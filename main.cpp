@@ -40,7 +40,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 	// ゲームループで使う変数の宣言
-
+	int sceneflag = 0;
 
 	// 最新のキーボード情報用
 	char keys[256] = {0};
@@ -65,7 +65,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		switch (sceneflag) {//シーン管理
+			case 0:
+				//タイトル
+				break;
 
+			case 1:
+				//ステージ選択
+				break;
+
+			case 2:
+				//プレイ画面
+				break;
+			case 3:
+				//リザルト画面
+				break;
+		}
 
 		// 描画処理
 
