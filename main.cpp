@@ -1,4 +1,7 @@
 #include "DxLib.h"
+#include"player.h"
+#include"enemy.h"
+#include"bullet.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -41,6 +44,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// ゲームループで使う変数の宣言
 	int sceneflag = 0;
+	Player* player = new Player();
 
 	// 最新のキーボード情報用
 	char keys[256] = {0};
@@ -68,6 +72,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (sceneflag) {//シーン管理
 			case 0:
 				//タイトル
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+					sceneflag = 2;
+				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					sceneflag = 2;
+				}
+				
 				break;
 
 			case 1:
@@ -76,13 +86,35 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				//プレイ画面
+				player->PlayerPadMove(keys,oldkeys);
+				
 				break;
+
 			case 3:
 				//リザルト画面
 				break;
 		}
 
 		// 描画処理
+		switch (sceneflag) {//シーン管理
+			case 0:
+				//タイトル
+				break;
+
+			case 1:
+				//ステージ選択
+				break;
+
+			case 2:
+				//プレイ画面
+				player->Draw();
+				
+				break;
+				delete player;
+			case 3:
+				//リザルト画面
+				break;
+		}
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
