@@ -1,16 +1,19 @@
 #include "DxLib.h"
+#include"player.h"
+#include"enemy.h"
+#include"bullet.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 600;
+const int WIN_WIDTH = 1376;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 400;
+const int WIN_HEIGHT = 960;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
-                   _In_ int nCmdShow) {
+	_In_ int nCmdShow) {
 	// ウィンドウモードに設定
 	ChangeWindowMode(TRUE);
 
@@ -41,12 +44,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// ゲームループで使う変数の宣言
 	int sceneflag = 0;
+	Player* player = new Player();
+	Enemy* enemy = new Enemy;
 
 	// 最新のキーボード情報用
-	char keys[256] = {0};
+	char keys[256] = { 0 };
 
 	// 1ループ(フレーム)前のキーボード情報
-	char oldkeys[256] = {0};
+	char oldkeys[256] = { 0 };
 
 	// ゲームループ
 	while (true) {
@@ -56,7 +61,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			oldkeys[i] = keys[i];
 		}
 		//配列なのでoldkey = keys;のようにできない、要素を一つずつコピー
-		
+
 		// 最新のキーボード情報を取得
 		GetHitKeyStateAll(keys);
 
@@ -66,23 +71,53 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				break;
+		case 0:
+			//タイトル
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+				sceneflag = 2;
+			}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				sceneflag = 2;
+			}
 
-			case 1:
-				//ステージ選択
-				break;
+			break;
 
-			case 2:
-				//プレイ画面
-				break;
-			case 3:
-				//リザルト画面
-				break;
+		case 1:
+			//ステージ選択
+			break;
+
+		case 2:
+			//プレイ画面
+			enemy->Move();
+			player->PlayerPadMove(keys, oldkeys);
+
+			break;
+
+		case 3:
+			//リザルト画面
+			break;
 		}
 
 		// 描画処理
+		switch (sceneflag) {//シーン管理
+		case 0:
+			//タイトル
+			break;
+
+		case 1:
+			//ステージ選択
+			break;
+
+		case 2:
+			//プレイ画面
+			enemy->Draw();
+			player->Draw();
+
+			break;
+			delete player;
+		case 3:
+			//リザルト画面
+			break;
+		}
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
