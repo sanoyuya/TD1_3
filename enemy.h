@@ -32,3 +32,4 @@ private:
 	int shot_time;
 	EnemyBullet* bullet;
 };
+
