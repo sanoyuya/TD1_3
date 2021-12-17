@@ -1,5 +1,6 @@
-#include"C:/DxLib_VC/プロジェクトに追加すべきファイル_VC用/DxLib.h"
+#include"DxLib.h"
 #include"enemy.h"
+#include"bullet.h"
 #include<math.h>
 
 
@@ -36,7 +37,9 @@ Enemy::Enemy()
 	appear_time = 100;
 	frame = 0;
 	end_frame = 100;
-	shot_time = 0;
+	shot_time = 10;
+	bullet = new EnemyBullet(-10,0);
+	
 }
 
 Enemy::~Enemy()
@@ -78,13 +81,21 @@ void Enemy::Move()
 
 			}
 
+			if (move_flag == false && fast_move_flag == false && shot_time>0)
+			{
+				shot_time--;
+			}
 
 			if (shot_time == 0)
 			{
-
+				bullet->Form(x, y);
+				shot_time = -1;
 			}
 		}
+
 	}
+
+	bullet->Move();
 
 }
 
@@ -95,5 +106,7 @@ void Enemy::Draw()
 		DrawBox((int)x - xr, (int)y - yr, (int)x + xr, (int)y + yr, GetColor(255, 255, 255), true);
 
 	}
+	bullet->Draw();
+
 	DrawBox(0+32, 0+32, 960+-32, 960-32, GetColor(255, 255, 255), false);
 }

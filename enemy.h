@@ -1,4 +1,6 @@
 #pragma once
+#include"bullet.h"
+
 class Enemy
 {
 public:
@@ -28,4 +30,5 @@ private:
 	int frame;
 	int end_frame;
 	int shot_time;
+	EnemyBullet* bullet;
 };
