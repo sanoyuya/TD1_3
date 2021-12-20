@@ -47,6 +47,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player = new Player();
 	Enemy* enemy = new Enemy;
 
+	EnemyForm("test.csv", 1 ,enemy);
+
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -87,7 +89,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			enemy->Move();
+			enemy->Move(*player);
 			player->PlayerPadMove(keys, oldkeys);
 
 			break;
