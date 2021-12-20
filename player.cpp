@@ -90,6 +90,16 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 }
 
+int Player::GetX()
+{
+	return X;
+}
+
+int Player::GetY()
+{
+	return Y;
+}
+
 void Player::Draw() {//描画関数
 	DrawBox(X - R, Y - R, X + R, Y + R, GetColor(255, 255, 255), true);
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
