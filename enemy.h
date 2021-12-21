@@ -12,10 +12,11 @@ public:
 	void Move(Player& player);
 	void Draw();
 	void HitBox(Transform transform);
+	void EnemyToEnemyHitBox(Transform transform);
 	void ExplosionBommer(Enemy& enemy, Player& player);
 
 private:
-	bool use_flag;
+	bool use_flag;//使うか
 	int enemy_type;//敵のタイプ
 	Transform transform;//座標
 	int hp;//体力
@@ -23,6 +24,7 @@ private:
 	int y_speed;//Y座標のスピード
 	bool exising_flag;//存在フラグ
 	bool action_flag;//動くかどうかフラグ
+	bool shot_action_flag;//打つかどうか
 	bool damage_flag;
 	int shot_time;
 	//最初の移動のための変数
@@ -47,10 +49,15 @@ private:
 	//初期値
 	int def_move_time;
 	int def_shot_time;
+
 	//ボマー
 	float angle;
 	Vertex vertex;
+	int explosion_time;
 	bool explosion_bommer_flag;
+	bool enemy_to_bommer;
+	//初期値
+	int def_explosion_time;
 
 	EnemyBullet* bullet;
 
