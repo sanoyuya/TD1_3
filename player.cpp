@@ -5,7 +5,7 @@ Player::Player() {//コンストラクタの定義
 	X = 300;
 	Y = 200;
 	R = 32;
-	speed = 10;
+	speed = 7;
 	stelsflag = 0;
 	stelscooltimer = -50;
 	reflectionflag = 0;
@@ -33,6 +33,16 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
 		Y += speed;
+	}
+
+	if (X <= 64) {
+		X = 64;
+	}if (X >=896) {
+		X = 896;
+	}if (Y <= 64) {
+		Y = 64;
+	}if (Y >= 896) {
+		Y = 896;
 	}
 
 	if (COOLTIMEtimer == 0) {
