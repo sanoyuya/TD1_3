@@ -1,6 +1,7 @@
 #include"DxLib.h"
 #include"enemy.h"
 #include"bullet.h"
+#include"map.h"
 #include"Transform.h"
 #include<math.h>
 
@@ -71,6 +72,17 @@ Enemy::Enemy()
 	def_move_time = move_time;
 	def_shot_time = shot_time;
 
+	//ボマー
+	angle = 0.0f;
+	vertex.top_left_x = 0;
+	vertex.top_left_y = 0;
+	vertex.down_left_x = 0;
+	vertex.down_left_y = 0;
+	vertex.top_right_x = 0;
+	vertex.top_right_y = 0;
+	vertex.down_right_x = 0;
+	vertex.down_right_y = 0;
+	explosion_bommer_flag = false;
 	bullet = new EnemyBullet();
 
 }
@@ -91,6 +103,11 @@ void Enemy::Move(Player& player)
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
+
+			if (enemy_type == 2)
+			{
+				angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+			}
 		}
 		else if (appear_time != 0 && appear_time != -1)
 		{
@@ -189,11 +206,248 @@ void Enemy::Move(Player& player)
 			}
 
 		}
+
+		//ボマー
+		if (enemy_type == 2)
+		{
+			if (exising_flag == true)
+			{
+				//最初の移動
+				if (fast_move_flag == true)
+				{
+					if (transform.x < 960.0 && transform.x> 0 + 64 &&
+						transform.y < 960.0 && transform.y> 0 + 64)
+					{
+						if ((cos(angle) * x_speed) < 0)
+						{ 
+							//座標計算
+							vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+							vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+
+							vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
+							vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
+
+							//判定
+							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+								GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+							{
+								transform.x += (cos(angle) * x_speed);
+							}
+							else
+							{
+								vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+								vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+
+								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+									GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+								{
+									while (1)//隙間埋め
+									{
+										vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+										vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+
+										if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+											GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+										{
+											if (x_speed < 0)
+											{
+												transform.x += (cos(angle) * -1);
+											}
+											else
+											{
+												transform.x += (cos(angle) * 1);
+											}
+
+
+										}
+										else
+										{
+
+											break;
+
+										}
+
+									}
+								}
+
+							}
+						}
+						else if ((cos(angle) * x_speed) > 0)
+						{
+							//座標計算
+							vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
+							vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+
+							vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+							vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+
+							//判定
+							if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+							{
+								transform.x += (cos(angle) * x_speed);
+							}
+							else
+							{
+								vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+								vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+								if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+								{
+									while (1)//隙間埋め
+									{
+										vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+										vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+
+										if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+											GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+										{
+											if (x_speed < 0)
+											{
+												transform.x += (cos(angle) * -1);
+											}
+											else
+											{
+												transform.x += (cos(angle) * 1);
+											}
+
+										}
+										else
+										{
+											break;
+
+										}
+
+									}
+								}
+
+							}
+						}
+
+						if ((sin(angle) * y_speed) < 0)
+						{
+							//座標計算
+							vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+							vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+							vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
+							vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+
+							//判定
+							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+								GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+							{
+								transform.y += (sin(angle) * y_speed);
+							}
+							else
+							{
+								vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+								vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
+
+								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+									GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+								{
+									while (1)//隙間埋め
+									{
+										vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
+										vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
+
+										if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+											GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+										{
+											if (y_speed < 0)
+											{
+												transform.y += (sin(angle) * -1);
+											}
+											else
+											{
+												transform.y += (sin(angle) * 1);
+											}
+										}
+										else
+										{
+											break;
+										}
+
+									}
+								}
+							}
+						}
+						else if ((sin(angle) * y_speed) > 0)
+						{
+							//座標計算
+							vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+							vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+							vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+							vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+
+							//判定
+							if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+							{
+								transform.y += (sin(angle) * y_speed);
+							}
+							else
+							{
+								vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+								vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+
+								if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+								{
+									while (1)//隙間埋め
+									{
+										vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+										vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+										if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+											GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+										{
+											if (y_speed > 0)
+											{
+												transform.y += (sin(angle) * 1);
+											}
+											else
+											{
+												transform.y += (sin(angle) * -1);
+											}
+
+										}
+										else
+										{
+											break;
+
+										}
+
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						transform.y += (sin(angle) * y_speed);
+						transform.x += (cos(angle) * x_speed);
+					}
+				}
+			}
+		}
+
 		//弾の動き
-		bullet->Move();
+		bullet->Move(enemy_type);
 	}
 }
 
+void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
+{
+	if (explosion_bommer_flag == true)
+	{
+
+	}
+}
 //描画
 void Enemy::Draw()
 {
@@ -211,34 +465,37 @@ void Enemy::Draw()
 //当たり判定
 void Enemy::HitBox(Transform transform)
 {
-		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-			this->transform.x + this->transform.xr > transform.x - transform.xr)
+	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	{
+		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+			this->transform.y + this->transform.yr > transform.y - transform.yr)
 		{
-			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			if (damage_flag == false)
 			{
-				if (damage_flag == false)
-				{
-					hp--;
-				}
-				damage_flag = true;
+				hp--;
 			}
-			else
-			{
-				damage_flag = false;
-			}
+			damage_flag = true;
 		}
 		else
 		{
 			damage_flag = false;
 		}
-	
+	}
+	else
+	{
+		damage_flag = false;
+	}
+
 }
+
+
 
 //ファイルからデータ読みこみ
 void Enemy::form(FILE* fp)
-{		int a = 0;
-		int b = 0;
+{
+	int a = 0;
+	int b = 0;
 	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf"
 		, &a, &enemy_type, &transform.xr, &transform.yr, &hp, &x_speed, &y_speed,
 		&b, &shot_time, &end_frame, &start_x, &start_y, &end_x, &end_y, &appear_time, &move_time, &move_end_frame,
@@ -300,6 +557,17 @@ void Enemy::form(FILE* fp)
 	move_end_y[3] = move_start_y[0];
 	def_move_time = move_time;
 	def_shot_time = shot_time;
+
+	angle = 0.0f;
+	vertex.top_left_x = 0;
+	vertex.top_left_y = 0;
+	vertex.down_left_x = 0;
+	vertex.down_left_y = 0;
+	vertex.top_right_x = 0;
+	vertex.top_right_y = 0;
+	vertex.down_right_x = 0;
+	vertex.down_right_y = 0;
+	explosion_bommer_flag = false;
 }
 
 void EnemyForm(const char* file_name, int max, Enemy enemy[])

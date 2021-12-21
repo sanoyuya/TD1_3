@@ -30,241 +30,244 @@ EnemyBullet::~EnemyBullet()
 {
 }
 
-void EnemyBullet::Move()
+void EnemyBullet::Move(int enemy_type)
 {
 	if (bullet_flag == true)
 	{
-		if ((cos(angle) * x_speed) < 0)
+		if (enemy_type == 1)
 		{
-			//ç¿ïWåvéZ
-			vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-			vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-
-			vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-			vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-
-			//îªíË
-			if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-				GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+			if ((cos(angle) * x_speed) < 0)
 			{
-				transform.x += (cos(angle) * x_speed);
-			}
-			else
-			{
-				vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-				vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+				//ç¿ïWåvéZ
+				vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+				vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
 
+				vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
+				vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
+
+				//îªíË
 				if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 					GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
 				{
-					while (1)//åÑä‘ñÑÇﬂ
-					{
-						vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-						vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-						{
-							if (x_speed < 0)
-							{
-								transform.x += (cos(angle) * -1);
-							}
-							else
-							{
-								transform.x += (cos(angle) * 1);
-							}
-
-
-						}
-						else
-						{
-							x_speed = -(x_speed);
-							reflection_num++;
-							break;
-
-						}
-
-					}
+					transform.x += (cos(angle) * x_speed);
 				}
 				else
 				{
-					x_speed = -(x_speed);
-					reflection_num++;
+					vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+					vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+
+					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+						GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+					{
+						while (1)//åÑä‘ñÑÇﬂ
+						{
+							vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+							vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+
+							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+								GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
+							{
+								if (x_speed < 0)
+								{
+									transform.x += (cos(angle) * -1);
+								}
+								else
+								{
+									transform.x += (cos(angle) * 1);
+								}
+
+
+							}
+							else
+							{
+								x_speed = -(x_speed);
+								reflection_num++;
+								break;
+
+							}
+
+						}
+					}
+					else
+					{
+						x_speed = -(x_speed);
+						reflection_num++;
+
+					}
 
 				}
-
 			}
-		}
-		else if ((cos(angle) * x_speed) > 0)
-		{
-			//ç¿ïWåvéZ
-			vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
-			vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
-
-			vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-			vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-
-			//îªíË
-			if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-				GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+			else if ((cos(angle) * x_speed) > 0)
 			{
-				transform.x += (cos(angle) * x_speed);
-			}
-			else
-			{
-				vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-				vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+				//ç¿ïWåvéZ
+				vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
+				vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
 
+				vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+				vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+
+				//îªíË
 				if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
 					GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 				{
-					while (1)//åÑä‘ñÑÇﬂ
-					{
-						vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-						vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+					transform.x += (cos(angle) * x_speed);
+				}
+				else
+				{
+					vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+					vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
 
-						if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+					if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+					{
+						while (1)//åÑä‘ñÑÇﬂ
 						{
-							if (x_speed < 0)
+							vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+							vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+
+							if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 							{
-								transform.x += (cos(angle) * -1);
+								if (x_speed < 0)
+								{
+									transform.x += (cos(angle) * -1);
+								}
+								else
+								{
+									transform.x += (cos(angle) * 1);
+								}
+
 							}
 							else
 							{
-								transform.x += (cos(angle) * 1);
+								x_speed = -(x_speed);
+								reflection_num++;
+								break;
+
 							}
 
 						}
-						else
-						{
-							x_speed = -(x_speed);
-							reflection_num++;
-							break;
-
-						}
-
 					}
+
 				}
-
 			}
-		}
 
-		if ((sin(angle) * y_speed) < 0)
-		{
-			//ç¿ïWåvéZ
-			vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-			vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-			vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
-			vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-			//îªíË
-			if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-				GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+			if ((sin(angle) * y_speed) < 0)
 			{
-				transform.y += (sin(angle) * y_speed);
-			}
-			else
-			{
-				vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-				vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
+				//ç¿ïWåvéZ
+				vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+				vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
 
+				vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
+				vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+
+				//îªíË
 				if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 					GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
 				{
-					while (1)//åÑä‘ñÑÇﬂ
-					{
-						vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
-						vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-						{
-							if (y_speed < 0)
-							{
-								transform.y += (sin(angle) * -1);
-							}
-							else
-							{
-								transform.y += (sin(angle) * 1);
-							}
-						}
-						else
-						{
-							y_speed = -(y_speed);
-							reflection_num++;
-							break;
-						}
-
-					}
+					transform.y += (sin(angle) * y_speed);
 				}
 				else
 				{
-					y_speed = -(y_speed);
-					reflection_num++;
+					vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+					vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
+
+					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+						GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+					{
+						while (1)//åÑä‘ñÑÇﬂ
+						{
+							vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
+							vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
+
+							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+								GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+							{
+								if (y_speed < 0)
+								{
+									transform.y += (sin(angle) * -1);
+								}
+								else
+								{
+									transform.y += (sin(angle) * 1);
+								}
+							}
+							else
+							{
+								y_speed = -(y_speed);
+								reflection_num++;
+								break;
+							}
+
+						}
+					}
+					else
+					{
+						y_speed = -(y_speed);
+						reflection_num++;
+					}
+
 				}
-
 			}
-		}
-		else if ((sin(angle) * y_speed) > 0)
-		{
-			//ç¿ïWåvéZ
-			vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-			vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-			vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-			vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-			//îªíË
-			if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-				GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+			else if ((sin(angle) * y_speed) > 0)
 			{
-				transform.y += (sin(angle) * y_speed);
-			}
-			else
-			{
-				vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-				vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+				//ç¿ïWåvéZ
+				vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+				vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
 
+				vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+				vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+
+				//îªíË
 				if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
 					GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 				{
-					while (1)//åÑä‘ñÑÇﬂ
-					{
-						vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-						vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-						if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-						{
-							if (y_speed > 0)
-							{
-								transform.y += (sin(angle) * 1);
-							}
-							else
-							{
-								transform.y += (sin(angle) * -1);
-							}
-
-						}
-						else
-						{
-							y_speed = -(y_speed);
-							reflection_num++;
-							break;
-
-						}
-
-					}
+					transform.y += (sin(angle) * y_speed);
 				}
 				else
 				{
-					y_speed = -(y_speed);
-					reflection_num++;
-				}
+					vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+					vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
 
+					if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+					{
+						while (1)//åÑä‘ñÑÇﬂ
+						{
+							vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+							vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+							if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+							{
+								if (y_speed > 0)
+								{
+									transform.y += (sin(angle) * 1);
+								}
+								else
+								{
+									transform.y += (sin(angle) * -1);
+								}
+
+							}
+							else
+							{
+								y_speed = -(y_speed);
+								reflection_num++;
+								break;
+
+							}
+
+						}
+					}
+					else
+					{
+						y_speed = -(y_speed);
+						reflection_num++;
+					}
+
+				}
 			}
 		}
 	}

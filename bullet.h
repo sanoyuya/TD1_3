@@ -5,7 +5,7 @@
 class EnemyBullet
 {
 public:
-	void Move();
+	void Move(int enemy_type);
 	void Draw();
 	void Form(Transform transform, Player& player, int x_speed, int y_speed);
 	Vertex GetVertex();

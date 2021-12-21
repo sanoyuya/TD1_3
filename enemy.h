@@ -12,6 +12,7 @@ public:
 	void Move(Player& player);
 	void Draw();
 	void HitBox(Transform transform);
+	void ExplosionBommer(Enemy& enemy, Player& player);
 
 private:
 	bool use_flag;
@@ -43,14 +44,17 @@ private:
 	double move_start_y[4];
 	double move_end_x[4];
 	double move_end_y[4];
-
 	//初期値
 	int def_move_time;
 	int def_shot_time;
-
-
+	//ボマー
+	float angle;
+	Vertex vertex;
+	bool explosion_bommer_flag;
 
 	EnemyBullet* bullet;
+
 };
+
 void EnemyForm(const char* file_name, int max, Enemy enemy[]);
 
