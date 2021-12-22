@@ -8,11 +8,17 @@ public:
 	void Move(int enemy_type);
 	void Draw();
 	void Form(Transform transform, Player& player, int x_speed, int y_speed);
+
 	Vertex GetVertex();
 	Transform GetTransform();
-	bool GetBulletFlag();
+	bool* GetBulletFlag();
 	int GetReflectionNum();
+	float GetAngle();
+
+	void SetAngle(float angle);
 	void SetReflectionNum(int reflection_num);
+	void SetBulletFlag(bool bullet_flag);
+	
 	EnemyBullet();
 	~EnemyBullet();
 

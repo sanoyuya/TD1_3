@@ -2,6 +2,7 @@
 #include"player.h"
 #include"enemy.h"
 #include"bullet.h"
+#include"subboss.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -46,9 +47,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int sceneflag = 0;
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[2];
-
+	SubBoss* sub_boss = new SubBoss;
 	EnemyForm("test.csv", 2 ,enemy);
 
+	SubBossForm("subbosstest.csv", 1, *sub_boss);
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -90,9 +92,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 2:
 			//プレイ画面
 
-			enemy[0].Move(*player);
+			/*enemy[0].Move(*player);
 			enemy[1].Move(*player);
-			enemy[0].ExplosionBommer(enemy[1], *player);
+			enemy[0].ExplosionBommer(enemy[1], *player);*/
+
+			sub_boss->Move(*player);
 
 			player->PlayerPadMove(keys, oldkeys);
 
@@ -115,12 +119,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			for (int i = 0; i < 2; i++)
-			{
-			enemy[i].Draw();
-			}
+			//for (int i = 0; i < 2; i++)
+			//{
+			//enemy[i].Draw();
+			//}
 
 			player->Draw();
+			sub_boss->Draw();
 
 			break;
 			delete player;
@@ -147,6 +152,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 	}
 	delete []enemy;
+	delete sub_boss;
 	// Dxライブラリ終了処理
 	DxLib_End();
 

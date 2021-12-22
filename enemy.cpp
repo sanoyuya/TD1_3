@@ -14,6 +14,8 @@ const int WIN_HEIGHT = 960;
 
 #define PI 3.1415926535f
 
+
+
 double easeInSine(double x)
 {
 	return 1 - cos((x * PI) / 2);
@@ -96,6 +98,7 @@ Enemy::~Enemy()
 
 }
 
+#pragma region Move
 //“®‚«
 void Enemy::Move(Player& player)
 {
@@ -192,7 +195,7 @@ void Enemy::Move(Player& player)
 					}
 
 					//“–‚½‚è”»’è
-					if (bullet->GetBulletFlag() == true)
+					if (*bullet->GetBulletFlag() == true)
 					{
 						HitBox(bullet->GetTransform());
 					}
@@ -450,6 +453,7 @@ void Enemy::Move(Player& player)
 		bullet->Move(enemy_type);
 	}
 }
+#pragma endregion
 
 void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 {
@@ -637,12 +641,6 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 		{
 			enemy[i].form(fp);
 		}
-		enemy[0];
-		enemy[1];
 		fclose(fp);
 	}
 }
-
-
-
-
