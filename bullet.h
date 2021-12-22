@@ -1,36 +1,29 @@
 #pragma once
-
-typedef struct Vertex
-{
-	int top_right_x;
-	int top_right_y;
-	int down_right_x;
-	int down_right_y;
-	int top_left_x;
-	int top_left_y;
-	int down_left_x;
-	int down_left_y;
-};
+#include"Transform.h"
+#include"player.h"
 
 class EnemyBullet
 {
 public:
-	void Move();
+	void Move(int enemy_type);
 	void Draw();
-	void Form(int x, int y);
+	void Form(Transform transform, Player& player, int x_speed, int y_speed);
 	Vertex GetVertex();
-	EnemyBullet(int x_speed, int y_speed);
+	Transform GetTransform();
+	bool GetBulletFlag();
+	int GetReflectionNum();
+	void SetReflectionNum(int reflection_num);
+	EnemyBullet();
 	~EnemyBullet();
 
 private:
-	int x;
-	int y;
-	int r;
+	Transform transform;
 	Vertex vertex;
 	int reflection_num;
 	bool bullet_flag;
 	int x_speed;
 	int y_speed;
+	float angle;
 
 };
 

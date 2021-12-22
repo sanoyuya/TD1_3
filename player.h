@@ -18,7 +18,9 @@ private:
     int COOLTIMEtimer;
     int itemflag;
 public:
-    void PlayerPadMove(char *keys,char *oldkeys);
+    int GetX();
+    int GetY();
+    void PlayerPadMove(char* keys, char* oldkeys);
     void Draw();
     Player();
 };

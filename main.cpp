@@ -45,7 +45,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// ゲームループで使う変数の宣言
 	int sceneflag = 0;
 	Player* player = new Player();
-	Enemy* enemy = new Enemy;
+	Enemy* enemy = new Enemy[2];
+
+	EnemyForm("test.csv", 2 ,enemy);
 
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -87,7 +89,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			enemy->Move();
+
+			enemy[0].Move(*player);
+			enemy[1].Move(*player);
+			enemy[0].ExplosionBommer(enemy[1], *player);
+
 			player->PlayerPadMove(keys, oldkeys);
 
 			break;
@@ -109,7 +115,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			enemy->Draw();
+			for (int i = 0; i < 2; i++)
+			{
+			enemy[i].Draw();
+			}
+
 			player->Draw();
 
 			break;
@@ -136,6 +146,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		}
 	}
+	delete []enemy;
 	// Dxライブラリ終了処理
 	DxLib_End();
 
