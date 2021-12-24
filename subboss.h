@@ -2,14 +2,15 @@
 #include"Transform.h"
 #include"bullet.h"
 #include"player.h"
+#include"mine.h"
 class SubBoss
 {
 public:
 	void form(FILE* fp);
-	void Move(Player& player);
-	void Draw();
-	void HitBox(Transform transform, bool* bullet_flag);
-	void Refresh_ReflectionNum(int max);
+	void Move(Player& player);//“®‚«
+	void Draw();//•`‰æ
+	void HitBox(Transform transform, bool* bullet_flag);//“–‚½‚è”»’è
+	void Refresh_ReflectionNum(int max);//”½Ë‰ñ”•ÏX
 
 	SubBoss();
 	~SubBoss();
@@ -47,6 +48,8 @@ private:
 	int def_shot_time;
 
 	EnemyBullet* bullet;
+	Mine* mine;
+	MimeInitialize mime_initialize;
 };
 
 void SubBossForm(const char* file_name, int max, SubBoss& sub_boss);

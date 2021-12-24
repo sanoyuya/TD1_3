@@ -67,3 +67,4 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy);
 
 double easeInSine(double x);
 
+int FlagSerch(bool flag[], int max);

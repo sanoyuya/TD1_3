@@ -21,6 +21,18 @@ double easeInSine(double x)
 	return 1 - cos((x * PI) / 2);
 }
 
+int FlagSerch(bool flag[],int max)
+{//‹ó‚«”Ô†‚ğ•Ô‚·
+	for (int i = 0; i < max; i++)
+	{
+		if (flag[i] == false)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 Enemy::Enemy()
 {
 	use_flag = false;//g‚¤‚©ƒtƒ‰ƒO
@@ -498,6 +510,8 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 		}
 	}
 }
+
+#pragma region Draw
 //•`‰æ
 void Enemy::Draw()
 {
@@ -518,6 +532,7 @@ void Enemy::Draw()
 
 	DrawBox(0 + 32, 0 + 32, 960 + -32, 960 - 32, GetColor(255, 255, 255), false);
 }
+#pragma endregion
 
 //“–‚½‚è”»’è
 void Enemy::HitBox(Transform transform)
