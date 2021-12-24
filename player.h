@@ -8,6 +8,7 @@ private:
     int Y;
     int R;
     int speed;
+    int hp;
     int stelsflag;
     int stelscooltimer;
     int reflectionflag;
@@ -18,9 +19,10 @@ private:
     int COOLTIMEtimer;
     int itemflag;
 public:
-    int GetX();
-    int GetY();
+    Player();
     void PlayerPadMove(char* keys, char* oldkeys);
     void Draw();
-    Player();
+    int GetX();
+    int GetY();
+    int Result();
 };
