@@ -75,71 +75,76 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-					sceneflag = 2;
-				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					sceneflag = 2;
-				}
+		case 0:
+			//タイトル
+			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+				sceneflag = 2;
+			}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				sceneflag = 2;
+			}
 
-				break;
+			break;
 
-			case 1:
-				//ステージ選択
-				break;
+		case 1:
+			//ステージ選択
+			break;
 
-			case 2:
-				//プレイ画面
+		case 2:
+			//プレイ画面
 
-				/*enemy[0].Move(*player);
-				enemy[1].Move(*player);
-				enemy[0].ExplosionBommer(enemy[1], *player);*/
+			/*enemy[0].Move(*player);
+			enemy[1].Move(*player);
+			enemy[0].ExplosionBommer(enemy[1], *player);*/
 
-				sub_boss->Move(*player);
+			sub_boss->Move(*player);
 
-				player->PlayerPadMove(keys, oldkeys);
-				sceneflag = player->Result();
+			for (int i = 0; i < 4; i++)
+			{
+				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet());
+			}
 
-				break;
+			player->PlayerPadMove(keys, oldkeys);
+			sceneflag = player->Result();
 
-			case 3:
-				//リザルト画面(ゲームオーバー)
-				break;
+			break;
 
-			case 4:
-				//リザルト画面(ゲームクリア)
-				break;
+		case 3:
+			//リザルト画面(ゲームオーバー)
+			break;
+
+		case 4:
+			//リザルト画面(ゲームクリア)
+			break;
 		}
 		// 描画処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				break;
+		case 0:
+			//タイトル
+			break;
 
-			case 1:
-				//ステージ選択
-				break;
+		case 1:
+			//ステージ選択
+			break;
 
-			case 2:
-				//プレイ画面
-				//for (int i = 0; i < 2; i++)
-				//{
-				//enemy[i].Draw();
-				//}
+		case 2:
+			//プレイ画面
+			//for (int i = 0; i < 2; i++)
+			//{
+			//enemy[i].Draw();
+			//}
 
-				player->Draw();
-				sub_boss->Draw();
+			player->Draw();
+			sub_boss->Draw();
 
-				break;
-				delete player;
-			case 3:
-				//リザルト画面(ゲームオーバー)
-				break;
+			break;
+			delete player;
+		case 3:
+			//リザルト画面(ゲームオーバー)
+			break;
 
-			case 4:
-				//リザルト画面(ゲームクリア)
-				break;
+		case 4:
+			//リザルト画面(ゲームクリア)
+			break;
 		}
 
 		//---------  ここまでにプログラムを記述  ---------//

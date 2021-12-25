@@ -2,7 +2,6 @@
 #include"enemy.h"
 #include"DxLib.h"
 #include"map.h"
-#include"player.h"
 #include<math.h>
 
 EnemyBullet::EnemyBullet()

@@ -2,7 +2,7 @@
 #include"Transform.h"
 #include"player.h"
 
-class EnemyBullet
+typedef class EnemyBullet
 {
 public:
 	void Move(int enemy_type);
@@ -31,5 +31,5 @@ private:
 	int y_speed;
 	float angle;
 
-};
+}EnemyBullet;
 

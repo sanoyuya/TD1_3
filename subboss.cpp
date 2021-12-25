@@ -325,6 +325,19 @@ void SubBoss::Refresh_ReflectionNum(int max)
 		move_flag = true;
 	}
 }
+
+Transform SubBoss::GetBulletTransform(int num)
+{
+	return bullet[num].GetTransform();
+}
+
+EnemyBullet* SubBoss::GetEnmyBullet()
+{
+	return bullet;
+}
+
+
+
 #pragma endregion
 
 #pragma region コントラスタ・デストラクタ

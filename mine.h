@@ -1,5 +1,4 @@
 #pragma once
-#include"DxLib.h"
 #include"Transform.h"
 
 typedef struct//‰Šú‰»—p

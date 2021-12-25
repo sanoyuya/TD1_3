@@ -1,7 +1,6 @@
 #pragma once
 #include"bullet.h"
 #include"Transform.h"
-#include"player.h"
 
 class Enemy
 {
