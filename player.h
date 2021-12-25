@@ -1,5 +1,8 @@
 #pragma once
 #include"Dxlib.h"
+#include"Transform.h"
+#include"bullet.h"
+
 
 class Player
 {
@@ -21,6 +24,7 @@ private:
 public:
     Player();
     void PlayerPadMove(char* keys, char* oldkeys);
+    void HP(Transform transform, EnemyBullet bullet);
     void Draw();
     int GetX();
     int GetY();
