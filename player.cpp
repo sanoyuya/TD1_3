@@ -2,6 +2,7 @@
 #include"player.h"
 #include"enemy.h"
 #include"subboss.h"
+#include"bullet.h"
 
 Player::Player() {//コンストラクタの定義
 	X = 300;
@@ -40,7 +41,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 	if (X <= 64) {
 		X = 64;
-	}if (X >=896) {
+	}if (X >= 896) {
 		X = 896;
 	}if (Y <= 64) {
 		Y = 64;
@@ -101,6 +102,12 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 		}
 	}
 
+}
+
+void Player::HP(Transform transform, EnemyBullet bullet) {
+	if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
+		hp -= 1;
+	}
 }
 
 int Player::GetX()
