@@ -130,7 +130,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				player->Draw();
 				sub_boss->Draw();
-
+				
 				break;
 				delete player;
 			case 3:

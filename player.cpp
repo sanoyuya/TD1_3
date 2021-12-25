@@ -114,12 +114,18 @@ int Player::GetY()
 }
 
 int Player::Result() {
-	if (hp >= 0) {//ゲームオーバー画面へ
-		return 3;
+	if (hp <= 0) {
+		return 3;//ゲームオーバー画面へ
 	}
-	/*if (全ての敵が死んだら) {
-		return 4;//ゲームクリア画面へ
-	}*/
+	else {
+		return 2;
+	}
+	//if (全ての敵が死んだら) {
+	//	return 4;//ゲームクリア画面へ
+	//}
+	//else {
+	//	return 2;
+	//}
 }
 
 void Player::Draw() {//描画関数
@@ -128,6 +134,7 @@ void Player::Draw() {//描画関数
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
+	DrawFormatString(0, 80, GetColor(255, 255, 255), "hp:%d", hp);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "Afterglow:%d", Afterglow);
 }
 
