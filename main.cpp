@@ -100,10 +100,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < 4; i++)
 			{
-				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet());
+				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(),i);
 			}
 
 			player->PlayerPadMove(keys, oldkeys);
+
 			sceneflag = player->Result();
 
 			break;

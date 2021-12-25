@@ -24,7 +24,7 @@ private:
 public:
 	Player();
 	void PlayerPadMove(char* keys, char* oldkeys);
-	void HP(Transform transform, EnemyBullet* bullet);
+	void HP(Transform transform, EnemyBullet* bullet, int num);
 	void Draw();
 	int GetX();
 	int GetY();

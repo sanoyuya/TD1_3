@@ -102,13 +102,13 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//ƒvƒŒƒCƒ„[‚ÌˆÚ“®
 
 }
 
-void Player::HP(Transform transform, EnemyBullet* bullet) {
+void Player::HP(Transform transform, EnemyBullet* bullet,int num) {
 
-	if (*bullet->GetBulletFlag() == true)
+	if (*bullet[num].GetBulletFlag() == true)
 	{
 		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 			hp -= 1;
-			bullet->SetBulletFlag(false);
+			bullet[num].SetBulletFlag(false);
 		}
 	}
 }
