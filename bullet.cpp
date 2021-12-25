@@ -30,6 +30,7 @@ EnemyBullet::~EnemyBullet()
 {
 }
 
+#pragma region Move
 void EnemyBullet::Move(int enemy_type)
 {
 	if (bullet_flag == true)
@@ -272,7 +273,9 @@ void EnemyBullet::Move(int enemy_type)
 		}
 	}
 }
+#pragma endregion
 
+#pragma region Draw
 //描画
 void EnemyBullet::Draw()
 {
@@ -286,7 +289,9 @@ void EnemyBullet::Draw()
 		}
 	}
 }
+#pragma endregion
 
+#pragma region Form
 //生成
 void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_speed)
 {
@@ -294,12 +299,14 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
 	angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
-	this->transform.x += (cos(angle) * ((double)transform.xr + 15));
-	this->transform.y += (sin(angle) * ((double)transform.yr + 15));
+	//this->transform.x += (cos(angle) * ((double)transform.xr + 15));
+	//this->transform.y += (sin(angle) * ((double)transform.yr + 15));
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 }
+#pragma endregion
 
+#pragma region ゲッター
 //ゲッター
 Vertex EnemyBullet::GetVertex()
 {
@@ -311,9 +318,9 @@ Transform EnemyBullet::GetTransform()
 	return transform;
 }
 
-bool EnemyBullet::GetBulletFlag()
+bool* EnemyBullet::GetBulletFlag()
 {
-	return bullet_flag;
+	return &bullet_flag;
 }
 
 int EnemyBullet::GetReflectionNum()
@@ -321,11 +328,29 @@ int EnemyBullet::GetReflectionNum()
 	return reflection_num;
 }
 
+float EnemyBullet::GetAngle()
+{
+	return angle;
+}
+
+
+
+#pragma endregion
+
+#pragma region セッター
 //セッター
 void EnemyBullet::SetReflectionNum(int reflection_num)
 {
 	this->reflection_num = reflection_num;
 }
 
+void EnemyBullet::SetBulletFlag(bool bullet_flag)
+{
+	this->bullet_flag = bullet_flag;
+}
 
-
+void EnemyBullet::SetAngle(float _angle)
+{
+	this->angle = _angle;
+}
+#pragma endregion

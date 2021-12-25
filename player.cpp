@@ -1,11 +1,14 @@
 #include "DxLib.h"
 #include"player.h"
+#include"enemy.h"
+#include"subboss.h"
 
 Player::Player() {//コンストラクタの定義
 	X = 300;
 	Y = 200;
 	R = 32;
 	speed = 7;
+	hp = 20;
 	stelsflag = 0;
 	stelscooltimer = -50;
 	reflectionflag = 0;
@@ -108,6 +111,15 @@ int Player::GetX()
 int Player::GetY()
 {
 	return Y;
+}
+
+int Player::Result() {
+	if (hp >= 0) {//ゲームオーバー画面へ
+		return 3;
+	}
+	/*if (全ての敵が死んだら) {
+		return 4;//ゲームクリア画面へ
+	}*/
 }
 
 void Player::Draw() {//描画関数

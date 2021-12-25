@@ -2,6 +2,7 @@
 #include"player.h"
 #include"enemy.h"
 #include"bullet.h"
+#include"subboss.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -46,9 +47,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int sceneflag = 0;
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[2];
+	SubBoss* sub_boss = new SubBoss;
+	EnemyForm("test.csv", 2, enemy);
 
-	EnemyForm("test.csv", 2 ,enemy);
-
+	SubBossForm("subbosstest.csv", 1, *sub_boss);
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -73,60 +75,71 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-		case 0:
-			//タイトル
-			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-				sceneflag = 2;
-			}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				sceneflag = 2;
-			}
+			case 0:
+				//タイトル
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+					sceneflag = 2;
+				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					sceneflag = 2;
+				}
 
-			break;
+				break;
 
-		case 1:
-			//ステージ選択
-			break;
+			case 1:
+				//ステージ選択
+				break;
 
-		case 2:
-			//プレイ画面
+			case 2:
+				//プレイ画面
 
-			enemy[0].Move(*player);
-			enemy[1].Move(*player);
-			enemy[0].ExplosionBommer(enemy[1], *player);
+				/*enemy[0].Move(*player);
+				enemy[1].Move(*player);
+				enemy[0].ExplosionBommer(enemy[1], *player);*/
 
-			player->PlayerPadMove(keys, oldkeys);
+				sub_boss->Move(*player);
 
-			break;
+				player->PlayerPadMove(keys, oldkeys);
+				sceneflag = player->Result();
 
-		case 3:
-			//リザルト画面
-			break;
+				break;
+
+			case 3:
+				//リザルト画面(ゲームオーバー)
+				break;
+
+			case 4:
+				//リザルト画面(ゲームクリア)
+				break;
 		}
-
 		// 描画処理
 		switch (sceneflag) {//シーン管理
-		case 0:
-			//タイトル
-			break;
+			case 0:
+				//タイトル
+				break;
 
-		case 1:
-			//ステージ選択
-			break;
+			case 1:
+				//ステージ選択
+				break;
 
-		case 2:
-			//プレイ画面
-			for (int i = 0; i < 2; i++)
-			{
-			enemy[i].Draw();
-			}
+			case 2:
+				//プレイ画面
+				//for (int i = 0; i < 2; i++)
+				//{
+				//enemy[i].Draw();
+				//}
 
-			player->Draw();
+				player->Draw();
+				sub_boss->Draw();
 
-			break;
-			delete player;
-		case 3:
-			//リザルト画面
-			break;
+				break;
+				delete player;
+			case 3:
+				//リザルト画面(ゲームオーバー)
+				break;
+
+			case 4:
+				//リザルト画面(ゲームクリア)
+				break;
 		}
 
 		//---------  ここまでにプログラムを記述  ---------//
@@ -146,7 +159,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		}
 	}
-	delete []enemy;
+	delete[]enemy;
+	delete sub_boss;
 	// Dxライブラリ終了処理
 	DxLib_End();
 

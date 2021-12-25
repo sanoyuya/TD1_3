@@ -14,9 +14,23 @@ const int WIN_HEIGHT = 960;
 
 #define PI 3.1415926535f
 
+
+
 double easeInSine(double x)
 {
 	return 1 - cos((x * PI) / 2);
+}
+
+int FlagSerch(bool flag[],int max)
+{//ãÛÇ´î‘çÜÇï‘Ç∑
+	for (int i = 0; i < max; i++)
+	{
+		if (flag[i] == false)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 Enemy::Enemy()
@@ -96,6 +110,7 @@ Enemy::~Enemy()
 
 }
 
+#pragma region Move
 //ìÆÇ´
 void Enemy::Move(Player& player)
 {
@@ -192,7 +207,7 @@ void Enemy::Move(Player& player)
 					}
 
 					//ìñÇΩÇËîªíË
-					if (bullet->GetBulletFlag() == true)
+					if (*bullet->GetBulletFlag() == true)
 					{
 						HitBox(bullet->GetTransform());
 					}
@@ -450,6 +465,7 @@ void Enemy::Move(Player& player)
 		bullet->Move(enemy_type);
 	}
 }
+#pragma endregion
 
 void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 {
@@ -494,6 +510,8 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 		}
 	}
 }
+
+#pragma region Draw
 //ï`âÊ
 void Enemy::Draw()
 {
@@ -514,6 +532,7 @@ void Enemy::Draw()
 
 	DrawBox(0 + 32, 0 + 32, 960 + -32, 960 - 32, GetColor(255, 255, 255), false);
 }
+#pragma endregion
 
 //ìñÇΩÇËîªíË
 void Enemy::HitBox(Transform transform)
@@ -637,12 +656,6 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 		{
 			enemy[i].form(fp);
 		}
-		enemy[0];
-		enemy[1];
 		fclose(fp);
 	}
 }
-
-
-
-
