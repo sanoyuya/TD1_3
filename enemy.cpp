@@ -216,6 +216,7 @@ void Enemy::Move(Player& player)
 					if (shot_time == 0)
 					{
 						bullet->Form(transform, player, x_speed, y_speed);
+						damage_flag = true;
 						shot_time = -1;
 					}
 

@@ -24,7 +24,6 @@ public:
 	//セッター
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);
-	//設置フラグを立てる
 
 private:
 	int rand;//ランダム

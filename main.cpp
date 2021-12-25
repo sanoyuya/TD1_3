@@ -46,11 +46,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// ゲームループで使う変数の宣言
 	int sceneflag = 0;
 	Player* player = new Player();
-	Enemy* enemy = new Enemy[2];
+	Enemy* enemy = new Enemy[5];
 	SubBoss* sub_boss = new SubBoss;
-	EnemyForm("test.csv", 2, enemy);
+
 
 	SubBossForm("subbosstest.csv", 1, *sub_boss);
+
+	int wave_num = 1;
+	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -92,15 +95,32 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 2:
 			//プレイ画面
 
+			if (game_set == false)
+			{
+				switch (wave_num)
+				{
+				case 1:
+					EnemyForm("wave1.csv", 4, enemy);
+					game_set = true;
+					break;
+				}
+
+			}
+
+			for (int i = 0; i < 5; i++)
+			{
+				enemy[i].Move(*player);
+			}
+
 			/*enemy[0].Move(*player);
 			enemy[1].Move(*player);
 			enemy[0].ExplosionBommer(enemy[1], *player);*/
 
-			sub_boss->Move(*player);
+			//sub_boss->Move(*player);
 
 			for (int i = 0; i < 4; i++)
 			{
-				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(),i);
+				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
 			}
 
 			player->PlayerPadMove(keys, oldkeys);
@@ -129,10 +149,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			//for (int i = 0; i < 2; i++)
-			//{
-			//enemy[i].Draw();
-			//}
+			for (int i = 0; i < 4; i++)
+			{
+			enemy[i].Draw();
+			}
 
 			player->Draw();
 			sub_boss->Draw();
