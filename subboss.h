@@ -1,7 +1,5 @@
 #pragma once
 #include"Transform.h"
-#include"bullet.h"
-#include"player.h"
 #include"mine.h"
 class SubBoss
 {
@@ -11,11 +9,15 @@ public:
 	void Draw();//描画
 	void HitBox(Transform transform, bool* bullet_flag);//当たり判定
 	void Refresh_ReflectionNum(int max);//反射回数変更
+	
+	Transform GetBulletTransform(int num);
+	EnemyBullet* GetEnmyBullet();
 
 	SubBoss();
 	~SubBoss();
 
 private:
+
 	int enemy_type;//敵のタイプ
 	Transform transform;//座標
 	int hp;//体力

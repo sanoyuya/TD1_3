@@ -1,8 +1,6 @@
 #include "DxLib.h"
 #include"player.h"
 #include"enemy.h"
-#include"subboss.h"
-#include"bullet.h"
 
 Player::Player() {//コンストラクタの定義
 	X = 300;
@@ -104,9 +102,14 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 }
 
-void Player::HP(Transform transform, EnemyBullet bullet) {
-	if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
-		hp -= 1;
+void Player::HP(Transform transform, EnemyBullet* bullet) {
+
+	if (*bullet->GetBulletFlag() == true)
+	{
+		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
+			hp -= 1;
+			bullet->SetBulletFlag(false);
+		}
 	}
 }
 
