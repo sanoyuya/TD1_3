@@ -50,10 +50,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
 
-
 	SubBossForm("subbosstest.csv", 1, *sub_boss);
-
-	
 
 	int wave_num = 1;
 	bool game_set = false;
@@ -150,7 +147,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					{
 						if (i != k)
 						{
-							enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
+							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetEnemyFlag() == true)
+							{
+								enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
+							}
 						}
 					}
 				}
