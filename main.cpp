@@ -44,13 +44,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 	// ゲームループで使う変数の宣言
+	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
 	Player* player = new Player();
-	Enemy* enemy = new Enemy[5];
+	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
 
 
 	SubBossForm("subbosstest.csv", 1, *sub_boss);
+
+	
 
 	int wave_num = 1;
 	bool game_set = false;
@@ -95,19 +98,37 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 2:
 			//プレイ画面
 
+#pragma region 敵データ読み込み
 			if (game_set == false)
 			{
 				switch (wave_num)
 				{
 				case 1:
-					EnemyForm("wave1.csv", 4, enemy);
+					EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 2:
+					EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 3:
+					EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 4:
+					EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 5:
+					EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
 					game_set = true;
 					break;
 				}
 
 			}
+#pragma endregion
 
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < ENEMY_MAX; i++)
 			{
 				enemy[i].Move(*player);
 			}
@@ -118,9 +139,44 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			//sub_boss->Move(*player);
 
+#pragma region 体力減少
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				for (int j = 0; j < 2; j++)
+				{
+					player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
+
+					for (int k = 0; k < ENEMY_MAX; k++)
+					{
+						if (i != k)
+						{
+							enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
+						}
+					}
+				}
+			}
 			for (int i = 0; i < 4; i++)
 			{
 				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
+			}
+#pragma endregion
+
+			//waveクリア判定
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == true ||
+					
+					enemy[i].GetAppearTime() != -1)
+				{
+					i--;
+					break;
+				}
+
+				if (i == ENEMY_MAX-1)
+				{
+					game_set = false;
+					wave_num++;
+				}
 			}
 
 			player->PlayerPadMove(keys, oldkeys);
@@ -149,9 +205,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-			enemy[i].Draw();
+			enemy[i].Draw(40*i);
 			}
 
 			player->Draw();

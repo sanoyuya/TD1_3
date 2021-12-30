@@ -4,6 +4,7 @@
 #include"map.h"
 #include<math.h>
 
+#pragma region コンストラクタ・デストラクタ
 EnemyBullet::EnemyBullet()
 {
 	transform.x = 0;
@@ -28,6 +29,7 @@ EnemyBullet::EnemyBullet()
 EnemyBullet::~EnemyBullet()
 {
 }
+#pragma endregion
 
 #pragma region Move
 void EnemyBullet::Move(int enemy_type)
@@ -286,6 +288,7 @@ void EnemyBullet::Draw()
 		{
 			bullet_flag = false;
 		}
+		
 	}
 }
 #pragma endregion
@@ -306,7 +309,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 #pragma endregion
 
 #pragma region ゲッター
-//ゲッター
+
 Vertex EnemyBullet::GetVertex()
 {
 	return vertex;
@@ -337,7 +340,7 @@ float EnemyBullet::GetAngle()
 #pragma endregion
 
 #pragma region セッター
-//セッター
+
 void EnemyBullet::SetReflectionNum(int reflection_num)
 {
 	this->reflection_num = reflection_num;
