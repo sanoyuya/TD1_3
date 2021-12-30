@@ -139,7 +139,7 @@ int Player::Result() {
 }
 
 void Player::Draw() {//描画関数
-	DrawBox(X - R, Y - R, X + R, Y + R, GetColor(255, 255, 255), true);
+	DrawCircle(X, Y, R, GetColor(255, 255, 255), true);
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);

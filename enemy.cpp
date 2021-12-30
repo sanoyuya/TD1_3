@@ -14,15 +14,14 @@ const int WIN_HEIGHT = 960;
 
 #define PI 3.1415926535f
 
-
-
 double easeInSine(double x)
 {
 	return 1 - cos((x * PI) / 2);
 }
 
+//空き番号を返す
 int FlagSerch(bool flag[],int max)
-{//空き番号を返す
+{
 	for (int i = 0; i < max; i++)
 	{
 		if (flag[i] == false)
@@ -33,6 +32,7 @@ int FlagSerch(bool flag[],int max)
 	return -1;
 }
 
+#pragma region コントラスタ・デストラクタ
 Enemy::Enemy()
 {
 	use_flag = false;//使うかフラグ
@@ -49,7 +49,8 @@ Enemy::Enemy()
 	exising_flag = false;//存在フラグ
 	action_flag = false;//動くかどうかフラグ
 	shot_action_flag = false;
-	damage_flag = false;
+	damage_flag[0] = false;
+	damage_flag[1] = false;
 	shot_time = 0;
 	//最初の移動のための変数
 	frame = 0;
@@ -101,7 +102,7 @@ Enemy::Enemy()
 	enemy_to_bommer = false;
 	def_explosion_time = 0;
 	explosion_bommer_flag = false;
-	bullet = new EnemyBullet();
+	bullet = new EnemyBullet[2];
 
 }
 
@@ -109,6 +110,7 @@ Enemy::~Enemy()
 {
 
 }
+#pragma endregion
 
 #pragma region Move
 //動き
@@ -153,7 +155,7 @@ void Enemy::Move(Player& player)
 				//移動
 				if (action_flag == true && fast_move_flag == false)
 				{
-					if (move_flag == true)
+					//if (move_flag == true)
 					{
 						if (move_time > 0)
 						{
@@ -168,11 +170,10 @@ void Enemy::Move(Player& player)
 
 							if (move_frame == move_end_frame)
 							{
-								move_flag = false;
+								//move_flag = false;
 								move_num++;
 								move_time = def_move_time;
 								move_frame = 0;
-								shot_time = def_shot_time;
 
 								if (move_num == 4)
 								{
@@ -194,29 +195,40 @@ void Enemy::Move(Player& player)
 				if (shot_action_flag == true)
 				{
 					//発射時間管理
-					if (fast_move_flag == false && shot_time > 0 && move_flag == false)
+					if (fast_move_flag == false && shot_time > 0)
 					{
 						shot_time--;
 					}
 
 					//反射回数初期化
-					if (bullet->GetReflectionNum() == 4)
+					for (int i = 0; i < 2; i++)
 					{
-						bullet->SetReflectionNum(0);
-						move_flag = true;
-					}
+						if (bullet[i].GetReflectionNum() == 4)
+						{
+							bullet[i].SetReflectionNum(0);
+						}
 
-					//当たり判定
-					if (*bullet->GetBulletFlag() == true)
-					{
-						HitBox(bullet->GetTransform());
+						//当たり判定
+						if (*bullet[i].GetBulletFlag() == true)
+						{
+							HitBox(bullet[i].GetTransform(),i);
+						}
 					}
-
 					//弾の生成
 					if (shot_time == 0)
 					{
-						bullet->Form(transform, player, x_speed, y_speed);
-						shot_time = -1;
+						shot_time = def_shot_time;
+
+						for (int i = 0; i < 2; i++)
+						{
+							if (*bullet[i].GetBulletFlag() == false)
+							{
+								bullet[i].Form(transform, player, x_speed, y_speed);
+								damage_flag[i] = true;
+
+								break;
+							}
+						}
 					}
 
 					if (hp <= 0)
@@ -228,7 +240,7 @@ void Enemy::Move(Player& player)
 			}
 
 		}
-
+#pragma region ボマー
 		//ボマー
 		if (enemy_type == 2)
 		{
@@ -460,13 +472,19 @@ void Enemy::Move(Player& player)
 				}
 			}
 		}
+#pragma endregion
 
 		//弾の動き
-		bullet->Move(enemy_type);
+		for (int i = 0; i < 2; i++)
+		{
+			bullet[i].Move(enemy_type);
+		}
 	}
 }
 #pragma endregion
 
+#pragma region ボマー当たり判定
+//爆発エフェクト
 void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 {
 	if (transform.x != enemy.transform.x && transform.y != enemy.transform.y && 
@@ -493,7 +511,7 @@ void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 		}
 	}
 }
-
+//敵と敵
 void Enemy::EnemyToEnemyHitBox(Transform transform)
 {
 	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
@@ -502,7 +520,7 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
 			this->transform.y + this->transform.yr > transform.y - transform.yr)
 		{
-			if (damage_flag == false)
+			if (damage_flag[0] == false || damage_flag[1] == false)
 			{
 				explosion_bommer_flag = true;
 				enemy_to_bommer = true;
@@ -510,10 +528,58 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 		}
 	}
 }
+#pragma endregion
+
+#pragma region 当たり判定
+void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
+{
+	//当たり判定(複数)
+	if (*bullet[num].GetBulletFlag() == true)
+	{
+		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+			this->transform.x + this->transform.xr > transform.x - transform.xr)
+		{
+			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			{
+				hp -= 1;
+				bullet[num].SetBulletFlag(false);
+			}
+		}
+	}
+}
+
+//当たり判定(単体)
+void Enemy::HitBox(Transform transform,int num)
+{
+	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	{
+		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		{
+			if (damage_flag[num] == false)
+			{
+				hp--;
+			}
+			damage_flag[num] = true;
+		}
+		else
+		{
+			damage_flag[num] = false;
+		}
+	}
+	else
+	{
+		damage_flag[num] = false;
+	}
+
+}
+#pragma endregion
 
 #pragma region Draw
 //描画
-void Enemy::Draw()
+void Enemy::Draw(int num)
 {
 	if (exising_flag == true)
 	{
@@ -528,43 +594,17 @@ void Enemy::Draw()
 				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 255, 255), true);
 		}
 	}
-	bullet->Draw();
+	for (int i = 0; i < 2; i++)
+	{
+		bullet[i].Draw();
+		DrawFormatString(0, 300+num+(i*20), GetColor(255, 255, 255), "reflection_num[%d]:%d", i,bullet[i].GetReflectionNum());
+	}
 
 	DrawBox(0 + 32, 0 + 32, 960 + -32, 960 - 32, GetColor(255, 255, 255), false);
 }
 #pragma endregion
 
-//当たり判定
-void Enemy::HitBox(Transform transform)
-{
-	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-		this->transform.x + this->transform.xr > transform.x - transform.xr)
-	{
-		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-			this->transform.y + this->transform.yr > transform.y - transform.yr)
-		{
-			if (damage_flag == false)
-			{
-				hp--;
-			}
-			damage_flag = true;
-		}
-		else
-		{
-			damage_flag = false;
-		}
-	}
-	else
-	{
-		damage_flag = false;
-	}
-
-}
-
-
-
-
-
+#pragma region 生成
 //ファイルからデータ読みこみ
 void Enemy::form(FILE* fp)
 {
@@ -595,7 +635,7 @@ void Enemy::form(FILE* fp)
 		start_x = 0;
 		end_x = 0;
 		end_y = 0;
-		appear_time = 0;
+		appear_time = -1;
 		move_time = 0;
 		move_end_frame = 0;
 		move_end_x[0] = 0;
@@ -613,7 +653,8 @@ void Enemy::form(FILE* fp)
 	transform.x = start_x;
 	transform.y = start_y;
 	exising_flag = false;
-	damage_flag = false;
+	damage_flag[0] = false;
+	damage_flag[1] = false;
 	fast_move_flag = false;
 
 	move_flag = false;
@@ -644,6 +685,7 @@ void Enemy::form(FILE* fp)
 	def_explosion_time = explosion_time;
 }
 
+//生成メイン
 void EnemyForm(const char* file_name, int max, Enemy* enemy)
 {
 
@@ -659,3 +701,26 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 		fclose(fp);
 	}
 }
+#pragma endregion
+
+#pragma region ゲッター
+Transform Enemy::GetBulletTransform(int num)
+{
+	return bullet[num].GetTransform();
+}
+
+bool Enemy::GetEnemyFlag()
+{
+	return exising_flag;
+}
+
+int Enemy::GetAppearTime()
+{
+	return appear_time;
+}
+
+EnemyBullet* Enemy::GetEnmyBullet()
+{
+	return bullet;
+}
+#pragma endregion

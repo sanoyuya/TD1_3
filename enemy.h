@@ -9,10 +9,16 @@ public:
 	~Enemy();
 	void form(FILE* fp);
 	void Move(Player& player);
-	void Draw();
-	void HitBox(Transform transform);
+	void Draw(int num);
+	void HitBox(Transform transform,int num);
 	void EnemyToEnemyHitBox(Transform transform);
 	void ExplosionBommer(Enemy& enemy, Player& player);
+	void HP(Transform transform, EnemyBullet* bullet, int num);
+
+	bool GetEnemyFlag();
+	int GetAppearTime();
+	EnemyBullet* GetEnmyBullet();
+	Transform GetBulletTransform(int num);
 
 private:
 	bool use_flag;//使うか
@@ -24,7 +30,7 @@ private:
 	bool exising_flag;//存在フラグ
 	bool action_flag;//動くかどうかフラグ
 	bool shot_action_flag;//打つかどうか
-	bool damage_flag;
+	bool damage_flag[2];
 	int shot_time;
 	//最初の移動のための変数
 	int frame;
