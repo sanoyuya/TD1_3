@@ -98,6 +98,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 			if (game_set == false)
 			{
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					enemy[i].SetReflectionNum();
+				}
 				switch (wave_num)
 				{
 				case 1:
@@ -164,9 +168,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//waveクリア判定
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				if (enemy[i].GetEnemyFlag() == true ||
-					
-					enemy[i].GetAppearTime() != -1)
+				if (enemy[i].GetEnemyFlag() == true ||enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true|| enemy[i].GetBulletFlag(1) == true)
 				{
 					i--;
 					break;

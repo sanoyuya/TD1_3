@@ -15,10 +15,13 @@ public:
 	void ExplosionBommer(Enemy& enemy, Player& player);
 	void HP(Transform transform, EnemyBullet* bullet, int num);
 
+	bool GetBulletFlag(int i);
 	bool GetEnemyFlag();
 	int GetAppearTime();
 	EnemyBullet* GetEnmyBullet();
 	Transform GetBulletTransform(int num);
+
+	void SetReflectionNum();
 
 private:
 	bool use_flag;//Žg‚¤‚©

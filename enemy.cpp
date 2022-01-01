@@ -709,6 +709,19 @@ Transform Enemy::GetBulletTransform(int num)
 	return bullet[num].GetTransform();
 }
 
+void Enemy::SetReflectionNum()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		bullet[i].SetReflectionNum(0);
+	}
+}
+
+bool Enemy::GetBulletFlag(int i)
+{
+	return bullet[i].GetBulletFlag();
+}
+
 bool Enemy::GetEnemyFlag()
 {
 	return exising_flag;
