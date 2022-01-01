@@ -719,7 +719,7 @@ void Enemy::SetReflectionNum()
 
 bool Enemy::GetBulletFlag(int i)
 {
-	return bullet[i].GetBulletFlag();
+	return *bullet[i].GetBulletFlag();
 }
 
 bool Enemy::GetEnemyFlag()
