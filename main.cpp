@@ -97,6 +97,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			//プレイ画面
+#pragma region
+			player->PlayerPadMove(keys, oldkeys);
+			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
+				delete player;
+				player = new Player();
+			}
 
 #pragma region 敵データ読み込み
 			if (game_set == false)
@@ -185,7 +191,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
-			player->PlayerPadMove(keys, oldkeys);
+			
 
 			sceneflag = player->Result();
 

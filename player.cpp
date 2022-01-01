@@ -3,8 +3,8 @@
 #include"enemy.h"
 
 Player::Player() {//コンストラクタの定義
-	X = 300;
-	Y = 200;
+	X = 480;
+	Y = 832;
 	R = 32;
 	speed = 7;
 	hp = 20;

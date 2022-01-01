@@ -23,6 +23,7 @@ private:
 	int itemflag;
 public:
 	Player();
+	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys);
 	void HP(Transform transform, EnemyBullet* bullet, int num);
 	void Draw();
