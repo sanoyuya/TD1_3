@@ -102,6 +102,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
 				delete player;
 				player = new Player();
+				delete[]enemy;
+				enemy = new Enemy[ENEMY_MAX];
+				wave_num = 1;
+				game_set = false;
 			}
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
