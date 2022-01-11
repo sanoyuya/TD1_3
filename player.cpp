@@ -125,7 +125,7 @@ int Player::GetY()
 
 int Player::Result() {
 	if (hp <= 0) {
-		return 3;//ゲームオーバー画面へ
+		return 4;//ゲームオーバー画面へ
 	}
 	else {
 		return 2;
