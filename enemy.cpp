@@ -106,6 +106,8 @@ Enemy::Enemy()
 	explosion_bommer_flag = false;
 	bullet = new EnemyBullet[bullet_max];
 
+	color = GetColor(255, 255, 255);
+
 }
 
 Enemy::~Enemy()
@@ -202,20 +204,6 @@ void Enemy::Move(Player& player)
 						shot_time--;
 					}
 
-					//”½Ë‰ñ”‰Šú‰»
-					for (int i = 0; i < bullet_max; i++)
-					{
-						if (bullet[i].GetReflectionNum() == 3)
-						{
-							bullet[i].SetReflectionNum(0);
-						}
-
-						//“–‚½‚è”»’è
-						if (*bullet[i].GetBulletFlag() == true)
-						{
-							HitBox(bullet[i].GetTransform(), i);
-						}
-					}
 					//’e‚Ì¶¬
 					if (shot_time == 0)
 					{
@@ -485,6 +473,16 @@ void Enemy::Move(Player& player)
 		{
 			bullet[i].Move(enemy_type);
 		}
+
+		//“–‚½‚è”»’è
+		for (int i = 0; i < bullet_max; i++)
+		{
+
+			if (*bullet[i].GetBulletFlag() == true)
+			{
+				HitBox(bullet[i].GetTransform(), i);
+			}
+		}
 	}
 }
 #pragma endregion
@@ -589,6 +587,11 @@ void Enemy::HitBox(Transform transform, int num)
 //•`‰æ
 void Enemy::Draw(int num)
 {
+	for (int i = 0; i < bullet_max; i++)
+	{
+		bullet[i].color = color;
+	}
+
 	if (exising_flag == true)
 	{
 		if (explosion_bommer_flag == true)
@@ -599,13 +602,20 @@ void Enemy::Draw(int num)
 		else
 		{
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 255, 255), true);
+				(int)transform.x + transform.xr, (int)transform.y + transform.yr, color, true);
 		}
 	}
+
 	for (int i = 0; i < bullet_max; i++)
 	{
 		bullet[i].Draw();
-		DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "reflection_num[%d]:%d", i, bullet[i].GetReflectionNum());
+		DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
+
+		if (bullet[i].GetReflectionNum() == 3)
+		{
+			bullet[i].SetBulletFlag(false);
+			bullet[i].SetReflectionNum(0);
+		}
 	}
 
 	DrawBox(0 + 32, 0 + 32, 960 - 32, 960 - 32, GetColor(255, 255, 255), false);

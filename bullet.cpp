@@ -7,6 +7,7 @@
 #pragma region コンストラクタ・デストラクタ
 EnemyBullet::EnemyBullet()
 {
+	color = GetColor(255, 255, 255);
 	transform.x = 0;
 	transform.y = 0;
 	transform.xr = 8;
@@ -282,12 +283,7 @@ void EnemyBullet::Draw()
 {
 	if (bullet_flag == true)
 	{
-		DrawCircle((int)transform.x, (int)transform.y, transform.xr, GetColor(255, 255, 255), true);
-
-		if (reflection_num == 3)
-		{
-			bullet_flag = false;
-		}
+		DrawCircle((int)transform.x, (int)transform.y, transform.xr, color, true);
 		
 	}
 }
