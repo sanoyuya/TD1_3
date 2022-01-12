@@ -109,9 +109,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (stageflag == 0) {
 				if (pushflag == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 10;
+						sceneflag = 2;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 10;
+						sceneflag = 2;
 					}
 				}
 			}

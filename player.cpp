@@ -19,6 +19,7 @@ Player::Player() {//コンストラクタの定義
 	itemflag = 0;
 	Cgh = LoadGraph("Circle.png");
 	Moveflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	txtflag = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動

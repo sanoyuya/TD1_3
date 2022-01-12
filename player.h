@@ -23,6 +23,7 @@ private:
 	int itemflag;
 	int Cgh;
 	int Moveflag; int Bflag; int Aflag; double CP;
+	int txtflag;
 public:
 	Player();
 	//void Rset();
