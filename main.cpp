@@ -44,13 +44,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 画像などのリソースデータの変数宣言と読み込み
-
+	
 
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
 	int pushflag = 0;
 	int stageflag = 0;
+	
+	
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
@@ -96,6 +98,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 1:
 				//ステージ選択
+
 				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 					pushflag = 0;
 				}
@@ -107,9 +110,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (stageflag == 0) {
 					if (pushflag == 0) {
 						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 2;
+							sceneflag = 10;
 						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 2;
+							sceneflag = 10;
 						}
 					}
 				}
@@ -241,6 +244,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 5:
 				//リザルト画面(ゲームクリア)
 				break;
+
+			case 10:
+				//チュートリアル
+				player->TutorialMove(keys,oldkeys);
+				break;
 		}
 		// 描画処理
 		switch (sceneflag) {//シーン管理
@@ -260,6 +268,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				//プレイ画面
+
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
 					enemy[i].Draw(40 * i);
@@ -281,6 +290,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 5:
 				//リザルト画面(ゲームクリア)
 				break;
+
+			case 10:
+				//チュートリアル
+				player->TutorialDraw();
+				break;
+				delete player;
 		}
 
 		//---------  ここまでにプログラムを記述  ---------//
