@@ -22,7 +22,7 @@ public:
 	Transform GetBulletTransform(int num);
 
 	void SetReflectionNum();
-
+	int color;
 private:
 	bool use_flag;//使うか
 	int enemy_type;//敵のタイプ
@@ -33,7 +33,8 @@ private:
 	bool exising_flag;//存在フラグ
 	bool action_flag;//動くかどうかフラグ
 	bool shot_action_flag;//打つかどうか
-	bool damage_flag[2];
+	int bullet_max;
+	bool damage_flag[3];
 	int shot_time;
 	//最初の移動のための変数
 	int frame;
@@ -68,6 +69,9 @@ private:
 	int def_explosion_time;
 
 	EnemyBullet* bullet;
+
+	//デバッグ用
+
 
 };
 

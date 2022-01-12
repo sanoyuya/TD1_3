@@ -44,18 +44,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 画像などのリソースデータの変数宣言と読み込み
-	
+
 
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
+	int pushflag = 0;
+	int stageflag = 0;
+
+
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
 
-	SubBossForm("subbosstest.csv", 1, *sub_boss);
 
-	int wave_num = 1;
+	int wave_num = 5;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -84,15 +87,43 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 0:
 			//タイトル
 			if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-				sceneflag = 2;
+				pushflag = 1;
+				sceneflag = 1;
 			}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				sceneflag = 2;
+				pushflag = 1;
+				sceneflag = 1;
 			}
-
 			break;
 
 		case 1:
 			//ステージ選択
+
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflag = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				stageflag = 0;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+				stageflag = 1;
+			}
+			if (stageflag == 0) {
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 2;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 2;
+					}
+				}
+			}
+			else {
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 3;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 3;
+					}
+				}
+			}
 			break;
 
 		case 2:
@@ -135,6 +166,33 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					break;
 				case 5:
 					EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
+					enemy[0].color = GetColor(255, 255, 255);
+					enemy[1].color = GetColor(0, 0, 255);
+					enemy[2].color = GetColor(0, 255, 0);
+					enemy[3].color = GetColor(255, 0, 0);
+					enemy[4].color = GetColor(255, 255, 0);
+
+					game_set = true;
+					break;
+				case 6:
+					EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 7:
+					EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 8:
+					EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 9:
+					EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 10:
+					EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
+					SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
 					game_set = true;
 					break;
 				}
@@ -147,16 +205,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy[i].Move(*player);
 			}
 
-			/*enemy[0].Move(*player);
-			enemy[1].Move(*player);
-			enemy[0].ExplosionBommer(enemy[1], *player);*/
 
-			//sub_boss->Move(*player);
+
+			sub_boss->Move(*player);
 
 #pragma region 体力減少
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				for (int j = 0; j < 2; j++)
+				for (int j = 0; j < 3; j++)
 				{
 					player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
 
@@ -164,10 +220,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					{
 						if (i != k)
 						{
-							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetEnemyFlag() == true)
+							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetBulletFlag(j) == true)
 							{
 								enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
 							}
+
+							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
 					}
 				}
@@ -176,37 +234,45 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
 			}
-#pragma endregion
 
 			//waveクリア判定
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				if (enemy[i].GetEnemyFlag() == true ||enemy[i].GetAppearTime() != -1 ||
-					enemy[i].GetBulletFlag(0) == true|| enemy[i].GetBulletFlag(1) == true)
+				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
 				{
 					i--;
 					break;
 				}
 
-				if (i == ENEMY_MAX-1)
+				if (i == ENEMY_MAX - 1)
 				{
 					game_set = false;
-					wave_num++;
+					//wave_num++;
 				}
 			}
 
-			
+
 
 			sceneflag = player->Result();
 
 			break;
 
 		case 3:
-			//リザルト画面(ゲームオーバー)
+			//プレイ画面
 			break;
 
 		case 4:
+			//リザルト画面(ゲームオーバー)
+			break;
+
+		case 5:
 			//リザルト画面(ゲームクリア)
+			break;
+
+		case 10:
+			//チュートリアル
+			player->TutorialMove(keys, oldkeys);
 			break;
 		}
 		// 描画処理
@@ -217,13 +283,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 1:
 			//ステージ選択
+			if (stageflag == 0) {
+				DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
+			}if (stageflag == 1) {
+				DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
+			}
+
 			break;
 
 		case 2:
 			//プレイ画面
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-			enemy[i].Draw(40*i);
+				enemy[i].Draw(60 * i);
 			}
 
 			player->Draw();
@@ -232,12 +304,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 			delete player;
 		case 3:
-			//リザルト画面(ゲームオーバー)
+			//プレイ画面
 			break;
 
 		case 4:
+			//リザルト画面(ゲームオーバー)
+			break;
+
+		case 5:
 			//リザルト画面(ゲームクリア)
 			break;
+
+		case 10:
+			//チュートリアル
+			player->TutorialDraw();
+			break;
+			delete player;
 		}
 
 		//---------  ここまでにプログラムを記述  ---------//

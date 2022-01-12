@@ -17,6 +17,9 @@ Player::Player() {//コンストラクタの定義
 	COOLTIME = 0;
 	COOLTIMEtimer = 0;
 	itemflag = 0;
+	Cgh = LoadGraph("Circle.png");
+	Moveflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	txtflag = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -102,7 +105,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 }
 
-void Player::HP(Transform transform, EnemyBullet* bullet,int num) {
+void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
 
 	if (*bullet[num].GetBulletFlag() == true)
 	{
@@ -125,7 +128,7 @@ int Player::GetY()
 
 int Player::Result() {
 	if (hp <= 0) {
-		return 3;//ゲームオーバー画面へ
+		return 4;//ゲームオーバー画面へ
 	}
 	else {
 		return 2;
@@ -138,13 +141,50 @@ int Player::Result() {
 	//}
 }
 
+void Player::TutorialMove(char* keys, char* oldkeys) {
+	if (Moveflag == 0) {
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+			CP += 1;
+			if (CP >= 125) {
+				Moveflag = 1;
+			}
+		}
+	}
+	
+	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+		Y -= speed;
+	}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+		Y += speed;
+	}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+		X += speed;
+	}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+		X -= speed;
+	}
+
+	if (X <= 64) {
+		X = 64;
+	}if (X >= 896) {
+		X = 896;
+	}if (Y <= 64) {
+		Y = 64;
+	}if (Y >= 896) {
+		Y = 896;
+	}
+}
+
 void Player::Draw() {//描画関数
 	DrawCircle(X, Y, R, GetColor(255, 255, 255), true);
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
-	DrawFormatString(0, 80, GetColor(255, 255, 255), "hp:%d", hp);
+	//DrawFormatString(0, 0, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
+	//DrawFormatString(0, 40, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
+	//DrawFormatString(0, 60, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
+	//DrawFormatString(0, 80, GetColor(255, 255, 255), "hp:%d", hp);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "Afterglow:%d", Afterglow);
 }
 
+void Player::TutorialDraw() {
+	DrawCircle(X, Y, R, GetColor(255, 255, 255), true);
+	if (Moveflag == 0) {
+		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
+	}
+}

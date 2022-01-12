@@ -22,6 +22,9 @@ public:
 	EnemyBullet();
 	~EnemyBullet();
 
+	//デバッグ用
+	int color;
+
 private:
 	Transform transform;
 	Vertex vertex;
@@ -30,6 +33,7 @@ private:
 	int x_speed;
 	int y_speed;
 	float angle;
+
 
 }EnemyBullet;
 

@@ -21,6 +21,9 @@ private:
 	int COOLTIME;
 	int COOLTIMEtimer;
 	int itemflag;
+	int Cgh;
+	int Moveflag; int Bflag; int Aflag; double CP;
+	int txtflag;
 public:
 	Player();
 	//void Rset();
@@ -30,4 +33,6 @@ public:
 	int GetX();
 	int GetY();
 	int Result();
+	void TutorialMove(char* keys, char* oldkeys);
+	void TutorialDraw();
 }Player;

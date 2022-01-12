@@ -7,6 +7,7 @@
 #pragma region コンストラクタ・デストラクタ
 EnemyBullet::EnemyBullet()
 {
+	color = GetColor(255, 255, 255);
 	transform.x = 0;
 	transform.y = 0;
 	transform.xr = 8;
@@ -282,12 +283,7 @@ void EnemyBullet::Draw()
 {
 	if (bullet_flag == true)
 	{
-		DrawCircle((int)transform.x, (int)transform.y, transform.xr, GetColor(255, 255, 255), true);
-
-		if (reflection_num == 4)
-		{
-			bullet_flag = false;
-		}
+		DrawCircle((int)transform.x, (int)transform.y, transform.xr, color, true);
 		
 	}
 }
@@ -301,8 +297,6 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
 	angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
-	//this->transform.x += (cos(angle) * ((double)transform.xr + 15));
-	//this->transform.y += (sin(angle) * ((double)transform.yr + 15));
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 }

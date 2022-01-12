@@ -20,7 +20,7 @@ double easeInSine(double x)
 }
 
 //空き番号を返す
-int FlagSerch(bool flag[],int max)
+int FlagSerch(bool flag[], int max)
 {
 	for (int i = 0; i < max; i++)
 	{
@@ -51,6 +51,8 @@ Enemy::Enemy()
 	shot_action_flag = false;
 	damage_flag[0] = false;
 	damage_flag[1] = false;
+	damage_flag[2] = false;
+	bullet_max = 3;
 	shot_time = 0;
 	//最初の移動のための変数
 	frame = 0;
@@ -102,7 +104,9 @@ Enemy::Enemy()
 	enemy_to_bommer = false;
 	def_explosion_time = 0;
 	explosion_bommer_flag = false;
-	bullet = new EnemyBullet[2];
+	bullet = new EnemyBullet[bullet_max];
+
+	color = GetColor(255, 255, 255);
 
 }
 
@@ -124,64 +128,64 @@ void Enemy::Move(Player& player)
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
-
-			if (enemy_type == 2)
-			{
-				angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
-			}
 		}
 		else if (appear_time != 0 && appear_time != -1)
 		{
 			appear_time--;
 		}
 
+		if (exising_flag == true)
+		{
+			//最初の移動
+			if (fast_move_flag == true)
+			{
+				frame++;
+				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
+				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
+
+				if (frame == end_frame)
+				{
+					fast_move_flag = false;
+
+					if (enemy_type == 2)
+					{
+						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+					}
+				}
+			}
+		}
 		if (enemy_type != 2)
 		{
 			if (exising_flag == true)
 			{
-				//最初の移動
-				if (fast_move_flag == true)
-				{
-					frame++;
-					transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
-					transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
-
-					if (frame == end_frame)
-					{
-						fast_move_flag = false;
-					}
-				}
-
 				//移動
 				if (action_flag == true && fast_move_flag == false)
 				{
-					//if (move_flag == true)
+
+					if (move_time > 0)
 					{
-						if (move_time > 0)
-						{
-							move_time--;
-						}
+						move_time--;
+					}
 
-						if (move_time == 0)
-						{
-							move_frame++;
-							transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
-							transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+					if (move_time == 0)
+					{
+						move_frame++;
+						transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+						transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
 
-							if (move_frame == move_end_frame)
+						if (move_frame == move_end_frame)
+						{
+							move_num++;
+							move_time = def_move_time;
+							move_frame = 0;
+
+							if (move_num == 4)
 							{
-								//move_flag = false;
-								move_num++;
-								move_time = def_move_time;
-								move_frame = 0;
-
-								if (move_num == 4)
-								{
-									move_num = 0;
-								}
+								move_num = 0;
 							}
 						}
 					}
+
 				}
 				else if (action_flag == false)
 				{
@@ -200,26 +204,12 @@ void Enemy::Move(Player& player)
 						shot_time--;
 					}
 
-					//反射回数初期化
-					for (int i = 0; i < 2; i++)
-					{
-						if (bullet[i].GetReflectionNum() == 4)
-						{
-							bullet[i].SetReflectionNum(0);
-						}
-
-						//当たり判定
-						if (*bullet[i].GetBulletFlag() == true)
-						{
-							HitBox(bullet[i].GetTransform(),i);
-						}
-					}
 					//弾の生成
 					if (shot_time == 0)
 					{
 						shot_time = def_shot_time;
 
-						for (int i = 0; i < 2; i++)
+						for (int i = 0; i < bullet_max; i++)
 						{
 							if (*bullet[i].GetBulletFlag() == false)
 							{
@@ -244,10 +234,15 @@ void Enemy::Move(Player& player)
 		//ボマー
 		if (enemy_type == 2)
 		{
-			if (exising_flag == true)
+			//最初の移動
+			if (exising_flag == true && fast_move_flag == false && explosion_bommer_flag == false)
 			{
-				//最初の移動
-				if (fast_move_flag == true && explosion_bommer_flag == false)
+				if (move_time > 0)
+				{
+					move_time--;
+				}
+
+				if (move_time == 0)
 				{
 					if (transform.x < 960.0 && transform.x> 0 + 64 &&
 						transform.y < 960.0 && transform.y> 0 + 64)
@@ -291,8 +286,6 @@ void Enemy::Move(Player& player)
 											{
 												transform.x += (cos(angle) * 1);
 											}
-
-
 										}
 										else
 										{
@@ -471,13 +464,24 @@ void Enemy::Move(Player& player)
 					}
 				}
 			}
+
 		}
 #pragma endregion
 
 		//弾の動き
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < bullet_max; i++)
 		{
 			bullet[i].Move(enemy_type);
+		}
+
+		//当たり判定
+		for (int i = 0; i < bullet_max; i++)
+		{
+
+			if (*bullet[i].GetBulletFlag() == true)
+			{
+				HitBox(bullet[i].GetTransform(), i);
+			}
 		}
 	}
 }
@@ -487,8 +491,8 @@ void Enemy::Move(Player& player)
 //爆発エフェクト
 void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 {
-	if (transform.x != enemy.transform.x && transform.y != enemy.transform.y && 
-		enemy.exising_flag ==true && exising_flag == true)
+	if (transform.x != enemy.transform.x && transform.y != enemy.transform.y &&
+		enemy.exising_flag == true && exising_flag == true)
 	{
 		EnemyToEnemyHitBox(enemy.transform);
 	}
@@ -550,7 +554,7 @@ void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
 }
 
 //当たり判定(単体)
-void Enemy::HitBox(Transform transform,int num)
+void Enemy::HitBox(Transform transform, int num)
 {
 	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 		this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -561,7 +565,9 @@ void Enemy::HitBox(Transform transform,int num)
 			if (damage_flag[num] == false)
 			{
 				hp--;
+				bullet[num].SetBulletFlag(false);
 			}
+
 			damage_flag[num] = true;
 		}
 		else
@@ -581,6 +587,11 @@ void Enemy::HitBox(Transform transform,int num)
 //描画
 void Enemy::Draw(int num)
 {
+	for (int i = 0; i < bullet_max; i++)
+	{
+		bullet[i].color = color;
+	}
+
 	if (exising_flag == true)
 	{
 		if (explosion_bommer_flag == true)
@@ -591,16 +602,23 @@ void Enemy::Draw(int num)
 		else
 		{
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 255, 255), true);
+				(int)transform.x + transform.xr, (int)transform.y + transform.yr, color, true);
 		}
 	}
-	for (int i = 0; i < 2; i++)
+
+	for (int i = 0; i < bullet_max; i++)
 	{
 		bullet[i].Draw();
-		DrawFormatString(0, 300+num+(i*20), GetColor(255, 255, 255), "reflection_num[%d]:%d", i,bullet[i].GetReflectionNum());
+		DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
+
+		if (bullet[i].GetReflectionNum() == 3)
+		{
+			bullet[i].SetBulletFlag(false);
+			bullet[i].SetReflectionNum(0);
+		}
 	}
 
-	DrawBox(0 + 32, 0 + 32, 960 + -32, 960 - 32, GetColor(255, 255, 255), false);
+	DrawBox(0 + 32, 0 + 32, 960 - 32, 960 - 32, GetColor(255, 255, 255), false);
 }
 #pragma endregion
 
@@ -612,7 +630,7 @@ void Enemy::form(FILE* fp)
 	int b = 0;
 	int c = 0;
 	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf"
-, &a,&b,&c,&enemy_type,&appear_time,&shot_time,&explosion_time,&hp,&transform.xr,&transform.yr,&x_speed,&y_speed,&end_frame,&start_x,&start_y,&end_x,&end_y,&move_time,&move_end_frame,
+		, &a, &b, &c, &enemy_type, &appear_time, &shot_time, &explosion_time, &hp, &transform.xr, &transform.yr, &x_speed, &y_speed, &end_frame, &start_x, &start_y, &end_x, &end_y, &move_time, &move_end_frame,
 		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2])
 		!= EOF)
 	{
@@ -711,7 +729,7 @@ Transform Enemy::GetBulletTransform(int num)
 
 void Enemy::SetReflectionNum()
 {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < bullet_max; i++)
 	{
 		bullet[i].SetReflectionNum(0);
 	}
