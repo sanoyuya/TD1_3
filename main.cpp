@@ -57,9 +57,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
 
-	SubBossForm("subbosstest.csv", 1, *sub_boss);
 
-	int wave_num = 1;
+	int wave_num = 5;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -149,26 +148,47 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					switch (wave_num)
 					{
-						case 1:
-							EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 2:
-							EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 3:
-							EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 4:
-							EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 5:
-							EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
+					case 1:
+						EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 2:
+						EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 3:
+						EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 4:
+						EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 5:
+						EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 6:
+						EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 7:
+						EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 8:
+						EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 9:
+						EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
+					case 10:
+						EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
+						SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
+						game_set = true;
+						break;
 					}
 
 				}
@@ -179,59 +199,58 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					enemy[i].Move(*player);
 				}
 
-				/*enemy[0].Move(*player);
-				enemy[1].Move(*player);
-				enemy[0].ExplosionBommer(enemy[1], *player);*/
 
-				//sub_boss->Move(*player);
+
+			sub_boss->Move(*player);
 
 #pragma region 体力減少
-				for (int i = 0; i < ENEMY_MAX; i++)
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				for (int j = 0; j < 3; j++)
 				{
-					for (int j = 0; j < 2; j++)
-					{
-						player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
+					player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
 
-						for (int k = 0; k < ENEMY_MAX; k++)
+					for (int k = 0; k < ENEMY_MAX; k++)
+					{
+						if (i != k)
 						{
-							if (i != k)
+							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetEnemyFlag() == true)
 							{
-								if (enemy[i].GetEnemyFlag() == true && enemy[k].GetEnemyFlag() == true)
-								{
-									enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
-								}
+								enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
 							}
+
+							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
 					}
 				}
-				for (int i = 0; i < 4; i++)
-				{
-					player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
-				}
-#pragma endregion
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
+			}
 
-				//waveクリア判定
-				for (int i = 0; i < ENEMY_MAX; i++)
+			//waveクリア判定
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
 				{
-					if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
-						enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true)
-					{
-						i--;
-						break;
-					}
-
-					if (i == ENEMY_MAX - 1)
-					{
-						game_set = false;
-						wave_num++;
-					}
+					i--;
+					break;
 				}
 
+				if (i == ENEMY_MAX - 1)
+				{
+					game_set = false;
+					wave_num++;
+				}
+			}
 
 
-				sceneflag = player->Result();
 
-				break;
+			sceneflag = player->Result();
+
+			break;
 
 			case 3:
 				//プレイ画面
@@ -268,10 +287,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				//プレイ画面
-
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
-					enemy[i].Draw(40 * i);
+					enemy[i].Draw(60 * i);
 				}
 
 				player->Draw();
