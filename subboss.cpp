@@ -82,7 +82,7 @@ void SubBoss::form(FILE* fp)
 //’e‚ğ‘Å‚Á‚½‚Ä‚·‚×‚ÄÁ‚¦‚½Œã‚ÉˆÚ“®‚·‚é
 //’n—‹‚Æ’e‚Ì“®‚«‚ğ‚·‚é
 
-void SubBoss::Move(Player& player)
+void SubBoss::Move(Player& player, bool reflection_flag)
 {
 	//oŒ»ŠÔŠÇ—
 	if (appear_time == 0)
@@ -294,7 +294,7 @@ void SubBoss::Move(Player& player)
 	for (int i = 0; i < 4; i++)
 	{
 		//’e‚Ì“®‚«
-		bullet[i].Move(enemy_type);
+		bullet[i].Move(enemy_type,reflection_flag);
 	}
 }
 #pragma endregion

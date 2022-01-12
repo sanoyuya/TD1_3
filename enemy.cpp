@@ -118,7 +118,7 @@ Enemy::~Enemy()
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player)
+void Enemy::Move(Player& player,bool reflection_flag)
 {
 	if (use_flag == true)
 	{
@@ -471,7 +471,7 @@ void Enemy::Move(Player& player)
 		//’e‚Ì“®‚«
 		for (int i = 0; i < bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type);
+			bullet[i].Move(enemy_type,reflection_flag);
 		}
 
 		//“–‚½‚è”»’è
@@ -673,6 +673,7 @@ void Enemy::form(FILE* fp)
 	exising_flag = false;
 	damage_flag[0] = false;
 	damage_flag[1] = false;
+	damage_flag[2] = false;
 	fast_move_flag = false;
 
 	move_flag = false;

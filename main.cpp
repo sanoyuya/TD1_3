@@ -51,7 +51,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int sceneflag = 0;
 	int pushflag = 0;
 	int stageflag = 0;
-
+	bool reflection_flag = true;
 
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[ENEMY_MAX];
@@ -202,12 +202,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				enemy[i].Move(*player);
+				enemy[i].Move(*player,true);
 			}
 
 
 
-			sub_boss->Move(*player);
+			sub_boss->Move(*player,true);
 
 #pragma region ëÃóÕå∏è≠
 			for (int i = 0; i < ENEMY_MAX; i++)
@@ -238,9 +238,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//waveÉNÉäÉAîªíË
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
+				if (enemy[i].GetEnemyFlag() == false || enemy[i].GetAppearTime() == -1 && i == ENEMY_MAX-1)
+				{
+					reflection_flag = false;
+				}
+
 				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
 					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
 				{
+
 					i--;
 					break;
 				}
@@ -248,6 +254,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (i == ENEMY_MAX - 1)
 				{
 					game_set = false;
+					reflection_flag = true;
 					//wave_num++;
 				}
 			}

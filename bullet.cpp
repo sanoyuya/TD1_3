@@ -33,7 +33,7 @@ EnemyBullet::~EnemyBullet()
 #pragma endregion
 
 #pragma region Move
-void EnemyBullet::Move(int enemy_type)
+void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 {
 	if (bullet_flag == true)
 	{
@@ -83,8 +83,17 @@ void EnemyBullet::Move(int enemy_type)
 							}
 							else
 							{
-								x_speed = -(x_speed);
-								reflection_num++;
+								if (reflection_flag == true)
+								{
+									x_speed = -(x_speed);
+									reflection_num++;
+								}
+								else
+								{
+									bullet_flag = false;
+									reflection_num = 0;
+								}
+
 								break;
 
 							}
@@ -143,8 +152,16 @@ void EnemyBullet::Move(int enemy_type)
 							}
 							else
 							{
-								x_speed = -(x_speed);
-								reflection_num++;
+								if (reflection_flag == true)
+								{
+									x_speed = -(x_speed);
+									reflection_num++;
+								}
+								else
+								{
+									bullet_flag = false;
+									reflection_num = 0;
+								}
 								break;
 
 							}
@@ -197,8 +214,16 @@ void EnemyBullet::Move(int enemy_type)
 							}
 							else
 							{
-								y_speed = -(y_speed);
-								reflection_num++;
+								if (reflection_flag == true)
+								{
+									y_speed = -(y_speed);
+									reflection_num++;
+								}
+								else
+								{
+									bullet_flag = false;
+									reflection_num = 0;
+								}
 								break;
 							}
 
@@ -206,8 +231,16 @@ void EnemyBullet::Move(int enemy_type)
 					}
 					else
 					{
-						y_speed = -(y_speed);
-						reflection_num++;
+						if (reflection_flag == true)
+						{
+							y_speed = -(y_speed);
+							reflection_num++;
+						}
+						else
+						{
+							bullet_flag = false;
+							reflection_num = 0;
+						}
 					}
 
 				}
@@ -256,8 +289,17 @@ void EnemyBullet::Move(int enemy_type)
 							}
 							else
 							{
-								y_speed = -(y_speed);
-								reflection_num++;
+								if (reflection_flag == true)
+								{
+									y_speed = -(y_speed);
+									reflection_num++;
+								}
+								else
+								{
+									bullet_flag = false;
+									reflection_num = 0;
+								}
+
 								break;
 
 							}
@@ -266,8 +308,16 @@ void EnemyBullet::Move(int enemy_type)
 					}
 					else
 					{
-						y_speed = -(y_speed);
-						reflection_num++;
+						if (reflection_flag == true)
+						{
+							y_speed = -(y_speed);
+							reflection_num++;
+						}
+						else
+						{
+							bullet_flag = false;
+							reflection_num = 0;
+						}
 					}
 
 				}
@@ -284,7 +334,7 @@ void EnemyBullet::Draw()
 	if (bullet_flag == true)
 	{
 		DrawCircle((int)transform.x, (int)transform.y, transform.xr, color, true);
-		
+
 	}
 }
 #pragma endregion

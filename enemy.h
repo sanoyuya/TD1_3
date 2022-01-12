@@ -8,7 +8,7 @@ public:
 	Enemy();
 	~Enemy();
 	void form(FILE* fp);
-	void Move(Player& player);
+	void Move(Player& player, bool reflection_flag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num);
 	void EnemyToEnemyHitBox(Transform transform);
