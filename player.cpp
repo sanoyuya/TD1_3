@@ -593,5 +593,9 @@ void Player::TutorialDraw() {
 	}
 
 }
+int Player::GetR()
+{
+	return R;
+}
 //DrawFormatString(0, 0, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 

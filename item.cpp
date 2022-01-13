@@ -1,5 +1,6 @@
 #include "item.h"
 #include"DxLib.h"
+
 Item::Item()
 {
 }
@@ -19,6 +20,16 @@ void Item::TutorialForm(Transform transform, int item_flag)
 	if (exising_flag == true)
 		this->transform.x = transform.x;
 		this->transform.y = transform.y;
+	}
+}
+
+void Item::Move(Player& player)
+{
+	if ((player.GetR() * player.GetR()) >
+		((player.GetX() - 480) * (player.GetX() - 480)) +
+		((player.GetY() - 128) * (player.GetY() - 128)))
+	{
+
 	}
 }
 

@@ -50,6 +50,7 @@ public:
 	void Draw();
 	int GetX();
 	int GetY();
+	int GetR();
 	int Getstelsflag();
 	int Getreflectionflag();
 	int Result();

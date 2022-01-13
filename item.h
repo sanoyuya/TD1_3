@@ -1,6 +1,6 @@
 #pragma once
 #include "Transform.h"
-
+#include"player.h"
 class Item
 {
 public:
@@ -8,7 +8,7 @@ public:
 	~Item();
 	void Form();
 	void TutorialForm(Transform transform, int item_flag);
-	void Move();
+	void Move(Player& player);
 	void Draw();
 
 private:
