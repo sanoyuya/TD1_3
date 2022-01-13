@@ -25,6 +25,17 @@ private:
 	int Moveflag1; int Moveflag2; int Moveflag2_2; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
 	int pushflag;
+
+	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
+	int easing_flag;
+	double easing_end_frame;
+	double easing_frame;
+	double easing_start_x;
+	double easing_end_x;
+	double easing_start_y;
+	double easing_end_y;
+	double easing_y;
+	double easing_x;
 public:
 	Player();
 	//void Rset();

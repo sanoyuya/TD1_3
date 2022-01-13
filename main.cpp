@@ -48,7 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
-	int sceneflag = 2;
+	int sceneflag = 0;
 	int pushflag = 0;
 	int stageflag = 0;
 	bool reflection_flag = true;

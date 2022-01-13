@@ -21,6 +21,18 @@ Player::Player() {//コンストラクタの定義
 	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
+
+	//頼まれてたもの
+
+	easing_end_frame = 70;
+	easing_end_x = (double)X;
+	easing_end_y = (double)Y;
+	easing_flag = 0;
+	easing_frame = 0.0;
+	easing_start_x = 0.0;
+	easing_start_y = 0.0;
+	easing_x = 0.0;
+	easing_y = 0.0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -157,100 +169,104 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 		pushflag = 0;
 	}
 	switch (txtflag) {
-		case 0:
+	case 0:
 
-			break;
+		break;
 
-		case 1:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 2;
-				}
+	case 1:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 2;
 			}
+		}
 
-			break;
+		break;
 
-		case 2:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag1 = 1;
-				}
+	case 2:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag1 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 3:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 4;
-				}
+	case 3:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 4;
 			}
+		}
 
-			break;
+		break;
 
-		case 4:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 5;
-				}
+	case 4:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 5;
 			}
+		}
 
-			break;
+		break;
 
-		case 5:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag2 = 1;
-				}
+	case 5:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag2 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 6:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 7;
-				}
+	case 6:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 7;
 			}
+		}
 
-			break;
+		break;
 
-		case 7:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 8;
-				}
+	case 7:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 8;
 			}
+		}
 
-			break;
+		break;
 
-		case 8:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-				}
+	case 8:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
 			}
+		}
 
-			break;
+		break;
 	}
 	if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
 		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 			CP += 1;
 			if (CP >= 125) {
 				Moveflag1 = 0;
-				txtflag = 3;//(仮)
+				//txtflag = 3;//(仮)
 				//初期値までイージング
 				//イージングが終わったらtxtflag=3;
+				if (txtflag == 0)
+				{
+					easing_flag = 1;
+				}
 			}
 		}
 		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
@@ -264,6 +280,35 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 		}
 	}
 
+	//イージング
+	if (easing_flag == 1)
+	{
+		//最初に座標代入
+		if (easing_frame == 0)
+		{
+			easing_start_x = (double)X;
+			easing_start_y = (double)Y;
+		}
+
+		easing_frame++;
+
+		//計算して代入
+		easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
+		easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+
+		//座標に代入
+		X = (int)easing_x;
+		Y = (int)easing_y;
+
+		//終わったら初期化
+		if (easing_frame == easing_end_frame)
+		{
+			easing_frame = 0;
+			easing_flag = 0;
+			txtflag = 3;
+		}
+	}
+
 	if (Moveflag2 == 1) {//敵の弾を避けるときに使うやつ
 		if (Moveflag2_2 == 0) {
 			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
@@ -274,7 +319,7 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 				Moveflag2_2 = 1;
 			}
 		}
-		
+
 		if (rightflag == 1 && Moveflag2_2 == 1) {
 			Move2time++;
 			if (Move2time <= 20) {
@@ -347,35 +392,35 @@ void Player::TutorialDraw() {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
 	switch (txtflag) {
-		case 0:
-			//テキストなし
-			break;
-		case 1:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
-			break;
-		case 2:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
-			break;
-		case 3:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
-			break;
-		case 4:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
-			break;
-		case 5:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
-			break;
-		case 6:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
-			break;
-		case 7:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
-			break;
-		case 8:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずはAボタン(絵)を押してみて");
-			DrawFormatString(20, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
-			break;
+	case 0:
+		//テキストなし
+		break;
+	case 1:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
+		break;
+	case 2:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
+		break;
+	case 3:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
+		break;
+	case 4:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
+		break;
+	case 5:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
+		break;
+	case 6:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
+		break;
+	case 7:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
+		break;
+	case 8:
+		DrawFormatString(20, 896, GetColor(255, 255, 255), "まずはAボタン(絵)を押してみて");
+		DrawFormatString(20, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
+		break;
 	}
 	//DrawFormatString(0, 0, GetColor(255, 255, 255), "txtflag:%d", txtflag);
-	
+
 }
