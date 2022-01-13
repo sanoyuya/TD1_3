@@ -4,6 +4,7 @@
 #include"map.h"
 #include"Transform.h"
 #include<math.h>
+#include"item.h"
 
 
 // ウィンドウ横幅
@@ -105,7 +106,7 @@ Enemy::Enemy()
 	def_explosion_time = 0;
 	explosion_bommer_flag = false;
 	bullet = new EnemyBullet[bullet_max];
-
+	item = new Item;
 	color = GetColor(255, 255, 255);
 
 }
@@ -559,8 +560,6 @@ void Enemy::TuTorialMove(int x, int y, int r,int& shot_flag, int stelsflag, int 
 		bullet[0].TutorialMove(y - r);
 	}
 
-
-
 	//当たり判定
 
 	if (*bullet[0].GetBulletFlag() == true)
@@ -701,6 +700,8 @@ void Enemy::Draw(int num)
 	}
 
 	DrawBox(0 + 32, 0 + 32, 960 - 32, 960 - 32, GetColor(255, 255, 255), false);
+
+	item->Draw();
 }
 #pragma endregion
 

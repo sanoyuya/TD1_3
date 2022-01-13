@@ -436,8 +436,6 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 
 			if (enemy[0].GetEnemyFlag() == false)
 			{
-
-
 				//©‹@‚ÉŒü‚¯‚Ä’e‚ğo‚·
 				//“G‚ª€‚ñ‚¾‚ç
 				reflectionflag = 0;

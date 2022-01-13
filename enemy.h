@@ -1,6 +1,7 @@
 #pragma once
 #include"bullet.h"
 #include"Transform.h"
+#include"item.h"
 
 class Enemy
 {
@@ -71,7 +72,8 @@ private:
 	//初期値
 	int def_explosion_time;
 
-	EnemyBullet* bullet;
+	EnemyBullet* bullet; 
+	Item* item;
 
 	//デバッグ用
 
