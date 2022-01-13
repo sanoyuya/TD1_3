@@ -131,7 +131,7 @@ void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
 	}
 }
 
-void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num,int& damage_flag) {
+void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag) {
 
 	if (*bullet[num].GetBulletFlag() == true)
 	{
@@ -177,99 +177,120 @@ int Player::Result() {
 	//}
 }
 
-void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
+void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
 	}
 	switch (txtflag) {
-	case 0:
+		case 0:
 
-		break;
+			break;
 
-	case 1:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 2;
+		case 1:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 2;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 2:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag1 = 1;
+		case 2:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag1 = 1;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 3:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 4;
+		case 3:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 4;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 4:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 5;
-				EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
-				shot_flag = 1;
+		case 4:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 5;
+					EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
+					shot_flag = 1;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 5:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag2 = 1;
+		case 5:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag2 = 1;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 6:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 7;
+		case 6:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 7;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 7:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 8;
+		case 7:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 8;
+				}
 			}
-		}
 
-		break;
+			break;
 
-	case 8:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag3 = 1;
+		case 8:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag3 = 1;
+				}
 			}
-		}
 
-		break;
+			break;
+
+		case 9:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 10;
+				}
+			}
+
+			break;
+
+		case 10:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag4 = 1;
+				}
+			}
+
+			break;
 	}
 	if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
 		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
@@ -371,7 +392,8 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 					Moveflag2 = 0;
 					txtflag = 6;
 				}
-			}else if (leftflag == 1) {
+			}
+			else if (leftflag == 1) {
 				Move2time++;
 				if (Move2time <= 20) {
 					X += 5;
@@ -384,7 +406,7 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 		}
 	}
 
-	if (Moveflag3 == 1) {
+	if (Moveflag3 == 1) {//ステルスチュートリアル
 		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
 			stelsflag = 1;
 			enemy[0].SetShotTime(5);
@@ -396,13 +418,29 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 			//弾が画面外に出たら
 			if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
 			{
-				stelsflag=0;
-				txtflag=9;
-				Moveflag3=0;
+				stelsflag = 0;
+				txtflag = 9;
+				Moveflag3 = 0;
 			}
 		}
 	}
-	
+
+	if (Moveflag4 == 1) {//反射チュートリアル
+		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
+			reflectionflag = 1;
+		}
+
+		if (reflectionflag == 1) {
+			//自機に向けて弾を出す
+			//敵が死んだら
+			//reflectionflag = 0;
+			//txtflag=11;
+			//itemflag=1;
+			//Moveflag4 = 0;
+			
+		}
+	}
+
 	enemy[0].TuTorialMove(X, Y, shot_flag, stelsflag);
 
 	if (X <= 64) {
@@ -432,35 +470,43 @@ void Player::TutorialDraw() {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
 	switch (txtflag) {
-	case 0:
-		//テキストなし
-		break;
-	case 1:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
-		break;
-	case 2:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
-		break;
-	case 3:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
-		break;
-	case 4:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
-		break;
-	case 5:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
-		break;
-	case 6:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
-		break;
-	case 7:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
-		break;
-	case 8:
-		DrawFormatString(20, 896, GetColor(255, 255, 255), "まずはAボタン(絵)を押してみて");
-		DrawFormatString(20, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
-		break;
+		case 0:
+			//テキストなし
+			break;
+		case 1:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
+			break;
+		case 2:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
+			break;
+		case 3:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
+			break;
+		case 4:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
+			break;
+		case 5:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
+			break;
+		case 6:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
+			break;
+		case 7:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
+			break;
+		case 8:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずはBボタン(絵)を押してみて");
+			DrawFormatString(20, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
+			break;
+		case 9:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "今度はAボタン(絵)を押してみて");
+			DrawFormatString(20, 916, GetColor(255, 255, 255), "バリアが張られている間、敵の弾を反射出来るの(わ)");
+			break;
+		case 10:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "本来はアイテムを20個集めないと使えないのだけど、今回は特別よ");
+			break;
 	}
-	//DrawFormatString(0, 0, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 
 }
+//DrawFormatString(0, 0, GetColor(255, 255, 255), "txtflag:%d", txtflag);
+
