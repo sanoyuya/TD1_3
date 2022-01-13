@@ -487,7 +487,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 }
 #pragma endregion
 
-void Enemy::TuTorialMove(int x, int y, int& shot_flag)
+void Enemy::TuTorialMove(int x, int y, int& shot_flag, int stelsflag)
 {
 	if (use_flag == true)
 	{
@@ -536,8 +536,7 @@ void Enemy::TuTorialMove(int x, int y, int& shot_flag)
 
 				if (*bullet[0].GetBulletFlag() == false)
 				{
-					bullet[0].TuTorialForm(transform, x, y, x_speed, y_speed);
-					bullet[0].SetAngle(1.57);
+					bullet[0].TuTorialForm(transform, x, y, x_speed, y_speed, stelsflag);
 					damage_flag[0] = true;
 					shot_flag = false;
 				}

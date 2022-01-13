@@ -356,7 +356,7 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 				}
 			}
 		}
-		enemy[0].TuTorialMove(X, Y, shot_flag);
+
 		HP(enemy[0].GetBulletTransform(0), enemy[0].GetEnmyBullet(), 0);
 
 		if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
@@ -387,16 +387,23 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 	if (Moveflag3 == 1) {
 		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
 			stelsflag = 1;
+			enemy[0].SetShotTime(5);
+			shot_flag = 1;
 		}
 
 		if (stelsflag == 1) {
 			//自機に向けない弾を出す
 			//弾が画面外に出たら
-			//stelsflag=0;
-			//Moveflag3=0;
-			//txtflag=9;
+			if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
+			{
+				stelsflag=0;
+				txtflag=9;
+				Moveflag3=0;
+			}
 		}
 	}
+	
+	enemy[0].TuTorialMove(X, Y, shot_flag, stelsflag);
 
 	if (X <= 64) {
 		X = 64;

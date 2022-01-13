@@ -351,12 +351,20 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	this->y_speed = y_speed;
 }
 
-void EnemyBullet::TuTorialForm(Transform transform, int x,int y, int x_speed, int y_speed)
+void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed, int stelsflag)
 {
 	bullet_flag = true;
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
-	angle = (float)atan2(y - this->transform.y, x - this->transform.x);
+	if (stelsflag == 0)
+	{
+		angle = (float)atan2(y - this->transform.y, x - this->transform.x);
+	}
+	else
+	{
+		angle = (float)atan2(y - this->transform.y, x+64.0 - this->transform.x);
+	}
+
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 }
