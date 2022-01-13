@@ -325,9 +325,6 @@ void SubBoss::Draw()
 	DrawFormatString(0, 140, GetColor(255, 255, 255), "move_time :%d", move_time);
 	DrawFormatString(500, 160, GetColor(255, 255, 255), "x:%lf", transform.x);
 	DrawFormatString(0, 180, GetColor(255, 255, 255), "y:%lf", transform.y);
-
-	DrawLine(96, 0, 96,1000,GetColor(255, 255, 255));
-	DrawLine(960-64-32, 0, 960-64-32, 1000, GetColor(255, 255, 255));
 }
 #pragma endregion
 

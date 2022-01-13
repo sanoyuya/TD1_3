@@ -48,7 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
-	int sceneflag = 0;
+	int sceneflag = 2;
 	int pushflag = 0;
 	int stageflag = 0;
 	bool reflection_flag = true;
@@ -202,12 +202,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				enemy[i].Move(*player,true);
+				enemy[i].Move(*player, reflection_flag);
 			}
 
-
-
-			sub_boss->Move(*player,true);
+			sub_boss->Move(*player, reflection_flag);
 
 #pragma region 体力減少
 			for (int i = 0; i < ENEMY_MAX; i++)
@@ -238,11 +236,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//waveクリア判定
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				if (enemy[i].GetEnemyFlag() == false || enemy[i].GetAppearTime() == -1 && i == ENEMY_MAX-1)
+ 				if (enemy[i].GetEnemyFlag() == false && enemy[i].GetAppearTime() == -1)
 				{
-					reflection_flag = false;
+					if (i == ENEMY_MAX - 1)
+					{
+						reflection_flag = false;
+					}
 				}
+				else
+				{
+					break;
+				}
+			}
 
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
 				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
 					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
 				{
@@ -258,6 +266,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					//wave_num++;
 				}
 			}
+
 
 
 
