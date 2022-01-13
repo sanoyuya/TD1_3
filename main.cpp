@@ -47,8 +47,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int Layout = LoadGraph("resouce/Layout.png");
 
 	int player_img[4];
-	LoadGraph("resouce/player_kari.png");
-
+	LoadDivGraph("resouce/player_kari.png", 4, 4, 1, 388, 484, player_img);
+	int maba = 0;
+	int maba2 = 0;
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
@@ -88,334 +89,345 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflag = 0;
+		case 0:
+			//タイトル
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflag = 0;
+			}
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+					pushflag = 1;
+					sceneflag = 1;
+				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					sceneflag = 1;
 				}
+			}
+
+			break;
+
+		case 1:
+			//ステージ選択
+
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflag = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				stageflag = 0;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+				stageflag = 1;
+			}
+			if (stageflag == 0) {
 				if (pushflag == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						pushflag = 1;
-						sceneflag = 1;
+						sceneflag = 10;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						sceneflag = 1;
+						sceneflag = 10;
 					}
 				}
-
-				break;
-
-			case 1:
-				//ステージ選択
-
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflag = 0;
-				}
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-					stageflag = 0;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-					stageflag = 1;
-				}
-				if (stageflag == 0) {
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 10;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 10;
-						}
+			}
+			else {
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 3;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 3;
 					}
 				}
-				else {
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 3;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 3;
-						}
-					}
-				}
-				break;
+			}
+			break;
 
-			case 2:
-				//プレイ画面
+		case 2:
+			//プレイ画面
 #pragma region
-				player->PlayerPadMove(keys, oldkeys);
-				if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
-					delete player;
-					player = new Player();
-					delete[]enemy;
-					enemy = new Enemy[ENEMY_MAX];
-					wave_num = 1;
-					game_set = false;
-				}
+			player->PlayerPadMove(keys, oldkeys);
+			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
+				delete player;
+				player = new Player();
+				delete[]enemy;
+				enemy = new Enemy[ENEMY_MAX];
+				wave_num = 1;
+				game_set = false;
+			}
 
 #pragma region 敵データ読み込み
-				if (game_set == false)
+			if (game_set == false)
+			{
+				for (int i = 0; i < ENEMY_MAX; i++)
 				{
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						enemy[i].SetReflectionNum();
-					}
-					switch (wave_num)
-					{
-						case 1:
-							EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 2:
-							EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 3:
-							EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 4:
-							EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 5:
-							EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
-							enemy[0].color = GetColor(255, 255, 255);
-							enemy[1].color = GetColor(0, 0, 255);
-							enemy[2].color = GetColor(0, 255, 0);
-							enemy[3].color = GetColor(255, 0, 0);
-							enemy[4].color = GetColor(255, 255, 0);
-
-							game_set = true;
-							break;
-						case 6:
-							EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 7:
-							EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 8:
-							EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 9:
-							EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
-							game_set = true;
-							break;
-						case 10:
-							EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
-							SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
-							game_set = true;
-							break;
-					}
-
+					enemy[i].SetReflectionNum();
 				}
+				switch (wave_num)
+				{
+				case 1:
+					EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 2:
+					EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 3:
+					EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 4:
+					EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 5:
+					EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
+					enemy[0].color = GetColor(255, 255, 255);
+					enemy[1].color = GetColor(0, 0, 255);
+					enemy[2].color = GetColor(0, 255, 0);
+					enemy[3].color = GetColor(255, 0, 0);
+					enemy[4].color = GetColor(255, 255, 0);
+
+					game_set = true;
+					break;
+				case 6:
+					EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 7:
+					EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 8:
+					EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 9:
+					EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 10:
+					EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
+					SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
+					game_set = true;
+					break;
+				}
+
+			}
 #pragma endregion
 
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					enemy[i].Move(*player, reflection_flag);
-				}
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				enemy[i].Move(*player, reflection_flag);
+			}
 
-				sub_boss->Move(*player, reflection_flag);
+			sub_boss->Move(*player, reflection_flag);
 
 #pragma region 体力減少
-				for (int i = 0; i < ENEMY_MAX; i++)
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				for (int j = 0; j < 3; j++)
 				{
-					for (int j = 0; j < 3; j++)
-					{
-						player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
+					player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
 
-						for (int k = 0; k < ENEMY_MAX; k++)
+					for (int k = 0; k < ENEMY_MAX; k++)
+					{
+						if (i != k)
 						{
-							if (i != k)
+							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetBulletFlag(j) == true)
 							{
-								if (enemy[i].GetEnemyFlag() == true && enemy[k].GetBulletFlag(j) == true)
-								{
-									enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
-								}
-
-								enemy[i].ExplosionBommer(enemy[k], *player);
+								enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
 							}
+
+							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
 					}
 				}
-				for (int i = 0; i < 4; i++)
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
+			}
+
+			//waveクリア判定
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == false && enemy[i].GetAppearTime() == -1)
 				{
-					player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
-				}
-
-				//waveクリア判定
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					if (enemy[i].GetEnemyFlag() == false && enemy[i].GetAppearTime() == -1)
-					{
-						if (i == ENEMY_MAX - 1)
-						{
-							reflection_flag = false;
-						}
-					}
-					else
-					{
-						break;
-					}
-				}
-
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
-						enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
-					{
-
-						i--;
-						break;
-					}
-
 					if (i == ENEMY_MAX - 1)
 					{
-						game_set = false;
-						reflection_flag = true;
-						//wave_num++;
+						reflection_flag = false;
 					}
 				}
-
-
-
-
-				sceneflag = player->Result();
-
-				break;
-
-			case 3:
-				//プレイ画面
-				break;
-
-			case 4:
-				//リザルト画面(ゲームオーバー)
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflag = 0;
+				else
+				{
+					break;
 				}
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-					resultflag = 0;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-					resultflag = 1;
+			}
+
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
+				{
+
+					i--;
+					break;
 				}
-				if (resultflag == 0) {//ステージ選択画面に戻る
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 1;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 1;
-						}
+
+				if (i == ENEMY_MAX - 1)
+				{
+					game_set = false;
+					reflection_flag = true;
+					//wave_num++;
+				}
+			}
+
+
+
+
+			sceneflag = player->Result();
+
+			break;
+
+		case 3:
+			//プレイ画面
+			break;
+
+		case 4:
+			//リザルト画面(ゲームオーバー)
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflag = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+				resultflag = 0;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+				resultflag = 1;
+			}
+			if (resultflag == 0) {//ステージ選択画面に戻る
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 1;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 1;
 					}
 				}
-				else {//タイトルへ戻る
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 0;
-							resultflag = 0;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 0;
-							resultflag = 0;
-						}
+			}
+			else {//タイトルへ戻る
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 0;
+						resultflag = 0;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 0;
+						resultflag = 0;
 					}
 				}
-				break;
+			}
+			break;
 
-			case 5:
-				//リザルト画面(ゲームクリア)
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflag = 0;
-				}
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-					resultflag = 0;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-					resultflag = 1;
-				}
-				if (resultflag == 0) {//ステージ選択画面に戻る
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 1;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 1;
-						}
+		case 5:
+			//リザルト画面(ゲームクリア)
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflag = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+				resultflag = 0;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+				resultflag = 1;
+			}
+			if (resultflag == 0) {//ステージ選択画面に戻る
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 1;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 1;
 					}
 				}
-				else {//タイトルへ戻る
-					if (pushflag == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-							sceneflag = 0;
-							resultflag = 0;
-						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 0;
-							resultflag = 0;
-						}
+			}
+			else {//タイトルへ戻る
+				if (pushflag == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						sceneflag = 0;
+						resultflag = 0;
+					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 0;
+						resultflag = 0;
 					}
 				}
-				break;
+			}
+			break;
 
 		case 10:
 			//チュートリアル
-			player->TutorialMove(keys, oldkeys, enemy,sceneflag);
+			player->TutorialMove(keys, oldkeys, enemy, sceneflag);
 			break;
 		}
 		// 描画処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				break;
+		case 0:
+			//タイトル
+			break;
 
-			case 1:
-				//ステージ選択
-				if (stageflag == 0) {
-					DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
-				}if (stageflag == 1) {
-					DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
-				}
+		case 1:
+			//ステージ選択
+			if (stageflag == 0) {
+				DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
+			}if (stageflag == 1) {
+				DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
+			}
 
-				break;
+			break;
 
-			case 2:
-				DrawGraph(0, 0, Layout, true);
-				DrawGraph(958, 144, player_img, true);
-				//プレイ画面
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					enemy[i].Draw(60 * i);
-				}
+		case 2:
+			DrawGraph(0, 0, Layout, true);
+			DrawGraph(958, 144, player_img[0], true);
+			//プレイ画面
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				enemy[i].Draw(60 * i);
+			}
 
-				player->Draw();
-				sub_boss->Draw();
+			player->Draw();
+			sub_boss->Draw();
 
-				break;
-				delete player;
-			case 3:
-				//プレイ画面
-				break;
+			break;
+			delete player;
+		case 3:
+			//プレイ画面
+			break;
 
-			case 4:
-				//リザルト画面(ゲームオーバー)
-				if (resultflag == 0) {
-					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-				}
-				else {
-					DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-				}
+		case 4:
+			//リザルト画面(ゲームオーバー)
+			if (resultflag == 0) {
+				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+			}
+			else {
+				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+			}
 
-				break;
+			break;
 
-			case 5:
-				//リザルト画面(ゲームクリア)
-				if (resultflag == 0) {
-					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-				}
-				else {
-					DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-				}
-				break;
+		case 5:
+			//リザルト画面(ゲームクリア)
+			if (resultflag == 0) {
+				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+			}
+			else {
+				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+			}
+			break;
 
 		case 10:
 			//チュートリアル
+
+			maba++;
+			
+			maba2 = maba/10;
+
+			if (maba2 == 4)
+			{
+				maba = 0;
+				maba2 = 0;
+			}
+
 			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 144, player_img, true);
+			DrawGraph(958, 144, player_img[maba2], true);
 			player->TutorialDraw();
 			enemy[0].Draw(0);
 			break;
