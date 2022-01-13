@@ -78,8 +78,6 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 								{
 									transform.x += (cos(angle) * 1);
 								}
-
-
 							}
 							else
 							{
@@ -93,11 +91,8 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 									bullet_flag = false;
 									reflection_num = 0;
 								}
-
 								break;
-
 							}
-
 						}
 					}
 					else
@@ -327,6 +322,19 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 }
 #pragma endregion
 
+void EnemyBullet::TutorialMove(int y)
+{
+	if (bullet_flag == true)
+	{
+		transform.y += y_speed;
+		
+		if (transform.y > y)
+		{
+			y_speed = -y_speed;
+		}
+	}
+}
+
 #pragma region Draw
 //•`‰æ
 void EnemyBullet::Draw()
@@ -362,7 +370,7 @@ void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, i
 	}
 	else
 	{
-		angle = (float)atan2(y - this->transform.y, x+64.0 - this->transform.x);
+		angle = (float)atan2(y - this->transform.y, x + 64.0 - this->transform.x);
 	}
 
 	this->x_speed = x_speed;

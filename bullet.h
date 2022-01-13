@@ -6,6 +6,7 @@ typedef class EnemyBullet
 {
 public:
 	void Move(int enemy_type, bool reflection_flag);
+	void TutorialMove(int y);
 	void Draw();
 	void Form(Transform transform, Player& player, int x_speed, int y_speed);
 	void TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed,int stelsflag);

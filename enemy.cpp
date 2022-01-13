@@ -487,7 +487,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 }
 #pragma endregion
 
-void Enemy::TuTorialMove(int x, int y, int& shot_flag, int stelsflag)
+void Enemy::TuTorialMove(int x, int y, int r,int& shot_flag, int stelsflag, int reflectionflag)
 {
 	if (use_flag == true)
 	{
@@ -549,8 +549,16 @@ void Enemy::TuTorialMove(int x, int y, int& shot_flag, int stelsflag)
 		}
 	}
 
-	//’e‚Ì“®‚«
-	bullet[0].Move(enemy_type, false);
+	if (reflectionflag != 1)
+	{
+		//’e‚Ì“®‚«
+		bullet[0].Move(enemy_type, false);
+	}
+	else
+	{
+		bullet[0].TutorialMove(y - r);
+	}
+
 
 
 	//“–‚½‚è”»’è

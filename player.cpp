@@ -428,20 +428,28 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 	if (Moveflag4 == 1) {//反射チュートリアル
 		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
 			reflectionflag = 1;
+			enemy[0].SetShotTime(5);
+			shot_flag = 1;
 		}
 
 		if (reflectionflag == 1) {
-			//自機に向けて弾を出す
-			//敵が死んだら
-			//reflectionflag = 0;
-			//txtflag=11;
-			//itemflag=1;
-			//Moveflag4 = 0;
+
+			if (enemy[0].GetEnemyFlag() == false)
+			{
+
+
+				//自機に向けて弾を出す
+				//敵が死んだら
+				reflectionflag = 0;
+				txtflag=11;
+				itemflag=1;
+				Moveflag4 = 0;
+			}
 			
 		}
 	}
 
-	enemy[0].TuTorialMove(X, Y, shot_flag, stelsflag);
+	enemy[0].TuTorialMove(X, Y, R, shot_flag, stelsflag, reflectionflag);
 
 	if (X <= 64) {
 		X = 64;
