@@ -46,6 +46,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// 画像などのリソースデータの変数宣言と読み込み
 	int Layout = LoadGraph("resouce/Layout.png");
 
+	int player_img[4];
+	LoadGraph("resouce/player_kari.png");
+
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
@@ -372,6 +375,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				DrawGraph(0, 0, Layout, true);
+				DrawGraph(958, 144, player_img, true);
 				//プレイ画面
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
@@ -411,6 +415,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 10:
 			//チュートリアル
 			DrawGraph(0, 0, Layout, true);
+			DrawGraph(958, 144, player_img, true);
 			player->TutorialDraw();
 			enemy[0].Draw(0);
 			break;
