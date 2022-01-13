@@ -260,9 +260,6 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 			CP += 1;
 			if (CP >= 125) {
 				Moveflag1 = 0;
-				//txtflag = 3;//(仮)
-				//初期値までイージング
-				//イージングが終わったらtxtflag=3;
 				if (txtflag == 0)
 				{
 					easing_flag = 1;
