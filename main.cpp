@@ -351,7 +351,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 10:
 			//チュートリアル
-			player->TutorialMove(keys, oldkeys, enemy);
+			player->TutorialMove(keys, oldkeys, enemy,sceneflag);
 			break;
 		}
 		// 描画処理

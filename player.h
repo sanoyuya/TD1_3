@@ -25,7 +25,7 @@ private:
 	int COOLTIMEtimer;
 	int itemflag;
 	int Cgh;
-	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
+	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Moveflag5; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
 	int pushflag;
 
@@ -53,7 +53,7 @@ public:
 	int Getstelsflag();
 	int Getreflectionflag();
 	int Result();
-	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[]);
+	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag);
 	void TutorialDraw();
 
 	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
