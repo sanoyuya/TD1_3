@@ -537,6 +537,7 @@ void Enemy::TuTorialMove(int x, int y, int& shot_flag)
 				if (*bullet[0].GetBulletFlag() == false)
 				{
 					bullet[0].TuTorialForm(transform, x, y, x_speed, y_speed);
+					bullet[0].SetAngle(1.57);
 					damage_flag[0] = true;
 					shot_flag = false;
 				}

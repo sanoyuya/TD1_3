@@ -334,26 +334,28 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 			}
 		}
 
-		if (rightflag == 1 && Moveflag2_2 == 1) {
-			Move2time++;
-			if (Move2time <= 20) {
-				X += 5;
-			}
-			else {
-				Move2time = 0;
-				Moveflag2_2 = 2;
-			}
-		}if (leftflag == 1 && Moveflag2_2 == 1) {
-			Move2time++;
-			if (Move2time <= 20) {
-				X -= 5;
-			}
-			else {
-				Move2time = 0;
-				Moveflag2_2 = 2;
+		if (enemy[0].GetBulletFlag(0) == true)
+		{
+			if (rightflag == 1 && Moveflag2_2 == 1) {
+				Move2time++;
+				if (Move2time <= 20) {
+					X += 5;
+				}
+				else {
+					Move2time = 0;
+					Moveflag2_2 = 2;
+				}
+			}if (leftflag == 1 && Moveflag2_2 == 1) {
+				Move2time++;
+				if (Move2time <= 20) {
+					X -= 5;
+				}
+				else {
+					Move2time = 0;
+					Moveflag2_2 = 2;
+				}
 			}
 		}
-
 		enemy[0].TuTorialMove(X, Y, shot_flag);
 		HP(enemy[0].GetBulletTransform(0), enemy[0].GetEnmyBullet(), 0);
 
