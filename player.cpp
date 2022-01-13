@@ -18,7 +18,7 @@ Player::Player() {//コンストラクタの定義
 	COOLTIMEtimer = 0;
 	itemflag = 0;
 	Cgh = LoadGraph("Circle.png");
-	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
 
@@ -265,6 +265,7 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 				pushflag = 1;
 				txtflag = 0;
+				Moveflag3 = 1;
 			}
 		}
 
@@ -378,6 +379,20 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 					txtflag = 6;
 				}
 			}
+		}
+	}
+
+	if (Moveflag3 == 1) {
+		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+			stelsflag = 1;
+		}
+
+		if (stelsflag == 1) {
+			//自機に向けない弾を出す
+			//弾が画面外に出たら
+			//stelsflag=0;
+			//Moveflag3=0;
+			//txtflag=9;
 		}
 	}
 

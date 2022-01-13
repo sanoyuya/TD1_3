@@ -25,7 +25,7 @@ private:
 	int COOLTIMEtimer;
 	int itemflag;
 	int Cgh;
-	int Moveflag1; int Moveflag2; int Moveflag2_2; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
+	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
 	int pushflag;
 
