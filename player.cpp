@@ -18,7 +18,7 @@ Player::Player() {//コンストラクタの定義
 	COOLTIMEtimer = 0;
 	itemflag = 0;
 	Cgh = LoadGraph("Circle.png");
-	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
 
@@ -177,7 +177,7 @@ int Player::Result() {
 	//}
 }
 
-void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
+void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag) {
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
 	}
@@ -287,6 +287,48 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 					pushflag = 1;
 					txtflag = 0;
 					Moveflag4 = 1;
+				}
+			}
+
+			break;
+
+		case 11:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 12;
+				}
+			}
+
+			break;
+
+		case 12:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag5 = 1;
+				}
+			}
+
+			break;
+
+		case 13:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 14;
+				}
+			}
+
+			break;
+
+		case 14:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					sceneflag = 2;
 				}
 			}
 
@@ -426,10 +468,12 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 	}
 
 	if (Moveflag4 == 1) {//反射チュートリアル
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
-			reflectionflag = 1;
-			enemy[0].SetShotTime(5);
-			shot_flag = 1;
+		if (pushflag == 0) {
+			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
+				reflectionflag = 1;
+				enemy[0].SetShotTime(5);
+				shot_flag = 1;
+			}
 		}
 
 		if (reflectionflag == 1) {
@@ -439,11 +483,30 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[]) {
 				//自機に向けて弾を出す
 				//敵が死んだら
 				reflectionflag = 0;
-				txtflag=11;
-				itemflag=1;
+				txtflag = 11;
+				itemflag = 1;
 				Moveflag4 = 0;
 			}
-			
+
+		}
+	}
+
+	if (Moveflag5 == 1) {
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+			Y -= speed;
+		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+			Y += speed;
+		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+			X += speed;
+		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+			X -= speed;
+		}
+		if (itemflag == 1) {
+			if ((R * R) > ((X - 480) * (X - 480)) + ((Y - 128) * (Y - 128))) {
+				itemflag = 0;
+				txtflag = 13;
+				Moveflag5 = 0;
+			}
 		}
 	}
 
@@ -511,6 +574,22 @@ void Player::TutorialDraw() {
 		case 10:
 			DrawFormatString(20, 896, GetColor(255, 255, 255), "本来はアイテムを20個集めないと使えないのだけど、今回は特別よ");
 			break;
+		case 11:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "敵を倒せたみたいね");
+			break;
+		case 12:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "アイテムがドロップしたみたい");
+			DrawFormatString(20, 916, GetColor(255, 255, 255), "取りに行ってみましょう");
+			break;
+		case 13:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "ここで持っているアイテムの数がわかるようになっているの(わ)");
+			break;
+		case 14:
+			DrawFormatString(20, 896, GetColor(255, 255, 255), "これで操作説明は以上よ、一緒に頑張りましょう");
+			break;
+	}
+	if (itemflag == 1) {
+		DrawCircle(480, 128, 32, GetColor(255, 255, 255), false);
 	}
 
 }
