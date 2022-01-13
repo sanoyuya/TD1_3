@@ -381,8 +381,6 @@ void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 		}
 	}
 
-
-
 	if (X <= 64) {
 		X = 64;
 	}if (X >= 896) {
