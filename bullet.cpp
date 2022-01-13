@@ -25,6 +25,7 @@ EnemyBullet::EnemyBullet()
 	x_speed = 0;
 	y_speed = 0;
 	angle = 0.0f;
+	img = LoadGraph("resouce/bullet.png");
 }
 
 EnemyBullet::~EnemyBullet()
@@ -341,7 +342,7 @@ void EnemyBullet::Draw()
 {
 	if (bullet_flag == true)
 	{
-		DrawCircle((int)transform.x, (int)transform.y, transform.xr, color, true);
+		DrawGraph((int)transform.x-transform.xr, (int)transform.y-transform.yr, img, true);
 
 	}
 }

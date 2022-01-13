@@ -35,7 +35,7 @@ private:
 	int x_speed;
 	int y_speed;
 	float angle;
-
+	int img;
 
 }EnemyBullet;
 
