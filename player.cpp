@@ -17,7 +17,7 @@ Player::Player() {//コンストラクタの定義
 	COOLTIME = 0;
 	COOLTIMEtimer = 0;
 	itemflag = 0;
-	Cgh = LoadGraph("Circle.png");
+	Cgh = LoadGraph("resouce/enban.png");
 	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
