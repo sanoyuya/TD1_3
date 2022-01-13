@@ -375,8 +375,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 2:
+			maba++;
+
+			maba2 = maba / 10;
+
+			if (maba2 == 4)
+			{
+				maba = 0;
+				maba2 = 0;
+			}
+
 			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 144, player_img[0], true);
+			DrawGraph(958, 144, player_img[maba2], true);
+
 			//ƒvƒŒƒC‰æ–Ê
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
