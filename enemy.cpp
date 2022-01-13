@@ -118,7 +118,7 @@ Enemy::~Enemy()
 
 #pragma region Move
 //動き
-void Enemy::Move(Player& player,bool reflection_flag)
+void Enemy::Move(Player& player, bool reflection_flag)
 {
 	if (use_flag == true)
 	{
@@ -471,7 +471,7 @@ void Enemy::Move(Player& player,bool reflection_flag)
 		//弾の動き
 		for (int i = 0; i < bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type,reflection_flag);
+			bullet[i].Move(enemy_type, reflection_flag);
 		}
 
 		//当たり判定
@@ -486,6 +486,80 @@ void Enemy::Move(Player& player,bool reflection_flag)
 	}
 }
 #pragma endregion
+
+void Enemy::TuTorialMove(int x, int y, int& shot_flag)
+{
+	if (use_flag == true)
+	{
+		//出現時間管理
+		if (appear_time == 0)
+		{
+			fast_move_flag = true;
+			exising_flag = true;
+			appear_time = -1;
+		}
+		else if (appear_time != 0 && appear_time != -1)
+		{
+			appear_time--;
+		}
+
+		if (exising_flag == true)
+		{
+			//最初の移動
+			if (fast_move_flag == true)
+			{
+				frame++;
+				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
+				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
+
+				if (frame == end_frame)
+				{
+					fast_move_flag = false;
+				}
+			}
+		}
+
+		if (shot_action_flag == true)
+		{
+			//弾の生成
+
+			//発射時間管理
+			if (shot_flag == 1 && shot_time > 0)
+			{
+				shot_time--;
+			}
+
+			//弾の生成
+			if (shot_time == 0)
+			{
+				shot_time = -1;
+
+				if (*bullet[0].GetBulletFlag() == false)
+				{
+					bullet[0].TuTorialForm(transform, x, y, x_speed, y_speed);
+					damage_flag[0] = true;
+					shot_flag = false;
+				}
+			}
+
+			if (hp <= 0)
+			{
+				exising_flag = false;
+			}
+		}
+	}
+
+	//弾の動き
+	bullet[0].Move(enemy_type, false);
+
+
+	//当たり判定
+
+	if (*bullet[0].GetBulletFlag() == true)
+	{
+		HitBox(bullet[0].GetTransform(), 0);
+	}
+}
 
 #pragma region ボマー当たり判定
 //爆発エフェクト
@@ -734,6 +808,16 @@ void Enemy::SetReflectionNum()
 	{
 		bullet[i].SetReflectionNum(0);
 	}
+}
+
+int Enemy::GetShotTime()
+{
+	return shot_time;
+}
+
+void Enemy::SetShotTime(int shot_time)
+{
+	this->shot_time = shot_time;
 }
 
 bool Enemy::GetBulletFlag(int i)

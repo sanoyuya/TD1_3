@@ -33,6 +33,8 @@ Player::Player() {//コンストラクタの定義
 	easing_start_y = 0.0;
 	easing_x = 0.0;
 	easing_y = 0.0;
+
+	shot_flag = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -129,6 +131,17 @@ void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
 	}
 }
 
+void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num,int& damage_flag) {
+
+	if (*bullet[num].GetBulletFlag() == true)
+	{
+		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
+			damage_flag = 1;
+			bullet[num].SetBulletFlag(false);
+		}
+	}
+}
+
 int Player::GetX()
 {
 	return X;
@@ -164,7 +177,7 @@ int Player::Result() {
 	//}
 }
 
-void Player::TutorialMove(char* keys, char* oldkeys) {
+void Player::TutorialMove(char* keys, char* oldkeys,Enemy enemy[]) {
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
 	}
@@ -209,6 +222,8 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 				pushflag = 1;
 				txtflag = 5;
+				EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
+				shot_flag = 1;
 			}
 		}
 
@@ -260,9 +275,7 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 			CP += 1;
 			if (CP >= 125) {
 				Moveflag1 = 0;
-				//txtflag = 3;//(仮)
-				//初期値までイージング
-				//イージングが終わったらtxtflag=3;
+
 				if (txtflag == 0)
 				{
 					easing_flag = 1;
@@ -340,27 +353,32 @@ void Player::TutorialMove(char* keys, char* oldkeys) {
 			}
 		}
 
-		//敵の弾が消えたら
-		/*if (rightflag == 1) {
-			Move2time++;
-			if (Move2time <= 20) {
-				X -= 5;
-			}
-			else {
-				Moveflag2 = 0;
-				txtflag = 6;
-			}
-		}else if (leftflag == 1) {
-			Move2time++;
-			if (Move2time <= 20) {
-				X += 5;
-			}
-			else {
-				Moveflag2 = 0;
-				txtflag = 6;
-			}
-		}*/
+		enemy[0].TuTorialMove(X, Y, shot_flag);
+		HP(enemy[0].GetBulletTransform(0), enemy[0].GetEnmyBullet(), 0);
 
+		if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
+		{
+			//敵の弾が消えたら
+			if (rightflag == 1) {
+				Move2time++;
+				if (Move2time <= 20) {
+					X -= 5;
+				}
+				else {
+					Moveflag2 = 0;
+					txtflag = 6;
+				}
+			}else if (leftflag == 1) {
+				Move2time++;
+				if (Move2time <= 20) {
+					X += 5;
+				}
+				else {
+					Moveflag2 = 0;
+					txtflag = 6;
+				}
+			}
+		}
 	}
 
 

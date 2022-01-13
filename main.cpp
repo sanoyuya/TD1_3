@@ -288,7 +288,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 10:
 			//チュートリアル
-			player->TutorialMove(keys, oldkeys);
+			player->TutorialMove(keys, oldkeys,enemy);
 			break;
 		}
 		// 描画処理
@@ -334,6 +334,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 10:
 			//チュートリアル
 			player->TutorialDraw();
+			enemy[0].Draw(0);
 			break;
 			delete player;
 		}

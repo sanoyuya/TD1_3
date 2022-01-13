@@ -9,6 +9,7 @@ public:
 	~Enemy();
 	void form(FILE* fp);
 	void Move(Player& player, bool reflection_flag);
+	void TuTorialMove(int x, int y, int& shot_flag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num);
 	void EnemyToEnemyHitBox(Transform transform);
@@ -22,6 +23,8 @@ public:
 	Transform GetBulletTransform(int num);
 
 	void SetReflectionNum();
+	void SetShotTime(int shot_time);
+	int GetShotTime();
 	int color;
 private:
 	bool use_flag;//Žg‚¤‚©

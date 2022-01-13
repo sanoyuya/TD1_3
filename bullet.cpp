@@ -350,6 +350,16 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 }
+
+void EnemyBullet::TuTorialForm(Transform transform, int x,int y, int x_speed, int y_speed)
+{
+	bullet_flag = true;
+	this->transform.x = transform.x;
+	this->transform.y = transform.y;
+	angle = (float)atan2(y - this->transform.y, x - this->transform.x);
+	this->x_speed = x_speed;
+	this->y_speed = y_speed;
+}
 #pragma endregion
 
 #pragma region ƒQƒbƒ^[

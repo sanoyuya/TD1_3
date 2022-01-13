@@ -2,7 +2,10 @@
 #include"Dxlib.h"
 #include"Transform.h"
 
+
 class EnemyBullet;
+
+class Enemy;
 
 typedef class Player
 {
@@ -36,6 +39,9 @@ private:
 	double easing_end_y;
 	double easing_y;
 	double easing_x;
+
+
+	int shot_flag;
 public:
 	Player();
 	//void Rset();
@@ -47,6 +53,9 @@ public:
 	int Getstelsflag();
 	int Getreflectionflag();
 	int Result();
-	void TutorialMove(char* keys, char* oldkeys);
+	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[]);
 	void TutorialDraw();
+
+	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
+
 }Player;
