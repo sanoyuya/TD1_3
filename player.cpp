@@ -543,39 +543,39 @@ void Player::TutorialDraw() {
 			//テキストなし
 			break;
 		case 1:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
 			break;
 		case 2:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
 			break;
 		case 3:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
 			break;
 		case 4:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
 			break;
 		case 5:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
 			break;
 		case 6:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
 			break;
 		case 7:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
 			break;
 		case 8:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "まずはBボタン(絵)を押してみて");
-			DrawFormatString(20, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "まずはBボタン(絵)を押してみて");
+			DrawFormatString(40, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
 			break;
 		case 9:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "今度はAボタン(絵)を押してみて");
-			DrawFormatString(20, 916, GetColor(255, 255, 255), "バリアが張られている間、敵の弾を反射出来るの(わ)");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "今度はAボタン(絵)を押してみて");
+			DrawFormatString(40, 916, GetColor(255, 255, 255), "バリアが張られている間、敵の弾を反射出来るの(わ)");
 			break;
 		case 10:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "本来はアイテムを20個集めないと使えないのだけど、今回は特別よ");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "本来はアイテムを20個集めないと使えないのだけど、今回は特別よ");
 			break;
 		case 11:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "敵を倒せたみたいね");
+			DrawFormatString(40, 896, GetColor(255, 255, 255), "敵を倒せたみたいね");
 			break;
 		case 12:
 			DrawFormatString(20, 896, GetColor(255, 255, 255), "アイテムがドロップしたみたい");
