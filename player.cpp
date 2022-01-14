@@ -21,6 +21,13 @@ Player::Player() {//コンストラクタの定義
 	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
+	txt1 = LoadGraph("resouce/text_1.png"); txt2 = LoadGraph("resouce/text_2.png"); txt3 = LoadGraph("resouce/text_3.png");
+	txt4 = LoadGraph("resouce/text_4.png"); txt5 = LoadGraph("resouce/text_5.png"); txt6 = LoadGraph("resouce/text_6.png");
+	txt7 = LoadGraph("resouce/text_7.png"); txt8 = LoadGraph("resouce/text_8.png"); txt9 = LoadGraph("resouce/text_9.png");
+	txt10 = LoadGraph("resouce/text_10.png"); txt11 = LoadGraph("resouce/text_11.png"); txt12 = LoadGraph("resouce/text_12.png");
+	txt13 = LoadGraph("resouce/text_13.png"); txt14 = LoadGraph("resouce/text_14.png"); txt15 = LoadGraph("resouce/text_15.png");
+	txt16 = LoadGraph("resouce/text_16.png"); txt17 = LoadGraph("resouce/text_17.png"); A = LoadGraph("resouce/A.png");
+	Apflag = 0; Apushflag = 0; SetAtime = 0;
 
 	//頼まれてたもの
 
@@ -264,8 +271,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
-					txtflag = 0;
-					Moveflag3 = 1;
+					txtflag = 9;
 				}
 			}
 
@@ -275,7 +281,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
-					txtflag = 10;
+					txtflag = 0;
+					Moveflag3 = 1;
 				}
 			}
 
@@ -285,8 +292,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
-					txtflag = 0;
-					Moveflag4 = 1;
+					txtflag = 11;
+
 				}
 			}
 
@@ -306,8 +313,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
-					txtflag = 0;
-					Moveflag5 = 1;
+					txtflag = 13;
 				}
 			}
 
@@ -317,13 +323,43 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
-					txtflag = 14;
+					txtflag = 0;
+					Moveflag4 = 1;
 				}
 			}
 
 			break;
 
 		case 14:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 15;
+				}
+			}
+
+			break;
+
+		case 15:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag5 = 1;
+				}
+			}
+
+			break;
+
+		case 16:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 17;
+				}
+			}
+
+		case 17:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflag = 1;
@@ -445,6 +481,11 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 					txtflag = 6;
 				}
 			}
+			if (rightflag == 0 && leftflag == 0) {
+				Moveflag2 = 0;
+				txtflag = 6;
+			}
+
 		}
 	}
 
@@ -461,7 +502,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
 			{
 				stelsflag = 0;
-				txtflag = 9;
+				txtflag = 10;
 				Moveflag3 = 0;
 			}
 		}
@@ -483,7 +524,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				//自機に向けて弾を出す
 				//敵が死んだら
 				reflectionflag = 0;
-				txtflag = 11;
+				txtflag = 14;
 				itemflag = 1;
 				Moveflag4 = 0;
 			}
@@ -504,11 +545,26 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 		if (itemflag == 1) {
 			if ((R * R) > ((X - 480) * (X - 480)) + ((Y - 128) * (Y - 128))) {
 				itemflag = 0;
-				txtflag = 13;
+				txtflag = 16;
 				Moveflag5 = 0;
 			}
 		}
 	}
+
+	SetAtime++;
+	if (Apushflag == 0) {
+		if (SetAtime >= 25) {
+			Apushflag = 1;
+			SetAtime = 0;
+		}
+	}
+	else {
+		if (SetAtime >= 25) {
+			Apushflag = 0;
+			SetAtime = 0;
+		}
+	}
+	
 
 	enemy[0].TuTorialMove(X, Y, R, shot_flag, stelsflag, reflectionflag);
 
@@ -534,7 +590,8 @@ void Player::Draw() {//描画関数
 }
 
 void Player::TutorialDraw() {
-	DrawCircle(X, Y, R, GetColor(255, 255, 255), true);
+	DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
+
 	if (Moveflag1 == 1) {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
@@ -543,59 +600,75 @@ void Player::TutorialDraw() {
 			//テキストなし
 			break;
 		case 1:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "まずは操作説明を始めるね");
+			DrawGraph(47, 719, txt1, true);//まずは簡単な操作説明を始めるね(わ)
 			break;
 		case 2:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "Lスティック(絵)で移動出来る。試しに自由に動いてみて");
+			DrawGraph(47, 719, txt2, true);//Lスティック(絵)で移動出来る。試しに自由に動いてみて
 			break;
 		case 3:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "ここに体力ゲージがあるの(わ)");
+			DrawGraph(47, 719, txt3, true);//ここに体力ゲージがあるの(わ)
 			break;
 		case 4:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "このゲージが0になったら私たちの負け");
+			DrawGraph(47, 719, txt4, true);//
 			break;
 		case 5:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "危ない！敵の攻撃よ、避けて！");
+			DrawGraph(47, 719, txt5, true);
 			break;
 		case 6:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "この宇宙船(？)は攻撃が出来ないから敵の攻撃で倒すしかない");
+			DrawGraph(47, 719, txt6, true);
 			break;
 		case 7:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "攻撃が出来ない代わりに2つの防御スキルがあるの(わ)");
+			DrawGraph(47, 719, txt7, true);
 			break;
 		case 8:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "まずはBボタン(絵)を押してみて");
-			DrawFormatString(40, 916, GetColor(255, 255, 255), "一定時間の間、敵の視界から逸らすことが出来るの(わ)");
+			DrawGraph(47, 719, txt8, true);
 			break;
 		case 9:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "今度はAボタン(絵)を押してみて");
-			DrawFormatString(40, 916, GetColor(255, 255, 255), "バリアが張られている間、敵の弾を反射出来るの(わ)");
+			DrawGraph(47, 719, txt9, true);
 			break;
 		case 10:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "本来はアイテムを20個集めないと使えないのだけど、今回は特別よ");
+			DrawGraph(47, 719, txt10, true);
 			break;
 		case 11:
-			DrawFormatString(40, 896, GetColor(255, 255, 255), "敵を倒せたみたいね");
+			DrawGraph(47, 719, txt11, true);
 			break;
 		case 12:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "アイテムがドロップしたみたい");
-			DrawFormatString(20, 916, GetColor(255, 255, 255), "取りに行ってみましょう");
+			DrawGraph(47, 719, txt12, true);
 			break;
 		case 13:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "ここで持っているアイテムの数がわかるようになっているの(わ)");
+			DrawGraph(47, 719, txt13, true);
 			break;
 		case 14:
-			DrawFormatString(20, 896, GetColor(255, 255, 255), "これで操作説明は以上よ、一緒に頑張りましょう");
+			DrawGraph(47, 719, txt14, true);
+			break;
+		case 15:
+			DrawGraph(47, 719, txt15, true);
+			break;
+		case 16:
+			DrawGraph(47, 719, txt16, true);
+			break;
+		case 17:
+			DrawGraph(47, 719, txt17, true);
 			break;
 	}
 	if (itemflag == 1) {
 		DrawCircle(480, 128, 32, GetColor(255, 255, 255), false);
 	}
-
+	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
+	if (txtflag != 0) {
+		if (Apushflag == 0) {
+			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
+		}
+		else {
+			SetDrawBright(100, 100, 100);
+			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
+			SetDrawBright(255, 255, 255);
+		}
+		
+	}
 }
 int Player::GetR()
 {
 	return R;
 }
-//DrawFormatString(0, 0, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 
