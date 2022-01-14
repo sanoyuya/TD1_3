@@ -28,6 +28,7 @@ Player::Player() {//コンストラクタの定義
 	txt10 = LoadGraph("resouce/text_10.png"); txt11 = LoadGraph("resouce/text_11.png"); txt12 = LoadGraph("resouce/text_12.png");
 	txt13 = LoadGraph("resouce/text_13.png"); txt14 = LoadGraph("resouce/text_14.png"); txt15 = LoadGraph("resouce/text_15.png");
 	txt16 = LoadGraph("resouce/text_16.png"); txt17 = LoadGraph("resouce/text_17.png"); A = LoadGraph("resouce/A.png");
+	option= LoadGraph("≡skip.png");
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
 
 	//頼まれてたもの
@@ -219,6 +220,12 @@ int Player::Result() {
 
 #pragma region チュートリアル
 void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag) {
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0)
+	{
+		X = 480;
+		Y = 832;
+		sceneflag = 2;
+	}
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
 	}
@@ -258,26 +265,27 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 
 		break;
 
-	case 4:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 5;
-				EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
-				shot_flag = 1;
+		case 4:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 5;
+
+				}
 			}
-		}
 
 		break;
 
-	case 5:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag2 = 1;
+		case 5:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag2 = 1;
+					EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
+					shot_flag = 1;
+				}
 			}
-		}
 
 		break;
 
@@ -399,6 +407,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 				pushflag = 1;
 				txtflag = 0;
+				X = 480;
+				Y = 832;
 				sceneflag = 2;
 			}
 		}
@@ -458,18 +468,17 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 	}
 
 	if (Moveflag2 == 1) {//敵の弾を避けるときに使うやつ
-		if (Moveflag2_2 == 0) {
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-				rightflag = 1;
-				Moveflag2_2 = 1;
-			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-				leftflag = 1;
-				Moveflag2_2 = 1;
-			}
-		}
-
 		if (enemy[0].GetBulletFlag(0) == true)
 		{
+			if (Moveflag2_2 == 0) {
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+					rightflag = 1;
+					Moveflag2_2 = 1;
+				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+					leftflag = 1;
+					Moveflag2_2 = 1;
+				}
+			}
 			if (rightflag == 1 && Moveflag2_2 == 1) {
 				Move2time++;
 				if (Move2time <= 20) {
@@ -777,17 +786,17 @@ void Player::TutorialDraw() {
 		DrawGraph(47, 719, txt17, true);
 		break;
 	}
-
 	tutorial_item->Draw();
-
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 	if (txtflag != 0) {
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
+			DrawGraph(650, 64, option, true);
 		}
 		else {
 			SetDrawBright(100, 100, 100);
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
+			DrawGraph(650, 64, option, true);
 			SetDrawBright(255, 255, 255);
 		}
 	}
@@ -815,6 +824,14 @@ void Player::TutorialDraw() {
 	if (itemflag >= 6)
 	{
 		DrawGraph(item_x[2], item_y[1], item_img, true);
+	}
+	if (Apushflag == 0) {
+		DrawGraph(650, 64, option, true);
+	}
+	else {
+		SetDrawBright(100, 100, 100);
+		DrawGraph(650, 64, option, true);
+		SetDrawBright(255, 255, 255);
 	}
 }
 #pragma endregion
