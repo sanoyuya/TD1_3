@@ -28,6 +28,7 @@ private:
 	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Moveflag5; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
 	int pushflag;
+	int txt1; int txt2; int txt3; int txt4; int txt5; int txt6; int txt7; int txt8; int txt9; int txt10; int txt11; int txt12; int txt13; int txt14; int txt15; int txt16; int txt17;
 
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
 	int easing_flag;
