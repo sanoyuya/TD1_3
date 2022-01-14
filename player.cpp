@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include"player.h"
 #include"enemy.h"
+#include"item.h"
 
 Player::Player() {//コンストラクタの定義
 	X = 480;
@@ -30,6 +31,7 @@ Player::Player() {//コンストラクタの定義
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
 
 	//頼まれてたもの
+	itemflag2 = 0;
 
 	easing_end_frame = 70;
 	easing_end_x = (double)X;
@@ -42,6 +44,24 @@ Player::Player() {//コンストラクタの定義
 	easing_y = 0.0;
 
 	shot_flag = 0;
+	anime = 0;
+	anime_timer = 0;
+	hp_img = LoadGraph("resouce/HP1.png");
+	
+	img_r = 48;
+	LoadDivGraph("resouce/player.png", 16, 16, 1, 96, 96, img);
+	tutorial_item = new Item;
+
+	item_x[0] = 1008;
+	item_x[1] = 1120;
+	item_x[2] = 1233;
+	item_y[0] = 752;
+	item_y[1] = 848;
+	item_r = 32;
+	item_img = LoadGraph("resouce/ReflectionItem.png");
+
+	reflection_img = LoadGraph("resouce/Reflection.png");
+	reflection_r = 56;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -81,7 +101,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 			}
 		}
 	}
-	if (itemflag == 10) {//反射
+	if (itemflag == 6) {//反射
 		if (reflectioncooltimer == -50 || stelscooltimer == -50) {
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
 				itemflag = 0;
@@ -125,6 +145,14 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 		}
 	}
 
+	anime_timer++;
+
+	if (anime_timer == 16 * 6)
+	{
+		anime_timer = 0;
+	}
+
+	anime = anime_timer / 6;
 }
 
 void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
@@ -147,6 +175,11 @@ void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& 
 			bullet[num].SetBulletFlag(false);
 		}
 	}
+}
+
+void Player::ItemFlagAdd(int num)
+{
+	itemflag += num;
 }
 
 int Player::GetX()
@@ -184,191 +217,193 @@ int Player::Result() {
 	//}
 }
 
+#pragma region チュートリアル
 void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag) {
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
 	}
 	switch (txtflag) {
-		case 0:
+	case 0:
 
-			break;
+		break;
 
-		case 1:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 2;
-				}
+	case 1:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 2;
 			}
+		}
 
-			break;
+		break;
 
-		case 2:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag1 = 1;
-				}
+	case 2:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag1 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 3:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 4;
-				}
+	case 3:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 4;
 			}
+		}
 
-			break;
+		break;
 
-		case 4:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 5;
-					EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
-					shot_flag = 1;
-				}
+	case 4:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 5;
+				EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
+				shot_flag = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 5:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag2 = 1;
-				}
+	case 5:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag2 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 6:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 7;
-				}
+	case 6:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 7;
 			}
+		}
 
-			break;
+		break;
 
-		case 7:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 8;
-				}
+	case 7:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 8;
 			}
+		}
 
-			break;
+		break;
 
-		case 8:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 9;
-				}
+	case 8:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 9;
 			}
+		}
 
-			break;
+		break;
 
-		case 9:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag3 = 1;
-				}
+	case 9:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag3 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 10:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 11;
+	case 10:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 11;
 
-				}
 			}
+		}
 
-			break;
+		break;
 
-		case 11:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 12;
-				}
+	case 11:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 12;
 			}
+		}
 
-			break;
+		break;
 
-		case 12:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 13;
-				}
+	case 12:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 13;
 			}
+		}
 
-			break;
+		break;
 
-		case 13:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag4 = 1;
-				}
+	case 13:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag4 = 1;
+				itemflag = 6;
 			}
+		}
 
-			break;
+		break;
 
-		case 14:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 15;
-				}
+	case 14:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 15;
 			}
+		}
 
-			break;
+		break;
 
-		case 15:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag5 = 1;
-				}
+	case 15:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag5 = 1;
 			}
+		}
 
-			break;
+		break;
 
-		case 16:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 17;
-				}
+	case 16:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 17;
 			}
+		}
 
-		case 17:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					sceneflag = 2;
-				}
+	case 17:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				sceneflag = 2;
 			}
+		}
 
-			break;
+		break;
 	}
 	if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
 		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
@@ -514,6 +549,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				reflectionflag = 1;
 				enemy[0].SetShotTime(5);
 				shot_flag = 1;
+				itemflag = 0;
 			}
 		}
 
@@ -525,8 +561,10 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				//敵が死んだら
 				reflectionflag = 0;
 				txtflag = 14;
-				itemflag = 1;
+				itemflag2 = 1;
 				Moveflag4 = 0;
+
+				tutorial_item->TutorialForm(enemy[0].GetTransform(), itemflag2);
 			}
 
 		}
@@ -542,12 +580,15 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 			X -= speed;
 		}
-		if (itemflag == 1) {
-			if ((R * R) > ((X - 480) * (X - 480)) + ((Y - 128) * (Y - 128))) {
-				itemflag = 0;
-				txtflag = 16;
-				Moveflag5 = 0;
-			}
+
+
+
+		if (tutorial_item->TutorialMove(X, Y, R, itemflag2) == true) {
+
+			itemflag = 1;
+			txtflag = 16;
+			Moveflag5 = 0;
+
 		}
 	}
 
@@ -564,7 +605,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			SetAtime = 0;
 		}
 	}
-	
+
 
 	enemy[0].TuTorialMove(X, Y, R, shot_flag, stelsflag, reflectionflag);
 
@@ -577,10 +618,68 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 	}if (Y >= 896) {
 		Y = 896;
 	}
+
+	anime_timer++;
+
+	if (anime_timer == 16 * 6)
+	{
+		anime_timer = 0;
+	}
+
+	anime = anime_timer / 6;
+
 }
+#pragma endregion
 
 void Player::Draw() {//描画関数
-	DrawCircle(X, Y, R, GetColor(255, 255, 255), true);
+	
+	//体力
+	if (hp > 10)
+	{
+		SetDrawBright(153, 229, 80);
+	}
+	else if (hp > 4)
+	{
+		SetDrawBright(255, 239, 15);
+	}
+	else
+	{
+		SetDrawBright(255, 25, 0);
+	}
+
+	for (int i = 0; i < hp; i++)
+	{
+		DrawGraph(973 + (19 * i), 668, hp_img, true);
+	}
+
+	SetDrawBright(255, 255, 255);
+	
+	DrawGraph(X - img_r, Y - img_r, img[anime], true);
+
+	if (itemflag >= 1)
+	{
+		DrawGraph(item_x[0], item_y[0], item_img, true);
+	}
+	if (itemflag >= 2)
+	{
+		DrawGraph(item_x[1], item_y[0], item_img, true);
+	}
+	if (itemflag >= 3)
+	{
+		DrawGraph(item_x[2], item_y[0], item_img, true);
+	}
+	if (itemflag >= 4)
+	{
+		DrawGraph(item_x[0], item_y[1], item_img, true);
+	}
+	if (itemflag >= 5)
+	{
+		DrawGraph(item_x[1], item_y[1], item_img, true);
+	}
+	if (itemflag >= 6)
+	{
+		DrawGraph(item_x[2], item_y[1], item_img, true);
+	}
 	//DrawFormatString(0, 0, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
 	//DrawFormatString(0, 40, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
@@ -589,71 +688,98 @@ void Player::Draw() {//描画関数
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "Afterglow:%d", Afterglow);
 }
 
+#pragma region チュートリアル
 void Player::TutorialDraw() {
+
 	DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
+	DrawGraph(X - img_r, Y - img_r, img[anime], true);
+
+	if (reflectionflag == 1)
+	{
+		DrawGraph(X - reflection_r, Y - reflection_r, reflection_img, true);
+	}
+	if (hp > 10)
+	{
+		SetDrawBright(153, 229, 80);
+	}
+	else if(hp > 4)
+	{
+		SetDrawBright(255, 239, 15);
+	}
+	else 
+	{
+		SetDrawBright(255, 25, 0);
+	}
+	
+	for (int i = 0; i < hp; i++)
+	{
+		DrawGraph(953 + (19 * i), 668, hp_img, true);
+	}
+
+	SetDrawBright(255, 255, 255);
 
 	if (Moveflag1 == 1) {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
 	switch (txtflag) {
-		case 0:
-			//テキストなし
-			break;
-		case 1:
-			DrawGraph(47, 719, txt1, true);//まずは簡単な操作説明を始めるね(わ)
-			break;
-		case 2:
-			DrawGraph(47, 719, txt2, true);//Lスティック(絵)で移動出来る。試しに自由に動いてみて
-			break;
-		case 3:
-			DrawGraph(47, 719, txt3, true);//ここに体力ゲージがあるの(わ)
-			break;
-		case 4:
-			DrawGraph(47, 719, txt4, true);//
-			break;
-		case 5:
-			DrawGraph(47, 719, txt5, true);
-			break;
-		case 6:
-			DrawGraph(47, 719, txt6, true);
-			break;
-		case 7:
-			DrawGraph(47, 719, txt7, true);
-			break;
-		case 8:
-			DrawGraph(47, 719, txt8, true);
-			break;
-		case 9:
-			DrawGraph(47, 719, txt9, true);
-			break;
-		case 10:
-			DrawGraph(47, 719, txt10, true);
-			break;
-		case 11:
-			DrawGraph(47, 719, txt11, true);
-			break;
-		case 12:
-			DrawGraph(47, 719, txt12, true);
-			break;
-		case 13:
-			DrawGraph(47, 719, txt13, true);
-			break;
-		case 14:
-			DrawGraph(47, 719, txt14, true);
-			break;
-		case 15:
-			DrawGraph(47, 719, txt15, true);
-			break;
-		case 16:
-			DrawGraph(47, 719, txt16, true);
-			break;
-		case 17:
-			DrawGraph(47, 719, txt17, true);
-			break;
+	case 0:
+		//テキストなし
+		break;
+	case 1:
+		DrawGraph(47, 719, txt1, true);//まずは簡単な操作説明を始めるね(わ)
+		break;
+	case 2:
+		DrawGraph(47, 719, txt2, true);//Lスティック(絵)で移動出来る。試しに自由に動いてみて
+		break;
+	case 3:
+		DrawGraph(47, 719, txt3, true);//ここに体力ゲージがあるの(わ)
+		break;
+	case 4:
+		DrawGraph(47, 719, txt4, true);//
+		break;
+	case 5:
+		DrawGraph(47, 719, txt5, true);
+		break;
+	case 6:
+		DrawGraph(47, 719, txt6, true);
+		break;
+	case 7:
+		DrawGraph(47, 719, txt7, true);
+		break;
+	case 8:
+		DrawGraph(47, 719, txt8, true);
+		break;
+	case 9:
+		DrawGraph(47, 719, txt9, true);
+		break;
+	case 10:
+		DrawGraph(47, 719, txt10, true);
+		break;
+	case 11:
+		DrawGraph(47, 719, txt11, true);
+		break;
+	case 12:
+		DrawGraph(47, 719, txt12, true);
+		break;
+	case 13:
+		DrawGraph(47, 719, txt13, true);
+		break;
+	case 14:
+		DrawGraph(47, 719, txt14, true);
+		break;
+	case 15:
+		DrawGraph(47, 719, txt15, true);
+		break;
+	case 16:
+		DrawGraph(47, 719, txt16, true);
+		break;
+	case 17:
+		DrawGraph(47, 719, txt17, true);
+		break;
 	}
-	if (itemflag == 1) {
-		DrawCircle(480, 128, 32, GetColor(255, 255, 255), false);
-	}
+
+	tutorial_item->Draw();
+
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 	if (txtflag != 0) {
 		if (Apushflag == 0) {
@@ -664,9 +790,35 @@ void Player::TutorialDraw() {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
 			SetDrawBright(255, 255, 255);
 		}
-		
+	}
+
+	if (itemflag >= 1)
+	{
+		DrawGraph(item_x[0], item_y[0], item_img, true);
+	}
+	if (itemflag >= 2)
+	{
+		DrawGraph(item_x[1], item_y[0], item_img, true);
+	}
+	if (itemflag >= 3)
+	{
+		DrawGraph(item_x[2], item_y[0], item_img, true);
+	}
+	if (itemflag >= 4)
+	{
+		DrawGraph(item_x[0], item_y[1], item_img, true);
+	}
+	if (itemflag >= 5)
+	{
+		DrawGraph(item_x[1], item_y[1], item_img, true);
+	}
+	if (itemflag >= 6)
+	{
+		DrawGraph(item_x[2], item_y[1], item_img, true);
 	}
 }
+#pragma endregion
+
 int Player::GetR()
 {
 	return R;

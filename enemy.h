@@ -1,7 +1,7 @@
 #pragma once
 #include"bullet.h"
 #include"Transform.h"
-#include"item.h"
+
 
 class Enemy
 {
@@ -23,6 +23,7 @@ public:
 	int GetAppearTime();
 	EnemyBullet* GetEnmyBullet();
 	Transform GetBulletTransform(int num);
+	Transform GetTransform();
 
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);
@@ -72,6 +73,12 @@ private:
 	bool enemy_to_bommer;
 	//‰Šú’l
 	int def_explosion_time;
+
+	//‰æ‘œ
+	int img[12];
+	int img_r;
+	int anime_timer;
+	int anime;
 
 	EnemyBullet* bullet; 
 	Item* item;

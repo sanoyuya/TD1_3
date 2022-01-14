@@ -333,7 +333,7 @@ void EnemyBullet::TutorialMove(int y)
 	{
 		transform.y += y_speed;
 		
-		if (transform.y > y)
+		if (transform.y + 56 + y_speed > y)
 		{
 			y_speed = -y_speed;
 		}

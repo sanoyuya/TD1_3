@@ -108,7 +108,11 @@ Enemy::Enemy()
 	bullet = new EnemyBullet[bullet_max];
 	item = new Item;
 	color = GetColor(255, 255, 255);
-
+	//‰æ‘œ
+	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
+	img_r = 48;
+	anime = 0;
+	anime_timer = 0;
 }
 
 Enemy::~Enemy()
@@ -479,6 +483,18 @@ void Enemy::Move(Player& player, bool reflection_flag)
 				HitBox(bullet[i].GetTransform(), i);
 			}
 		}
+
+		item->Move(player);
+
+		anime_timer++;
+
+		if (anime_timer == 12 * 6)
+		{
+			anime_timer = 0;
+		}
+
+		anime = anime_timer / 6;
+
 	}
 }
 #pragma endregion
@@ -552,7 +568,7 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 	}
 	else
 	{
-		bullet[0].TutorialMove(y - r);
+		bullet[0].TutorialMove(y);
 	}
 
 	//“–‚½‚è”»’è
@@ -588,6 +604,7 @@ void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 		if (explosion_time == 0)
 		{
 			exising_flag = false;
+			item->Form(transform);
 		}
 	}
 }
@@ -611,11 +628,11 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 
 void Enemy::PlaterToEnemyHitBox(Player& player)
 {
-	if (this->transform.x - this->transform.xr < player.GetX() + player.GetR() &&
-		this->transform.x + this->transform.xr >  player.GetX() - player.GetR())
+	if (this->transform.x - this->transform.xr < (double)player.GetX() + (double)player.GetR() &&
+		this->transform.x + this->transform.xr >(double)player.GetX() - (double)player.GetR())
 	{
-		if (this->transform.y - this->transform.yr <  player.GetY() + player.GetR() &&
-			this->transform.y + this->transform.yr >  player.GetY() - player.GetR())
+		if (this->transform.y - this->transform.yr <  (double)player.GetY() + (double)player.GetR() &&
+			this->transform.y + this->transform.yr >(double)player.GetY() - (double)player.GetR())
 		{
 
 			explosion_bommer_flag = true;
@@ -643,6 +660,7 @@ void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
 				if (hp <= 0)
 				{
 					exising_flag = false;
+					item->Form(transform);
 				}
 
 			}
@@ -667,6 +685,7 @@ void Enemy::HitBox(Transform transform, int num)
 				if (hp <= 0)
 				{
 					exising_flag = false;
+					item->Form(transform);
 				}
 			}
 
@@ -703,8 +722,7 @@ void Enemy::Draw(int num)
 		}
 		else
 		{
-			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-				(int)transform.x + transform.xr, (int)transform.y + transform.yr, color, true);
+			DrawGraph((int)transform.x - img_r, (int)transform.y - img_r, img[anime], true);
 		}
 	}
 
@@ -830,6 +848,11 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 Transform Enemy::GetBulletTransform(int num)
 {
 	return bullet[num].GetTransform();
+}
+
+Transform Enemy::GetTransform()
+{
+	return transform;
 }
 
 void Enemy::SetReflectionNum()

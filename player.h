@@ -7,6 +7,8 @@ class EnemyBullet;
 
 class Enemy;
 
+class Item;
+
 typedef class Player
 {
 private:
@@ -32,6 +34,9 @@ private:
 	int A; int Apflag; int Apushflag; int SetAtime;
 
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
+
+	int itemflag2;
+
 	int easing_flag;
 	double easing_end_frame;
 	double easing_frame;
@@ -41,6 +46,22 @@ private:
 	double easing_end_y;
 	double easing_y;
 	double easing_x;
+
+	int hp_img;
+	int img[16];
+	int img_r;
+	int anime_timer;
+	int anime;
+
+	int item_x[3];
+	int item_y[2];
+	int item_r;
+	int item_img;
+
+	int reflection_img;
+	int reflection_r;
+
+	Item* tutorial_item;
 
 
 	int shot_flag;
@@ -56,9 +77,11 @@ public:
 	int Getstelsflag();
 	int Getreflectionflag();
 	int Result();
+
 	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag);
 	void TutorialDraw();
-
 	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
+
+	void ItemFlagAdd(int num);
 
 }Player;
