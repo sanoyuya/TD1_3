@@ -3,6 +3,9 @@
 
 Item::Item()
 {
+	appear_flag = false;
+	exising_flag = false;
+	transform = { 0 };
 }
 
 Item::~Item()
@@ -25,11 +28,14 @@ void Item::TutorialForm(Transform transform, int item_flag)
 
 void Item::Move(Player& player)
 {
-	if ((player.GetR() * player.GetR()) >
-		((player.GetX() - 480) * (player.GetX() - 480)) +
-		((player.GetY() - 128) * (player.GetY() - 128)))
+	if (exising_flag == true)
 	{
-
+		if (player.GetR() * player.GetR() >
+			((player.GetX() - (int)transform.x) * (player.GetX() - (int)transform.x)) +
+			((player.GetY() - (int)transform.y) * (player.GetY() - (int)transform.y)))
+		{
+			exising_flag = false;
+		}
 	}
 }
 
@@ -37,6 +43,6 @@ void Item::Draw()
 {
 	if (exising_flag == true)
 	{
-		DrawCircle(transform.x, transform.y, transform.xr, GetColor(255, 255, 255));
+		DrawCircle((int)transform.x, (int)transform.y, transform.xr, GetColor(255, 255, 255));
 	}
 }

@@ -483,7 +483,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 }
 #pragma endregion
 
-void Enemy::TuTorialMove(int x, int y, int r,int& shot_flag, int stelsflag, int reflectionflag)
+void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag)
 {
 	if (use_flag == true)
 	{
@@ -557,7 +557,7 @@ void Enemy::TuTorialMove(int x, int y, int r,int& shot_flag, int stelsflag, int 
 
 	//“–‚½‚è”»’è
 
-	if (*bullet[0].GetBulletFlag() == true&& exising_flag == true)
+	if (*bullet[0].GetBulletFlag() == true && exising_flag == true)
 	{
 		HitBox(bullet[0].GetTransform(), 0);
 	}
@@ -605,6 +605,21 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 				explosion_bommer_flag = true;
 				enemy_to_bommer = true;
 			}
+		}
+	}
+}
+
+void Enemy::PlaterToEnemyHitBox(Player& player)
+{
+	if (this->transform.x - this->transform.xr < player.GetX() + player.GetR() &&
+		this->transform.x + this->transform.xr >  player.GetX() - player.GetR())
+	{
+		if (this->transform.y - this->transform.yr <  player.GetY() + player.GetR() &&
+			this->transform.y + this->transform.yr >  player.GetY() - player.GetR())
+		{
+
+			explosion_bommer_flag = true;
+			enemy_to_bommer = true;
 		}
 	}
 }

@@ -14,6 +14,7 @@ public:
 	void Draw(int num);
 	void HitBox(Transform transform,int num);
 	void EnemyToEnemyHitBox(Transform transform);
+	void PlaterToEnemyHitBox(Player& player);
 	void ExplosionBommer(Enemy& enemy, Player& player);
 	void HP(Transform transform, EnemyBullet* bullet, int num);
 

@@ -319,6 +319,10 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 				}
 			}
 		}
+		if (enemy_type == 2)
+		{
+
+		}
 	}
 }
 #pragma endregion

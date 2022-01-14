@@ -137,6 +137,7 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mine.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="score.cpp" />
     <ClCompile Include="subboss.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="mine.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="score.h" />
     <ClInclude Include="subboss.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="item.h" />
