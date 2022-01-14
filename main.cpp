@@ -68,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SubBoss* sub_boss = new SubBoss;
 
 
-	int wave_num = 5;
+	int wave_num = 1;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -277,7 +277,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					game_set = false;
 					reflection_flag = true;
-					//wave_num++;
+					wave_num++;
 				}
 			}
 
