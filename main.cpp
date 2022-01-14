@@ -56,6 +56,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int pushflag = 0;
 	int stageflag = 0;
 	int resultflag = 0;
+	int Score = 0;
+	int Toptier = 0;
+	int Secondtier = 0;
+	int Thirdtier = 0;
+
 	bool reflection_flag = true;
 
 	Player* player = new Player();
@@ -207,7 +212,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					game_set = true;
 					break;
 				}
-
+				//敵が死ぬ毎に
+				//Score+=100;
 			}
 #pragma endregion
 
@@ -288,6 +294,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 4:
 			//リザルト画面(ゲームオーバー)
+			if (Toptier < Score) {//スコアがランキングも含め一番高かったら
+				Toptier = Score;//ランキングにランクイン
+			}if (Toptier > Score && Secondtier < Score) {//スコアがランキングも含め二番目に高かったら
+				Secondtier = Score;//ランキングにランクイン
+			}if (Secondtier > Score && Thirdtier < Score) {//スコアがランキングも含め三番目に高かったら
+				Thirdtier = Score;//ランキングにランクイン
+			}
+
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflag = 0;
 			}
@@ -320,6 +334,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 5:
 			//リザルト画面(ゲームクリア)
+
+			//Score+=5000;
+			// Score*=(30000-クリアf)
+			//被弾していなかったら
+			//+10000;
+			if (Toptier < Score) {//スコアがランキングも含め一番高かったら
+				Toptier = Score;//ランキングにランクイン
+			}if (Toptier > Score && Secondtier < Score) {//スコアがランキングも含め二番目に高かったら
+				Secondtier = Score;//ランキングにランクイン
+			}if (Secondtier > Score && Thirdtier < Score) {//スコアがランキングも含め三番目に高かったら
+				Thirdtier = Score;//ランキングにランクイン
+			}
+
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflag = 0;
 			}
