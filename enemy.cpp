@@ -221,11 +221,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 							}
 						}
 					}
-
-					if (hp <= 0)
-					{
-						exising_flag = false;
-					}
 				}
 
 			}
@@ -479,7 +474,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		for (int i = 0; i < bullet_max; i++)
 		{
 
-			if (*bullet[i].GetBulletFlag() == true)
+			if (*bullet[i].GetBulletFlag() == true && exising_flag == true)
 			{
 				HitBox(bullet[i].GetTransform(), i);
 			}
@@ -562,7 +557,7 @@ void Enemy::TuTorialMove(int x, int y, int r,int& shot_flag, int stelsflag, int 
 
 	//“–‚½‚è”»’è
 
-	if (*bullet[0].GetBulletFlag() == true)
+	if (*bullet[0].GetBulletFlag() == true&& exising_flag == true)
 	{
 		HitBox(bullet[0].GetTransform(), 0);
 	}
@@ -605,7 +600,7 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
 			this->transform.y + this->transform.yr > transform.y - transform.yr)
 		{
-			if (damage_flag[0] == false || damage_flag[1] == false)
+			if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
 			{
 				explosion_bommer_flag = true;
 				enemy_to_bommer = true;
@@ -619,7 +614,7 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
 {
 	//“–‚½‚è”»’è(•¡”)
-	if (*bullet[num].GetBulletFlag() == true)
+	if (*bullet[num].GetBulletFlag() == true && exising_flag == true)
 	{
 		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 			this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -629,6 +624,12 @@ void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
 			{
 				hp -= 1;
 				bullet[num].SetBulletFlag(false);
+
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+
 			}
 		}
 	}
@@ -647,6 +648,11 @@ void Enemy::HitBox(Transform transform, int num)
 			{
 				hp--;
 				bullet[num].SetBulletFlag(false);
+
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
 			}
 
 			damage_flag[num] = true;

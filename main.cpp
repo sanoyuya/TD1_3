@@ -52,7 +52,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int maba2 = 0;
 	// ゲームループで使う変数の宣言
 	const int ENEMY_MAX = 5;
-	int sceneflag = 0;
+	int sceneflag = 2;
 	int pushflag = 0;
 	int stageflag = 0;
 	int resultflag = 0;
@@ -229,10 +229,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					{
 						if (i != k)
 						{
-							if (enemy[i].GetEnemyFlag() == true && enemy[k].GetBulletFlag(j) == true)
-							{
-								enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
-							}
+							enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
 
 							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
@@ -396,7 +393,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			player->Draw();
 			sub_boss->Draw();
-			
+
 			DrawGraph(0, 0, Layout, true);
 			DrawGraph(958, 144, player_img[maba2], true);
 			break;
@@ -430,8 +427,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//チュートリアル
 
 			maba++;
-			
-			maba2 = maba/10;
+
+			maba2 = maba / 10;
 
 			if (maba2 == 4)
 			{
