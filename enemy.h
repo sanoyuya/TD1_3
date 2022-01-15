@@ -13,6 +13,7 @@ public:
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num);
+	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Transform transform);
 	void PlaterToEnemyHitBox(Player& player);
 	void ExplosionBommer(Enemy& enemy, Player& player);
@@ -28,7 +29,9 @@ public:
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);
 	int GetShotTime();
+
 	int color;
+
 private:
 	bool use_flag;//使うか
 	int enemy_type;//敵のタイプ

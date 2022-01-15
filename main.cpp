@@ -68,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SubBoss* sub_boss = new SubBoss;
 
 
-	int wave_num = 1;
+	int wave_num = 0;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -166,6 +166,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 				case 1:
 					EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+					delete player;
+					player = new Player();
 					game_set = true;
 					break;
 				case 2:
@@ -379,7 +381,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 10:
 			//チュートリアル
-			player->TutorialMove(keys, oldkeys, enemy, sceneflag);
+			player->TutorialMove(keys, oldkeys, enemy, sceneflag,wave_num);
 			break;
 		}
 		// 描画処理

@@ -294,7 +294,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 	for (int i = 0; i < 4; i++)
 	{
 		//’e‚Ì“®‚«
-		bullet[i].Move(enemy_type,reflection_flag);
+		bullet[i].Move(enemy_type,reflection_flag,player);
 	}
 }
 #pragma endregion

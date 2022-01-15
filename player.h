@@ -37,6 +37,7 @@ private:
 
 	int itemflag2;
 
+	//イージング
 	int easing_flag;
 	double easing_end_frame;
 	double easing_frame;
@@ -47,19 +48,31 @@ private:
 	double easing_y;
 	double easing_x;
 
+	//体力
 	int hp_img;
+
+	//時機アニメーション
 	int img[16];
 	int img_r;
 	int anime_timer;
 	int anime;
 
+	//アイテムを取得した数
 	int item_x[3];
 	int item_y[2];
 	int item_r;
 	int item_img;
 
+	//反射
 	int reflection_img;
 	int reflection_r;
+
+	//ステルスアニメーション
+	
+	int stealth_img[16];
+	int stealth_img_r;
+	int stealth_anime_timer;
+	int stealth_anime;
 
 	Item* tutorial_item;
 
@@ -76,9 +89,10 @@ public:
 	int GetR();
 	int Getstelsflag();
 	int Getreflectionflag();
+	int GetReflectionR();
 	int Result();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag);
+	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag, int& wave_num);
 	void TutorialDraw();
 	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
 

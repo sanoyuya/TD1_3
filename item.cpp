@@ -49,7 +49,7 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		if (r * r >
+		if (r * (int)transform.xr >
 			((x - (int)transform.x) * (x - (int)transform.x)) +
 			((y - (int)transform.y) * (y - (int)transform.y)))
 		{

@@ -471,7 +471,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		//’e‚Ì“®‚«
 		for (int i = 0; i < bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag);
+			bullet[i].Move(enemy_type, reflection_flag,player);
 		}
 
 		//“–‚½‚è”»’è
@@ -575,7 +575,7 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 
 	if (*bullet[0].GetBulletFlag() == true && exising_flag == true)
 	{
-		HitBox(bullet[0].GetTransform(), 0);
+		TutorialHitBox(bullet[0].GetTransform(), 0);
 	}
 }
 
@@ -701,6 +701,38 @@ void Enemy::HitBox(Transform transform, int num)
 		damage_flag[num] = false;
 	}
 
+}
+
+void Enemy::TutorialHitBox(Transform transform, int num)
+{
+	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	{
+		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		{
+			if (damage_flag[num] == false)
+			{
+				hp--;
+				bullet[num].SetBulletFlag(false);
+
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+			}
+
+			damage_flag[num] = true;
+		}
+		else
+		{
+			damage_flag[num] = false;
+		}
+	}
+	else
+	{
+		damage_flag[num] = false;
+	}
 }
 #pragma endregion
 

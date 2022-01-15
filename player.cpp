@@ -28,7 +28,7 @@ Player::Player() {//コンストラクタの定義
 	txt10 = LoadGraph("resouce/text_10.png"); txt11 = LoadGraph("resouce/text_11.png"); txt12 = LoadGraph("resouce/text_12.png");
 	txt13 = LoadGraph("resouce/text_13.png"); txt14 = LoadGraph("resouce/text_14.png"); txt15 = LoadGraph("resouce/text_15.png");
 	txt16 = LoadGraph("resouce/text_16.png"); txt17 = LoadGraph("resouce/text_17.png"); A = LoadGraph("resouce/A.png");
-	option= LoadGraph("≡skip.png");
+	option = LoadGraph("≡skip.png");
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
 
 	//頼まれてたもの
@@ -48,7 +48,7 @@ Player::Player() {//コンストラクタの定義
 	anime = 0;
 	anime_timer = 0;
 	hp_img = LoadGraph("resouce/HP1.png");
-	
+
 	img_r = 48;
 	LoadDivGraph("resouce/player.png", 16, 16, 1, 96, 96, img);
 	tutorial_item = new Item;
@@ -63,6 +63,11 @@ Player::Player() {//コンストラクタの定義
 
 	reflection_img = LoadGraph("resouce/Reflection.png");
 	reflection_r = 56;
+
+	LoadDivGraph("resouce/playerStealth.png", 16, 16, 1, 112, 112, stealth_img);
+	stealth_img_r = 56;
+	stealth_anime_timer = 0;
+	stealth_anime = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -154,6 +159,18 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 	}
 
 	anime = anime_timer / 6;
+
+	if (stelsflag == 1)
+	{
+		stealth_anime_timer++;
+
+		if (stealth_anime_timer == 16 * 6)
+		{
+			stealth_anime_timer = 0;
+		}
+
+		stealth_anime = stealth_anime_timer / 6;
+	}
 }
 
 void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
@@ -181,6 +198,11 @@ void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& 
 void Player::ItemFlagAdd(int num)
 {
 	itemflag += num;
+}
+
+int Player::GetReflectionR()
+{
+	return reflection_r;
 }
 
 int Player::GetX()
@@ -219,12 +241,13 @@ int Player::Result() {
 }
 
 #pragma region チュートリアル
-void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag) {
+void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag, int& wave_num) {
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0)
 	{
 		X = 480;
 		Y = 832;
 		sceneflag = 2;
+		wave_num = 1;
 	}
 	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 		pushflag = 0;
@@ -265,27 +288,27 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 
 		break;
 
-		case 4:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 5;
+	case 4:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 5;
 
-				}
 			}
+		}
 
 		break;
 
-		case 5:
-			if (pushflag == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflag = 1;
-					txtflag = 0;
-					Moveflag2 = 1;
-					EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
-					shot_flag = 1;
-				}
+	case 5:
+		if (pushflag == 0) {
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				pushflag = 1;
+				txtflag = 0;
+				Moveflag2 = 1;
+				EnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 5, enemy);
+				shot_flag = 1;
 			}
+		}
 
 		break;
 
@@ -410,6 +433,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				X = 480;
 				Y = 832;
 				sceneflag = 2;
+				wave_num = 1;
 			}
 		}
 
@@ -541,6 +565,16 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 		}
 
 		if (stelsflag == 1) {
+
+			stealth_anime_timer++;
+
+			if (stealth_anime_timer == 16 * 6)
+			{
+				stealth_anime_timer = 0;
+			}
+
+			stealth_anime = stealth_anime_timer / 6;
+
 			//自機に向けない弾を出す
 			//弾が画面外に出たら
 			if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
@@ -589,7 +623,6 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 			X -= speed;
 		}
-
 
 
 		if (tutorial_item->TutorialMove(X, Y, R, itemflag2) == true) {
@@ -641,7 +674,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 #pragma endregion
 
 void Player::Draw() {//描画関数
-	
+
 	//体力
 	if (hp > 10)
 	{
@@ -662,9 +695,24 @@ void Player::Draw() {//描画関数
 	}
 
 	SetDrawBright(255, 255, 255);
-	
-	DrawGraph(X - img_r, Y - img_r, img[anime], true);
 
+	//時機
+	if (stelsflag == 1)
+	{
+		DrawGraph(X - img_r, Y - img_r, stealth_img[stealth_anime], true);
+	}
+	else
+	{
+		DrawGraph(X - img_r, Y - img_r, img[anime], true);
+	}
+
+	//バリア
+	if (reflectionflag == 1)
+	{
+		DrawGraph(X - reflection_r, Y - reflection_r, reflection_img, true);
+	}
+
+	//アイテム取得数
 	if (itemflag >= 1)
 	{
 		DrawGraph(item_x[0], item_y[0], item_img, true);
@@ -700,8 +748,19 @@ void Player::Draw() {//描画関数
 #pragma region チュートリアル
 void Player::TutorialDraw() {
 
-	DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
-	DrawGraph(X - img_r, Y - img_r, img[anime], true);
+	//DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
+	
+	tutorial_item->Draw();
+
+	//時機
+	if (stelsflag == 1)
+	{
+		DrawGraph(X - stealth_img_r, Y - stealth_img_r, stealth_img[stealth_anime], true);
+	}
+	else
+	{
+		DrawGraph(X - img_r, Y - img_r, img[anime], true);
+	}
 
 	if (reflectionflag == 1)
 	{
@@ -711,15 +770,15 @@ void Player::TutorialDraw() {
 	{
 		SetDrawBright(153, 229, 80);
 	}
-	else if(hp > 4)
+	else if (hp > 4)
 	{
 		SetDrawBright(255, 239, 15);
 	}
-	else 
+	else
 	{
 		SetDrawBright(255, 25, 0);
 	}
-	
+
 	for (int i = 0; i < hp; i++)
 	{
 		DrawGraph(953 + (19 * i), 668, hp_img, true);
@@ -786,8 +845,11 @@ void Player::TutorialDraw() {
 		DrawGraph(47, 719, txt17, true);
 		break;
 	}
-	tutorial_item->Draw();
+
+
+	
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
+	
 	if (txtflag != 0) {
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
