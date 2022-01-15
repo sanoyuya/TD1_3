@@ -68,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SubBoss* sub_boss = new SubBoss;
 
 
-	int wave_num = 0;
+	int wave_num = 6;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -238,7 +238,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (i != k)
 						{
 							enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
-
+							
 							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
 					}

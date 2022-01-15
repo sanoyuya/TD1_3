@@ -20,6 +20,19 @@ double easeInSine(double x)
 	return 1 - cos((x * PI) / 2);
 }
 
+int Box_Circle(int LeftTopBoxX, int LeftTopBoxY, int RightBottomX, int RightBottomY, int circleX, int circleY, int r)
+{
+	if ((circleX > LeftTopBoxX - r)
+		&& (circleX < RightBottomX + r)
+		&& (circleY > LeftTopBoxY - r)
+		&& (circleY < RightBottomY + r)) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
 //空き番号を返す
 int FlagSerch(bool flag[], int max)
 {
@@ -293,10 +306,8 @@ void Enemy::Move(Player& player, bool reflection_flag)
 											break;
 
 										}
-
 									}
 								}
-
 							}
 						}
 						else if ((cos(angle) * x_speed) > 0)
@@ -443,7 +454,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 											{
 												transform.y += (sin(angle) * -1);
 											}
-
 										}
 										else
 										{
@@ -471,7 +481,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		//弾の動き
 		for (int i = 0; i < bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag,player);
+			bullet[i].Move(enemy_type, reflection_flag, player);
 		}
 
 		//当たり判定
@@ -484,7 +494,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 			}
 		}
 
-		item->Move(player);
+
 
 		anime_timer++;
 
@@ -496,9 +506,12 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		anime = anime_timer / 6;
 
 	}
+
+	item->Move(player);
 }
 #pragma endregion
 
+#pragma region チュートリアル
 void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag)
 {
 	if (use_flag == true)
@@ -578,6 +591,7 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 		TutorialHitBox(bullet[0].GetTransform(), 0);
 	}
 }
+#pragma endregion
 
 #pragma region ボマー当たり判定
 //爆発エフェクト
@@ -587,18 +601,11 @@ void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 		enemy.exising_flag == true && exising_flag == true)
 	{
 		EnemyToEnemyHitBox(enemy.transform);
+		enemy.PlaterToEnemyHitBox(player);
 	}
 
 	if (explosion_bommer_flag == true)
 	{
-		if (explosion_time == def_explosion_time)
-		{
-			if (enemy_to_bommer == true)
-			{
-				enemy.exising_flag = false;
-			}
-		}
-
 		explosion_time--;
 
 		if (explosion_time == 0)
@@ -628,15 +635,14 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 
 void Enemy::PlaterToEnemyHitBox(Player& player)
 {
-	if (this->transform.x - this->transform.xr < (double)player.GetX() + (double)player.GetR() &&
-		this->transform.x + this->transform.xr >(double)player.GetX() - (double)player.GetR())
+	if (enemy_to_bommer == false)
 	{
-		if (this->transform.y - this->transform.yr <  (double)player.GetY() + (double)player.GetR() &&
-			this->transform.y + this->transform.yr >(double)player.GetY() - (double)player.GetR())
+		if (Box_Circle(transform.x - transform.xr, transform.y - transform.yr, transform.x + transform.xr, transform.y + transform.yr,
+			player.GetX(), (double)player.GetY(), player.GetR()) == 1)
 		{
-
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;
+			player.HpSub(1);
 		}
 	}
 }

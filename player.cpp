@@ -197,12 +197,21 @@ void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& 
 
 void Player::ItemFlagAdd(int num)
 {
-	itemflag += num;
+	if (itemflag < 6)
+	{
+		itemflag += num;
+	}
+
 }
 
 int Player::GetReflectionR()
 {
 	return reflection_r;
+}
+
+void Player::HpSub(int num)
+{
+	hp -= num;
 }
 
 int Player::GetX()
@@ -699,7 +708,7 @@ void Player::Draw() {//•`‰æŠÖ”
 	//Žž‹@
 	if (stelsflag == 1)
 	{
-		DrawGraph(X - img_r, Y - img_r, stealth_img[stealth_anime], true);
+		DrawGraph(X - stealth_img_r, Y - stealth_img_r, stealth_img[stealth_anime], true);
 	}
 	else
 	{
@@ -749,7 +758,7 @@ void Player::Draw() {//•`‰æŠÖ”
 void Player::TutorialDraw() {
 
 	//DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
-	
+
 	tutorial_item->Draw();
 
 	//Žž‹@
@@ -847,9 +856,9 @@ void Player::TutorialDraw() {
 	}
 
 
-	
+
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
-	
+
 	if (txtflag != 0) {
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);

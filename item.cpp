@@ -9,6 +9,8 @@ Item::Item()
 	transform.xr = 32;
 	transform.yr = 32;
 
+	time = 500;
+
 	img = LoadGraph("resouce/ReflectionItem.png");
 	img_r = 32;
 }
@@ -71,6 +73,16 @@ void Item::Move(Player& player)
 		{
 			exising_flag = false;
 			player.ItemFlagAdd(1);
+		}
+
+		if (time > 0)
+		{
+			time--;
+		}
+		if (time <= 0)
+		{
+			exising_flag = false;
+			time = 500;
 		}
 	}
 }

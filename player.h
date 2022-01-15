@@ -68,7 +68,6 @@ private:
 	int reflection_r;
 
 	//ステルスアニメーション
-	
 	int stealth_img[16];
 	int stealth_img_r;
 	int stealth_anime_timer;
@@ -76,7 +75,7 @@ private:
 
 	Item* tutorial_item;
 
-
+	int damage_flag;
 	int shot_flag;
 public:
 	Player();
@@ -97,5 +96,6 @@ public:
 	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
 
 	void ItemFlagAdd(int num);
+	void HpSub(int num);
 
 }Player;

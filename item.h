@@ -20,5 +20,7 @@ private:
 	bool exising_flag;
 	int img;
 	int img_r;
+
+	int time;
 };
 

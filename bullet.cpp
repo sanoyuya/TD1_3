@@ -816,7 +816,36 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	bullet_flag = true;
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
-	angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+	if (player.Getstelsflag() == 0)
+	{
+		angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+	}
+	else
+	{
+		int rand = GetRand(1);
+		int rand2 = GetRand(1);
+		int X;
+		int Y;
+		if (rand == 1)
+		{
+			X = 128;
+		}
+		else
+		{
+			X = -128;
+		}
+
+		if (rand2 == 1)
+		{
+			Y = 128;
+		}
+		else
+		{
+			Y = -128;
+		}
+
+		angle = (float)atan2((double)player.GetY() + Y - this->transform.y, (double)player.GetX() + X - this->transform.x);
+	}
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 }
