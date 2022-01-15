@@ -481,7 +481,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		//’e‚Ì“®‚«
 		for (int i = 0; i < bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag, player);
+			bullet[i].Move(enemy_type, reflection_flag, player,transform.x,transform.y,exising_flag);
 		}
 
 		//“–‚½‚è”»’è
@@ -493,8 +493,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 				HitBox(bullet[i].GetTransform(), i);
 			}
 		}
-
-
 
 		anime_timer++;
 
@@ -637,8 +635,8 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 {
 	if (enemy_to_bommer == false)
 	{
-		if (Box_Circle(transform.x - transform.xr, transform.y - transform.yr, transform.x + transform.xr, transform.y + transform.yr,
-			player.GetX(), (double)player.GetY(), player.GetR()) == 1)
+		if (Box_Circle((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr,
+			player.GetX(), player.GetY(), player.GetR()) == 1)
 		{
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;

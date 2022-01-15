@@ -700,7 +700,7 @@ void Player::Draw() {//•`‰æŠÖ”
 
 	for (int i = 0; i < hp; i++)
 	{
-		DrawGraph(973 + (19 * i), 668, hp_img, true);
+		DrawGraph(973 + (18 * i), 668, hp_img, true);
 	}
 
 	SetDrawBright(255, 255, 255);
@@ -790,7 +790,7 @@ void Player::TutorialDraw() {
 
 	for (int i = 0; i < hp; i++)
 	{
-		DrawGraph(953 + (19 * i), 668, hp_img, true);
+		DrawGraph(973 + (18 * i), 668, hp_img, true);
 	}
 
 	SetDrawBright(255, 255, 255);
