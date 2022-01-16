@@ -87,6 +87,8 @@ void SubBoss::form(FILE* fp)
 
 void SubBoss::Move(Player& player, bool reflection_flag)
 {
+
+
 	//出現時間管理
 	if (appear_time == 0)
 	{
@@ -99,185 +101,188 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 		appear_time--;
 	}
 
-	if (enemy_type != 2)
+	if (exising_flag == true)
 	{
-		if (exising_flag == true)
+		if (enemy_type != 2)
 		{
-			//最初の移動
-			if (fast_move_flag == true)
+			if (exising_flag == true)
 			{
-				frame++;
-				//イージング
-				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
-				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
-
-				if (frame == end_frame)
+				//最初の移動
+				if (fast_move_flag == true)
 				{
-					fast_move_flag = false;
-				}
-			}
+					frame++;
+					//イージング
+					transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
+					transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
 
-			//移動
-			if (fast_move_flag == false)
-			{
-				if (move_time == 1)
-				{//地雷設置フラフを立てる
-					mine->SetMineFlag(true);
-					mine->SetRand(7);
-				}
-
-				if (move_time > 0)
-				{
-					move_time--;
-				}
-
-				if (move_time == 0)
-				{
-					move_flag = true;
-				}
-
-				if (move_flag == true)
-				{
-
-					if (move_frame == 0)
+					if (frame == end_frame)
 					{
-						rand = GetRand(7) + 1;
+						fast_move_flag = false;
+					}
+				}
 
-						if ((int)transform.y == 128)//上
-						{
-							while (rand == 3 || rand == 5 || rand == 7)
-							{
-								rand = GetRand(7) + 1;
-							}
-						}
-						else if ((int)transform.y == 864)//下
-						{
-							while (rand == 4 || rand == 6 || rand == 8)
-							{
-								rand = GetRand(7) + 1;
-							}
-						}
-						else if ((int)transform.x >= 776)//右
-						{
-							while (rand == 1 || rand == 5 || rand == 6)
-							{
-								rand = GetRand(7) + 1;
-							}
-						}
-						else if ((int)transform.x <= 178)//左
-						{
-							while (rand == 2 || rand == 7 || rand == 8)
-							{
-								rand = GetRand(7) + 1;
-							}
-						}
+				//移動
+				if (fast_move_flag == false)
+				{
+					if (move_time == 1)
+					{//地雷設置フラフを立てる
+						mine->SetMineFlag(true);
+						mine->SetRand(7);
 					}
 
-					switch (rand)
+					if (move_time > 0)
 					{
-
-					case 1://右
-						XMove(x_speed, true);
-						break;
-
-					case 2://左
-						XMove(x_speed, false);
-						break;
-
-					case 3://上
-						YMove(y_speed, true);
-						break;
-
-					case 4://下
-						YMove(y_speed, false);
-						break;
-
-					case 5://右上
-						XMove(x_speed, true);
-						YMove(y_speed, true);
-						break;
-
-					case 6://右下
-						XMove(x_speed, true);
-						YMove(y_speed, false);
-						break;
-
-					case 7://左上
-						XMove(x_speed, false);
-						YMove(y_speed, true);
-						break;
-
-					case 8://左下
-						XMove(x_speed, false);
-						YMove(y_speed, false);
-						break;
+						move_time--;
 					}
 
-					move_frame++;
-
-					if (move_frame == move_end_frame)
+					if (move_time == 0)
 					{
-						move_frame = 0;
-						move_time = def_move_time;
-						move_flag = false;
+						move_flag = true;
 					}
 
+					if (move_flag == true)
+					{
+
+						if (move_frame == 0)
+						{
+							rand = GetRand(7) + 1;
+
+							if ((int)transform.y == 128)//上
+							{
+								while (rand == 3 || rand == 5 || rand == 7)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.y == 864)//下
+							{
+								while (rand == 4 || rand == 6 || rand == 8)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x >= 776)//右
+							{
+								while (rand == 1 || rand == 5 || rand == 6)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x <= 178)//左
+							{
+								while (rand == 2 || rand == 7 || rand == 8)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+						}
+
+						switch (rand)
+						{
+
+						case 1://右
+							XMove(x_speed, true);
+							break;
+
+						case 2://左
+							XMove(x_speed, false);
+							break;
+
+						case 3://上
+							YMove(y_speed, true);
+							break;
+
+						case 4://下
+							YMove(y_speed, false);
+							break;
+
+						case 5://右上
+							XMove(x_speed, true);
+							YMove(y_speed, true);
+							break;
+
+						case 6://右下
+							XMove(x_speed, true);
+							YMove(y_speed, false);
+							break;
+
+						case 7://左上
+							XMove(x_speed, false);
+							YMove(y_speed, true);
+							break;
+
+						case 8://左下
+							XMove(x_speed, false);
+							YMove(y_speed, false);
+							break;
+						}
+
+						move_frame++;
+
+						if (move_frame == move_end_frame)
+						{
+							move_frame = 0;
+							move_time = def_move_time;
+							move_flag = false;
+						}
+
+					}
 				}
-			}
 
-			//発射時間管理
-			if (fast_move_flag == false && shot_time > 0)
-			{
-				shot_time--;
-			}
-
-			if (shot_time == -1)
-			{
-				//反射回数初期化
-				Refresh_ReflectionNum(4);
-			}
-
-			//当たり判定
-			for (int i = 0; i < 4; i++)
-			{
-				if (*bullet[i].GetBulletFlag() == true)
+				//発射時間管理
+				if (fast_move_flag == false && shot_time > 0)
 				{
-
-					HitBox(*bullet[i].GetTransform(), bullet[i],i);
+					shot_time--;
 				}
-			}
 
-			//弾の生成
-			if (shot_time == 0)
-			{
+				if (shot_time == -1)
+				{
+					//反射回数初期化
+					Refresh_ReflectionNum(4);
+					shot_time = def_shot_time;
+				}
+
+				//当たり判定
 				for (int i = 0; i < 4; i++)
 				{
-					if (*bullet[i].GetBulletFlag() == false)
+					if (*bullet[i].GetBulletFlag() == true)
 					{
-						bullet[i].Form(transform, player, bullet_x_speed, bullet_y_speed,enemy_type);
-						damage_flag[i] = true;
-						//角度を90度ずつずらす
-						bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
-						bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
-						bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
+
+						HitBox(*bullet[i].GetTransform(), bullet[i], i);
 					}
 				}
 
-				shot_time = -1;
-			}
+				//弾の生成
+				if (shot_time == 0)
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (*bullet[i].GetBulletFlag() == false)
+						{
+							bullet[i].Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+							damage_flag[i] = true;
+							//角度を90度ずつずらす
+							bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
+							bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
+							bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
+						}
+					}
 
-			if (hp <= 0)
-			{
-				exising_flag = false;
-			}
+					shot_time = -1;
+				}
 
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+
+			}
+			//地雷の動き
+			mine->form(transform, rand);
+			mine->HitBox(transform, hp);
 		}
-		//地雷の動き
-		mine->form(transform, rand);
-		mine->HitBox(transform, hp);
-		mine->Move();
-
 	}
+	mine->Move();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -327,7 +332,7 @@ void SubBoss::Draw()
 //ダメージフラグがfalseなら体力を減らし
 //各種フラグを代入
 
-void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet,int i)
+void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 {
 	if (*enemyBullet.GetBulletFlag() == true)
 	{
@@ -360,25 +365,25 @@ void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet,int i)
 void SubBoss::HP(Transform& transform, EnemyBullet& enemyBullet)
 {
 	//当たり判定(複数)
-if (*enemyBullet.GetBulletFlag() == true && exising_flag == true)
-{
-	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	if (*enemyBullet.GetBulletFlag() == true && exising_flag == true)
 	{
-		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+			this->transform.x + this->transform.xr > transform.x - transform.xr)
 		{
-			hp -= 1;
-			enemyBullet.SetBulletFlag(false);
-
-			if (hp <= 0)
+			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+				this->transform.y + this->transform.yr > transform.y - transform.yr)
 			{
-				exising_flag = false;
-			}
+				hp -= 1;
+				enemyBullet.SetBulletFlag(false);
 
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+
+			}
 		}
 	}
-}
 }
 
 

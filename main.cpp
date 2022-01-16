@@ -153,6 +153,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy = new Enemy[ENEMY_MAX];
 				wave_num = 1;
 				game_set = false;
+				wave_num = 9;
 			}
 
 #pragma region “Gƒf[ƒ^“Ç‚İ‚İ
@@ -163,6 +164,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					enemy[i].SetReflectionNum();
 				}
+
 				switch (wave_num)
 				{
 				case 1:
@@ -225,8 +227,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy[i].Move(*player, reflection_flag);
 			}
 
-			sub_boss->Move(*player, reflection_flag);
-
+			if (wave_num == 10)
+			{
+				sub_boss->Move(*player, reflection_flag);
+			}
 #pragma region ‘Ì—ÍŒ¸­
 
 			for (int i = 0; i < ENEMY_MAX; i++)
