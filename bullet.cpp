@@ -184,7 +184,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 {
 	if (bullet_flag == true)
 	{
-		if (enemy_type == 1)
+		if (enemy_type == 1 || enemy_type == 4)
 		{
 #pragma region ˆÚ“®
 			if ((cos(angle) * x_speed) < 0)
@@ -532,7 +532,7 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 {
 	if (bullet_flag == true)
 	{
-		if (enemy_type == 1)
+		if (enemy_type == 1 || enemy_type == 4)
 		{
 #pragma region ˆÚ“®
 			if ((cos(angle) * x_speed) < 0)
@@ -899,13 +899,13 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 
 		if (transform.x - center_x >= 90 && transform.x > center_x)
 		{
-			boomerang_y_r = transform.x - center_x+130;
+			boomerang_y_r = transform.x - center_x + 130;
 			center_x = center_x - 130;
 		}
 
 		if (center_x - transform.x >= 90 && transform.x < center_x)
 		{
-			boomerang_y_r = center_x - transform.x+130;
+			boomerang_y_r = center_x - transform.x + 130;
 			center_x = center_x + 130;
 		}
 
@@ -913,7 +913,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		{
 			boomerang_angle = 3.85;//
 		}
-		else if (angle> -2.355&& angle < -1.57)
+		else if (angle > -2.355 && angle < -1.57)
 		{
 			boomerang_angle = 3.90;//
 		}
@@ -933,7 +933,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		{
 			boomerang_angle = 3.74;//
 		}
-		else if (angle >1.57 && angle <= 2.335)
+		else if (angle > 1.57 && angle <= 2.335)
 		{
 			boomerang_angle = 2.75;//
 		}
@@ -942,6 +942,29 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 			boomerang_angle = 2.85;//
 		}
 	}
+}
+
+void EnemyBullet::OmniForm(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle)
+{
+	bullet_flag = true;
+	this->transform.x = transform.x;
+	this->transform.y = transform.y;
+	go_time = 50;
+	return_flag = false;
+	flag = false;
+
+	if (num == 0)
+	{
+		this->angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+	}
+	else
+	{
+		this->angle = angle + ((DX_PI * 2 / 16) * num);
+	}
+
+	this->x_speed = x_speed;
+	this->y_speed = y_speed;
+
 }
 
 void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed, int stelsflag)

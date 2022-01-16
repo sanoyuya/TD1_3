@@ -43,7 +43,7 @@ private:
 	bool action_flag;//“®‚­‚©‚Ç‚¤‚©ƒtƒ‰ƒO
 	bool shot_action_flag;//‘Å‚Â‚©‚Ç‚¤‚©
 	int bullet_max;
-	bool damage_flag[3];
+	bool damage_flag[48];
 	int shot_time;
 	//Å‰‚ÌˆÚ“®‚Ì‚½‚ß‚Ì•Ï”
 	int frame;

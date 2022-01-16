@@ -22,6 +22,7 @@ public:
 	void TutorialMove(int y);
 	void Draw();
 	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
+	void OmniForm(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);
 	void TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed,int stelsflag);
 
 	Vertex GetVertex();
@@ -60,5 +61,7 @@ private:
 	float boomerang_x_r;
 	float boomerang_y_r;
 	bool flag;
+
+	//‘S•ûˆÊ
 }EnemyBullet;
 
