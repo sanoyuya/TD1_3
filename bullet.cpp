@@ -166,11 +166,11 @@ EnemyBullet::EnemyBullet()
 	go_time = 50;
 	return_flag = false;
 
-	center_x = 100;
-	center_y = 250;
+	center_x = 120;
+	center_y = 270;
 	boomerang_angle = 0.0f;
-	boomerang_x_r = 100;
-	boomerang_y_r = 250;
+	boomerang_x_r = 120;
+	boomerang_y_r = 270;
 	flag = false;
 }
 
@@ -899,14 +899,14 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 
 		if (transform.x - center_x >= 90 && transform.x > center_x)
 		{
-			boomerang_y_r = transform.x - center_x+110;
-			center_x = center_x - 110;
+			boomerang_y_r = transform.x - center_x+130;
+			center_x = center_x - 130;
 		}
 
 		if (center_x - transform.x >= 90 && transform.x < center_x)
 		{
-			boomerang_y_r = center_x - transform.x+110;
-			center_x = center_x + 110;
+			boomerang_y_r = center_x - transform.x+130;
+			center_x = center_x + 130;
 		}
 
 		if (angle <= -2.335 && angle > -3.14)
