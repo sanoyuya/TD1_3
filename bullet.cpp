@@ -911,7 +911,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 
 		if (angle <= -2.335 && angle > -3.14)
 		{
-			boomerang_angle = 3.60;//
+			boomerang_angle = 3.85;//
 		}
 		else if (angle> -2.355&& angle < -1.57)
 		{
@@ -927,11 +927,11 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		}
 		else if (angle > 0 && angle <= 0.785)
 		{
-			boomerang_angle = 3.00;//
+			boomerang_angle = 3.95;//
 		}
 		else if (angle > 0.785 && angle <= 1.57)
 		{
-			boomerang_angle = 3.54;//
+			boomerang_angle = 3.74;//
 		}
 		else if (angle >1.57 && angle <= 2.335)
 		{
@@ -939,14 +939,8 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		}
 		else if (angle > 2.335 && angle <= 3.14)
 		{
-			boomerang_angle = 2.50;//
+			boomerang_angle = 2.85;//
 		}
-
-
-
-
-
-
 	}
 }
 
