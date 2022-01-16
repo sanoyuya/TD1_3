@@ -62,7 +62,10 @@ void SubBoss::form(FILE* fp)
 	transform.x = start_x;
 	transform.y = start_y;
 	exising_flag = false;
-	damage_flag = false;
+	damage_flag[0] = false;
+	damage_flag[1] = false;
+	damage_flag[2] = false;
+	damage_flag[3] = false;
 	fast_move_flag = false;
 
 	move_flag = false;
@@ -230,32 +233,17 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 
 			if (shot_time == -1)
 			{
-				int i;
-
-				for (i = 0; i < 4; i++)
-				{
-					if (*bullet[i].GetBulletFlag() != false)
-					{
-						i--;
-						break;
-					}
-				}
-
-				if (i == 4)
-				{
-					//反射回数初期化
-					Refresh_ReflectionNum(4);
-
-					shot_time = def_shot_time;
-				}
+				//反射回数初期化
+				Refresh_ReflectionNum(4);
 			}
 
 			//当たり判定
-			if (*bullet->GetBulletFlag() == true)
+			for (int i = 0; i < 4; i++)
 			{
-				for (int i = 0; i < 4; i++)
+				if (*bullet[i].GetBulletFlag() == true)
 				{
-					HitBox(bullet[i].GetTransform(), bullet[i].GetBulletFlag());
+
+					HitBox(*bullet[i].GetTransform(), bullet[i],i);
 				}
 			}
 
@@ -266,8 +254,8 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				{
 					if (*bullet[i].GetBulletFlag() == false)
 					{
-						bullet[i].Form(transform, player, bullet_x_speed, bullet_y_speed);
-						damage_flag = true;
+						bullet[i].Form(transform, player, bullet_x_speed, bullet_y_speed,enemy_type);
+						damage_flag[i] = true;
 						//角度を90度ずつずらす
 						bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
 						bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
@@ -294,7 +282,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 	for (int i = 0; i < 4; i++)
 	{
 		//弾の動き
-		bullet[i].Move(enemy_type,reflection_flag,player,transform.x,transform.y,exising_flag);
+		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag);
 	}
 }
 #pragma endregion
@@ -316,6 +304,11 @@ void SubBoss::Draw()
 	for (int i = 0; i < 4; i++)
 	{
 		bullet[i].Draw();
+		if (bullet[i].GetReflectionNum() == 3)
+		{
+			bullet[i].SetBulletFlag(false);
+			bullet[i].SetReflectionNum(0);
+		}
 	}
 
 	mine->Draw();
@@ -334,9 +327,9 @@ void SubBoss::Draw()
 //ダメージフラグがfalseなら体力を減らし
 //各種フラグを代入
 
-void SubBoss::HitBox(Transform transform, bool* bullet_flag)
+void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet,int i)
 {
-	if (*bullet_flag == true)
+	if (*enemyBullet.GetBulletFlag() == true)
 	{
 		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 			this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -344,25 +337,51 @@ void SubBoss::HitBox(Transform transform, bool* bullet_flag)
 			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
 				this->transform.y + this->transform.yr > transform.y - transform.yr)
 			{
-				if (damage_flag == false)
+				if (damage_flag[i] == false)
 				{
 					hp--;
-					damage_flag = true;
-					*bullet_flag = false;
+					damage_flag[i] = true;
+					enemyBullet.SetBulletFlag(false);
 				}
 
 			}
 			else
 			{
-				damage_flag = false;
+				damage_flag[i] = false;
 			}
 		}
 		else
 		{
-			damage_flag = false;
+			damage_flag[i] = false;
 		}
 	}
 }
+
+void SubBoss::HP(Transform& transform, EnemyBullet& enemyBullet)
+{
+	//当たり判定(複数)
+if (*enemyBullet.GetBulletFlag() == true && exising_flag == true)
+{
+	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	{
+		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		{
+			hp -= 1;
+			enemyBullet.SetBulletFlag(false);
+
+			if (hp <= 0)
+			{
+				exising_flag = false;
+			}
+
+		}
+	}
+}
+}
+
+
 #pragma endregion
 
 #pragma region 当たり判定付き移動
@@ -380,7 +399,7 @@ void SubBoss::XMove(int x_speed, bool right_flag)
 
 		//判定
 		if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-			GetMap(vertex.down_left_x, vertex.down_left_y) == 0&&
+			GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
 			transform.x > 178)
 		{
 			transform.x -= x_speed;
@@ -550,6 +569,15 @@ void SubBoss::YMove(int y_speed, bool up_flag)
 	}
 }
 
+void SubBoss::MineHit(Transform transform, int& hp, bool damage_flag)
+{
+	mine->HitBox(transform, hp, damage_flag);
+}
+
+void SubBoss::PlayerMineHit(Player& player)
+{
+	mine->PlayerHitBox(player);
+}
 #pragma endregion
 
 #pragma region 反射回数初期化
@@ -577,6 +605,7 @@ void SubBoss::Refresh_ReflectionNum(int max)
 		for (int j = 0; j < max; j++)
 		{
 			bullet[j].SetReflectionNum(0);
+			shot_time = def_shot_time;
 		}
 	}
 }
@@ -584,14 +613,24 @@ void SubBoss::Refresh_ReflectionNum(int max)
 #pragma endregion
 
 #pragma region ゲッター
-Transform SubBoss::GetBulletTransform(int num)
+Transform* SubBoss::GetBulletTransform(int num)
 {
 	return bullet[num].GetTransform();
 }
 
-EnemyBullet* SubBoss::GetEnmyBullet()
+EnemyBullet* SubBoss::GetEnmyBullet(int i)
 {
-	return bullet;
+	return &bullet[i];
+}
+
+bool SubBoss::GetEnmyBulletFlag(int i)
+{
+	return bullet[i].GetBulletFlag();
+}
+
+bool SubBoss::GetSubBossFlag()
+{
+	return exising_flag;
 }
 
 #pragma endregion
@@ -623,7 +662,10 @@ SubBoss::SubBoss()
 	x_speed = 0;//X座標のスピード
 	y_speed = 0;//Y座標のスピード
 	exising_flag = false;//存在フラグ
-	damage_flag = false;
+	damage_flag[0] = false;
+	damage_flag[1] = false;
+	damage_flag[2] = false;
+	damage_flag[3] = false;
 	shot_time = 0;
 	//最初の移動のための変数
 	frame = 0;

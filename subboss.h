@@ -7,15 +7,20 @@ public:
 	void form(FILE* fp);
 	void Move(Player& player, bool reflection_flag);//動き
 	void Draw();//描画
-	void HitBox(Transform transform, bool* bullet_flag);//当たり判定
+	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//当たり判定
+	void HP(Transform& transform, EnemyBullet& enemyBullet);//当たり判定
 	void Refresh_ReflectionNum(int max);//反射回数変更
 	void XMove(int x_speed,bool right_flag);
 	void YMove(int y_speed,bool up_flag);
+	void MineHit(Transform transform, int& hp, bool damage_flag);
+	void PlayerMineHit(Player& player);
 
+	Transform* GetBulletTransform(int num);
+	EnemyBullet* GetEnmyBullet(int i);
 
+	bool GetEnmyBulletFlag(int i);
 
-	Transform GetBulletTransform(int num);
-	EnemyBullet* GetEnmyBullet();
+	bool GetSubBossFlag();
 
 	SubBoss();
 	~SubBoss();
@@ -31,7 +36,7 @@ private:
 	int x_speed = 10;//X座標のスピード
 	int y_speed = 10;//Y座標のスピード
 	bool exising_flag;//存在フラグ
-	bool damage_flag;
+	bool damage_flag[4];
 	int shot_time;
 	//最初の移動のための変数
 	int frame;

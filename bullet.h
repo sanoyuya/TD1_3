@@ -21,11 +21,11 @@ public:
 
 	void TutorialMove(int y);
 	void Draw();
-	void Form(Transform transform, Player& player, int x_speed, int y_speed);
+	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
 	void TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed,int stelsflag);
 
 	Vertex GetVertex();
-	Transform GetTransform();
+	Transform* GetTransform();
 	bool* GetBulletFlag();
 	int GetReflectionNum();
 	float GetAngle();
@@ -54,5 +54,11 @@ private:
 	int go_time;
 	bool return_flag;
 
+	float center_x;
+	float center_y;
+	float boomerang_angle;
+	float boomerang_x_r;
+	float boomerang_y_r;
+	bool flag;
 }EnemyBullet;
 

@@ -2,6 +2,7 @@
 #include"DxLib.h"
 #include"Transform.h"
 #include"enemy.h"
+#include"player.h"
 
 #pragma region コントラスタ・デストラクタ
 //コントラスタ
@@ -109,6 +110,101 @@ void Mine::HitBox(Transform transform, int& hp)
 		}
 	}
 }
+
+void Mine::HitBox(Transform transform, int& hp, bool damage_flag)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (exising_flag[i] == true && explosion_flag[i] == false && explosion_time[i] < def_explosion_time - 30)
+		{
+			if (this->transform[i].x - this->transform[i].xr < transform.x + transform.xr &&
+				this->transform[i].x + this->transform[i].xr > transform.x - transform.xr)
+			{
+				if (this->transform[i].y - this->transform[i].yr < transform.y + transform.yr &&
+					this->transform[i].y + this->transform[i].yr > transform.y - transform.yr)
+				{
+					explosion_flag[i] = true;
+				}
+
+			}
+
+		}
+
+		if (explosion_flag[i] == true)
+		{
+			if (this->transform[i].x - explosion_r < transform.x + transform.xr &&
+				this->transform[i].x + explosion_r > transform.x - transform.xr)
+			{
+				if (this->transform[i].y - explosion_r < transform.y + transform.yr &&
+					this->transform[i].y + explosion_r > transform.y - transform.yr)
+				{
+					if (damage_flag == false)
+					{
+						hp--;
+					}
+					damage_flag = true;
+				}
+				else
+				{
+					damage_flag = false;
+				}
+			}
+			else
+			{
+				damage_flag = false;
+
+			}
+		}
+	}
+}
+
+void Mine::PlayerHitBox(Player& player)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (exising_flag[i] == true && explosion_flag[i] == false && explosion_time[i] < def_explosion_time - 30)
+		{
+			if (transform[i].x - transform[i].xr < player.GetX() + player.GetR() &&
+				transform[i].x + transform[i].xr > player.GetX() - player.GetR())
+			{
+				if (transform[i].y - transform[i].yr < player.GetY() + player.GetR() &&
+					transform[i].y + transform[i].yr > player.GetY() - player.GetR())
+				{
+					explosion_flag[i] = true;
+				}
+
+			}
+
+		}
+
+		if (explosion_flag[i] == true)
+		{
+			if (transform[i].x - explosion_r < player.GetX() + player.GetR() &&
+				transform[i].x + explosion_r > player.GetX() - player.GetR())
+			{
+				if (transform[i].y - explosion_r < player.GetY() + player.GetR() &&
+					transform[i].y + explosion_r > player.GetY() - player.GetR())
+				{
+					if (player.GetDamageFlag() == 0)
+					{
+						player.HpSub(1);
+					}
+					player.SetDamageFlag(1);
+				}
+				else
+				{
+					player.SetDamageFlag(0);
+				}
+			}
+			else
+			{
+				player.SetDamageFlag(0);
+
+			}
+		}
+	}
+}
+
 #pragma endregion
 
 #pragma region 動き

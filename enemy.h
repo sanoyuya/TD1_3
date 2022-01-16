@@ -17,13 +17,13 @@ public:
 	void EnemyToEnemyHitBox(Transform transform);
 	void PlaterToEnemyHitBox(Player& player);
 	void ExplosionBommer(Enemy& enemy, Player& player);
-	void HP(Transform transform, EnemyBullet* bullet, int num);
+	void HP(Transform transform, EnemyBullet& bullet);
 
 	bool GetBulletFlag(int i);
 	bool GetEnemyFlag();
 	int GetAppearTime();
-	EnemyBullet* GetEnmyBullet();
-	Transform GetBulletTransform(int num);
+	EnemyBullet* GetEnmyBullet(int i);
+	Transform* GetBulletTransform(int num);
 	Transform GetTransform();
 
 	void SetReflectionNum();

@@ -68,6 +68,7 @@ Player::Player() {//コンストラクタの定義
 	stealth_img_r = 56;
 	stealth_anime_timer = 0;
 	stealth_anime = 0;
+	damage_flag = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -173,24 +174,24 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 	}
 }
 
-void Player::HP(Transform transform, EnemyBullet* bullet, int num) {
+void Player::HP(Transform transform, EnemyBullet& bullet) {
 
-	if (*bullet[num].GetBulletFlag() == true)
+	if (*bullet.GetBulletFlag() == true)
 	{
 		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 			hp -= 1;
-			bullet[num].SetBulletFlag(false);
+			bullet.SetBulletFlag(false);
 		}
 	}
 }
 
-void Player::TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag) {
+void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag) {
 
-	if (*bullet[num].GetBulletFlag() == true)
+	if (*bullet.GetBulletFlag() == true)
 	{
 		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 			damage_flag = 1;
-			bullet[num].SetBulletFlag(false);
+			bullet.SetBulletFlag(false);
 		}
 	}
 }
@@ -204,14 +205,29 @@ void Player::ItemFlagAdd(int num)
 
 }
 
+int Player::GetHp()
+{
+	return hp;
+}
+
 int Player::GetReflectionR()
 {
 	return reflection_r;
 }
 
+int Player::GetDamageFlag()
+{
+	return damage_flag;
+}
+
 void Player::HpSub(int num)
 {
 	hp -= num;
+}
+
+void Player::SetDamageFlag(int num)
+{
+	damage_flag = num;
 }
 
 int Player::GetX()
@@ -533,7 +549,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 			}
 		}
 
-		HP(enemy[0].GetBulletTransform(0), enemy[0].GetEnmyBullet(), 0);
+		HP(*enemy[0].GetBulletTransform(0), *enemy[0].GetEnmyBullet(0));
 
 		if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
 		{

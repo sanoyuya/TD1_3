@@ -158,6 +158,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 			if (game_set == false)
 			{
+
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
 					enemy[i].SetReflectionNum();
@@ -227,32 +228,38 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			sub_boss->Move(*player, reflection_flag);
 
 #pragma region 体力減少
+
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
 				for (int j = 0; j < 3; j++)
 				{
-					player->HP(enemy[i].GetBulletTransform(j), enemy[i].GetEnmyBullet(), j);
+					player->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
+					sub_boss->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
 
 					for (int k = 0; k < ENEMY_MAX; k++)
 					{
 						if (i != k)
 						{
-							enemy[i].HP(enemy[k].GetBulletTransform(j), enemy[k].GetEnmyBullet(), j);
+							enemy[i].HP(*enemy[k].GetBulletTransform(j), *enemy[k].GetEnmyBullet(j));
+							
 							
 							enemy[i].ExplosionBommer(enemy[k], *player);
 						}
 					}
 				}
 			}
+
 			for (int i = 0; i < 4; i++)
 			{
-				player->HP(sub_boss->GetBulletTransform(i), sub_boss->GetEnmyBullet(), i);
+				player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
 			}
+			sub_boss->PlayerMineHit(*player);
 
+#pragma endregion
 			//waveクリア判定
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				if (enemy[i].GetEnemyFlag() == false && enemy[i].GetAppearTime() == -1)
+				if (enemy[i].GetEnemyFlag() == false && enemy[i].GetAppearTime() == -1 && sub_boss->GetSubBossFlag() == false)
 				{
 					if (i == ENEMY_MAX - 1)
 					{
@@ -268,7 +275,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
 				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
-					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true)
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
+					|| sub_boss->GetSubBossFlag() == true)
 				{
 
 					i--;
@@ -282,9 +290,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					wave_num++;
 				}
 			}
-
-
-
 
 			sceneflag = player->Result();
 

@@ -10,6 +10,8 @@ typedef struct//初期化用
 	int explosion_r;
 }MimeInitialize;
 
+class Player;
+
 class Mine
 {
 public:
@@ -20,7 +22,8 @@ public:
 	void Move();//動き
 	void Draw();//描画
 	void initialize(MimeInitialize& mimeinitialize);//初期化
-
+	void HitBox(Transform transform, int& hp, bool damage_flag);
+	void PlayerHitBox(Player& player);
 	//セッター
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);

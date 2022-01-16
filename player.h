@@ -75,13 +75,13 @@ private:
 
 	Item* tutorial_item;
 
-	int damage_flag;
 	int shot_flag;
+	int damage_flag;
 public:
 	Player();
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys);
-	void HP(Transform transform, EnemyBullet* bullet, int num);
+	void HP(Transform transform, EnemyBullet& bullet);
 	void Draw();
 	int GetX();
 	int GetY();
@@ -89,13 +89,15 @@ public:
 	int Getstelsflag();
 	int Getreflectionflag();
 	int GetReflectionR();
+	int GetDamageFlag();
+	int GetHp();
 	int Result();
 
 	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag, int& wave_num);
 	void TutorialDraw();
-	void TuTorialHP(Transform transform, EnemyBullet* bullet, int num, int& damage_flag);
+	void TuTorialHP(Transform transform, EnemyBullet& bullet,int& damage_flag);
 
 	void ItemFlagAdd(int num);
 	void HpSub(int num);
-
+	void SetDamageFlag(int num);
 }Player;

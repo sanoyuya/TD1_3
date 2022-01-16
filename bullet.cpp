@@ -128,6 +128,18 @@ bool EnemyBullet::LineAndLine(float start_x, float start_y, float end_x, float e
 }
 #pragma endregion
 
+void circularMotionL(double& posX, double& posY, float cPosX, float cPosY, float x_r, float y_r, float angle, float& angle2) {
+
+	double thRad = angle;
+	double Px0 = (float)(x_r * cos(angle2) * cos(thRad) - y_r * sin(angle2) * sin(thRad) + cPosX);
+	double Py0 = (float)(x_r * cos(angle2) * sin(thRad) + y_r * sin(angle2) * cos(thRad) + cPosY);
+
+	posX = Px0;
+	posY = Py0;
+
+	angle2 += 0.05;
+}
+
 #pragma region コンストラクタ・デストラクタ
 EnemyBullet::EnemyBullet()
 {
@@ -153,6 +165,13 @@ EnemyBullet::EnemyBullet()
 
 	go_time = 50;
 	return_flag = false;
+
+	center_x = 100;
+	center_y = 250;
+	boomerang_angle = 0.0f;
+	boomerang_x_r = 100;
+	boomerang_y_r = 250;
+	flag = false;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -494,485 +513,16 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 		}
 		if (enemy_type == 3)
 		{
-			if (return_flag == false && exising_flag == true)
+			if (exising_flag == true)
 			{
-				go_time--;
-
-				if (go_time == 0)
-				{
-					return_flag = true;
-				}
-
-#pragma region 移動
-				if ((cos(angle) * x_speed) < 0)
-				{
-					//座標計算
-					vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-					vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-
-					vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-					vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-						GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-					{
-						transform.x += (cos(angle) * x_speed);
-					}
-					else
-					{
-						vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-						vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-								vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-
-								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-									GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-								{
-									if (x_speed < 0)
-									{
-										transform.x += (cos(angle) * -1);
-									}
-									else
-									{
-										transform.x += (cos(angle) * 1);
-									}
-								}
-								else
-								{
-									return_flag = true;
-									break;
-								}
-							}
-						}
-						else
-						{
-							return_flag = true;
-
-						}
-
-					}
-				}
-				else if ((cos(angle) * x_speed) > 0)
-				{
-					//座標計算
-					vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
-					vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
-
-					vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-					vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-					{
-						transform.x += (cos(angle) * x_speed);
-					}
-					else
-					{
-						vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-						vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-						if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-								vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-
-								if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-								{
-									if (x_speed < 0)
-									{
-										transform.x += (cos(angle) * -1);
-									}
-									else
-									{
-										transform.x += (cos(angle) * 1);
-									}
-
-								}
-								else
-								{
-									return_flag = true;
-									break;
-
-								}
-
-							}
-						}
-
-					}
-				}
-
-				if ((sin(angle) * y_speed) < 0)
-				{
-					//座標計算
-					vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-					vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-					vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
-					vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-						GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-					{
-						transform.y += (sin(angle) * y_speed);
-					}
-					else
-					{
-						vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-						vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
-								vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
-
-								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-									GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-								{
-									if (y_speed < 0)
-									{
-										transform.y += (sin(angle) * -1);
-									}
-									else
-									{
-										transform.y += (sin(angle) * 1);
-									}
-								}
-								else
-								{
-									return_flag = true;
-									break;
-								}
-
-							}
-						}
-						else
-						{
-							return_flag = true;
-						}
-
-					}
-				}
-				else if ((sin(angle) * y_speed) > 0)
-				{
-					//座標計算
-					vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-					vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-					vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-					vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-					{
-						transform.y += (sin(angle) * y_speed);
-					}
-					else
-					{
-						vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-						vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
-
-						if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-								vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-								if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-								{
-									if (y_speed > 0)
-									{
-										transform.y += (sin(angle) * 1);
-									}
-									else
-									{
-										transform.y += (sin(angle) * -1);
-									}
-
-								}
-								else
-								{
-									return_flag = true;
-									break;
-
-								}
-
-							}
-						}
-						else
-						{
-							return_flag = true;
-						}
-
-					}
-				}
-#pragma endregion
+				circularMotionL(transform.x, transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
 			}
-
-			if (return_flag == true)
+			else
 			{
-				if (exising_flag == true)
+				if (bullet_flag == true)
 				{
-					angle = (float)atan2(y - this->transform.y, x - this->transform.x);
+					bullet_flag = false;
 				}
-
-				transform.x += (cos(angle) * x_speed);
-				transform.y += (sin(angle) * y_speed);
-			}
-
-			if (exising_flag == false)
-			{
-#pragma region 移動
-				if ((cos(angle) * x_speed) < 0)
-				{
-					//座標計算
-					vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-					vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-
-					vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-					vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-						GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-					{
-						transform.x += (cos(angle) * x_speed);
-					}
-					else
-					{
-						vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-						vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-								vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-
-								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-									GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
-								{
-									if (x_speed < 0)
-									{
-										transform.x += (cos(angle) * -1);
-									}
-									else
-									{
-										transform.x += (cos(angle) * 1);
-									}
-								}
-								else
-								{
-										bullet_flag = false;
-										reflection_num = 0;
-									break;
-								}
-							}
-						}
-						else
-						{
-							bullet_flag = false;
-							reflection_num = 0;
-
-						}
-
-					}
-				}
-				else if ((cos(angle) * x_speed) > 0)
-				{
-					//座標計算
-					vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
-					vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
-
-					vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-					vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-					{
-						transform.x += (cos(angle) * x_speed);
-					}
-					else
-					{
-						vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-						vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-						if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-								vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-
-								if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
-									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-								{
-									if (x_speed < 0)
-									{
-										transform.x += (cos(angle) * -1);
-									}
-									else
-									{
-										transform.x += (cos(angle) * 1);
-									}
-
-								}
-								else
-								{
-									bullet_flag = false;
-									reflection_num = 0;
-									break;
-
-								}
-
-							}
-						}
-
-					}
-				}
-
-				if ((sin(angle) * y_speed) < 0)
-				{
-					//座標計算
-					vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-					vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-					vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
-					vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-						GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-					{
-						transform.y += (sin(angle) * y_speed);
-					}
-					else
-					{
-						vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-						vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
-
-						if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-							GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
-								vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
-
-								if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
-									GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
-								{
-									if (y_speed < 0)
-									{
-										transform.y += (sin(angle) * -1);
-									}
-									else
-									{
-										transform.y += (sin(angle) * 1);
-									}
-								}
-								else
-								{
-									bullet_flag = false;
-									reflection_num = 0;
-									break;
-								}
-
-							}
-						}
-						else
-						{
-							bullet_flag = false;
-							reflection_num = 0;
-						}
-
-					}
-				}
-				else if ((sin(angle) * y_speed) > 0)
-				{
-					//座標計算
-					vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-					vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
-
-					vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-					vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-
-					//判定
-					if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-					{
-						transform.y += (sin(angle) * y_speed);
-					}
-					else
-					{
-						vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-						vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
-
-						if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-							GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-						{
-							while (1)//隙間埋め
-							{
-								vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-								vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
-
-								if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
-									GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
-								{
-									if (y_speed > 0)
-									{
-										transform.y += (sin(angle) * 1);
-									}
-									else
-									{
-										transform.y += (sin(angle) * -1);
-									}
-
-								}
-								else
-								{
-									bullet_flag = false;
-									reflection_num = 0;
-									break;
-
-								}
-
-							}
-						}
-						else
-						{
-							bullet_flag = false;
-							reflection_num = 0;
-						}
-
-					}
-				}
-#pragma endregion
 			}
 		}
 	}
@@ -1290,20 +840,22 @@ void EnemyBullet::Draw()
 	if (bullet_flag == true)
 	{
 		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
-
+		DrawCircle(center_x, center_y, 2, GetColor(225, 255, 255));
 	}
 }
 #pragma endregion
 
 #pragma region Form
 //生成
-void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_speed)
+void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type)
 {
 	bullet_flag = true;
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
 	go_time = 50;
 	return_flag = false;
+	flag = false;
+
 	if (player.Getstelsflag() == 0)
 	{
 		angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
@@ -1336,6 +888,66 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	}
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
+
+	if (enemy_type == 3)
+	{
+		boomerang_x_r = 100;
+		boomerang_y_r = 250;
+
+		center_x = transform.x + cos(angle) * boomerang_x_r;
+		center_y = transform.y + sin(angle) * boomerang_y_r;
+
+		if (transform.x - center_x >= 90 && transform.x > center_x)
+		{
+			boomerang_y_r = transform.x - center_x+110;
+			center_x = center_x - 110;
+		}
+
+		if (center_x - transform.x >= 90 && transform.x < center_x)
+		{
+			boomerang_y_r = center_x - transform.x+110;
+			center_x = center_x + 110;
+		}
+
+		if (angle <= -2.335 && angle > -3.14)
+		{
+			boomerang_angle = 3.60;//
+		}
+		else if (angle> -2.355&& angle < -1.57)
+		{
+			boomerang_angle = 3.90;//
+		}
+		else if (angle >= -1.57 && angle < -0.785)
+		{
+			boomerang_angle = 2.75;//
+		}
+		else if (angle < 0 && angle >= -0.785)
+		{
+			boomerang_angle = 2.95;//
+		}
+		else if (angle > 0 && angle <= 0.785)
+		{
+			boomerang_angle = 3.00;//
+		}
+		else if (angle > 0.785 && angle <= 1.57)
+		{
+			boomerang_angle = 3.54;//
+		}
+		else if (angle >1.57 && angle <= 2.335)
+		{
+			boomerang_angle = 2.75;//
+		}
+		else if (angle > 2.335 && angle <= 3.14)
+		{
+			boomerang_angle = 2.50;//
+		}
+
+
+
+
+
+
+	}
 }
 
 void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed, int stelsflag)
@@ -1364,9 +976,9 @@ Vertex EnemyBullet::GetVertex()
 	return vertex;
 }
 
-Transform EnemyBullet::GetTransform()
+Transform* EnemyBullet::GetTransform()
 {
-	return transform;
+	return &transform;
 }
 
 bool* EnemyBullet::GetBulletFlag()

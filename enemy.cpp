@@ -231,7 +231,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 						{
 							if (*bullet[i].GetBulletFlag() == false)
 							{
-								bullet[i].Form(transform, player, x_speed, y_speed);
+								bullet[i].Form(transform, player, x_speed, y_speed,enemy_type);
 								damage_flag[i] = true;
 
 								break;
@@ -490,7 +490,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 
 			if (*bullet[i].GetBulletFlag() == true && exising_flag == true)
 			{
-				HitBox(bullet[i].GetTransform(), i);
+				HitBox(*bullet[i].GetTransform(), i);
 			}
 		}
 
@@ -586,7 +586,7 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 
 	if (*bullet[0].GetBulletFlag() == true && exising_flag == true)
 	{
-		TutorialHitBox(bullet[0].GetTransform(), 0);
+		TutorialHitBox(*bullet[0].GetTransform(), 0);
 	}
 }
 #pragma endregion
@@ -647,10 +647,10 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 #pragma endregion
 
 #pragma region “–‚½‚è”»’è
-void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
+void Enemy::HP(Transform transform, EnemyBullet& bullet)
 {
 	//“–‚½‚è”»’è(•¡”)
-	if (*bullet[num].GetBulletFlag() == true && exising_flag == true)
+	if (*bullet.GetBulletFlag() == true && exising_flag == true)
 	{
 		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 			this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -659,7 +659,7 @@ void Enemy::HP(Transform transform, EnemyBullet* bullet, int num)
 				this->transform.y + this->transform.yr > transform.y - transform.yr)
 			{
 				hp -= 1;
-				bullet[num].SetBulletFlag(false);
+				bullet.SetBulletFlag(false);
 
 				if (hp <= 0)
 				{
@@ -881,7 +881,7 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 #pragma endregion
 
 #pragma region ƒQƒbƒ^[
-Transform Enemy::GetBulletTransform(int num)
+Transform* Enemy::GetBulletTransform(int num)
 {
 	return bullet[num].GetTransform();
 }
@@ -924,8 +924,8 @@ int Enemy::GetAppearTime()
 	return appear_time;
 }
 
-EnemyBullet* Enemy::GetEnmyBullet()
+EnemyBullet* Enemy::GetEnmyBullet(int i)
 {
-	return bullet;
+	return &bullet[i];
 }
 #pragma endregion
