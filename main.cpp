@@ -231,7 +231,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				for (int j = 0; j < 3; j++)
+				for (int j = 0; j < 48; j++)
 				{
 					player->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
 					sub_boss->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));

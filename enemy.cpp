@@ -97,22 +97,13 @@ Enemy::Enemy()
 	move_num = 0;
 	move_frame = 0;
 	move_end_frame = 00;
-	move_start_x[0] = .0;
-	move_start_y[0] = 0;
-	move_end_x[0] = 0;
-	move_end_y[0] = 0;
-	move_start_x[1] = 0;
-	move_start_y[1] = 0;
-	move_end_x[1] = 0;
-	move_end_y[1] = 0;
-	move_start_x[2] = 0;
-	move_start_y[2] = 0;
-	move_end_x[2] = 0;
-	move_end_y[2] = 0;
-	move_start_x[3] = 0;
-	move_start_y[3] = 0;
-	move_end_x[3] = 0;
-	move_end_y[3] = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		move_start_x[i] = .0;
+		move_start_y[i] = 0;
+		move_end_x[i] = 0;
+		move_end_y[i] = 0;
+	}
 
 	//‰Šú’l
 	def_move_time = move_time;
@@ -134,9 +125,9 @@ Enemy::Enemy()
 	explosion_bommer_flag = false;
 
 	//‘S•ûˆÊ
+	all_bullet_max = 48;
 
-
-	bullet = new EnemyBullet[48];
+	bullet = new EnemyBullet[all_bullet_max];
 	item = new Item;
 	color = GetColor(255, 255, 255);
 	//‰æ‘œ
@@ -148,7 +139,8 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-
+	delete item;
+	delete []bullet;
 }
 #pragma endregion
 
@@ -262,12 +254,12 @@ void Enemy::Move(Player& player, bool reflection_flag)
 						{
 							int j;
 							float angl = (float)atan2((double)player.GetY() - this->transform.y, (double)player.GetX() - this->transform.x);
-							
+
 							for (int i = 0; i < 16; i++)
 							{
 								j = FlagSerch(bullet, 48);
 
-								bullet[j].OmniForm(transform, player, x_speed, y_speed, enemy_type, i,angl);
+								bullet[j].OmniForm(transform, player, x_speed, y_speed, enemy_type, i, angl);
 								damage_flag[j] = true;
 							}
 						}
@@ -513,13 +505,13 @@ void Enemy::Move(Player& player, bool reflection_flag)
 #pragma endregion
 
 		//’e‚Ì“®‚«
-		for (int i = 0; i < 48; i++)
+		for (int i = 0; i < all_bullet_max; i++)
 		{
 			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag);
 		}
 
 		//“–‚½‚è”»’è
-		for (int i = 0; i < 48; i++)
+		for (int i = 0; i < all_bullet_max; i++)
 		{
 
 			if (*bullet[i].GetBulletFlag() == true && exising_flag == true)
@@ -778,10 +770,6 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 //•`‰æ
 void Enemy::Draw(int num)
 {
-	for (int i = 0; i < bullet_max; i++)
-	{
-		bullet[i].color = color;
-	}
 
 	if (exising_flag == true)
 	{
@@ -796,7 +784,7 @@ void Enemy::Draw(int num)
 		}
 	}
 
-	for (int i = 0; i < 48; i++)
+	for (int i = 0; i < all_bullet_max; i++)
 	{
 		bullet[i].Draw();
 		DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
@@ -927,7 +915,7 @@ Transform Enemy::GetTransform()
 
 void Enemy::SetReflectionNum()
 {
-	for (int i = 0; i < bullet_max; i++)
+	for (int i = 0; i < all_bullet_max; i++)
 	{
 		bullet[i].SetReflectionNum(0);
 	}
