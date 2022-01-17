@@ -133,7 +133,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 	if (COOLTIME == 1) {//ステルスの使用頻度
 		COOLTIMEtimer++;
-		if (COOLTIMEtimer > 999) {
+		if (COOLTIMEtimer > 500) {
 			COOLTIME = 0;
 			COOLTIMEtimer = 0;
 		}
@@ -146,7 +146,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 				reflectionflag = 0;
 			}
 		}
-		if (reflectioncooltimer > 50) {
+		if (reflectioncooltimer > 150) {
 			reflectioncooltimer = -50;
 			reflectionAfterglow = 0;
 		}
@@ -267,7 +267,7 @@ int Player::Result() {
 
 #pragma region チュートリアル
 void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag, int& wave_num) {
-	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0)
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0||keys[KEY_INPUT_S]==1&&oldkeys[KEY_INPUT_S]==0)
 	{
 		X = 480;
 		Y = 832;
