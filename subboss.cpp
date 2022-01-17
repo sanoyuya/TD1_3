@@ -239,7 +239,6 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				{
 					//”½Ë‰ñ”‰Šú‰»
 					Refresh_ReflectionNum(4);
-					shot_time = def_shot_time;
 				}
 
 				//“–‚½‚è”»’è
@@ -287,7 +286,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 	for (int i = 0; i < 4; i++)
 	{
 		//’e‚Ì“®‚«
-		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag);
+		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag,transform);
 	}
 }
 #pragma endregion

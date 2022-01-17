@@ -6,8 +6,8 @@ Item::Item()
 	appear_flag = false;
 	exising_flag = false;
 	transform = { 0 };
-	transform.xr = 32;
-	transform.yr = 32;
+	transform.xr = 64;
+	transform.yr = 64;
 
 	time = 500;
 

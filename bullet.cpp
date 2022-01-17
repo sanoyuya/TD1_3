@@ -109,11 +109,6 @@ bool EnemyBullet::LineAndLine(float start_x, float start_y, float end_x, float e
 	line2_cross1 = (vec_line2.x * line2_vec_point1.y) - (vec_line2.y * line2_vec_point1.x);
 	line2_cross2 = (vec_line2.x * line2_vec_point2.y) - (vec_line2.y * line2_vec_point2.x);
 
-	DrawFormatString(300, 115, GetColor(255, 255, 255), "%f ", line_cross1);
-	DrawFormatString(300, 135, GetColor(255, 255, 255), "%f ", line_cross2);
-	DrawFormatString(300, 155, GetColor(255, 255, 255), "%f ", line2_cross1);
-	DrawFormatString(300, 175, GetColor(255, 255, 255), "%f ", line2_cross2);
-
 	//  変数crossの値で左右の判定
 	//  (カーソルがラインより右か左かを文字で表示)
 	if (line_cross1 <= 0 && line_cross2 <= 0 &&
@@ -131,13 +126,13 @@ bool EnemyBullet::LineAndLine(float start_x, float start_y, float end_x, float e
 void circularMotionL(double& posX, double& posY, float cPosX, float cPosY, float x_r, float y_r, float angle, float& angle2) {
 
 	double thRad = angle;
-	double Px0 = (float)(x_r * cos(angle2) * cos(thRad) - y_r * sin(angle2) * sin(thRad) + cPosX);
-	double Py0 = (float)(x_r * cos(angle2) * sin(thRad) + y_r * sin(angle2) * cos(thRad) + cPosY);
+	float Px0 = (float)(x_r * cos(angle2) * cos(thRad) - y_r * sin(angle2) * sin(thRad) + cPosX);
+	float Py0 = (float)(x_r * cos(angle2) * sin(thRad) + y_r * sin(angle2) * cos(thRad) + cPosY);
 
 	posX = Px0;
 	posY = Py0;
 
-	angle2 += 0.05;
+	angle2 += 0.05f;
 }
 
 #pragma region コンストラクタ・デストラクタ
@@ -180,51 +175,51 @@ EnemyBullet::~EnemyBullet()
 #pragma endregion
 
 #pragma region Move
-void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag)
+void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag,Transform& transform)
 {
 	if (bullet_flag == true)
 	{
-		if (enemy_type == 1 || enemy_type == 4)
+		if (enemy_type == 1 || enemy_type == 4 || enemy_type == 10)
 		{
 #pragma region 移動
 			if ((cos(angle) * x_speed) < 0)
 			{
 				//座標計算
-				vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-				vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+				vertex.top_left_y = ((int)this->transform.y - this->transform.yr) / 32;
+				vertex.down_left_y = ((int)this->transform.y + this->transform.yr - 1) / 32;
 
-				vertex.top_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
-				vertex.down_left_x = (int)(((double)transform.x - transform.xr) + (cos(angle) * x_speed)) / 32;
+				vertex.top_left_x = (int)(((double)this->transform.x - this->transform.xr) + (cos(angle) * x_speed)) / 32;
+				vertex.down_left_x = (int)(((double)this->transform.x - this->transform.xr) + (cos(angle) * x_speed)) / 32;
 
 				//判定
 				if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 					GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
 				{
-					transform.x += (cos(angle) * x_speed);
+					this->transform.x += (cos(angle) * x_speed);
 				}
 				else
 				{
-					vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-					vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+					vertex.top_left_x = ((int)this->transform.x - this->transform.xr) / 32;
+					vertex.down_left_x = ((int)this->transform.x - this->transform.xr) / 32;
 
 					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 						GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
 					{
 						while (1)//隙間埋め
 						{
-							vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
-							vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+							vertex.top_left_x = (((int)this->transform.x - this->transform.xr) - 1) / 32;
+							vertex.down_left_x = (((int)this->transform.x - this->transform.xr) - 1) / 32;
 
 							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 								GetMap(vertex.down_left_x, vertex.down_left_y) == 0)
 							{
 								if (x_speed < 0)
 								{
-									transform.x += (cos(angle) * -1);
+									this->transform.x += (cos(angle) * -1);
 								}
 								else
 								{
-									transform.x += (cos(angle) * 1);
+									this->transform.x += (cos(angle) * 1);
 								}
 							}
 							else
@@ -247,51 +242,48 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 					{
 						x_speed = -(x_speed);
 						reflection_num++;
-
 					}
-
 				}
 			}
 			else if ((cos(angle) * x_speed) > 0)
 			{
 				//座標計算
-				vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
-				vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+				vertex.top_right_y = ((int)this->transform.y - this->transform.yr) / 32;
+				vertex.down_right_y = ((int)this->transform.y + this->transform.yr - 1) / 32;
 
-				vertex.top_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
-				vertex.down_right_x = (int)((transform.x + transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+				vertex.top_right_x = (int)((this->transform.x + this->transform.xr - 1) + (cos(angle) * x_speed)) / 32;
+				vertex.down_right_x = (int)((this->transform.x + this->transform.xr - 1) + (cos(angle) * x_speed)) / 32;
 
 				//判定
 				if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
 					GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 				{
-					transform.x += (cos(angle) * x_speed);
+					this->transform.x += (cos(angle) * x_speed);
 				}
 				else
 				{
-					vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
-					vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+					vertex.top_right_x = ((int)this->transform.x + this->transform.xr - 1) / 32;
+					vertex.down_right_x = ((int)this->transform.x + this->transform.xr - 1) / 32;
 
 					if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
 						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 					{
 						while (1)//隙間埋め
 						{
-							vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
-							vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+							vertex.top_right_x = (((int)this->transform.x + this->transform.xr - 1) + 1) / 32;
+							vertex.down_right_x = (((int)this->transform.x + this->transform.xr - 1) + 1) / 32;
 
 							if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
 								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 							{
 								if (x_speed < 0)
 								{
-									transform.x += (cos(angle) * -1);
+									this->transform.x += (cos(angle) * -1);
 								}
 								else
 								{
-									transform.x += (cos(angle) * 1);
+									this->transform.x += (cos(angle) * 1);
 								}
-
 							}
 							else
 							{
@@ -306,53 +298,50 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 									reflection_num = 0;
 								}
 								break;
-
 							}
-
 						}
 					}
-
 				}
 			}
 
 			if ((sin(angle) * y_speed) < 0)
 			{
 				//座標計算
-				vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
-				vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+				vertex.top_left_x = ((int)this->transform.x - this->transform.xr) / 32;
+				vertex.top_right_x = ((int)this->transform.x + this->transform.xr - 1) / 32;
 
-				vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * y_speed)) / 32;
-				vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+				vertex.top_left_y = (int)((this->transform.y - this->transform.yr) + (sin(angle) * y_speed)) / 32;
+				vertex.top_right_y = (int)((this->transform.y - this->transform.yr - 1) + (sin(angle) * y_speed)) / 32;
 
 				//判定
 				if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 					GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
 				{
-					transform.y += (sin(angle) * y_speed);
+					this->transform.y += (sin(angle) * y_speed);
 				}
 				else
 				{
-					vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
-					vertex.top_right_y = ((int)transform.y - transform.yr - 1) / 32;
+					vertex.top_left_y = ((int)this->transform.y - this->transform.yr) / 32;
+					vertex.top_right_y = ((int)this->transform.y - this->transform.yr - 1) / 32;
 
 					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 						GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
 					{
 						while (1)//隙間埋め
 						{
-							vertex.top_left_y = (int)((transform.y - transform.yr) + (sin(angle) * -1)) / 32;
-							vertex.top_right_y = (int)((transform.y - transform.yr - 1) + (sin(angle) * -1)) / 32;
+							vertex.top_left_y = (int)((this->transform.y - this->transform.yr) + (sin(angle) * -1)) / 32;
+							vertex.top_right_y = (int)((this->transform.y - this->transform.yr - 1) + (sin(angle) * -1)) / 32;
 
 							if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
 								GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
 							{
 								if (y_speed < 0)
 								{
-									transform.y += (sin(angle) * -1);
+									this->transform.y += (sin(angle) * -1);
 								}
 								else
 								{
-									transform.y += (sin(angle) * 1);
+									this->transform.y += (sin(angle) * 1);
 								}
 							}
 							else
@@ -369,7 +358,6 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 								}
 								break;
 							}
-
 						}
 					}
 					else
@@ -385,50 +373,48 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 							reflection_num = 0;
 						}
 					}
-
 				}
 			}
 			else if ((sin(angle) * y_speed) > 0)
 			{
 				//座標計算
-				vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
-				vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+				vertex.down_left_x = ((int)this->transform.x - this->transform.xr) / 32;
+				vertex.down_right_x = ((int)this->transform.x + this->transform.xr - 1) / 32;
 
-				vertex.down_left_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
-				vertex.down_right_y = (int)((transform.y + transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+				vertex.down_left_y = (int)((this->transform.y + this->transform.yr - 1) + (sin(angle) * y_speed)) / 32;
+				vertex.down_right_y = (int)((this->transform.y + this->transform.yr - 1) + (sin(angle) * y_speed)) / 32;
 
 				//判定
 				if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
 					GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 				{
-					transform.y += (sin(angle) * y_speed);
+					this->transform.y += (sin(angle) * y_speed);
 				}
 				else
 				{
-					vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
-					vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+					vertex.down_left_y = ((int)this->transform.y + this->transform.yr - 1) / 32;
+					vertex.down_right_y = ((int)this->transform.y + this->transform.yr - 1) / 32;
 
 					if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
 						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 					{
 						while (1)//隙間埋め
 						{
-							vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+							vertex.down_left_y = (((int)this->transform.y + this->transform.yr - 1) + 1) / 32;
 
-							vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+							vertex.down_right_y = (((int)this->transform.y + this->transform.yr - 1) + 1) / 32;
 
 							if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
 								GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
 							{
 								if (y_speed > 0)
 								{
-									transform.y += (sin(angle) * 1);
+									this->transform.y += (sin(angle) * 1);
 								}
 								else
 								{
-									transform.y += (sin(angle) * -1);
+									this->transform.y += (sin(angle) * -1);
 								}
-
 							}
 							else
 							{
@@ -444,9 +430,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 								}
 
 								break;
-
 							}
-
 						}
 					}
 					else
@@ -462,7 +446,6 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 							reflection_num = 0;
 						}
 					}
-
 				}
 			}
 #pragma endregion
@@ -471,43 +454,42 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 			if (player.Getreflectionflag() == 1)
 			{
 				int wey = Box_Line(
-					//プレイヤー
-					(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//右上
-					(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//左上
+				//プレイヤー
+				(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//右上
+				(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//左上
 
-					(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//左下
-					(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//右下
+				(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//左下
+				(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//右下
 
-					//弾
-					(float)transform.x - transform.xr, (float)transform.y + transform.yr,//左下
-					(float)transform.x + transform.xr, (float)transform.y + transform.yr,//右下
+				//弾
+				(float)this->transform.x - this->transform.xr, (float)this->transform.y + this->transform.yr,//左下
+				(float)this->transform.x + this->transform.xr, (float)this->transform.y + this->transform.yr,//右下
 
-					(float)transform.x - transform.xr, (float)transform.y - transform.yr,//左上
-					(float)transform.x + transform.xr, (float)transform.y - transform.yr);//右上
+				(float)this->transform.x - this->transform.xr, (float)this->transform.y - this->transform.yr,//左上
+				(float)this->transform.x + this->transform.xr, (float)this->transform.y - this->transform.yr);//右上
 
 				switch (wey)
 				{
 				case 1:
 					y_speed = -(y_speed);
-					transform.y = (double)player.GetY() - player.GetReflectionR() - transform.yr;
+					this->transform.y = (double)player.GetY() - player.GetReflectionR() - this->transform.yr;
 					break;
 
 				case 2:
 					y_speed = -(y_speed);
-					transform.y = (double)player.GetY() + player.GetReflectionR() + transform.yr;
+					this->transform.y = (double)player.GetY() + player.GetReflectionR() + this->transform.yr;
 					break;
 
 				case 3:
 					x_speed = -(x_speed);
-					transform.x = (double)player.GetX() - player.GetReflectionR() - transform.xr;
+					this->transform.x = (double)player.GetX() - player.GetReflectionR() - this->transform.xr;
 					break;
 
 				case 4:
 					x_speed = -(x_speed);
-					transform.x = (double)player.GetX() + player.GetReflectionR() + transform.xr;
+					this->transform.x = (double)player.GetX() + player.GetReflectionR() + this->transform.xr;
 					break;
 				}
-
 			}
 #pragma endregion
 		}
@@ -515,7 +497,25 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 		{
 			if (exising_flag == true)
 			{
-				circularMotionL(transform.x, transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
+				circularMotionL(this->transform.x, this->transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
+				
+				boomerang_x_r = 100;
+				boomerang_y_r = 250;
+
+				center_x = (float)(transform.x + cos(angle) * boomerang_x_r);
+				center_y = (float)(transform.y + sin(angle) * boomerang_y_r);
+
+				if (transform.x - center_x >= 90 && transform.x > center_x)
+				{
+					center_x = center_x - 130;
+					boomerang_y_r = (float)transform.x - center_x + 130.0f;
+				}
+
+				if (center_x - transform.x >= 90 && transform.x < center_x)
+				{
+					center_x = center_x + 130.0f;
+					boomerang_y_r = center_x - (float)transform.x + 130.0f;
+				}
 			}
 			else
 			{
@@ -595,9 +595,7 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 					{
 						x_speed = -(x_speed);
 						reflection_num++;
-
 					}
-
 				}
 			}
 			else if ((cos(angle) * x_speed) > 0)
@@ -639,7 +637,6 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 								{
 									transform.x += (cos(angle) * 1);
 								}
-
 							}
 							else
 							{
@@ -654,12 +651,10 @@ void EnemyBullet::Move(int enemy_type, bool reflection_flag)
 									reflection_num = 0;
 								}
 								break;
-
 							}
 
 						}
 					}
-
 				}
 			}
 
@@ -885,6 +880,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 
 		angle = (float)atan2((double)player.GetY() + Y - this->transform.y, (double)player.GetX() + X - this->transform.x);
 	}
+
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 
@@ -893,28 +889,26 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		boomerang_x_r = 100;
 		boomerang_y_r = 250;
 
-		center_x = transform.x + cos(angle) * boomerang_x_r;
-		center_y = transform.y + sin(angle) * boomerang_y_r;
+		center_x = (float)(transform.x + cos(angle) * boomerang_x_r);
+		center_y = (float)(transform.y + sin(angle) * boomerang_y_r);
 
 		if (transform.x - center_x >= 90 && transform.x > center_x)
 		{
-			boomerang_y_r = transform.x - center_x + 130;
-			center_x = center_x - 130;
+			boomerang_y_r = (float)transform.x - center_x + 130.0f;
 		}
 
 		if (center_x - transform.x >= 90 && transform.x < center_x)
 		{
-			boomerang_y_r = center_x - transform.x + 130;
-			center_x = center_x + 130;
+			boomerang_y_r = center_x - (float)transform.x + 130.0f;
 		}
 
 		if (angle <= -2.335 && angle > -3.14)
 		{
-			boomerang_angle = 3.85;//
+			boomerang_angle = 3.85f;//
 		}
 		else if (angle > -2.355 && angle < -1.57)
 		{
-			boomerang_angle = 3.90;//
+			boomerang_angle = 3.90f;//
 		}
 		else if (angle >= -1.57 && angle < -0.785)
 		{
@@ -922,23 +916,23 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 		}
 		else if (angle < 0 && angle >= -0.785)
 		{
-			boomerang_angle = 2.95;//
+			boomerang_angle = 2.95f;//
 		}
 		else if (angle > 0 && angle <= 0.785)
 		{
-			boomerang_angle = 3.95;//
+			boomerang_angle = 3.95f;//
 		}
 		else if (angle > 0.785 && angle <= 1.57)
 		{
-			boomerang_angle = 3.74;//
+			boomerang_angle = 3.74f;//
 		}
 		else if (angle > 1.57 && angle <= 2.335)
 		{
-			boomerang_angle = 2.75;//
+			boomerang_angle = 2.75f;//
 		}
 		else if (angle > 2.335 && angle <= 3.14)
 		{
-			boomerang_angle = 2.85;//
+			boomerang_angle = 2.85f;//
 		}
 	}
 }
@@ -958,12 +952,10 @@ void EnemyBullet::OmniForm(Transform transform, Player& player, int x_speed, int
 	}
 	else
 	{
-		this->angle = angle + ((DX_PI * 2 / 16) * num);
+		this->angle = angle + (float)((DX_PI * 2 / 16) * num);
 	}
-
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
-
 }
 
 void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed, int stelsflag)
@@ -1033,5 +1025,3 @@ void EnemyBullet::SetAngle(float _angle)
 	this->angle = _angle;
 }
 #pragma endregion
-
-
