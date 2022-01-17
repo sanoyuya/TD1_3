@@ -100,7 +100,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 	}
 
 	if (COOLTIMEtimer == 0) {
-		if (reflectioncooltimer == -250 || stelscooltimer == -150) {//ステルス
+		if (reflectionflag == 0 && stelscooltimer == -150) {//ステルス
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
 				stelsAfterglow = 1;
 				stelsflag = 1;
@@ -108,7 +108,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 		}
 	}
 	if (itemflag == 6) {//反射
-		if (reflectioncooltimer == -250 || stelscooltimer == -150) {
+		if (reflectioncooltimer == -250 && stelsflag == 0) {
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
 				itemflag = 0;
 				reflectionAfterglow = 1;
