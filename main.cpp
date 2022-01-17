@@ -153,13 +153,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy = new Enemy[ENEMY_MAX];
 				wave_num = 1;
 				game_set = false;
-				wave_num = 9;
 			}
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 			if (game_set == false)
 			{
-
+				wave_num = 11;
+				
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
 					enemy[i].SetReflectionNum();
@@ -214,6 +214,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				case 10:
 					EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
 					SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
+					game_set = true;
+					break;
+				case 11:
+					EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy);
 					game_set = true;
 					break;
 				}

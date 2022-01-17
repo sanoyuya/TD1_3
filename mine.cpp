@@ -14,6 +14,7 @@ Mine::Mine()
 		mine_flag = false;
 		def_explosion_time = 0;
 		def_bombs_time = 0;
+
 	for (int i = 0; i < 10; i++)
 	{
 		transform[i].x = 0;
@@ -164,11 +165,11 @@ void Mine::PlayerHitBox(Player& player)
 	{
 		if (exising_flag[i] == true && explosion_flag[i] == false && explosion_time[i] < def_explosion_time - 30)
 		{
-			if (transform[i].x - transform[i].xr < player.GetX() + player.GetR() &&
-				transform[i].x + transform[i].xr > player.GetX() - player.GetR())
+			if (transform[i].x - transform[i].xr < (double)player.GetX() + (double)player.GetR() &&
+				transform[i].x + transform[i].xr >(double)player.GetX() - (double)player.GetR())
 			{
-				if (transform[i].y - transform[i].yr < player.GetY() + player.GetR() &&
-					transform[i].y + transform[i].yr > player.GetY() - player.GetR())
+				if (transform[i].y - transform[i].yr < (double)player.GetY() + (double)player.GetR() &&
+					transform[i].y + transform[i].yr > (double)player.GetY() - (double)player.GetR())
 				{
 					explosion_flag[i] = true;
 				}
@@ -179,11 +180,11 @@ void Mine::PlayerHitBox(Player& player)
 
 		if (explosion_flag[i] == true)
 		{
-			if (transform[i].x - explosion_r < player.GetX() + player.GetR() &&
-				transform[i].x + explosion_r > player.GetX() - player.GetR())
+			if (transform[i].x - explosion_r < (double)player.GetX() + (double)player.GetR() &&
+				transform[i].x + explosion_r > (double)player.GetX() - (double)player.GetR())
 			{
-				if (transform[i].y - explosion_r < player.GetY() + player.GetR() &&
-					transform[i].y + explosion_r > player.GetY() - player.GetR())
+				if (transform[i].y - explosion_r < (double)player.GetY() + (double)player.GetR() &&
+					transform[i].y + explosion_r > (double)player.GetY() - (double)player.GetR())
 				{
 					if (player.GetDamageFlag() == 0)
 					{

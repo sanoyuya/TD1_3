@@ -129,18 +129,26 @@ Enemy::Enemy()
 
 	bullet = new EnemyBullet[all_bullet_max];
 	item = new Item;
+	mine = new Mine;
 	color = GetColor(255, 255, 255);
 	//画像
 	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
 	img_r = 48;
 	anime = 0;
 	anime_timer = 0;
+
+	mime_initialize.transform_yr = 0;
+	mime_initialize.transform_xr = 0;
+	mime_initialize.def_bombs_time = 0;
+	mime_initialize.def_explosion_time = 0;
+	mime_initialize.explosion_r = 0;
+	move_rand = 0;
 }
 
 Enemy::~Enemy()
 {
 	delete item;
-	delete []bullet;
+	delete[]bullet;
 }
 #pragma endregion
 
@@ -182,7 +190,8 @@ void Enemy::Move(Player& player, bool reflection_flag)
 				}
 			}
 		}
-		if (enemy_type != 2)
+
+		if (enemy_type == 1 || enemy_type == 3 || enemy_type == 4)
 		{
 			if (exising_flag == true)
 			{
@@ -236,7 +245,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 					if (shot_time == 0)
 					{
 						shot_time = def_shot_time;
-						if (enemy_type == 1)
+						if (enemy_type == 1 || enemy_type == 3)
 						{
 
 							for (int i = 0; i < bullet_max; i++)
@@ -504,10 +513,181 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		}
 #pragma endregion
 
+		if (enemy_type == 10)
+		{
+			if (exising_flag == true)
+			{
+				//移動
+				if (fast_move_flag == false)
+				{
+					if (move_time == 1)
+					{//地雷設置フラフを立てる
+						mine->SetMineFlag(true);
+						mine->SetRand(7);
+					}
+
+					if (move_time > 0)
+					{
+						move_time--;
+					}
+
+					if (move_time == 0)
+					{
+						move_flag = true;
+					}
+
+					if (move_flag == true)
+					{
+
+						if (move_frame == 0)
+						{
+							move_rand = GetRand(7) + 1;
+
+							if ((int)transform.y == 128)//上
+							{
+								while (move_rand == 3 || move_rand == 5 || move_rand == 7)
+								{
+									move_rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.y == 864)//下
+							{
+								while (move_rand == 4 || move_rand == 6 || move_rand == 8)
+								{
+									move_rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x >= 776)//右
+							{
+								while (move_rand == 1 || move_rand == 5 || move_rand == 6)
+								{
+									move_rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x <= 178)//左
+							{
+								while (move_rand == 2 || move_rand == 7 || move_rand == 8)
+								{
+									move_rand = GetRand(7) + 1;
+								}
+							}
+						}
+
+						switch (move_rand)
+						{
+
+						case 1://右
+							XMove(x_speed, true);
+							break;
+
+						case 2://左
+							XMove(x_speed, false);
+							break;
+
+						case 3://上
+							YMove(y_speed, true);
+							break;
+
+						case 4://下
+							YMove(y_speed, false);
+							break;
+
+						case 5://右上
+							XMove(x_speed, true);
+							YMove(y_speed, true);
+							break;
+
+						case 6://右下
+							XMove(x_speed, true);
+							YMove(y_speed, false);
+							break;
+
+						case 7://左上
+							XMove(x_speed, false);
+							YMove(y_speed, true);
+							break;
+
+						case 8://左下
+							XMove(x_speed, false);
+							YMove(y_speed, false);
+							break;
+						}
+
+						move_frame++;
+
+						if (move_frame == move_end_frame)
+						{
+							move_frame = 0;
+							move_time = def_move_time;
+							move_flag = false;
+						}
+
+					}
+				}
+
+				//発射時間管理
+				if (fast_move_flag == false && shot_time > 0)
+				{
+					shot_time--;
+				}
+
+				if (shot_time == -1)
+				{
+					//反射回数初期化
+					Refresh_ReflectionNum(4);
+
+				}
+
+				//当たり判定
+				for (int i = 0; i < 4; i++)
+				{
+					if (*bullet[i].GetBulletFlag() == true)
+					{
+
+						HitBox(*bullet[i].GetTransform(), bullet[i], i);
+					}
+				}
+
+				//弾の生成
+				if (shot_time == 0)
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (*bullet[i].GetBulletFlag() == false)
+						{
+							bullet[i].Form(transform, player, x_speed, y_speed, enemy_type);
+
+							damage_flag[i] = true;
+
+							//角度を90度ずつずらす
+							bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
+							bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
+							bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
+						}
+					}
+
+					shot_time = -1;
+				}
+
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+
+				//地雷の動き
+				mine->form(transform, move_rand);
+			}
+
+			mine->HitBox(transform, hp);
+
+			mine->Move();
+			mine->PlayerHitBox(player);
+		}
+
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag);
+			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag,transform);
 		}
 
 		//当たり判定
@@ -533,6 +713,38 @@ void Enemy::Move(Player& player, bool reflection_flag)
 
 	item->Move(player);
 }
+#pragma endregion
+
+#pragma region 反射回数初期化
+
+//bullet_flagがすべてfalseだったら
+//全ての反射回数を0にして
+//移動フラグを立てる
+
+void Enemy::Refresh_ReflectionNum(int max)
+{
+	int i = 0;
+
+	for (i = 0; i < max; i++)
+	{
+		//反射回数初期化
+		if (*bullet[i].GetBulletFlag() == true)
+		{
+			i -= 1;
+			break;
+
+		}
+	}
+	if (i == max && shot_time == -1)
+	{
+		for (int j = 0; j < max; j++)
+		{
+			bullet[j].SetReflectionNum(0);
+			shot_time = def_shot_time;
+		}
+	}
+}
+
 #pragma endregion
 
 #pragma region チュートリアル
@@ -621,37 +833,43 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 //爆発エフェクト
 void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 {
-	if (transform.x != enemy.transform.x && transform.y != enemy.transform.y &&
-		enemy.exising_flag == true && exising_flag == true)
+	if (enemy_type == 2)
 	{
-		EnemyToEnemyHitBox(enemy.transform);
-		enemy.PlaterToEnemyHitBox(player);
-	}
-
-	if (explosion_bommer_flag == true)
-	{
-		explosion_time--;
-
-		if (explosion_time == 0)
+		if (transform.x != enemy.transform.x && transform.y != enemy.transform.y &&
+			enemy.exising_flag == true && exising_flag == true)
 		{
-			exising_flag = false;
-			item->Form(transform);
+			EnemyToEnemyHitBox(enemy.transform);
+			enemy.PlaterToEnemyHitBox(player);
+		}
+
+		if (explosion_bommer_flag == true)
+		{
+			explosion_time--;
+
+			if (explosion_time == 0)
+			{
+				exising_flag = false;
+				item->Form(transform);
+			}
 		}
 	}
 }
 //敵と敵
 void Enemy::EnemyToEnemyHitBox(Transform transform)
 {
-	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-		this->transform.x + this->transform.xr > transform.x - transform.xr)
+	if (enemy_type == 2)
 	{
-		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+			this->transform.x + this->transform.xr > transform.x - transform.xr)
 		{
-			if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
+			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+				this->transform.y + this->transform.yr > transform.y - transform.yr)
 			{
-				explosion_bommer_flag = true;
-				enemy_to_bommer = true;
+				if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
+				{
+					explosion_bommer_flag = true;
+					enemy_to_bommer = true;
+				}
 			}
 		}
 	}
@@ -659,7 +877,7 @@ void Enemy::EnemyToEnemyHitBox(Transform transform)
 
 void Enemy::PlaterToEnemyHitBox(Player& player)
 {
-	if (enemy_to_bommer == false)
+	if (enemy_type == 2)
 	{
 		if (Box_Circle((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr,
 			player.GetX(), player.GetY(), player.GetR()) == 1)
@@ -733,6 +951,36 @@ void Enemy::HitBox(Transform transform, int num)
 
 }
 
+void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
+{
+	if (*enemyBullet.GetBulletFlag() == true)
+	{
+		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+			this->transform.x + this->transform.xr > transform.x - transform.xr)
+		{
+			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			{
+				if (damage_flag[i] == false)
+				{
+					hp--;
+					damage_flag[i] = true;
+					enemyBullet.SetBulletFlag(false);
+				}
+
+			}
+			else
+			{
+				damage_flag[i] = false;
+			}
+		}
+		else
+		{
+			damage_flag[i] = false;
+		}
+	}
+}
+
 void Enemy::TutorialHitBox(Transform transform, int num)
 {
 	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
@@ -799,6 +1047,8 @@ void Enemy::Draw(int num)
 	DrawBox(0 + 32, 0 + 32, 960 - 32, 960 - 32, GetColor(255, 255, 255), false);
 
 	item->Draw();
+
+	mine->Draw();
 }
 #pragma endregion
 
@@ -809,14 +1059,16 @@ void Enemy::form(FILE* fp)
 	int a = 0;
 	int b = 0;
 	int c = 0;
-	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf"
+	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d,%d,%d,%d"
 		, &a, &b, &c, &enemy_type, &appear_time, &shot_time, &explosion_time, &hp, &transform.xr, &transform.yr, &x_speed, &y_speed, &end_frame, &start_x, &start_y, &end_x, &end_y, &move_time, &move_end_frame,
-		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2])
+		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2],
+		&mime_initialize.transform_xr, &mime_initialize.transform_yr, &mime_initialize.explosion_r, &mime_initialize.def_explosion_time, &mime_initialize.def_bombs_time)
 		!= EOF)
 	{
 		use_flag = a;
 		action_flag = b;
 		shot_action_flag = c;
+		mine->initialize(mime_initialize);
 	}
 	else
 	{
@@ -843,6 +1095,11 @@ void Enemy::form(FILE* fp)
 		move_end_x[2] = 0;
 		move_end_y[2] = 0;
 		shot_action_flag = false;
+		mime_initialize.transform_yr = 0;
+		mime_initialize.transform_xr = 0;
+		mime_initialize.def_bombs_time = 0;
+		mime_initialize.def_explosion_time = 0;
+		mime_initialize.explosion_r = 0;
 
 	}
 
@@ -900,6 +1157,193 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 		fclose(fp);
 	}
 }
+#pragma endregion
+
+#pragma region 当たり判定付き移動
+
+void Enemy::XMove(int x_speed, bool right_flag)
+{
+	if (right_flag == false)
+	{
+		//座標計算
+		vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+		vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+
+		vertex.top_left_x = (int)(((double)transform.x - transform.xr) - x_speed) / 32;
+		vertex.down_left_x = (int)(((double)transform.x - transform.xr) - x_speed) / 32;
+
+		//判定
+		if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+			GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+			transform.x > 178)
+		{
+			transform.x -= x_speed;
+		}
+		else
+		{
+			vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+			vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+
+			if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+				GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+				transform.x > 178)
+			{
+				while (1)//隙間埋め
+				{
+					vertex.top_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+					vertex.down_left_x = (((int)transform.x - transform.xr) - 1) / 32;
+
+					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+						GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+						transform.x > 178)
+					{
+						transform.x -= 1;
+					}
+					else
+					{
+						break;
+					}
+
+				}
+			}
+
+		}
+	}
+	else
+	{
+		//座標計算
+		vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
+		vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+
+		vertex.top_right_x = ((int)(transform.x + transform.xr - 1) + x_speed) / 32;
+		vertex.down_right_x = ((int)(transform.x + transform.xr - 1) + x_speed) / 32;
+
+		//判定
+		if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+			GetMap(vertex.down_right_x, vertex.down_right_y) == 0 &&
+			transform.x < 776)
+		{
+			transform.x += x_speed;
+		}
+		else
+		{
+			vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+			vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+			if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+				GetMap(vertex.down_right_x, vertex.down_right_y) == 0 &&
+				transform.x < 776)
+			{
+				while (1)//隙間埋め
+				{
+					vertex.top_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+					vertex.down_right_x = (((int)transform.x + transform.xr - 1) + 1) / 32;
+
+					if (GetMap(vertex.top_right_x, vertex.top_right_y) == 0 &&
+						GetMap(vertex.down_right_x, vertex.down_right_y) == 0 &&
+						transform.x < 776)
+					{
+						transform.x += 1;
+					}
+					else
+					{
+						break;
+
+					}
+				}
+			}
+		}
+	}
+}
+
+void Enemy::YMove(int y_speed, bool up_flag)
+{
+	if (up_flag == true)
+	{
+		//座標計算
+		vertex.top_left_x = ((int)transform.x - transform.xr) / 32;
+		vertex.top_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+		vertex.top_left_y = (int)((transform.y - transform.yr) - y_speed) / 32;
+		vertex.top_right_y = (int)((transform.y - transform.yr) - y_speed) / 32;
+
+		//判定
+		if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+			GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+		{
+			transform.y -= y_speed;
+		}
+		else
+		{
+			vertex.top_left_y = ((int)transform.y - transform.yr) / 32;
+			vertex.top_right_y = ((int)transform.y - transform.yr) / 32;
+
+			if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+				GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+			{
+				while (1)//隙間埋め
+				{
+					vertex.top_left_y = ((int)(transform.y - transform.yr) - 1) / 32;
+					vertex.top_right_y = ((int)(transform.y - transform.yr) - 1) / 32;
+
+					if (GetMap(vertex.top_left_x, vertex.top_left_y) == 0 &&
+						GetMap(vertex.top_right_x, vertex.top_right_y) == 0)
+					{
+						transform.y -= 1;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+
+		}
+	}
+	else
+	{
+		//座標計算
+		vertex.down_left_x = ((int)transform.x - transform.xr) / 32;
+		vertex.down_right_x = ((int)transform.x + transform.xr - 1) / 32;
+
+		vertex.down_left_y = (int)((transform.y + transform.yr - 1) + y_speed) / 32;
+		vertex.down_right_y = (int)((transform.y + transform.yr - 1) + y_speed) / 32;
+
+		//判定
+		if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+			GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+		{
+			transform.y += y_speed;
+		}
+		else
+		{
+			vertex.down_left_y = ((int)transform.y + transform.yr - 1) / 32;
+			vertex.down_right_y = ((int)transform.y + transform.yr - 1) / 32;
+
+			if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+				GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+			{
+				while (1)//隙間埋め
+				{
+					vertex.down_left_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+					vertex.down_right_y = (((int)transform.y + transform.yr - 1) + 1) / 32;
+
+					if (GetMap(vertex.down_left_x, vertex.down_left_y) == 0 &&
+						GetMap(vertex.down_right_x, vertex.down_right_y) == 0)
+					{
+						transform.y += 1;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 #pragma endregion
 
 #pragma region ゲッター

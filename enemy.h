@@ -1,7 +1,9 @@
 #pragma once
 #include"bullet.h"
 #include"Transform.h"
+#include"mine.h"
 
+class Mine;
 
 class Enemy
 {
@@ -13,11 +15,15 @@ public:
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num);
+	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//当たり判定
 	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Transform transform);
 	void PlaterToEnemyHitBox(Player& player);
 	void ExplosionBommer(Enemy& enemy, Player& player);
 	void HP(Transform transform, EnemyBullet& bullet);
+	void XMove(int x_speed, bool right_flag);
+	void YMove(int y_speed, bool up_flag);
+	void Refresh_ReflectionNum(int max);
 
 	bool GetBulletFlag(int i);
 	bool GetEnemyFlag();
@@ -86,7 +92,13 @@ private:
 
 	EnemyBullet* bullet; 
 	Item* item;
+	Mine* mine;
+	
 
+	MimeInitialize mime_initialize;
+
+	//中ボス
+	int move_rand;
 	//デバッグ用
 
 

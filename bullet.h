@@ -5,7 +5,7 @@
 typedef class EnemyBullet
 {
 public:
-	void Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag);
+	void Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag, Transform& transform);
 	void Move(int enemy_type, bool reflection_flag);
 	
 	int Box_Line(
