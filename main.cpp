@@ -435,7 +435,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Draw();
 			sub_boss->Draw();
 
-			DrawGraph(0, 0, Layout, true);
+			//DrawGraph(0, 0, Layout, true);
 			DrawGraph(958, 144, player_img[maba2], true);
 			break;
 			delete player;

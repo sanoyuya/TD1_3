@@ -10,7 +10,7 @@ Player::Player() {//コンストラクタの定義
 	speed = 7;
 	hp = 20;
 	stelsflag = 0;
-	stelscooltimer = -150;
+	stelscooltimer = 250;
 	reflectionflag = 0;
 	reflectioncooltimer = -50;
 	stelsAfterglow = 0;
@@ -28,7 +28,7 @@ Player::Player() {//コンストラクタの定義
 	txt10 = LoadGraph("resouce/text_10.png"); txt11 = LoadGraph("resouce/text_11.png"); txt12 = LoadGraph("resouce/text_12.png");
 	txt13 = LoadGraph("resouce/text_13.png"); txt14 = LoadGraph("resouce/text_14.png"); txt15 = LoadGraph("resouce/text_15.png");
 	txt16 = LoadGraph("resouce/text_16.png"); txt17 = LoadGraph("resouce/text_17.png"); A = LoadGraph("resouce/A.png");
-	option = LoadGraph("≡skip.png");
+	option = LoadGraph("≡skip.png"); HPgh = LoadGraph("resouce/HP.png");MPgh= LoadGraph("resouce/MP.png");
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
 
 	//頼まれてたもの
@@ -100,8 +100,9 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 	}
 
 	if (COOLTIMEtimer == 0) {
-		if (reflectionflag == 0 && stelscooltimer == -150) {//ステルス
+		if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+				stelscooltimer = -150;//ステルス効果時間
 				stelsAfterglow = 1;
 				stelsflag = 1;
 			}
@@ -125,7 +126,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 			}
 		}
 		if (stelscooltimer > 250) {//ステルス後隙
-			stelscooltimer = -150;//ステルス効果時間
+			stelscooltimer = 250;
 			stelsAfterglow = 0;
 		}
 	}
@@ -574,10 +575,16 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 	}
 
 	if (Moveflag3 == 1) {//ステルスチュートリアル
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
-			stelsflag = 1;
-			enemy[0].SetShotTime(5);
-			shot_flag = 1;
+		if (COOLTIMEtimer == 0) {
+			if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+					stelscooltimer = -150;//ステルス効果時間
+					stelsAfterglow = 1;
+					stelsflag = 1;
+					enemy[0].SetShotTime(5);
+					shot_flag = 1;
+				}
+			}
 		}
 
 		if (stelsflag == 1) {
@@ -599,6 +606,19 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				txtflag = 10;
 				Moveflag3 = 0;
 			}
+		}
+	}
+
+	if (stelsAfterglow == 1) {
+		stelscooltimer++;
+		if (stelsflag == 1) {
+			if (stelscooltimer > 0) {
+				stelsflag = 0;
+			}
+		}
+		if (stelscooltimer > 250) {//ステルス後隙
+			stelscooltimer = 250;
+			stelsAfterglow = 0;
 		}
 	}
 
@@ -690,7 +710,9 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 #pragma endregion
 
 void Player::Draw() {//描画関数
-
+	float CHP = hp * 5+25.0;
+	float CMP = stelscooltimer * 0.4 + 25.0;
+	
 	//体力
 	if (hp > 10)
 	{
@@ -705,11 +727,13 @@ void Player::Draw() {//描画関数
 		SetDrawBright(255, 25, 0);
 	}
 
-	for (int i = 0; i < hp; i++)
-	{
-		DrawGraph(973 + (18 * i), 668, hp_img, true);
-	}
+	DrawCircleGauge(966+186, 558+186, CHP, HPgh,25.0);
 
+	SetDrawBright(255, 255, 255);
+
+	//ステルスゲージ
+	SetDrawBright(0, 103, 192);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
 	SetDrawBright(255, 255, 255);
 
 	//時機
@@ -763,6 +787,8 @@ void Player::Draw() {//描画関数
 
 #pragma region チュートリアル
 void Player::TutorialDraw() {
+	float CHP = hp * 5 + 25.0;
+	float CMP = stelscooltimer * 0.4 + 25.0;
 
 	//DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
 
@@ -795,16 +821,19 @@ void Player::TutorialDraw() {
 		SetDrawBright(255, 25, 0);
 	}
 
-	for (int i = 0; i < hp; i++)
-	{
-		DrawGraph(973 + (18 * i), 668, hp_img, true);
-	}
+	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
 
 	SetDrawBright(255, 255, 255);
 
 	if (Moveflag1 == 1) {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
+
+	//ステルスゲージ
+	SetDrawBright(0, 103, 192);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+	SetDrawBright(255, 255, 255);
+
 	switch (txtflag) {
 		case 0:
 			//テキストなし
