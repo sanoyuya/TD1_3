@@ -31,7 +31,7 @@ private:
 	int txtflag;
 	int pushflag;
 	int txt1; int txt2; int txt3; int txt4; int txt5; int txt6; int txt7; int txt8; int txt9; int txt10; int txt11; int txt12; int txt13; int txt14; int txt15; int txt16; int txt17; 
-	int A; int option; int Apflag; int Apushflag; int SetAtime;
+	int A; int option; int Apflag; int Apushflag; int SetAtime; int HPgh; int MPgh;
 
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
 
