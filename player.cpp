@@ -10,7 +10,7 @@ Player::Player() {//コンストラクタの定義
 	speed = 7;
 	hp = 20;
 	stelsflag = 0;
-	stelscooltimer = -150;
+	stelscooltimer = 250;
 	reflectionflag = 0;
 	reflectioncooltimer = -50;
 	stelsAfterglow = 0;
@@ -28,8 +28,10 @@ Player::Player() {//コンストラクタの定義
 	txt10 = LoadGraph("resouce/text_10.png"); txt11 = LoadGraph("resouce/text_11.png"); txt12 = LoadGraph("resouce/text_12.png");
 	txt13 = LoadGraph("resouce/text_13.png"); txt14 = LoadGraph("resouce/text_14.png"); txt15 = LoadGraph("resouce/text_15.png");
 	txt16 = LoadGraph("resouce/text_16.png"); txt17 = LoadGraph("resouce/text_17.png"); A = LoadGraph("resouce/A.png");
-	option = LoadGraph("≡skip.png");
+	option = LoadGraph("≡skip.png"); HPgh = LoadGraph("resouce/HP.png"); MPgh = LoadGraph("resouce/MP.png");
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
+	itemline = LoadGraph("resouce/ItemGauge.png"); itemback = LoadGraph("resouce/ItemColor.png"); bigitem = LoadGraph("resouce/ReflectionItem_ver2.png");
+	Alpha = 36;
 
 	//頼まれてたもの
 	itemflag2 = 0;
@@ -100,8 +102,9 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 	}
 
 	if (COOLTIMEtimer == 0) {
-		if (reflectionflag == 0 && stelscooltimer == -150) {//ステルス
+		if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+				stelscooltimer = -150;//ステルス効果時間
 				stelsAfterglow = 1;
 				stelsflag = 1;
 			}
@@ -125,7 +128,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 			}
 		}
 		if (stelscooltimer > 250) {//ステルス後隙
-			stelscooltimer = -150;//ステルス効果時間
+			stelscooltimer = 250;
 			stelsAfterglow = 0;
 		}
 	}
@@ -574,10 +577,16 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 	}
 
 	if (Moveflag3 == 1) {//ステルスチュートリアル
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
-			stelsflag = 1;
-			enemy[0].SetShotTime(5);
-			shot_flag = 1;
+		if (COOLTIMEtimer == 0) {
+			if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+					stelscooltimer = -150;//ステルス効果時間
+					stelsAfterglow = 1;
+					stelsflag = 1;
+					enemy[0].SetShotTime(5);
+					shot_flag = 1;
+				}
+			}
 		}
 
 		if (stelsflag == 1) {
@@ -599,6 +608,19 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				txtflag = 10;
 				Moveflag3 = 0;
 			}
+		}
+	}
+
+	if (stelsAfterglow == 1) {
+		stelscooltimer++;
+		if (stelsflag == 1) {
+			if (stelscooltimer > 0) {
+				stelsflag = 0;
+			}
+		}
+		if (stelscooltimer > 250) {//ステルス後隙
+			stelscooltimer = 250;
+			stelsAfterglow = 0;
 		}
 	}
 
@@ -690,6 +712,13 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 #pragma endregion
 
 void Player::Draw() {//描画関数
+	float CHP = hp * 5 + 25.0;
+	float CMP = stelscooltimer * 0.4 + 25.0;
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
+	DrawGraph(1088, 680, bigitem, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, Alpha);//ノーブレンド
+	DrawGraph(966, 558, itemline, true);
 
 	//体力
 	if (hp > 10)
@@ -705,11 +734,13 @@ void Player::Draw() {//描画関数
 		SetDrawBright(255, 25, 0);
 	}
 
-	for (int i = 0; i < hp; i++)
-	{
-		DrawGraph(973 + (18 * i), 668, hp_img, true);
-	}
+	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
 
+	SetDrawBright(255, 255, 255);
+
+	//ステルスゲージ
+	SetDrawBright(0x00, 0xFF, 0xFF);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
 	SetDrawBright(255, 255, 255);
 
 	//時機
@@ -729,30 +760,36 @@ void Player::Draw() {//描画関数
 	}
 
 	//アイテム取得数
-	if (itemflag >= 1)
+	if (itemflag == 0)
 	{
-		DrawGraph(item_x[0], item_y[0], item_img, true);
+		Alpha = 36;
 	}
-	if (itemflag >= 2)
+	if (itemflag == 1)
 	{
-		DrawGraph(item_x[1], item_y[0], item_img, true);
+		
+		Alpha = 72;
 	}
-	if (itemflag >= 3)
+	if (itemflag == 2)
 	{
-		DrawGraph(item_x[2], item_y[0], item_img, true);
+		Alpha = 108;
 	}
-	if (itemflag >= 4)
+	if (itemflag == 3)
 	{
-		DrawGraph(item_x[0], item_y[1], item_img, true);
+		Alpha = 144;
 	}
-	if (itemflag >= 5)
+	if (itemflag == 4)
 	{
-		DrawGraph(item_x[1], item_y[1], item_img, true);
+		Alpha = 180;
 	}
-	if (itemflag >= 6)
+	if (itemflag == 5)
 	{
-		DrawGraph(item_x[2], item_y[1], item_img, true);
+		Alpha = 216;
 	}
+	if (itemflag == 6)
+	{
+		Alpha = 255;
+	}
+
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
 	DrawFormatString(0, 80, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
 	DrawFormatString(0, 100, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
@@ -761,8 +798,33 @@ void Player::Draw() {//描画関数
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "Afterglow:%d", Afterglow);
 }
 
+void Player::D() {
+	SetDrawBright(0xff,0xff,0x00);
+	if (itemflag == 1) {
+		DrawExtendGraph(1000, 790, 1300, 900, itemback, true);
+	}if (itemflag == 2) {
+		DrawExtendGraph(800, 750, 1400, 900, itemback, true);
+	}if (itemflag == 3) {
+		DrawExtendGraph(800, 702, 1400, 900, itemback, true);
+	}if (itemflag == 4) {
+		DrawExtendGraph(800, 628, 1400, 1000, itemback, true);
+	}if (itemflag == 5) {
+		DrawExtendGraph(800, 589, 1400, 1000, itemback, true);
+	}if (itemflag == 6) {
+		DrawExtendGraph(800, 500, 1400, 1100, itemback, true);
+	}
+	SetDrawBright(255,255,255);
+}
+
 #pragma region チュートリアル
 void Player::TutorialDraw() {
+	float CHP = hp * 5 + 25.0;
+	float CMP = stelscooltimer * 0.4 + 25.0;
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
+	DrawGraph(1088, 680, bigitem, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, Alpha);//ノーブレンド
+	DrawGraph(966, 558, itemline, true);
 
 	//DrawCircle(X, Y, R, GetColor(25, 25, 25), true);
 
@@ -795,16 +857,19 @@ void Player::TutorialDraw() {
 		SetDrawBright(255, 25, 0);
 	}
 
-	for (int i = 0; i < hp; i++)
-	{
-		DrawGraph(973 + (18 * i), 668, hp_img, true);
-	}
+	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
 
 	SetDrawBright(255, 255, 255);
 
 	if (Moveflag1 == 1) {
 		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
 	}
+
+	//ステルスゲージ
+	SetDrawBright(0x00, 0xFF, 0xFF);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+	SetDrawBright(255, 255, 255);
+
 	switch (txtflag) {
 		case 0:
 			//テキストなし
@@ -879,29 +944,34 @@ void Player::TutorialDraw() {
 		}
 	}
 
-	if (itemflag >= 1)
+	//アイテム取得数
+	if (itemflag == 0)
 	{
-		DrawGraph(item_x[0], item_y[0], item_img, true);
+		Alpha = 36;
+	}
+	if (itemflag == 1)
+	{
+		Alpha = 72;
 	}
 	if (itemflag >= 2)
 	{
-		DrawGraph(item_x[1], item_y[0], item_img, true);
+		Alpha = 108;
 	}
 	if (itemflag >= 3)
 	{
-		DrawGraph(item_x[2], item_y[0], item_img, true);
+		Alpha = 144;
 	}
 	if (itemflag >= 4)
 	{
-		DrawGraph(item_x[0], item_y[1], item_img, true);
+		Alpha = 180;
 	}
 	if (itemflag >= 5)
 	{
-		DrawGraph(item_x[1], item_y[1], item_img, true);
+		Alpha = 216;
 	}
 	if (itemflag >= 6)
 	{
-		DrawGraph(item_x[2], item_y[1], item_img, true);
+		Alpha = 255;
 	}
 	if (Apushflag == 0) {
 		DrawGraph(650, 64, option, true);

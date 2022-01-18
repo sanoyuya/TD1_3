@@ -47,7 +47,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int Layout = LoadGraph("resouce/Layout.png");
 
 	int player_img[4];
-	LoadDivGraph("resouce/player_kari.png", 4, 4, 1, 388, 484, player_img);
+	LoadDivGraph("resouce/player_kari.png", 4, 4, 1, 388, 406, player_img);
 	int maba = 0;
 	int maba2 = 0;
 	// ゲームループで使う変数の宣言
@@ -462,12 +462,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				enemy[i].Draw(60 * i);
 			}
-
+			player->D();
+			DrawGraph(0, 0, Layout, true);
 			player->Draw();
 			sub_boss->Draw();
 
-			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 144, player_img[maba2], true);
+			
+			DrawGraph(958, 128, player_img[maba2], true);
 			break;
 			delete player;
 		case 3:
@@ -508,11 +509,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				maba2 = 0;
 			}
 
-
+			player->D();
+			DrawGraph(0, 0, Layout, true);
 			player->TutorialDraw();
 			enemy[0].Draw(0);
-			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 144, player_img[maba2], true);
+			
+			DrawGraph(958, 128, player_img[maba2], true);
 			break;
 			delete player;
 		}
