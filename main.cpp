@@ -509,10 +509,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				maba2 = 0;
 			}
 
-			player->D();
+			player->D();//itemback
+			enemy[0].Draw(0);
 			DrawGraph(0, 0, Layout, true);
 			player->TutorialDraw();
-			enemy[0].Draw(0);
+		
 			
 			DrawGraph(958, 128, player_img[maba2], true);
 			break;
