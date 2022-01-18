@@ -462,13 +462,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				enemy[i].Draw(60 * i);
 			}
+			sub_boss->Draw();
 			player->D();
 			DrawGraph(0, 0, Layout, true);
+			DrawGraph(958, 128, player_img[maba2], true);
+
 			player->Draw();
-			sub_boss->Draw();
+
 
 			
-			DrawGraph(958, 128, player_img[maba2], true);
 			break;
 			delete player;
 		case 3:
@@ -511,11 +513,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			player->D();//itemback
 			enemy[0].Draw(0);
+			DrawGraph(958, 128, player_img[maba2], true);
+
 			DrawGraph(0, 0, Layout, true);
 			player->TutorialDraw();
 		
 			
-			DrawGraph(958, 128, player_img[maba2], true);
 			break;
 			delete player;
 		}

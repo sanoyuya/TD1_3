@@ -71,6 +71,8 @@ Player::Player() {//コンストラクタの定義
 	stealth_anime_timer = 0;
 	stealth_anime = 0;
 	damage_flag = 0;
+
+	item_1_img = LoadGraph("resouce/item1big.png");
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -818,6 +820,7 @@ void Player::D() {
 
 #pragma region チュートリアル
 void Player::TutorialDraw() {
+
 	float CHP = hp * 5 + 25.0;
 	float CMP = stelscooltimer * 0.4 + 25.0;
 
@@ -881,9 +884,24 @@ void Player::TutorialDraw() {
 			DrawGraph(47, 719, txt2, true);//Lスティック(絵)で移動出来る。試しに自由に動いてみて
 			break;
 		case 3:
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBright(153, 229, 80);
+			DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+			SetDrawBright(255, 255, 255);
+
 			DrawGraph(47, 719, txt3, true);//ここに体力ゲージがあるの(わ)
+
 			break;
 		case 4:
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBright(153, 229, 80);
+			DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+			SetDrawBright(255, 255, 255);
+
 			DrawGraph(47, 719, txt4, true);//
 			break;
 		case 5:
@@ -896,9 +914,23 @@ void Player::TutorialDraw() {
 			DrawGraph(47, 719, txt7, true);
 			break;
 		case 8:
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBright(0x00, 0xFF, 0xFF);
+			DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+			SetDrawBright(255, 255, 255);
+
 			DrawGraph(47, 719, txt8, true);
 			break;
 		case 9:
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBright(0x00, 0xFF, 0xFF);
+			DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+			SetDrawBright(255, 255, 255);
+
 			DrawGraph(47, 719, txt9, true);
 			break;
 		case 10:
@@ -920,6 +952,12 @@ void Player::TutorialDraw() {
 			DrawGraph(47, 719, txt15, true);
 			break;
 		case 16:
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+			DrawGraph(966, 558,item_1_img,true);
+
 			DrawGraph(47, 719, txt16, true);
 			break;
 		case 17:
@@ -927,6 +965,15 @@ void Player::TutorialDraw() {
 			break;
 	}
 
+	if (Moveflag3 == 1 && stelsflag == 0)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(0x00, 0xFF, 0xFF);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+		SetDrawBright(255, 255, 255);
+	}
 
 
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);

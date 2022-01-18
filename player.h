@@ -78,6 +78,8 @@ private:
 
 	int shot_flag;
 	int damage_flag;
+
+	int item_1_img;
 public:
 	Player();
 	//void Rset();
