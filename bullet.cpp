@@ -841,7 +841,6 @@ void EnemyBullet::Draw()
 	if (bullet_flag == true)
 	{
 		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
-		DrawCircle(center_x, center_y,3,GetColor(255,255,255),true);
 	}
 }
 #pragma endregion
