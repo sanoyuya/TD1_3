@@ -497,7 +497,6 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 		{
 			if (exising_flag == true)
 			{
-				circularMotionL(this->transform.x, this->transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
 				
 				boomerang_x_r = 100;
 				boomerang_y_r = 250;
@@ -510,12 +509,19 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 					center_x = center_x - 130;
 					boomerang_y_r = (float)transform.x - center_x + 130.0f;
 				}
-
-				if (center_x - transform.x >= 90 && transform.x < center_x)
+				else if (center_x - transform.x >= 90 && transform.x < center_x)
 				{
 					center_x = center_x + 130.0f;
 					boomerang_y_r = center_x - (float)transform.x + 130.0f;
 				}
+
+				if (boomerang_angle > 26.00)
+				{
+					bullet_flag = false;
+				}
+
+				circularMotionL(this->transform.x, this->transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
+
 			}
 			else
 			{
@@ -835,6 +841,7 @@ void EnemyBullet::Draw()
 	if (bullet_flag == true)
 	{
 		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
+		DrawCircle(center_x, center_y,3,GetColor(255,255,255),true);
 	}
 }
 #pragma endregion

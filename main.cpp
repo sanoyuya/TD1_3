@@ -157,7 +157,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 			if (game_set == false)
 			{
-				wave_num = 11;
+				wave_num = 20;
 				
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
@@ -186,12 +186,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					break;
 				case 5:
 					EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
-					enemy[0].color = GetColor(255, 255, 255);
-					enemy[1].color = GetColor(0, 0, 255);
-					enemy[2].color = GetColor(0, 255, 0);
-					enemy[3].color = GetColor(255, 0, 0);
-					enemy[4].color = GetColor(255, 255, 0);
-
 					game_set = true;
 					break;
 				case 6:
@@ -219,6 +213,43 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy);
 					game_set = true;
 					break;
+				case 12:
+					EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 13:
+					EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 14:
+					EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 15:
+					EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 16:
+					EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 17:
+					EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 18:
+					EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 19:
+					EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy);
+					game_set = true;
+					break;
+				case 20:
+					EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy);
+					SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
+					game_set = true;
+					break;
 				}
 				//ìGÇ™éÄÇ ñàÇ…
 				//Score+=100;
@@ -230,7 +261,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy[i].Move(*player, reflection_flag);
 			}
 
-			if (wave_num == 10)
+			if (wave_num == 10 || wave_num == 20)
 			{
 				sub_boss->Move(*player, reflection_flag);
 			}

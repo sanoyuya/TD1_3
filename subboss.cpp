@@ -76,6 +76,9 @@ void SubBoss::form(FILE* fp)
 	def_move_time = move_time;
 	def_shot_time = shot_time;
 	hp = 100;
+
+	anticipation = 50;
+	teleport_flag = false;
 }
 #pragma endregion
 
@@ -103,7 +106,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 
 	if (exising_flag == true)
 	{
-		if (enemy_type != 2)
+		//if (enemy_type == 1)
 		{
 			if (exising_flag == true)
 			{
@@ -124,10 +127,16 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				//移動
 				if (fast_move_flag == false)
 				{
-					if (move_time == 1)
-					{//地雷設置フラフを立てる
+					if (enemy_type == 1 && move_time == 1)
+					{
+						//地雷設置フラフを立てる
 						mine->SetMineFlag(true);
 						mine->SetRand(7);
+					}
+
+					if (enemy_type == 3 && move_time == 1)
+					{
+						rand = GetRand(7);
 					}
 
 					if (move_time > 0)
@@ -138,11 +147,19 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 					if (move_time == 0)
 					{
 						move_flag = true;
+
+						int rand2 = GetRand(7);
+
+						if (enemy_type == 3&& rand == rand2)
+						{
+							move_flag = false;
+							teleport_flag = true;
+						}
 					}
 
+#pragma region 移動
 					if (move_flag == true)
 					{
-
 						if (move_frame == 0)
 						{
 							rand = GetRand(7) + 1;
@@ -225,7 +242,23 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 							move_time = def_move_time;
 							move_flag = false;
 						}
+					}
+#pragma endregion
 
+					if (teleport_flag == true)
+					{
+						if (anticipation > 0)
+						{
+							anticipation--;
+						}
+
+						if (anticipation == 0)
+						{
+							transform.x = (double)GetRand(560) + 207;
+							transform.y = (double)GetRand(576) + 192;
+							teleport_flag = false;
+							anticipation = 50;
+						}
 					}
 				}
 
@@ -274,19 +307,26 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				{
 					exising_flag = false;
 				}
-
 			}
-			//地雷の動き
-			mine->form(transform, rand);
-			mine->HitBox(transform, hp);
+
+			if (enemy_type == 1)
+			{
+				//地雷の動き
+				mine->form(transform, rand);
+				mine->HitBox(transform, hp);
+			}
 		}
 	}
-	mine->Move();
+
+	if (enemy_type == 1)
+	{
+		mine->Move();
+	}
 
 	for (int i = 0; i < 4; i++)
 	{
 		//弾の動き
-		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag,transform);
+		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
 	}
 }
 #pragma endregion

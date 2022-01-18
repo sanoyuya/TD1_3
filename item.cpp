@@ -6,8 +6,8 @@ Item::Item()
 	appear_flag = false;
 	exising_flag = false;
 	transform = { 0 };
-	transform.xr = 64;
-	transform.yr = 64;
+	transform.xr = 32;
+	transform.yr = 32;
 
 	time = 500;
 
@@ -67,7 +67,7 @@ void Item::Move(Player& player)
 {
 	if (exising_flag == true)
 	{
-		if (player.GetR() * player.GetR() >
+		if (player.GetR() * 64 >
 			((player.GetX() - (int)transform.x) * (player.GetX() - (int)transform.x)) +
 			((player.GetY() - (int)transform.y) * (player.GetY() - (int)transform.y)))
 		{

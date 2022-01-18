@@ -1035,9 +1035,9 @@ void Enemy::Draw(int num)
 	for (int i = 0; i < all_bullet_max; i++)
 	{
 		bullet[i].Draw();
-		DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
+		//DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
 
-		if (bullet[i].GetReflectionNum() == 3)
+		if (bullet[i].GetReflectionNum() >= 3)
 		{
 			bullet[i].SetBulletFlag(false);
 			bullet[i].SetReflectionNum(0);

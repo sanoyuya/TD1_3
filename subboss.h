@@ -57,6 +57,9 @@ private:
 	//‰Šú’l
 	int def_move_time;
 	int def_shot_time;
+	//uŠÔˆÚ“®—\”õ“®ì
+	int anticipation;
+	bool teleport_flag;
 
 	EnemyBullet* bullet;
 	Mine* mine;
