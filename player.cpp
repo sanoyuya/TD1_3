@@ -32,6 +32,7 @@ Player::Player() {//コンストラクタの定義
 	Apflag = 0; Apushflag = 0; SetAtime = 0;
 	itemline = LoadGraph("resouce/ItemGauge.png"); itemback = LoadGraph("resouce/ItemColor.png"); bigitem = LoadGraph("resouce/ReflectionItem_ver2.png");
 	Alpha = 36;
+	nohitflag = 0;
 
 	//頼まれてたもの
 	itemflag2 = 0;
@@ -148,6 +149,10 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 		}
 	}
 
+	if (hp < 20) {
+		nohitflag = 1;
+	}
+
 	anime_timer++;
 
 	if (anime_timer == 16 * 6)
@@ -244,6 +249,10 @@ int Player::Getreflectionflag()
 int Player::Getstelsflag()
 {
 	return stelsflag;
+}
+
+int Player::Getnohitflag() {
+	return nohitflag;
 }
 
 int Player::Result() {
