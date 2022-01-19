@@ -12,7 +12,7 @@ Player::Player() {//コンストラクタの定義
 	stelsflag = 0;
 	stelscooltimer = 250;
 	reflectionflag = 0;
-	reflectioncooltimer = -50;
+	reflectioncooltimer = -250;
 	stelsAfterglow = 0;
 	reflectionAfterglow = 0;
 	COOLTIME = 0;
