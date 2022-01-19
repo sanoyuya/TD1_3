@@ -158,7 +158,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 			if (game_set == false)
 			{
-				wave_num = 8;
+
 				
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
@@ -499,13 +499,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			player->D();//itemback
 			enemy[0].Draw(0);
-			DrawGraph(958, 128, player_img[maba2], true);
-
 			DrawGraph(0, 0, Layout, true);
-			player->TutorialDraw();
-		
 			DrawGraph(958, 128, player_img[maba2], true);
 			score->Draw();
+			player->TutorialDraw();
+		
+
 			break;
 			delete player;
 		}
