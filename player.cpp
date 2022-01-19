@@ -272,7 +272,7 @@ int Player::Result() {
 
 #pragma region チュートリアル
 void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& sceneflag, int& wave_num) {
-	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_S] == 1 && oldkeys[KEY_INPUT_S] == 0)
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0)
 	{
 		X = 480;
 		Y = 832;
