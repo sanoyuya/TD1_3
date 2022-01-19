@@ -64,4 +64,3 @@ private:
 
 	//‘S•ûˆÊ
 }EnemyBullet;
-

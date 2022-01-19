@@ -328,6 +328,18 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 		//’e‚Ì“®‚«
 		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
 	}
+
+	if (enemy_type == 1)
+	{
+		boss1_anime_timer++;
+
+		if (boss1_anime_timer == 14 * 6)
+		{
+			boss1_anime_timer = 0;
+		}
+
+		boss1_anime = boss1_anime_timer / 6;
+	}
 }
 #pragma endregion
 
@@ -341,8 +353,10 @@ void SubBoss::Draw()
 {
 	if (exising_flag == true)
 	{
-		DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-			(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 255, 255), true);
+		if (enemy_type == 1)
+		{
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
+		}
 	}
 
 	for (int i = 0; i < 4; i++)
@@ -742,6 +756,10 @@ SubBoss::SubBoss()
 
 	anticipation = 50;
 	teleport_flag = false;
+	LoadDivGraph("resouce/boss1.png", 14, 14, 1, 128, 128, boss1_img);
+	boss1_anime_timer = 0;
+	boss1_anime = 0;
+	img_r = 64;
 }
 
 SubBoss::~SubBoss()

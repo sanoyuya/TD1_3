@@ -33,6 +33,8 @@ int Box_Circle(int LeftTopBoxX, int LeftTopBoxY, int RightBottomX, int RightBott
 	}
 }
 
+
+
 //空き番号を返す
 int FlagSerch(EnemyBullet bullet[], int max)
 {
@@ -110,7 +112,7 @@ Enemy::Enemy()
 	def_shot_time = shot_time;
 
 	//ボマー
-	angle = 0.0f;
+	angle = 1.75f;
 	vertex.top_left_x = 0;
 	vertex.top_left_y = 0;
 	vertex.down_left_x = 0;
@@ -123,10 +125,11 @@ Enemy::Enemy()
 	enemy_to_bommer = false;
 	def_explosion_time = 0;
 	explosion_bommer_flag = false;
-
+	LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
+	bommer_anime_timer = 0;
+	bommer_anime = 0;
 	//全方位
 	all_bullet_max = 48;
-
 	bullet = new EnemyBullet[all_bullet_max];
 	item = new Item;
 	mine = new Mine;
@@ -152,6 +155,221 @@ Enemy::~Enemy()
 }
 #pragma endregion
 
+#pragma region ベクトルの当たり判定
+
+bool Enemy::BommerHitBox(Player& player)
+{
+	VECTOR bommr[4];
+
+	VECTOR vec_player[4][4];
+
+	float cross[4][4];
+
+	float player_left = player.GetX() - player.GetR();
+	float player_right = player.GetX() + player.GetR();
+	float player_top = player.GetY() - player.GetR();
+	float player_down = player.GetY() + player.GetR();
+
+	float left_top_x = ((-transform.xr) * cos(angle) + ((-transform.yr) * -sin(angle)) + transform.x);
+	float left_top_y = ((-transform.xr) * sin(angle) + ((-transform.yr) * cos(angle)) + transform.y);
+	float right_top_x = ((transform.xr) * cos(angle) + ((-transform.yr) * -sin(angle)) + transform.x);
+	float right_top_y = ((transform.xr) * sin(angle) + ((-transform.yr) * cos(angle)) + transform.y);
+	float left_down_x = ((-transform.xr) * cos(angle) + ((transform.yr) * -sin(angle)) + transform.x);
+	float left_down_y = ((-transform.xr) * sin(angle) + ((transform.yr) * cos(angle)) + transform.y);
+	float right_down_x = ((transform.xr) * cos(angle) + ((transform.yr) * -sin(angle)) + transform.x);
+	float right_down_y = ((transform.xr) * sin(angle) + ((transform.yr) * cos(angle)) + transform.y);
+
+
+	bommr[0] = VGet(left_top_x - left_down_x, left_top_y - left_down_y, 0.0f);//|
+	bommr[1] = VGet(left_down_x - right_down_x, left_down_y - right_down_y, 0.0f);//_
+	bommr[2] = VGet(right_down_x - right_top_x, right_down_y - right_top_y, 0.0f);// |
+	bommr[3] = VGet(right_top_x - left_top_x, right_top_y - left_top_y, 0.0f);//￣
+
+	bommr[0] = VNorm(bommr[0]);
+	bommr[1] = VNorm(bommr[1]);
+	bommr[2] = VNorm(bommr[2]);
+	bommr[3] = VNorm(bommr[3]);
+
+	vec_player[0][0] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[0][1] = VGet(player_left - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[0][2] = VGet(player_left - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[0][3] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[1][0] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[1][1] = VGet(player_left - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[1][2] = VGet(player_left - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[1][3] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[2][0] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[2][1] = VGet(player_right - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[2][2] = VGet(player_right - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[2][3] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[3][0] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[3][1] = VGet(player_right - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[3][2] = VGet(player_right - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[3][3] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[0][0] = VNorm(vec_player[0][0]);
+	vec_player[0][1] = VNorm(vec_player[0][1]);
+	vec_player[0][2] = VNorm(vec_player[0][2]);
+	vec_player[0][3] = VNorm(vec_player[0][3]);
+
+	vec_player[1][0] = VNorm(vec_player[1][0]);
+	vec_player[1][1] = VNorm(vec_player[1][1]);
+	vec_player[1][2] = VNorm(vec_player[1][2]);
+	vec_player[1][3] = VNorm(vec_player[1][3]);
+
+	vec_player[2][0] = VNorm(vec_player[2][0]);
+	vec_player[2][1] = VNorm(vec_player[2][1]);
+	vec_player[2][2] = VNorm(vec_player[2][2]);
+	vec_player[2][3] = VNorm(vec_player[2][3]);
+
+	vec_player[3][0] = VNorm(vec_player[3][0]);
+	vec_player[3][1] = VNorm(vec_player[3][1]);
+	vec_player[3][2] = VNorm(vec_player[3][2]);
+	vec_player[3][3] = VNorm(vec_player[3][3]);
+
+	cross[0][0] = (bommr[0].x * vec_player[0][0].y) - (bommr[0].y * vec_player[0][0].x);
+	cross[0][1] = (bommr[1].x * vec_player[0][1].y) - (bommr[1].y * vec_player[0][1].x);
+	cross[0][2] = (bommr[2].x * vec_player[0][2].y) - (bommr[2].y * vec_player[0][2].x);
+	cross[0][3] = (bommr[3].x * vec_player[0][3].y) - (bommr[3].y * vec_player[0][3].x);
+
+	cross[1][0] = (bommr[0].x * vec_player[1][0].y) - (bommr[0].y * vec_player[1][0].x);
+	cross[1][1] = (bommr[1].x * vec_player[1][1].y) - (bommr[1].y * vec_player[1][1].x);
+	cross[1][2] = (bommr[2].x * vec_player[1][2].y) - (bommr[2].y * vec_player[1][2].x);
+	cross[1][3] = (bommr[3].x * vec_player[1][3].y) - (bommr[3].y * vec_player[1][3].x);
+
+	cross[2][0] = (bommr[0].x * vec_player[2][0].y) - (bommr[0].y * vec_player[2][0].x);
+	cross[2][1] = (bommr[1].x * vec_player[2][1].y) - (bommr[1].y * vec_player[2][1].x);
+	cross[2][2] = (bommr[2].x * vec_player[2][2].y) - (bommr[2].y * vec_player[2][2].x);
+	cross[2][3] = (bommr[3].x * vec_player[2][3].y) - (bommr[3].y * vec_player[2][3].x);
+
+	cross[3][0] = (bommr[0].x * vec_player[3][0].y) - (bommr[0].y * vec_player[3][0].x);
+	cross[3][1] = (bommr[1].x * vec_player[3][1].y) - (bommr[1].y * vec_player[3][1].x);
+	cross[3][2] = (bommr[2].x * vec_player[3][2].y) - (bommr[2].y * vec_player[3][2].x);
+	cross[3][3] = (bommr[3].x * vec_player[3][3].y) - (bommr[3].y * vec_player[3][3].x);
+
+	if (cross[0][0] >= 0 && cross[0][1] >= 0 && cross[0][2] >= 0 && cross[0][3] >= 0 ||
+		cross[1][0] >= 0 && cross[1][1] >= 0 && cross[1][2] >= 0 && cross[1][3] >= 0 ||
+		cross[2][0] >= 0 && cross[2][1] >= 0 && cross[2][2] >= 0 && cross[2][3] >= 0 ||
+		cross[3][0] >= 0 && cross[3][1] >= 0 && cross[3][2] >= 0 && cross[3][3] >= 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Enemy::BommerHitBox(Transform transform)
+{
+	VECTOR bommr[4];
+
+	VECTOR vec_player[4][4];
+
+	float cross[4][4];
+
+	float player_left = transform.x - transform.xr;
+	float player_right = transform.x + transform.xr;
+	float player_top = transform.y - transform.yr;
+	float player_down = transform.y + transform.yr;
+
+	float left_top_x = ((-this->transform.xr) * cos(angle) + ((-this->transform.yr) * -sin(angle)) + this->transform.x);
+	float left_top_y = ((-this->transform.xr) * sin(angle) + ((-this->transform.yr) * cos(angle)) + this->transform.y);
+	float right_top_x = ((this->transform.xr) * cos(angle) + ((-this->transform.yr) * -sin(angle)) + this->transform.x);
+	float right_top_y = ((this->transform.xr) * sin(angle) + ((-this->transform.yr) * cos(angle)) + this->transform.y);
+	float left_down_x = ((-this->transform.xr) * cos(angle) + ((this->transform.yr) * -sin(angle)) + this->transform.x);
+	float left_down_y = ((-this->transform.xr) * sin(angle) + ((this->transform.yr) * cos(angle)) + this->transform.y);
+	float right_down_x = ((this->transform.xr) * cos(angle) + ((this->transform.yr) * -sin(angle)) + this->transform.x);
+	float right_down_y = ((this->transform.xr) * sin(angle) + ((this->transform.yr) * cos(angle)) + this->transform.y);
+
+
+	bommr[0] = VGet(left_top_x - left_down_x, left_top_y - left_down_y, 0.0f);//|
+	bommr[1] = VGet(left_down_x - right_down_x, left_down_y - right_down_y, 0.0f);//_
+	bommr[2] = VGet(right_down_x - right_top_x, right_down_y - right_top_y, 0.0f);// |
+	bommr[3] = VGet(right_top_x - left_top_x, right_top_y - left_top_y, 0.0f);//￣
+
+	bommr[0] = VNorm(bommr[0]);
+	bommr[1] = VNorm(bommr[1]);
+	bommr[2] = VNorm(bommr[2]);
+	bommr[3] = VNorm(bommr[3]);
+
+	vec_player[0][0] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[0][1] = VGet(player_left - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[0][2] = VGet(player_left - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[0][3] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[1][0] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[1][1] = VGet(player_left - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[1][2] = VGet(player_left - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[1][3] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[2][0] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[2][1] = VGet(player_right - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[2][2] = VGet(player_right - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[2][3] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[3][0] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[3][1] = VGet(player_right - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[3][2] = VGet(player_right - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[3][3] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[0][0] = VNorm(vec_player[0][0]);
+	vec_player[0][1] = VNorm(vec_player[0][1]);
+	vec_player[0][2] = VNorm(vec_player[0][2]);
+	vec_player[0][3] = VNorm(vec_player[0][3]);
+
+	vec_player[1][0] = VNorm(vec_player[1][0]);
+	vec_player[1][1] = VNorm(vec_player[1][1]);
+	vec_player[1][2] = VNorm(vec_player[1][2]);
+	vec_player[1][3] = VNorm(vec_player[1][3]);
+
+	vec_player[2][0] = VNorm(vec_player[2][0]);
+	vec_player[2][1] = VNorm(vec_player[2][1]);
+	vec_player[2][2] = VNorm(vec_player[2][2]);
+	vec_player[2][3] = VNorm(vec_player[2][3]);
+
+	vec_player[3][0] = VNorm(vec_player[3][0]);
+	vec_player[3][1] = VNorm(vec_player[3][1]);
+	vec_player[3][2] = VNorm(vec_player[3][2]);
+	vec_player[3][3] = VNorm(vec_player[3][3]);
+
+	cross[0][0] = (bommr[0].x * vec_player[0][0].y) - (bommr[0].y * vec_player[0][0].x);
+	cross[0][1] = (bommr[1].x * vec_player[0][1].y) - (bommr[1].y * vec_player[0][1].x);
+	cross[0][2] = (bommr[2].x * vec_player[0][2].y) - (bommr[2].y * vec_player[0][2].x);
+	cross[0][3] = (bommr[3].x * vec_player[0][3].y) - (bommr[3].y * vec_player[0][3].x);
+
+	cross[1][0] = (bommr[0].x * vec_player[1][0].y) - (bommr[0].y * vec_player[1][0].x);
+	cross[1][1] = (bommr[1].x * vec_player[1][1].y) - (bommr[1].y * vec_player[1][1].x);
+	cross[1][2] = (bommr[2].x * vec_player[1][2].y) - (bommr[2].y * vec_player[1][2].x);
+	cross[1][3] = (bommr[3].x * vec_player[1][3].y) - (bommr[3].y * vec_player[1][3].x);
+
+	cross[2][0] = (bommr[0].x * vec_player[2][0].y) - (bommr[0].y * vec_player[2][0].x);
+	cross[2][1] = (bommr[1].x * vec_player[2][1].y) - (bommr[1].y * vec_player[2][1].x);
+	cross[2][2] = (bommr[2].x * vec_player[2][2].y) - (bommr[2].y * vec_player[2][2].x);
+	cross[2][3] = (bommr[3].x * vec_player[2][3].y) - (bommr[3].y * vec_player[2][3].x);
+
+	cross[3][0] = (bommr[0].x * vec_player[3][0].y) - (bommr[0].y * vec_player[3][0].x);
+	cross[3][1] = (bommr[1].x * vec_player[3][1].y) - (bommr[1].y * vec_player[3][1].x);
+	cross[3][2] = (bommr[2].x * vec_player[3][2].y) - (bommr[2].y * vec_player[3][2].x);
+	cross[3][3] = (bommr[3].x * vec_player[3][3].y) - (bommr[3].y * vec_player[3][3].x);
+
+	if (cross[0][0] >= 0 && cross[0][1] >= 0 && cross[0][2] >= 0 && cross[0][3] >= 0 ||
+		cross[1][0] >= 0 && cross[1][1] >= 0 && cross[1][2] >= 0 && cross[1][3] >= 0 ||
+		cross[2][0] >= 0 && cross[2][1] >= 0 && cross[2][2] >= 0 && cross[2][3] >= 0 ||
+		cross[3][0] >= 0 && cross[3][1] >= 0 && cross[3][2] >= 0 && cross[3][3] >= 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+#pragma endregion
+
 #pragma region Move
 //動き
 void Enemy::Move(Player& player, bool reflection_flag)
@@ -164,6 +382,11 @@ void Enemy::Move(Player& player, bool reflection_flag)
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
+
+			if (enemy_type == 2)
+			{
+				angle = (float)atan2(end_y - start_y, end_x - start_x);
+			}
 		}
 		else if (appear_time != 0 && appear_time != -1)
 		{
@@ -198,7 +421,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 				//移動
 				if (action_flag == true && fast_move_flag == false)
 				{
-
 					if (move_time > 0)
 					{
 						move_time--;
@@ -222,7 +444,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 							}
 						}
 					}
-
 				}
 				else if (action_flag == false)
 				{
@@ -274,9 +495,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 						}
 					}
 				}
-
 			}
-
 		}
 #pragma region ボマー
 		//ボマー
@@ -444,7 +663,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 											explosion_bommer_flag = true;
 											break;
 										}
-
 									}
 								}
 							}
@@ -496,7 +714,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 											break;
 
 										}
-
 									}
 								}
 							}
@@ -509,7 +726,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 					}
 				}
 			}
-
 		}
 #pragma endregion
 
@@ -538,7 +754,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 
 					if (move_flag == true)
 					{
-
 						if (move_frame == 0)
 						{
 							move_rand = GetRand(7) + 1;
@@ -621,7 +836,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 							move_time = def_move_time;
 							move_flag = false;
 						}
-
 					}
 				}
 
@@ -635,7 +849,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 				{
 					//反射回数初期化
 					Refresh_ReflectionNum(4);
-
 				}
 
 				//当たり判定
@@ -665,7 +878,6 @@ void Enemy::Move(Player& player, bool reflection_flag)
 							bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
 						}
 					}
-
 					shot_time = -1;
 				}
 
@@ -687,7 +899,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag,transform);
+			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
 		}
 
 		//当たり判定
@@ -700,14 +912,31 @@ void Enemy::Move(Player& player, bool reflection_flag)
 			}
 		}
 
-		anime_timer++;
-
-		if (anime_timer == 12 * 6)
+		switch (enemy_type)
 		{
-			anime_timer = 0;
+		case 1:
+			anime_timer++;
+
+			if (anime_timer == 12 * 6)
+			{
+				anime_timer = 0;
+			}
+
+			anime = anime_timer / 6;
+			break;
+
+		case 2:
+			bommer_anime_timer++;
+
+			if (bommer_anime_timer == 10 * 6)
+			{
+				bommer_anime_timer = 0;
+			}
+
+			bommer_anime = bommer_anime_timer / 6;
+			break;
 		}
 
-		anime = anime_timer / 6;
 
 	}
 
@@ -831,15 +1060,19 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 
 #pragma region ボマー当たり判定
 //爆発エフェクト
-void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
+void Enemy::ExplosionBommer(Enemy& enemy)
 {
 	if (enemy_type == 2)
 	{
 		if (transform.x != enemy.transform.x && transform.y != enemy.transform.y &&
 			enemy.exising_flag == true && exising_flag == true)
 		{
-			EnemyToEnemyHitBox(enemy.transform);
-			enemy.PlaterToEnemyHitBox(player);
+			if (BommerHitBox(enemy.GetTransform()) == true)
+			{
+				explosion_bommer_flag = true;
+				enemy_to_bommer = true;
+				enemy.SetEnemyFlag(false);
+			}
 		}
 
 		if (explosion_bommer_flag == true)
@@ -855,21 +1088,17 @@ void Enemy::ExplosionBommer(Enemy& enemy, Player& player)
 	}
 }
 //敵と敵
-void Enemy::EnemyToEnemyHitBox(Transform transform)
+void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 {
 	if (enemy_type == 2)
 	{
-		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-			this->transform.x + this->transform.xr > transform.x - transform.xr)
+		if (BommerHitBox(enemy.GetTransform()) == true)
 		{
-			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
 			{
-				if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
-				{
-					explosion_bommer_flag = true;
-					enemy_to_bommer = true;
-				}
+				explosion_bommer_flag = true;
+				enemy_to_bommer = true;
+
 			}
 		}
 	}
@@ -879,12 +1108,22 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 {
 	if (enemy_type == 2)
 	{
-		if (Box_Circle((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr,
-			player.GetX(), player.GetY(), player.GetR()) == 1)
+		if (BommerHitBox(player) == true && exising_flag == true)
 		{
+			if (player.GetDamageFlag() == 0)
+			{
+				player.HpSub(1);
+			}
+
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;
-			player.HpSub(1);
+
+			player.SetDamageFlag(1);
+
+		}
+		else
+		{
+			player.SetDamageFlag(0);
 		}
 	}
 }
@@ -1021,15 +1260,20 @@ void Enemy::Draw(int num)
 
 	if (exising_flag == true)
 	{
-		if (explosion_bommer_flag == true)
+		switch (enemy_type)
 		{
+		case 1:
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img[anime], true);
+			break;
+		case 2:
+			DrawRotaGraphF((float)transform.x, (float)transform.y, 1.0, angle, bommer_img[bommer_anime], true, true);
+			break;
+		default:
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
 				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 0, 0), true);
+			break;
 		}
-		else
-		{
-			DrawGraph((int)transform.x - img_r, (int)transform.y - img_r, img[anime], true);
-		}
+
 	}
 
 	for (int i = 0; i < all_bullet_max; i++)
@@ -1357,22 +1601,9 @@ Transform Enemy::GetTransform()
 	return transform;
 }
 
-void Enemy::SetReflectionNum()
-{
-	for (int i = 0; i < all_bullet_max; i++)
-	{
-		bullet[i].SetReflectionNum(0);
-	}
-}
-
 int Enemy::GetShotTime()
 {
 	return shot_time;
-}
-
-void Enemy::SetShotTime(int shot_time)
-{
-	this->shot_time = shot_time;
 }
 
 bool Enemy::GetBulletFlag(int i)
@@ -1394,4 +1625,25 @@ EnemyBullet* Enemy::GetEnmyBullet(int i)
 {
 	return &bullet[i];
 }
+#pragma endregion
+
+#pragma region セッター
+
+void Enemy::SetReflectionNum()
+{
+	for (int i = 0; i < all_bullet_max; i++)
+	{
+		bullet[i].SetReflectionNum(0);
+	}
+}
+void Enemy::SetShotTime(int shot_time)
+{
+	this->shot_time = shot_time;
+}
+
+void Enemy::SetEnemyFlag(bool flag)
+{
+	exising_flag = flag;
+}
+
 #pragma endregion

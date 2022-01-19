@@ -17,13 +17,15 @@ public:
 	void HitBox(Transform transform,int num);
 	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//ìñÇΩÇËîªíË
 	void TutorialHitBox(Transform transform, int num);
-	void EnemyToEnemyHitBox(Transform transform);
+	void EnemyToEnemyHitBox(Enemy& enemy);
 	void PlaterToEnemyHitBox(Player& player);
-	void ExplosionBommer(Enemy& enemy, Player& player);
+	void ExplosionBommer(Enemy& enemy);
 	void HP(Transform transform, EnemyBullet& bullet);
 	void XMove(int x_speed, bool right_flag);
 	void YMove(int y_speed, bool up_flag);
 	void Refresh_ReflectionNum(int max);
+	bool BommerHitBox(Player& player);
+	bool BommerHitBox(Transform transform);
 
 	bool GetBulletFlag(int i);
 	bool GetEnemyFlag();
@@ -31,10 +33,12 @@ public:
 	EnemyBullet* GetEnmyBullet(int i);
 	Transform* GetBulletTransform(int num);
 	Transform GetTransform();
+	int GetShotTime();
 
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);
-	int GetShotTime();
+	void SetEnemyFlag(bool flag);
+
 
 	int color;
 
@@ -81,6 +85,9 @@ private:
 	int explosion_time;
 	bool explosion_bommer_flag;
 	bool enemy_to_bommer;
+	int bommer_img[10];
+	int bommer_anime_timer;
+	int bommer_anime;
 	//èâä˙íl
 	int def_explosion_time;
 

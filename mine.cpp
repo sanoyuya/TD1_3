@@ -18,8 +18,8 @@ Mine::Mine()
 	for (int i = 0; i < 10; i++)
 	{
 		transform[i].x = 0;
-		transform[i].xr = 0;
-		transform[i].y = 0;
+		transform[i].xr = 32;
+		transform[i].y = 32;
 		transform[i].yr = 0;
 		explosion_time[i] = 0;
 		explosion_flag[i] = 0;

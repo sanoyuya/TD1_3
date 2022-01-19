@@ -35,7 +35,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetWindowSizeExtendRate(1.0);
 
 	// 画面の背景色を設定する
-	SetBackgroundColor(0x00, 0x00, 0x00);
+	SetBackgroundColor(0xff, 0xff, 0xff);
 
 	// DXlibの初期化
 	if (DxLib_Init() == -1) { return -1; }
@@ -157,7 +157,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 			if (game_set == false)
 			{
-				wave_num = 20;
+				wave_num = 8;
 				
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
@@ -273,7 +273,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					player->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
 					sub_boss->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
-
+					enemy[i].PlaterToEnemyHitBox(*player);
 					for (int k = 0; k < ENEMY_MAX; k++)
 					{
 						if (i != k)
@@ -281,7 +281,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							enemy[i].HP(*enemy[k].GetBulletTransform(j), *enemy[k].GetEnmyBullet(j));
 							
 							
-							enemy[i].ExplosionBommer(enemy[k], *player);
+							enemy[i].ExplosionBommer(enemy[k]);
 						}
 					}
 				}

@@ -61,6 +61,10 @@ private:
 	int anticipation;
 	bool teleport_flag;
 
+	int boss1_img[14];
+	int boss1_anime_timer;
+	int boss1_anime;
+	int img_r;
 	EnemyBullet* bullet;
 	Mine* mine;
 	MimeInitialize mime_initialize;
