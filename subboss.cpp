@@ -739,6 +739,9 @@ SubBoss::SubBoss()
 	mime_initialize.def_bombs_time = 0;
 	mime_initialize.def_explosion_time = 0;
 	rand = 0;
+
+	anticipation = 50;
+	teleport_flag = false;
 }
 
 SubBoss::~SubBoss()
