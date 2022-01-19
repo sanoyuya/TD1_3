@@ -3,6 +3,7 @@
 #include"enemy.h"
 #include"bullet.h"
 #include"subboss.h"
+#include"Score.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -56,17 +57,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int pushflag = 0;
 	int stageflag = 0;
 	int resultflag = 0;
-	int Score = 0;
-	int Toptier = 0;
-	int Secondtier = 0;
-	int Thirdtier = 0;
+
 
 	bool reflection_flag = true;
 
 	Player* player = new Player();
 	Enemy* enemy = new Enemy[ENEMY_MAX];
 	SubBoss* sub_boss = new SubBoss;
-
+	Score* score = new Score;
 
 	int wave_num = 6;
 	bool game_set = false;
@@ -144,7 +142,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 2:
 			//プレイ画面
 #pragma region
+			score->TC(sceneflag);
+			score->KDC();
 			player->PlayerPadMove(keys, oldkeys);
+			//デバッグ用(本番消す)
 			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
 				delete player;
 				player = new Player();
@@ -329,24 +330,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
+			if (wave_num > 32) {
+				score->CC();
+				sceneflag = 5;
+			}
 			sceneflag = player->Result();
 
 			break;
 
 		case 3:
 			//プレイ画面
+			score->TC(sceneflag);
+			score->KDC();
 			break;
 
 		case 4:
-			//リザルト画面(ゲームオーバー)
-			if (Toptier < Score) {//スコアがランキングも含め一番高かったら
-				Toptier = Score;//ランキングにランクイン
-			}if (Toptier > Score && Secondtier < Score) {//スコアがランキングも含め二番目に高かったら
-				Secondtier = Score;//ランキングにランクイン
-			}if (Secondtier > Score && Thirdtier < Score) {//スコアがランキングも含め三番目に高かったら
-				Thirdtier = Score;//ランキングにランクイン
-			}
-
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflag = 0;
 			}
@@ -379,19 +377,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 5:
 			//リザルト画面(ゲームクリア)
-
-			//Score+=5000;
-			// Score*=(30000-クリアf)
-			//被弾していなかったら
-			//+10000;
-			if (Toptier < Score) {//スコアがランキングも含め一番高かったら
-				Toptier = Score;//ランキングにランクイン
-			}if (Toptier > Score && Secondtier < Score) {//スコアがランキングも含め二番目に高かったら
-				Secondtier = Score;//ランキングにランクイン
-			}if (Secondtier > Score && Thirdtier < Score) {//スコアがランキングも含め三番目に高かったら
-				Thirdtier = Score;//ランキングにランクイン
-			}
-
+			score->TC(sceneflag);
+			score->RC();
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflag = 0;
 			}
@@ -469,6 +456,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			
 			DrawGraph(958, 128, player_img[maba2], true);
+			score->Draw();
 			break;
 			delete player;
 		case 3:
@@ -516,6 +504,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		
 			
 			DrawGraph(958, 128, player_img[maba2], true);
+			score->Draw();
 			break;
 			delete player;
 		}
