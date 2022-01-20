@@ -4,12 +4,13 @@ class Score
 public:
 	Score();
 	~Score();
-	void KDC();//knockdown
+	void IC();//knockdown
 	void CC();//clear
 	void RC();//rank
 	void TC(int sceneflag);//time
 	void Setnohitflag(int nohitflag);
 	void Draw();
+	void Setscoreitem(int scoreitem);
 
 private:
 	int score;
@@ -21,5 +22,6 @@ private:
 	int scoregh[10];
 	int div;
 	int index;
+	int scoreitem;
 };
 

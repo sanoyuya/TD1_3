@@ -1,6 +1,7 @@
 #pragma once
 #include"Dxlib.h"
 #include"Transform.h"
+#include "score.h"
 
 
 class EnemyBullet;
@@ -25,7 +26,7 @@ private:
 	int reflectionAfterglow = 0;
 	int COOLTIME;
 	int COOLTIMEtimer;
-	int itemflag;
+	int itemflag; int scoreitem;
 	int Cgh;
 	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Moveflag5; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
@@ -98,12 +99,13 @@ public:
 	int GetHp();
 	int Result();
 	int Getnohitflag();
+	int Getscoreitem();
 
 	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag, int& wave_num);
 	void TutorialDraw();
 	void TuTorialHP(Transform transform, EnemyBullet& bullet,int& damage_flag);
 
-	void ItemFlagAdd(int num);
+	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
 	void SetDamageFlag(int num);
 }Player;

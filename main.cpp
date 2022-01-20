@@ -143,7 +143,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//プレイ画面
 #pragma region
 			score->TC(sceneflag);
-			score->KDC();
+			score->IC();
 			player->PlayerPadMove(keys, oldkeys);
 			//デバッグ用(本番消す)
 			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
@@ -259,7 +259,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				enemy[i].Move(*player, reflection_flag);
+				enemy[i].Move(*player, reflection_flag,*score);
 			}
 
 			if (wave_num == 10 || wave_num == 20)
@@ -341,7 +341,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 3:
 			//プレイ画面
 			score->TC(sceneflag);
-			score->KDC();
+			score->IC();
 			break;
 
 		case 4:
@@ -412,6 +412,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 10:
 			//チュートリアル
 			player->TutorialMove(keys, oldkeys, enemy, sceneflag,wave_num);
+			score->IC();
 			break;
 		}
 		// 描画処理
@@ -455,12 +456,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawGraph(958, 128, player_img[maba2], true);
 
 			player->Draw();
+			score->Draw();
 
 
 			break;
 			delete player;
 		case 3:
 			//プレイ画面
+			score->Draw();
 			break;
 
 		case 4:

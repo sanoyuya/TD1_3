@@ -17,9 +17,9 @@ Player::Player() {//コンストラクタの定義
 	reflectionAfterglow = 0;
 	COOLTIME = 0;
 	COOLTIMEtimer = 0;
-	itemflag = 0;
+	itemflag = 0; scoreitem = 0;
 	Cgh = LoadGraph("resouce/enban.png");
-	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0;rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
 	txtflag = 1;
 	pushflag = 1;
 	txt1 = LoadGraph("resouce/text_1.png"); txt2 = LoadGraph("resouce/text_2.png"); txt3 = LoadGraph("resouce/text_3.png");
@@ -123,6 +123,13 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 		}
 	}
 
+	if (stelsflag == 1) {
+		speed = 4;
+	}
+	else {
+		speed = 7;
+	}
+
 	if (stelsAfterglow == 1) {
 		stelscooltimer++;
 		if (stelsflag == 1) {
@@ -197,12 +204,16 @@ void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_fl
 	}
 }
 
-void Player::ItemFlagAdd(int num)
+void Player::ItemFlagAdd(int num, Score& score )
 {
 	if (itemflag < 6)
 	{
 		itemflag += num;
 	}
+
+	scoreitem += num;
+
+	score.Setscoreitem(scoreitem);
 
 }
 
@@ -253,6 +264,10 @@ int Player::Getstelsflag()
 
 int Player::Getnohitflag() {
 	return nohitflag;
+}
+
+int Player::Getscoreitem() {
+	return scoreitem;
 }
 
 int Player::Result() {
@@ -558,32 +573,37 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 
 		if (enemy[0].GetBulletFlag(0) == false && enemy[0].GetShotTime() == -1)
 		{
-			//敵の弾が消えたら
-			if (rightflag == 1) {
-				Move2time++;
-				if (Move2time <= 20) {
-					X -= 5;
+			if (rightflag == 1 || leftflag == 1) {
+				//最初に座標代入
+				if (easing_frame == 0)
+				{
+					easing_start_x = (double)X;
+					easing_start_y = (double)Y;
 				}
-				else {
+
+				easing_frame++;
+
+				//計算して代入
+				easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
+				easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+
+				//座標に代入
+				X = (int)easing_x;
+				Y = (int)easing_y;
+
+				//終わったら初期化
+				if (easing_frame == easing_end_frame)
+				{
+					easing_frame = 0;
+					easing_flag = 0;
 					Moveflag2 = 0;
 					txtflag = 6;
 				}
 			}
-			else if (leftflag == 1) {
-				Move2time++;
-				if (Move2time <= 20) {
-					X += 5;
-				}
-				else {
-					Moveflag2 = 0;
-					txtflag = 6;
-				}
-			}
-			if (rightflag == 0 && leftflag == 0) {
+			else {
 				Moveflag2 = 0;
 				txtflag = 6;
 			}
-
 		}
 	}
 
@@ -643,22 +663,6 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				shot_flag = 1;
 				itemflag = 0;
 			}
-		}
-
-		if (reflectionflag == 1) {
-
-			if (enemy[0].GetEnemyFlag() == false)
-			{
-				//自機に向けて弾を出す
-				//敵が死んだら
-				reflectionflag = 0;
-				txtflag = 14;
-				itemflag2 = 1;
-				Moveflag4 = 0;
-
-				tutorial_item->TutorialForm(enemy[0].GetTransform(), itemflag2);
-			}
-
 		}
 	}
 
@@ -1008,22 +1012,6 @@ void Player::TutorialDraw() {
 	if (itemflag == 1)
 	{
 		Alpha = 72;
-	}
-	if (itemflag >= 2)
-	{
-		Alpha = 108;
-	}
-	if (itemflag >= 3)
-	{
-		Alpha = 144;
-	}
-	if (itemflag >= 4)
-	{
-		Alpha = 180;
-	}
-	if (itemflag >= 5)
-	{
-		Alpha = 216;
 	}
 	if (itemflag >= 6)
 	{

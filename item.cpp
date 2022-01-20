@@ -63,7 +63,7 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 }
 
 
-void Item::Move(Player& player)
+void Item::Move(Player& player, Score& score)
 {
 	if (exising_flag == true)
 	{
@@ -72,7 +72,7 @@ void Item::Move(Player& player)
 			((player.GetY() - (int)transform.y) * (player.GetY() - (int)transform.y)))
 		{
 			exising_flag = false;
-			player.ItemFlagAdd(1);
+			player.ItemFlagAdd(1,score);
 		}
 
 		if (time > 0)
