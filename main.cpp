@@ -151,7 +151,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				player = new Player();
 				delete[]enemy;
 				enemy = new Enemy[ENEMY_MAX];
-				wave_num = 1;
+				wave_num = 10;
 				game_set = false;
 			}
 
