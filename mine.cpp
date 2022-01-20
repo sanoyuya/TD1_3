@@ -173,9 +173,7 @@ void Mine::PlayerHitBox(Player& player)
 				{
 					explosion_flag[i] = true;
 				}
-
 			}
-
 		}
 
 		if (explosion_flag[i] == true)
@@ -186,21 +184,20 @@ void Mine::PlayerHitBox(Player& player)
 				if (transform[i].y - explosion_r < (double)player.GetY() + (double)player.GetR() &&
 					transform[i].y + explosion_r > (double)player.GetY() - (double)player.GetR())
 				{
-					if (player.GetDamageFlag() == 0)
+					if (player.GetDamageFlag(i) == 0)
 					{
 						player.HpSub(1);
 					}
-					player.SetDamageFlag(1);
+					player.SetDamageFlag(i,1);
 				}
 				else
 				{
-					player.SetDamageFlag(0);
+					player.SetDamageFlag(i,0);
 				}
 			}
 			else
 			{
-				player.SetDamageFlag(0);
-
+				player.SetDamageFlag(i,0);
 			}
 		}
 	}
@@ -222,7 +219,7 @@ void Mine::Move()
 		{
 			explosion_time[i]--;
 
-			if (explosion_time[i] == 0)
+			if (explosion_time[i] <= 0)
 			{
 				explosion_flag[i] = true;
 			}
@@ -232,7 +229,7 @@ void Mine::Move()
 		{
 			bombs_time[i]--;
 
-			if (bombs_time[i] == 0)
+			if (bombs_time[i] <= 0)
 			{
 				explosion_flag[i] = false;
 				exising_flag[i] = false;

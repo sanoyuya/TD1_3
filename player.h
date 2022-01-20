@@ -79,7 +79,7 @@ private:
 	Item* tutorial_item;
 
 	int shot_flag;
-	int damage_flag;
+	int damage_flag[11];
 
 	int item_1_img;
 public:
@@ -95,7 +95,7 @@ public:
 	int Getstelsflag();
 	int Getreflectionflag();
 	int GetReflectionR();
-	int GetDamageFlag();
+	int GetDamageFlag(int num);
 	int GetHp();
 	int Result();
 	int Getnohitflag();
@@ -107,5 +107,5 @@ public:
 
 	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
-	void SetDamageFlag(int num);
+	void SetDamageFlag(int i,int num);
 }Player;

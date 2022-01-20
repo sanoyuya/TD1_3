@@ -106,6 +106,8 @@ private:
 
 	//中ボス
 	int move_rand;
+
+	int easing_num;
 	//デバッグ用
 
 
