@@ -180,7 +180,11 @@ void Player::HP(Transform transform, EnemyBullet& bullet) {
 	if (*bullet.GetBulletFlag() == true)
 	{
 		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
-			hp -= 1;
+			
+			if (reflectionflag == 0)
+			{
+				hp -= 1;
+			}
 			bullet.SetBulletFlag(false);
 		}
 	}
