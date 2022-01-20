@@ -13,6 +13,7 @@ Score::Score()
 	scoregh[9] = { 0 };
 	div = 1;
 	index = 0;
+	scoreitem = 0;
 	LoadDivGraph("resouce/scorenum.png", 10, 10, 1, 40, 60, scoregh);
 }
 
@@ -25,9 +26,12 @@ void Score::Setnohitflag(int nohitflag) {
 	this->nohitflag = nohitflag;
 }
 
-void Score::KDC() {
-	//敵が倒されたら
-	//score += 100;
+void Score::Setscoreitem(int scoreitem) {
+	this->scoreitem = scoreitem;
+}
+
+void Score::IC() {
+	score = scoreitem * 1000;
 }
 
 void Score::CC() {
@@ -64,6 +68,9 @@ void Score::Draw() {
 		DrawGraph(i * 48 + 985, 30 + 36, scoregh[index], true);
 		div = div * 10;
 	}
+
+	DrawFormatString(480, 480, GetColor(255, 255, 255), "score:%d", score);
+	DrawFormatString(480, 500, GetColor(255, 255, 255), "scoreitem:%d", scoreitem);
 
 	//result
 	//クリアボーナス     +5000

@@ -2,7 +2,7 @@
 #include"bullet.h"
 #include"Transform.h"
 #include"mine.h"
-
+#include"score.h"
 class Mine;
 
 class Enemy
@@ -11,7 +11,7 @@ public:
 	Enemy();
 	~Enemy();
 	void form(FILE* fp);
-	void Move(Player& player, bool reflection_flag);
+	void Move(Player& player, bool reflection_flag, Score& score);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num);

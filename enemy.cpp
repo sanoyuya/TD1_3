@@ -373,7 +373,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag)
+void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 {
 	if (use_flag == true)
 	{
@@ -959,7 +959,7 @@ void Enemy::Move(Player& player, bool reflection_flag)
 
 	}
 
-	item->Move(player);
+	item->Move(player,score);
 }
 #pragma endregion
 
