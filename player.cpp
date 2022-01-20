@@ -668,6 +668,22 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 				itemflag = 0;
 			}
 		}
+
+		if (reflectionflag == 1) {
+
+			if (enemy[0].GetEnemyFlag() == false)
+			{
+				//Ž©‹@‚ÉŒü‚¯‚Ä’e‚ðo‚·
+				//“G‚ªŽ€‚ñ‚¾‚ç
+				reflectionflag = 0;
+				txtflag = 14;
+				itemflag2 = 1;
+				Moveflag4 = 0;
+
+				tutorial_item->TutorialForm(enemy[0].GetTransform(), itemflag2);
+			}
+
+		}
 	}
 
 	if (Moveflag5 == 1) {
@@ -680,7 +696,6 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 			X -= speed;
 		}
-
 
 		if (tutorial_item->TutorialMove(X, Y, R, itemflag2) == true) {
 
