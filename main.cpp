@@ -164,7 +164,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					enemy[i].SetReflectionNum();
 				}
-				wave_num = 10;
+
 				switch (wave_num)
 				{
 				case 1:
@@ -262,7 +262,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				enemy[i].Move(*player, reflection_flag,*score);
 			}
 
-			if (wave_num == 10 || wave_num == 20)
+			if (wave_num == 10 || wave_num == 11 || wave_num == 20 || wave_num == 21)
 			{
 				sub_boss->Move(*player, reflection_flag);
 			}
