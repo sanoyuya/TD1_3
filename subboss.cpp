@@ -353,7 +353,7 @@ void SubBoss::Draw()
 {
 	if (exising_flag == true)
 	{
-		if (enemy_type == 1)
+		if (enemy_type == 1 || enemy_type == 3)
 		{
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
 		}
@@ -361,7 +361,7 @@ void SubBoss::Draw()
 
 	for (int i = 0; i < 4; i++)
 	{
-		bullet[i].Draw();
+		bullet[i].Draw(enemy_type);
 		if (bullet[i].GetReflectionNum() == 3)
 		{
 			bullet[i].SetBulletFlag(false);

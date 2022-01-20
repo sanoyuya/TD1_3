@@ -167,6 +167,9 @@ EnemyBullet::EnemyBullet()
 	boomerang_x_r = 120;
 	boomerang_y_r = 270;
 	flag = false;
+	LoadDivGraph("resouce/boomerang.png", 8, 8, 1, 32, 32, boomerang_img);
+	boomerang_anime_timer = 0;
+	boomerang_anime = 0;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -175,7 +178,7 @@ EnemyBullet::~EnemyBullet()
 #pragma endregion
 
 #pragma region Move
-void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag,Transform& transform)
+void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag, Transform& transform)
 {
 	if (bullet_flag == true)
 	{
@@ -454,19 +457,19 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 			if (player.Getreflectionflag() == 1)
 			{
 				int wey = Box_Line(
-				//プレイヤー
-				(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//右上
-				(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//左上
+					//プレイヤー
+					(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//右上
+					(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() - player.GetReflectionR(),//左上
 
-				(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//左下
-				(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//右下
+					(float)player.GetX() - player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//左下
+					(float)player.GetX() + player.GetReflectionR(), (float)player.GetY() + player.GetReflectionR(),//右下
 
-				//弾
-				(float)this->transform.x - this->transform.xr, (float)this->transform.y + this->transform.yr,//左下
-				(float)this->transform.x + this->transform.xr, (float)this->transform.y + this->transform.yr,//右下
+					//弾
+					(float)this->transform.x - this->transform.xr, (float)this->transform.y + this->transform.yr,//左下
+					(float)this->transform.x + this->transform.xr, (float)this->transform.y + this->transform.yr,//右下
 
-				(float)this->transform.x - this->transform.xr, (float)this->transform.y - this->transform.yr,//左上
-				(float)this->transform.x + this->transform.xr, (float)this->transform.y - this->transform.yr);//右上
+					(float)this->transform.x - this->transform.xr, (float)this->transform.y - this->transform.yr,//左上
+					(float)this->transform.x + this->transform.xr, (float)this->transform.y - this->transform.yr);//右上
 
 				switch (wey)
 				{
@@ -497,7 +500,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 		{
 			if (exising_flag == true)
 			{
-				
+
 				boomerang_x_r = 100;
 				boomerang_y_r = 250;
 
@@ -522,6 +525,14 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 
 				circularMotionL(this->transform.x, this->transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
 
+				boomerang_anime_timer++;
+
+				if (boomerang_anime_timer == 8 * 3)
+				{
+					boomerang_anime_timer = 0;
+				}
+
+				boomerang_anime = boomerang_anime_timer / 3;
 			}
 			else
 			{
@@ -836,11 +847,19 @@ void EnemyBullet::TutorialMove(int y)
 
 #pragma region Draw
 //描画
-void EnemyBullet::Draw()
+void EnemyBullet::Draw(int enemy_type)
 {
 	if (bullet_flag == true)
 	{
-		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
+		if (enemy_type == 1 || enemy_type == 10 || enemy_type == 4)
+		{
+			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
+		}
+		if (enemy_type == 3)
+		{
+			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, boomerang_img[boomerang_anime], true);
+		}
+
 	}
 }
 #pragma endregion

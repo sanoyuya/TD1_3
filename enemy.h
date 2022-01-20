@@ -85,9 +85,11 @@ private:
 	int explosion_time;
 	bool explosion_bommer_flag;
 	bool enemy_to_bommer;
+
 	int bommer_img[10];
 	int bommer_anime_timer;
 	int bommer_anime;
+
 	//初期値
 	int def_explosion_time;
 
@@ -106,7 +108,6 @@ private:
 
 	//中ボス
 	int move_rand;
-
 	int easing_num;
 	//デバッグ用
 

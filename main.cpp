@@ -152,36 +152,29 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (Pauseflag == 0) {
 #pragma region
-					score->TC(sceneflag);
-					score->IC();
-					player->PlayerPadMove(keys, oldkeys);
-					//デバッグ用(本番消す)
-					if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
-						delete player;
-						player = new Player();
-						delete[]enemy;
-						enemy = new Enemy[ENEMY_MAX];
-						wave_num = 17;
-						game_set = false;
-					}
-
-					if (pushflagoption == 0) {
-						if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
-							pushflagoption = 1;
-							Pauseflag = 1;
-						}
-					}
+			score->TC(sceneflag);
+			score->IC();
+			player->PlayerPadMove(keys, oldkeys);
+			//デバッグ用(本番消す)
+			if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
+				delete player;
+				player = new Player();
+				delete[]enemy;
+				enemy = new Enemy[ENEMY_MAX];
+				wave_num = 16;
+				game_set = false;
+			}
 
 
 #pragma region 敵データ読み込み
-					if (game_set == false)
-					{
+			if (game_set == false)
+			{
 
-
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							enemy[i].SetReflectionNum();
-						}
+				
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					enemy[i].SetReflectionNum();
+				}
 
 						switch (wave_num)
 						{
@@ -306,11 +299,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 					}
 
-					for (int i = 0; i < 4; i++)
-					{
-						player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
-					}
-					sub_boss->PlayerMineHit(*player);
+			for (int i = 0; i < 4; i++)
+			{
+				player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
+			}
+			sub_boss->PlayerMineHit(*player);
 
 #pragma endregion
 					//waveクリア判定
@@ -329,12 +322,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 					}
 
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
-							enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
-							|| sub_boss->GetSubBossFlag() == true)
-						{
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
+					|| sub_boss->GetSubBossFlag() == true)
+				{
 
 							i--;
 							break;
@@ -347,7 +340,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							wave_num++;
 						}
 					}
-
 					if (wave_num > 32) {
 						score->CC();
 						sceneflag = 5;
