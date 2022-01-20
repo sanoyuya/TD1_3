@@ -146,6 +146,7 @@ Enemy::Enemy()
 	mime_initialize.def_explosion_time = 0;
 	mime_initialize.explosion_r = 0;
 	move_rand = 0;
+	easing_num = 0;
 }
 
 Enemy::~Enemy()
@@ -165,19 +166,19 @@ bool Enemy::BommerHitBox(Player& player)
 
 	float cross[4][4];
 
-	float player_left = player.GetX() - player.GetR();
-	float player_right = player.GetX() + player.GetR();
-	float player_top = player.GetY() - player.GetR();
-	float player_down = player.GetY() + player.GetR();
+	float player_left = (float)player.GetX() - player.GetR();
+	float player_right = (float)player.GetX() + player.GetR();
+	float player_top = (float)player.GetY() - player.GetR();
+	float player_down = (float)player.GetY() + player.GetR();
 
-	float left_top_x = ((-transform.xr) * cos(angle) + ((-transform.yr) * -sin(angle)) + transform.x);
-	float left_top_y = ((-transform.xr) * sin(angle) + ((-transform.yr) * cos(angle)) + transform.y);
-	float right_top_x = ((transform.xr) * cos(angle) + ((-transform.yr) * -sin(angle)) + transform.x);
-	float right_top_y = ((transform.xr) * sin(angle) + ((-transform.yr) * cos(angle)) + transform.y);
-	float left_down_x = ((-transform.xr) * cos(angle) + ((transform.yr) * -sin(angle)) + transform.x);
-	float left_down_y = ((-transform.xr) * sin(angle) + ((transform.yr) * cos(angle)) + transform.y);
-	float right_down_x = ((transform.xr) * cos(angle) + ((transform.yr) * -sin(angle)) + transform.x);
-	float right_down_y = ((transform.xr) * sin(angle) + ((transform.yr) * cos(angle)) + transform.y);
+	float left_top_x = ((-transform.xr) * cosf(angle) + ((-transform.yr) * -sinf(angle)) + (float)transform.x);
+	float left_top_y = ((-transform.xr) * sinf(angle) + ((-transform.yr) * cosf(angle)) + (float)transform.y);
+	float right_top_x = ((transform.xr) * cosf(angle) + ((-transform.yr) * -sinf(angle)) + (float)transform.x);
+	float right_top_y = ((transform.xr) * sinf(angle) + ((-transform.yr) * cosf(angle)) + (float)transform.y);
+	float left_down_x = ((-transform.xr) * cosf(angle) + ((transform.yr) * -sinf(angle)) + (float)transform.x);
+	float left_down_y = ((-transform.xr) * sinf(angle) + ((transform.yr) * cosf(angle)) + (float)transform.y);
+	float right_down_x = ((transform.xr) * cosf(angle) + ((transform.yr) * -sinf(angle)) + (float)transform.x);
+	float right_down_y = ((transform.xr) * sinf(angle) + ((transform.yr) * cosf(angle)) + (float)transform.y);
 
 
 	bommr[0] = VGet(left_top_x - left_down_x, left_top_y - left_down_y, 0.0f);//|
@@ -271,19 +272,19 @@ bool Enemy::BommerHitBox(Transform transform)
 
 	float cross[4][4];
 
-	float player_left = transform.x - transform.xr;
-	float player_right = transform.x + transform.xr;
-	float player_top = transform.y - transform.yr;
-	float player_down = transform.y + transform.yr;
+	float player_left = (float)transform.x - transform.xr;
+	float player_right = (float)transform.x + transform.xr;
+	float player_top = (float)transform.y - transform.yr;
+	float player_down = (float)transform.y + transform.yr;
 
-	float left_top_x = ((-this->transform.xr) * cos(angle) + ((-this->transform.yr) * -sin(angle)) + this->transform.x);
-	float left_top_y = ((-this->transform.xr) * sin(angle) + ((-this->transform.yr) * cos(angle)) + this->transform.y);
-	float right_top_x = ((this->transform.xr) * cos(angle) + ((-this->transform.yr) * -sin(angle)) + this->transform.x);
-	float right_top_y = ((this->transform.xr) * sin(angle) + ((-this->transform.yr) * cos(angle)) + this->transform.y);
-	float left_down_x = ((-this->transform.xr) * cos(angle) + ((this->transform.yr) * -sin(angle)) + this->transform.x);
-	float left_down_y = ((-this->transform.xr) * sin(angle) + ((this->transform.yr) * cos(angle)) + this->transform.y);
-	float right_down_x = ((this->transform.xr) * cos(angle) + ((this->transform.yr) * -sin(angle)) + this->transform.x);
-	float right_down_y = ((this->transform.xr) * sin(angle) + ((this->transform.yr) * cos(angle)) + this->transform.y);
+	float left_top_x = ((-this->transform.xr) * cosf(angle) + ((-this->transform.yr) * -sinf(angle)) + (float)this->transform.x);
+	float left_top_y = ((-this->transform.xr) * sinf(angle) + ((-this->transform.yr) * cosf(angle)) + (float)this->transform.y);
+	float right_top_x = ((this->transform.xr) * cosf(angle) + ((-this->transform.yr) * -sinf(angle)) + (float)this->transform.x);
+	float right_top_y = ((this->transform.xr) * sinf(angle) + ((-this->transform.yr) * cosf(angle)) + (float)this->transform.y);
+	float left_down_x = ((-this->transform.xr) * cosf(angle) + ((this->transform.yr) * -sinf(angle)) + (float)this->transform.x);
+	float left_down_y = ((-this->transform.xr) * sinf(angle) + ((this->transform.yr) * cosf(angle)) + (float)this->transform.y);
+	float right_down_x = ((this->transform.xr) * cosf(angle) + ((this->transform.yr) * -sinf(angle)) + (float)this->transform.x);
+	float right_down_y = ((this->transform.xr) * sinf(angle) + ((this->transform.yr) * cosf(angle)) + (float)this->transform.y);
 
 
 	bommr[0] = VGet(left_top_x - left_down_x, left_top_y - left_down_y, 0.0f);//|
@@ -438,10 +439,28 @@ void Enemy::Move(Player& player, bool reflection_flag)
 							move_time = def_move_time;
 							move_frame = 0;
 
-							if (move_num == 4)
+							switch (easing_num)
 							{
-								move_num = 0;
+							case 2:
+								if (move_num == 2)
+								{
+									move_num = 0;
+								}
+								break;
+							case 3:
+								if (move_num == 3)
+								{
+									move_num = 0;
+								}
+								break;
+							case 4:
+								if (move_num == 4)
+								{
+									move_num = 0;
+								}
+								break;
 							}
+
 						}
 					}
 				}
@@ -1110,7 +1129,7 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 	{
 		if (BommerHitBox(player) == true && exising_flag == true)
 		{
-			if (player.GetDamageFlag() == 0)
+			if (player.GetDamageFlag(10) == 0)
 			{
 				player.HpSub(1);
 			}
@@ -1118,12 +1137,12 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;
 
-			player.SetDamageFlag(1);
+			player.SetDamageFlag(10,1);
 
 		}
 		else
 		{
-			player.SetDamageFlag(0);
+			player.SetDamageFlag(10,0);
 		}
 	}
 }
@@ -1303,9 +1322,9 @@ void Enemy::form(FILE* fp)
 	int a = 0;
 	int b = 0;
 	int c = 0;
-	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d,%d,%d,%d"
+	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d,%d,%d,%d,%d"
 		, &a, &b, &c, &enemy_type, &appear_time, &shot_time, &explosion_time, &hp, &transform.xr, &transform.yr, &x_speed, &y_speed, &end_frame, &start_x, &start_y, &end_x, &end_y, &move_time, &move_end_frame,
-		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2],
+		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2], &easing_num,
 		&mime_initialize.transform_xr, &mime_initialize.transform_yr, &mime_initialize.explosion_r, &mime_initialize.def_explosion_time, &mime_initialize.def_bombs_time)
 		!= EOF)
 	{
@@ -1338,6 +1357,7 @@ void Enemy::form(FILE* fp)
 		move_end_y[1] = 0;
 		move_end_x[2] = 0;
 		move_end_y[2] = 0;
+		easing_num = 0;
 		shot_action_flag = false;
 		mime_initialize.transform_yr = 0;
 		mime_initialize.transform_xr = 0;
@@ -1361,14 +1381,36 @@ void Enemy::form(FILE* fp)
 	frame = 0;
 	move_num = 0;
 	move_frame = 0;
-	move_start_x[1] = move_end_x[0];
-	move_start_y[1] = move_end_y[0];
-	move_start_x[2] = move_end_x[1];
-	move_start_y[2] = move_end_y[1];
-	move_start_x[3] = move_end_x[2];
-	move_start_y[3] = move_end_y[2];
-	move_end_x[3] = move_start_x[0];
-	move_end_y[3] = move_start_y[0];
+
+	switch (easing_num)
+	{
+	case 2:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_end_x[1] = move_start_x[0];
+		move_end_y[1] = move_start_y[0];
+		break;
+	case 3:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_start_x[2] = move_end_x[1];
+		move_start_y[2] = move_end_y[1];
+		move_end_x[2] = move_start_x[0];
+		move_end_y[2] = move_start_y[0];
+		break;
+	case 4:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_start_x[2] = move_end_x[1];
+		move_start_y[2] = move_end_y[1];
+		move_start_x[3] = move_end_x[2];
+		move_start_y[3] = move_end_y[2];
+		move_end_x[3] = move_start_x[0];
+		move_end_y[3] = move_start_y[0];
+		break;
+
+	}
+
 	def_move_time = move_time;
 	def_shot_time = shot_time;
 

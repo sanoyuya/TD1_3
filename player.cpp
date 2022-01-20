@@ -71,7 +71,7 @@ Player::Player() {//コンストラクタの定義
 	stealth_img_r = 56;
 	stealth_anime_timer = 0;
 	stealth_anime = 0;
-	damage_flag = 0;
+	damage_flag[0] = 0;
 
 	item_1_img = LoadGraph("resouce/item1big.png");
 }
@@ -216,9 +216,9 @@ int Player::GetReflectionR()
 	return reflection_r;
 }
 
-int Player::GetDamageFlag()
+int Player::GetDamageFlag(int num)
 {
-	return damage_flag;
+	return damage_flag[num];
 }
 
 void Player::HpSub(int num)
@@ -226,9 +226,9 @@ void Player::HpSub(int num)
 	hp -= num;
 }
 
-void Player::SetDamageFlag(int num)
+void Player::SetDamageFlag(int i,int num)
 {
-	damage_flag = num;
+	damage_flag[i] = num;
 }
 
 int Player::GetX()
@@ -636,7 +636,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 	}
 
 	if (Moveflag4 == 1) {//反射チュートリアル
-		if (pushflag == 0) {
+		if (pushflag == 0 && reflectionflag == 0) {
 			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
 				reflectionflag = 1;
 				enemy[0].SetShotTime(5);
@@ -723,8 +723,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy enemy[], int& scenefl
 #pragma endregion
 
 void Player::Draw() {//描画関数
-	float CHP = hp * 5 + 25.0;
-	float CMP = stelscooltimer * 0.4 + 25.0;
+	float CHP = hp * 5.0f + 25.0f;
+	float CMP = stelscooltimer * 0.4f + 25.0f;
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
 	DrawGraph(1088, 680, bigitem, true);
@@ -830,8 +830,8 @@ void Player::D() {
 #pragma region チュートリアル
 void Player::TutorialDraw() {
 
-	float CHP = hp * 5 + 25.0;
-	float CMP = stelscooltimer * 0.4 + 25.0;
+	float CHP = hp * 5.0f + 25.0f;
+	float CMP = stelscooltimer * 0.4f + 25.0f;
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
 	DrawGraph(1088, 680, bigitem, true);
