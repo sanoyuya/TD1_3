@@ -151,15 +151,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				player = new Player();
 				delete[]enemy;
 				enemy = new Enemy[ENEMY_MAX];
-				wave_num = 10;
+				wave_num = 16;
 				game_set = false;
 			}
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 			if (game_set == false)
 			{
-
-				
 				for (int i = 0; i < ENEMY_MAX; i++)
 				{
 					enemy[i].SetReflectionNum();
@@ -292,6 +290,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
 			}
+
 			sub_boss->PlayerMineHit(*player);
 
 #pragma endregion
@@ -315,7 +314,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
 					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
-					|| sub_boss->GetSubBossFlag() == true)
+					|| sub_boss->GetSubBossFlag() == true || sub_boss->GetEnmyBulletFlag(0) == true || sub_boss->GetEnmyBulletFlag(1) == true || sub_boss->GetEnmyBulletFlag(2) == true || sub_boss->GetEnmyBulletFlag(3) == true)
 				{
 
 					i--;

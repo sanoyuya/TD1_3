@@ -20,7 +20,7 @@ public:
 		float point1_x, float point1_y, float point2_x, float point2_y);
 
 	void TutorialMove(int y);
-	void Draw();
+	void Draw(int enemy_type);
 	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
 	void OmniForm(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);
 	void TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed,int stelsflag);
@@ -61,6 +61,10 @@ private:
 	float boomerang_x_r;
 	float boomerang_y_r;
 	bool flag;
+
+	int boomerang_img[8];
+	int boomerang_anime_timer;
+	int boomerang_anime;
 
 	//‘S•ûˆÊ
 }EnemyBullet;
