@@ -563,10 +563,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						DrawFormatString(400, 300, GetColor(255, 255, 255), "戻る");
 					}if (Pause == 1) {
 						DrawBox(380, 460, 580, 520, GetColor(255, 255, 255), false);
-						DrawFormatString(400, 480, GetColor(255, 255, 255), "初めからやり直す");
+						DrawFormatString(400, 480, GetColor(255, 255, 255), "再挑戦");
 					}if (Pause == 2) {
 						DrawBox(380, 640, 580, 700, GetColor(255, 255, 255), false);
-						DrawFormatString(400, 660, GetColor(255, 255, 255), "タイトルに戻る");
+						DrawFormatString(400, 660, GetColor(255, 255, 255), "タイトル");
 					}
 				}
 
