@@ -42,5 +42,10 @@ private:
 	//‰Šú’l
 	int def_explosion_time;
 	int def_bombs_time;
+
+	int mine_img[10];
+	int mine_anime_timer[10];
+	int mine_anime[10];
+	int mine_r;
 };
 

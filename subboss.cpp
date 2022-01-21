@@ -75,7 +75,6 @@ void SubBoss::form(FILE* fp)
 
 	def_move_time = move_time;
 	def_shot_time = shot_time;
-	hp = 100;
 
 	anticipation = 50;
 	teleport_flag = false;
@@ -150,7 +149,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 
 						int rand2 = GetRand(7);
 
-						if (enemy_type == 3&& rand == rand2)
+						if (enemy_type == 3 && rand == rand2)
 						{
 							move_flag = false;
 							teleport_flag = true;
@@ -271,11 +270,13 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				if (shot_time == -1)
 				{
 					//”½Ë‰ñ”‰Šú‰»
-					Refresh_ReflectionNum(4);
+					//Refresh_ReflectionNum(bullet_max);
+
+					shot_time = def_shot_time;
 				}
 
 				//“–‚½‚è”»’è
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < bullet_max; i++)
 				{
 					if (*bullet[i].GetBulletFlag() == true)
 					{
@@ -287,16 +288,48 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 				//’e‚Ì¶¬
 				if (shot_time == 0)
 				{
-					for (int i = 0; i < 4; i++)
+					int k[4] = { 0,0,0,0 };
+					bool end = false;
+					int i;
+					int length = 0;
+
+					for (i = 0; i < 4; i++)
 					{
-						if (*bullet[i].GetBulletFlag() == false)
+						int j = FlagSerch(bullet, bullet_max);
+
+						if (j != -1)
 						{
-							bullet[i].Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
-							damage_flag[i] = true;
-							//Šp“x‚ğ90“x‚¸‚Â‚¸‚ç‚·
-							bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
-							bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
-							bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
+							bullet[j].Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+							damage_flag[j] = true;
+							k[i] = j;
+						}
+						else
+						{
+							length = i;
+							break;
+						}
+					}
+
+					if (i == 4)
+					{
+						end = true;
+					}
+
+					if (end == true)
+					{
+						//Šp“x‚ğ90“x‚¸‚Â‚¸‚ç‚·
+						bullet[k[1]].SetAngle(bullet[k[0]].GetAngle() + (DX_PI_F / 2));
+						bullet[k[2]].SetAngle(bullet[k[1]].GetAngle() + (DX_PI_F / 2));
+						bullet[k[3]].SetAngle(bullet[k[2]].GetAngle() + (DX_PI_F / 2));
+					}
+					else
+					{
+						for (int i = 0; i < length; i++)
+						{
+							int j = k[i];
+							bullet[j].SetBulletFlag(false);
+
+							damage_flag[j] = false;
 						}
 					}
 
@@ -323,7 +356,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 		mine->Move();
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < bullet_max; i++)
 	{
 		//’e‚Ì“®‚«
 		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
@@ -359,7 +392,7 @@ void SubBoss::Draw()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < bullet_max; i++)
 	{
 		bullet[i].Draw(enemy_type);
 		if (bullet[i].GetReflectionNum() == 3)
@@ -651,19 +684,9 @@ void SubBoss::Refresh_ReflectionNum(int max)
 	for (i = 0; i < max; i++)
 	{
 		//”½Ë‰ñ”‰Šú‰»
-		if (*bullet[i].GetBulletFlag() == true)
+		if (*bullet[i].GetBulletFlag() == false)
 		{
-			i -= 1;
-			break;
-
-		}
-	}
-	if (i == max && shot_time == -1)
-	{
-		for (int j = 0; j < max; j++)
-		{
-			bullet[j].SetReflectionNum(0);
-			shot_time = def_shot_time;
+			bullet[i].SetReflectionNum(0);
 		}
 	}
 }
@@ -745,7 +768,7 @@ SubBoss::SubBoss()
 	def_move_time = move_time;
 	def_shot_time = shot_time;
 
-	bullet = new EnemyBullet[4];
+	bullet = new EnemyBullet[12];
 	mine = new Mine;
 
 	mime_initialize.transform_yr = 0;
@@ -760,6 +783,9 @@ SubBoss::SubBoss()
 	boss1_anime_timer = 0;
 	boss1_anime = 0;
 	img_r = 64;
+
+	bullet_max = 12;
+
 }
 
 SubBoss::~SubBoss()

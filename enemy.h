@@ -109,6 +109,15 @@ private:
 	//中ボス
 	int move_rand;
 	int easing_num;
+
+	int sub_boss1_img[14];
+	int sub_boss1_anime;
+	int sub_boss1_anime_timer;
+
+	//ブーメラン
+	int boomerang_img[10];
+	int boomerang_anime_timer;
+	int boomerang_anime;
 	//デバッグ用
 
 
@@ -119,3 +128,4 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy);
 double easeInSine(double x);
 
 int FlagSerch(bool flag[], int max);
+int FlagSerch(EnemyBullet bullet[], int max);

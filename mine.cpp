@@ -25,8 +25,11 @@ Mine::Mine()
 		explosion_flag[i] = 0;
 		bombs_time[i] = 0;
 		exising_flag[i] = 0;
+		mine_anime_timer[i] = 0;
+		mine_anime[i] = 0;
 	}
-
+	mine_r = 8;
+	LoadDivGraph("resouce/bom.png", 10, 10, 1, 32, 32, mine_img);
 }
 
 //デストラクタ
@@ -237,7 +240,12 @@ void Mine::Move()
 				explosion_time[i] = def_explosion_time;
 			}
 		}
+
+		mine_anime[i] = explosion_time[i] / 30;
 	}
+
+
+
 }
 #pragma endregion
 
@@ -253,13 +261,11 @@ void Mine::Draw()
 	{
 		if (exising_flag[i] == true && explosion_flag[i] == true)
 		{
-			DrawBox((int)transform[i].x - explosion_r, (int)transform[i].y - explosion_r,
-				(int)transform[i].x + explosion_r, (int)transform[i].y + explosion_r, GetColor(255, 0, 0), true);
+			DrawBox((int)transform[i].x - transform[i].xr, (int)transform[i].y - transform[i].yr,(int)transform[i].x + transform[i].xr, (int)transform[i].y + transform[i].yr, GetColor(255, 255, 255), true);
 		}
 		else if (exising_flag[i] == true)
 		{
-			DrawBox((int)transform[i].x - transform[i].xr, (int)transform[i].y - transform[i].yr,
-				(int)transform[i].x + transform[i].xr, (int)transform[i].y + transform[i].yr, GetColor(255, 255, 255), true);
+			DrawGraph(transform[i].x - mine_r, transform[i].y - mine_r, mine_img[mine_anime[i]], true);
 		}
 	}
 

@@ -151,7 +151,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				player = new Player();
 				delete[]enemy;
 				enemy = new Enemy[ENEMY_MAX];
-				wave_num = 16;
+				wave_num = 10;
 				game_set = false;
 			}
 
@@ -257,7 +257,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				enemy[i].Move(*player, reflection_flag,*score);
+				enemy[i].Move(*player, reflection_flag, *score);
 			}
 
 			if (wave_num == 10 || wave_num == 11 || wave_num == 20 || wave_num == 21)
@@ -278,8 +278,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (i != k)
 						{
 							enemy[i].HP(*enemy[k].GetBulletTransform(j), *enemy[k].GetEnmyBullet(j));
-							
-							
+
+
 							enemy[i].ExplosionBommer(enemy[k]);
 						}
 					}
@@ -316,6 +316,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
 					|| sub_boss->GetSubBossFlag() == true || sub_boss->GetEnmyBulletFlag(0) == true || sub_boss->GetEnmyBulletFlag(1) == true || sub_boss->GetEnmyBulletFlag(2) == true || sub_boss->GetEnmyBulletFlag(3) == true)
 				{
+					i--;
+					break;
+				}
+
+				if (wave_num != 10 && enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true) {
 
 					i--;
 					break;
@@ -410,7 +416,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 10:
 			//チュートリアル
-			player->TutorialMove(keys, oldkeys, enemy, sceneflag,wave_num);
+			player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num);
 			score->IC();
 			break;
 		}
@@ -505,7 +511,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawGraph(958, 128, player_img[maba2], true);
 			score->Draw();
 			player->TutorialDraw();
-		
+
 
 			break;
 			delete player;

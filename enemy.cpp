@@ -125,20 +125,14 @@ Enemy::Enemy()
 	enemy_to_bommer = false;
 	def_explosion_time = 0;
 	explosion_bommer_flag = false;
-	LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
-	bommer_anime_timer = 0;
-	bommer_anime = 0;
+
 	//‘S•ûˆÊ
 	all_bullet_max = 48;
 	bullet = new EnemyBullet[all_bullet_max];
 	item = new Item;
 	mine = new Mine;
 	color = GetColor(255, 255, 255);
-	//‰æ‘œ
-	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
-	img_r = 48;
-	anime = 0;
-	anime_timer = 0;
+
 
 	mime_initialize.transform_yr = 0;
 	mime_initialize.transform_xr = 0;
@@ -147,6 +141,24 @@ Enemy::Enemy()
 	mime_initialize.explosion_r = 0;
 	move_rand = 0;
 	easing_num = 0;
+
+	//‰æ‘œ
+	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
+	img_r = 48;
+	anime = 0;
+	anime_timer = 0;
+	
+	LoadDivGraph("resouce/boss1_64.png", 14, 14, 1, 64, 64, sub_boss1_img);
+	sub_boss1_anime = 0;
+	sub_boss1_anime_timer = 0;
+
+	LoadDivGraph("resouce/zako_boomerang.png", 10, 10, 1, 64, 64, boomerang_img);
+	boomerang_anime = 0;
+	boomerang_anime_timer = 0;
+
+	LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
+	bommer_anime_timer = 0;
+	bommer_anime = 0;
 }
 
 Enemy::~Enemy()
@@ -954,6 +966,28 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 
 			bommer_anime = bommer_anime_timer / 6;
 			break;
+
+		case 3:
+			boomerang_anime_timer++;
+
+			if (boomerang_anime_timer == 10 * 6)
+			{
+				boomerang_anime_timer = 0;
+			}
+
+			boomerang_anime = boomerang_anime_timer / 6;
+			break;
+
+		case 10:
+			sub_boss1_anime_timer++;
+
+			if (sub_boss1_anime_timer == 10 * 6)
+			{
+				sub_boss1_anime_timer = 0;
+			}
+
+			sub_boss1_anime = sub_boss1_anime_timer / 6;
+			break;
 		}
 
 
@@ -1286,6 +1320,12 @@ void Enemy::Draw(int num)
 			break;
 		case 2:
 			DrawRotaGraphF((float)transform.x, (float)transform.y, 1.0, angle, bommer_img[bommer_anime], true, true);
+			break;
+		case 3:
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boomerang_img[boomerang_anime], true);
+			break;
+		case 10:
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
 			break;
 		default:
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,

@@ -36,8 +36,9 @@ private:
 	int x_speed = 10;//X座標のスピード
 	int y_speed = 10;//Y座標のスピード
 	bool exising_flag;//存在フラグ
-	bool damage_flag[4];
+	bool damage_flag[14];
 	int shot_time;
+	int bullet_max;
 	//最初の移動のための変数
 	int frame;
 	int end_frame;
@@ -65,6 +66,9 @@ private:
 	int boss1_anime_timer;
 	int boss1_anime;
 	int img_r;
+
+
+
 	EnemyBullet* bullet;
 	Mine* mine;
 	MimeInitialize mime_initialize;
