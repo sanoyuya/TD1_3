@@ -101,7 +101,7 @@ public:
 	int Getnohitflag();
 	int Getscoreitem();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag, int& wave_num);
+	void TutorialMove(char* keys, char* oldkeys, Enemy enemy[],int &sceneflag, int& wave_num,int &pushflag);
 	void TutorialDraw();
 	void TuTorialHP(Transform transform, EnemyBullet& bullet,int& damage_flag);
 

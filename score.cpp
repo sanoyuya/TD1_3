@@ -69,8 +69,8 @@ void Score::Draw() {
 		div = div * 10;
 	}
 
-	DrawFormatString(480, 480, GetColor(255, 255, 255), "score:%d", score);
-	DrawFormatString(480, 500, GetColor(255, 255, 255), "scoreitem:%d", scoreitem);
+	/*DrawFormatString(480, 480, GetColor(255, 255, 255), "score:%d", score);
+	DrawFormatString(480, 500, GetColor(255, 255, 255), "scoreitem:%d", scoreitem);*/
 
 	//result
 	//クリアボーナス     +5000
