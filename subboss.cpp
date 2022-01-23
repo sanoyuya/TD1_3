@@ -269,69 +269,95 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 
 				if (shot_time == -1)
 				{
-					//反射回数初期化
-					//Refresh_ReflectionNum(bullet_max);
+					if (enemy_type == 1)
+					{
+						shot_time = def_shot_time;
+					}
+					else
+					{
+						Refresh_ReflectionNum(4);
+					}
 
-					shot_time = def_shot_time;
 				}
 
 				//当たり判定
 				for (int i = 0; i < bullet_max; i++)
 				{
-					if (*bullet[i].GetBulletFlag() == true)
+					if (*bullet[i]->GetBulletFlag() == true)
 					{
 
-						HitBox(*bullet[i].GetTransform(), bullet[i], i);
+						HitBox(*bullet[i]->GetTransform(), bullet[i], i);
 					}
 				}
 
 				//弾の生成
 				if (shot_time == 0)
 				{
-					int k[4] = { 0,0,0,0 };
-					bool end = false;
-					int i;
-					int length = 0;
 
-					for (i = 0; i < 4; i++)
+					if (enemy_type == 1)
 					{
-						int j = FlagSerch(bullet, bullet_max);
+						int k[4] = { 0,0,0,0 };
+						bool end = false;
+						int i;
+						int length = 0;
 
-						if (j != -1)
+						for (i = 0; i < 4; i++)
 						{
-							bullet[j].Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
-							damage_flag[j] = true;
-							k[i] = j;
+							int j = FlagSerch(bullet, bullet_max);
+
+							if (j != -1)
+							{
+								bullet[j]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+								damage_flag[j] = true;
+								k[i] = j;
+							}
+							else
+							{
+								length = i;
+								break;
+							}
+						}
+
+						if (i == 4)
+						{
+							end = true;
+						}
+
+						if (end == true)
+						{
+							//角度を90度ずつずらす
+							bullet[k[1]]->SetAngle(bullet[k[0]]->GetAngle() + (DX_PI_F / 2));
+							bullet[k[2]]->SetAngle(bullet[k[1]]->GetAngle() + (DX_PI_F / 2));
+							bullet[k[3]]->SetAngle(bullet[k[2]]->GetAngle() + (DX_PI_F / 2));
 						}
 						else
 						{
-							length = i;
-							break;
+							for (int i = 0; i < length; i++)
+							{
+								int j = k[i];
+								bullet[j]->SetBulletFlag(false);
+
+								damage_flag[j] = false;
+							}
 						}
-					}
-
-					if (i == 4)
-					{
-						end = true;
-					}
-
-					if (end == true)
-					{
-						//角度を90度ずつずらす
-						bullet[k[1]].SetAngle(bullet[k[0]].GetAngle() + (DX_PI_F / 2));
-						bullet[k[2]].SetAngle(bullet[k[1]].GetAngle() + (DX_PI_F / 2));
-						bullet[k[3]].SetAngle(bullet[k[2]].GetAngle() + (DX_PI_F / 2));
 					}
 					else
 					{
-						for (int i = 0; i < length; i++)
+						for (int i = 0; i < 4; i++)
 						{
-							int j = k[i];
-							bullet[j].SetBulletFlag(false);
-
-							damage_flag[j] = false;
+							if (*bullet[i]->GetBulletFlag() == false)
+							{
+								bullet[i]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+								damage_flag[i] = true;
+								//角度を90度ずつずらす
+								bullet[1]->SetAngle(bullet[0]->GetAngle() + (DX_PI_F / 2));
+								bullet[2]->SetAngle(bullet[1]->GetAngle() + (DX_PI_F / 2));
+								bullet[3]->SetAngle(bullet[2]->GetAngle() + (DX_PI_F / 2));
+							}
 						}
 					}
+
+
 
 					shot_time = -1;
 				}
@@ -359,7 +385,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 	for (int i = 0; i < bullet_max; i++)
 	{
 		//弾の動き
-		bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
+		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
 	}
 
 	if (enemy_type == 1)
@@ -394,11 +420,12 @@ void SubBoss::Draw()
 
 	for (int i = 0; i < bullet_max; i++)
 	{
-		bullet[i].Draw(enemy_type);
-		if (bullet[i].GetReflectionNum() == 3)
+		bullet[i]->Draw(enemy_type);
+
+		if (bullet[i]->GetReflectionNum() >= 3)
 		{
-			bullet[i].SetBulletFlag(false);
-			bullet[i].SetReflectionNum(0);
+			bullet[i]->SetBulletFlag(false);
+			bullet[i]->SetReflectionNum(0);
 		}
 	}
 
@@ -418,9 +445,9 @@ void SubBoss::Draw()
 //ダメージフラグがfalseなら体力を減らし
 //各種フラグを代入
 
-void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
+void SubBoss::HitBox(Transform& transform, EnemyBullet* enemyBullet, int i)
 {
-	if (*enemyBullet.GetBulletFlag() == true)
+	if (*enemyBullet->GetBulletFlag() == true)
 	{
 		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 			this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -432,7 +459,7 @@ void SubBoss::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 				{
 					hp--;
 					damage_flag[i] = true;
-					enemyBullet.SetBulletFlag(false);
+					enemyBullet->SetBulletFlag(false);
 				}
 
 			}
@@ -684,9 +711,19 @@ void SubBoss::Refresh_ReflectionNum(int max)
 	for (i = 0; i < max; i++)
 	{
 		//反射回数初期化
-		if (*bullet[i].GetBulletFlag() == false)
+		if (*bullet[i]->GetBulletFlag() == true)
 		{
-			bullet[i].SetReflectionNum(0);
+			i -= 1;
+			break;
+
+		}
+	}
+	if (i == max && shot_time == -1)
+	{
+		for (int j = 0; j < max; j++)
+		{
+			bullet[j]->SetReflectionNum(0);
+			shot_time = def_shot_time;
 		}
 	}
 }
@@ -696,22 +733,37 @@ void SubBoss::Refresh_ReflectionNum(int max)
 #pragma region ゲッター
 Transform* SubBoss::GetBulletTransform(int num)
 {
-	return bullet[num].GetTransform();
+	return bullet[num]->GetTransform();
 }
 
 EnemyBullet* SubBoss::GetEnmyBullet(int i)
 {
-	return &bullet[i];
+	return bullet[i];
 }
 
 bool SubBoss::GetEnmyBulletFlag(int i)
 {
-	return bullet[i].GetBulletFlag();
+	return *bullet[i]->GetBulletFlag();
 }
 
 bool SubBoss::GetSubBossFlag()
 {
 	return exising_flag;
+}
+
+int SubBoss::GetAppearTime()
+{
+	return appear_time;
+}
+
+int SubBoss::GetBulletMax()
+{
+	return bullet_max;
+}
+
+void SubBoss::SetMineExplosion()
+{
+	mine->SetExplosionTime(1);
 }
 
 #pragma endregion
@@ -768,7 +820,11 @@ SubBoss::SubBoss()
 	def_move_time = move_time;
 	def_shot_time = shot_time;
 
-	bullet = new EnemyBullet[12];
+	for (int i = 0; i < 12; i++)
+	{
+		bullet[i] = new EnemyBullet;
+	}
+
 	mine = new Mine;
 
 	mime_initialize.transform_yr = 0;
@@ -790,6 +846,13 @@ SubBoss::SubBoss()
 
 SubBoss::~SubBoss()
 {
+	delete mine;
+
+	for (int i = 0; i < bullet_max; i++)
+	{
+		delete bullet[i];
+	}
+
 }
 #pragma endregion
 

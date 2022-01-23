@@ -36,11 +36,11 @@ int Box_Circle(int LeftTopBoxX, int LeftTopBoxY, int RightBottomX, int RightBott
 
 
 //空き番号を返す
-int FlagSerch(EnemyBullet bullet[], int max)
+int FlagSerch(EnemyBullet** bullet, int max)
 {
 	for (int i = 0; i < max; i++)
 	{
-		if (*bullet[i].GetBulletFlag() == false)
+		if (*bullet[i]->GetBulletFlag() == false)
 		{
 			return i;
 		}
@@ -127,12 +127,13 @@ Enemy::Enemy()
 	explosion_bommer_flag = false;
 
 	//全方位
-	all_bullet_max = 48;
-	bullet = new EnemyBullet[all_bullet_max];
-	item = new Item;
+	all_bullet_max = 1;
+	bullet[0] = new EnemyBullet;
+
+	//item = new Item;
 	mine = new Mine;
 	color = GetColor(255, 255, 255);
-
+	sub_boss_buiiet_max = 12;
 
 	mime_initialize.transform_yr = 0;
 	mime_initialize.transform_xr = 0;
@@ -147,7 +148,7 @@ Enemy::Enemy()
 	img_r = 48;
 	anime = 0;
 	anime_timer = 0;
-	
+
 	LoadDivGraph("resouce/boss1_64.png", 14, 14, 1, 64, 64, sub_boss1_img);
 	sub_boss1_anime = 0;
 	sub_boss1_anime_timer = 0;
@@ -163,8 +164,12 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	delete item;
-	delete[]bullet;
+	delete mine;
+	for (int i = 0; i < all_bullet_max; i++)
+	{
+		delete bullet[i];
+	}
+
 }
 #pragma endregion
 
@@ -385,7 +390,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //動き
-void Enemy::Move(Player& player, bool reflection_flag,Score& score)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 {
 	if (use_flag == true)
 	{
@@ -502,9 +507,9 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 
 							for (int i = 0; i < bullet_max; i++)
 							{
-								if (*bullet[i].GetBulletFlag() == false)
+								if (*bullet[i]->GetBulletFlag() == false)
 								{
-									bullet[i].Form(transform, player, x_speed, y_speed, enemy_type);
+									bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
 									damage_flag[i] = true;
 
 									break;
@@ -520,7 +525,7 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 							{
 								j = FlagSerch(bullet, 48);
 
-								bullet[j].OmniForm(transform, player, x_speed, y_speed, enemy_type, i, angl);
+								bullet[j]->OmniForm(transform, player, x_speed, y_speed, enemy_type, i, angl);
 								damage_flag[j] = true;
 							}
 						}
@@ -757,6 +762,16 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 					}
 				}
 			}
+
+			if (explosion_bommer_flag == true)
+			{
+				explosion_time--;
+
+				if (explosion_time == 0)
+				{
+					exising_flag = false;
+				}
+			}
 		}
 #pragma endregion
 
@@ -879,36 +894,67 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 				if (shot_time == -1)
 				{
 					//反射回数初期化
-					Refresh_ReflectionNum(4);
+					shot_time = def_shot_time;
 				}
 
 				//当たり判定
 				for (int i = 0; i < 4; i++)
 				{
-					if (*bullet[i].GetBulletFlag() == true)
+					if (*bullet[i]->GetBulletFlag() == true)
 					{
 
-						HitBox(*bullet[i].GetTransform(), bullet[i], i);
+						HitBox(*bullet[i]->GetTransform(), *bullet[i], i);
 					}
 				}
 
 				//弾の生成
 				if (shot_time == 0)
 				{
-					for (int i = 0; i < 4; i++)
+					int k[4] = { 0,0,0,0 };
+					bool end = false;
+					int i;
+					int length = 0;
+
+					for (i = 0; i < 4; i++)
 					{
-						if (*bullet[i].GetBulletFlag() == false)
+						int j = FlagSerch(bullet, all_bullet_max);
+
+						if (j != -1)
 						{
-							bullet[i].Form(transform, player, x_speed, y_speed, enemy_type);
-
-							damage_flag[i] = true;
-
-							//角度を90度ずつずらす
-							bullet[1].SetAngle(bullet[0].GetAngle() + (DX_PI_F / 2));
-							bullet[2].SetAngle(bullet[1].GetAngle() + (DX_PI_F / 2));
-							bullet[3].SetAngle(bullet[2].GetAngle() + (DX_PI_F / 2));
+							bullet[j]->Form(transform, player, x_speed, y_speed, enemy_type);
+							damage_flag[j] = true;
+							k[i] = j;
+						}
+						else
+						{
+							length = i;
+							break;
 						}
 					}
+
+					if (i == 4)
+					{
+						end = true;
+					}
+
+					if (end == true)
+					{
+						//角度を90度ずつずらす
+						bullet[k[1]]->SetAngle(bullet[k[0]]->GetAngle() + (DX_PI_F / 2));
+						bullet[k[2]]->SetAngle(bullet[k[1]]->GetAngle() + (DX_PI_F / 2));
+						bullet[k[3]]->SetAngle(bullet[k[2]]->GetAngle() + (DX_PI_F / 2));
+					}
+					else
+					{
+						for (int i = 0; i < length; i++)
+						{
+							int j = k[i];
+							bullet[j]->SetBulletFlag(false);
+
+							damage_flag[j] = false;
+						}
+					}
+
 					shot_time = -1;
 				}
 
@@ -930,16 +976,16 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
 		{
-			bullet[i].Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
+			bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
 		}
 
 		//当たり判定
 		for (int i = 0; i < all_bullet_max; i++)
 		{
 
-			if (*bullet[i].GetBulletFlag() == true && exising_flag == true)
+			if (*bullet[i]->GetBulletFlag() == true && exising_flag == true)
 			{
-				HitBox(*bullet[i].GetTransform(), i);
+				HitBox(*bullet[i]->GetTransform(), i,item);
 			}
 		}
 
@@ -993,7 +1039,6 @@ void Enemy::Move(Player& player, bool reflection_flag,Score& score)
 
 	}
 
-	item->Move(player,score);
 }
 #pragma endregion
 
@@ -1010,7 +1055,7 @@ void Enemy::Refresh_ReflectionNum(int max)
 	for (i = 0; i < max; i++)
 	{
 		//反射回数初期化
-		if (*bullet[i].GetBulletFlag() == true)
+		if (*bullet[i]->GetBulletFlag() == true)
 		{
 			i -= 1;
 			break;
@@ -1021,7 +1066,7 @@ void Enemy::Refresh_ReflectionNum(int max)
 	{
 		for (int j = 0; j < max; j++)
 		{
-			bullet[j].SetReflectionNum(0);
+			bullet[j]->SetReflectionNum(0);
 			shot_time = def_shot_time;
 		}
 	}
@@ -1077,9 +1122,9 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 			{
 				shot_time = -1;
 
-				if (*bullet[0].GetBulletFlag() == false)
+				if (*bullet[0]->GetBulletFlag() == false)
 				{
-					bullet[0].TuTorialForm(transform, x, y, x_speed, y_speed, stelsflag);
+					bullet[0]->TuTorialForm(transform, x, y, x_speed, y_speed, stelsflag);
 					damage_flag[0] = true;
 					shot_flag = false;
 				}
@@ -1095,18 +1140,18 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 	if (reflectionflag != 1)
 	{
 		//弾の動き
-		bullet[0].Move(enemy_type, false);
+		bullet[0]->Move(enemy_type, false);
 	}
 	else
 	{
-		bullet[0].TutorialMove(y);
+		bullet[0]->TutorialMove(y);
 	}
 
 	//当たり判定
 
-	if (*bullet[0].GetBulletFlag() == true && exising_flag == true)
+	if (*bullet[0]->GetBulletFlag() == true && exising_flag == true)
 	{
-		TutorialHitBox(*bullet[0].GetTransform(), 0);
+		TutorialHitBox(*bullet[0]->GetTransform(), 0);
 	}
 }
 #pragma endregion
@@ -1125,17 +1170,6 @@ void Enemy::ExplosionBommer(Enemy& enemy)
 				explosion_bommer_flag = true;
 				enemy_to_bommer = true;
 				enemy.SetEnemyFlag(false);
-			}
-		}
-
-		if (explosion_bommer_flag == true)
-		{
-			explosion_time--;
-
-			if (explosion_time == 0)
-			{
-				exising_flag = false;
-				item->Form(transform);
 			}
 		}
 	}
@@ -1171,19 +1205,19 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;
 
-			player.SetDamageFlag(10,1);
+			player.SetDamageFlag(10, 1);
 
 		}
 		else
 		{
-			player.SetDamageFlag(10,0);
+			player.SetDamageFlag(10, 0);
 		}
 	}
 }
 #pragma endregion
 
 #pragma region 当たり判定
-void Enemy::HP(Transform transform, EnemyBullet& bullet)
+void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 {
 	//当たり判定(複数)
 	if (*bullet.GetBulletFlag() == true && exising_flag == true)
@@ -1209,7 +1243,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet)
 }
 
 //当たり判定(単体)
-void Enemy::HitBox(Transform transform, int num)
+void Enemy::HitBox(Transform transform, int num, Item* item)
 {
 	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
 		this->transform.x + this->transform.xr > transform.x - transform.xr)
@@ -1220,7 +1254,7 @@ void Enemy::HitBox(Transform transform, int num)
 			if (damage_flag[num] == false)
 			{
 				hp--;
-				bullet[num].SetBulletFlag(false);
+				bullet[num]->SetBulletFlag(false);
 
 				if (hp <= 0)
 				{
@@ -1284,7 +1318,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 			if (damage_flag[num] == false)
 			{
 				hp--;
-				bullet[num].SetBulletFlag(false);
+				bullet[num]->SetBulletFlag(false);
 
 				if (hp <= 0)
 				{
@@ -1310,21 +1344,32 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 //描画
 void Enemy::Draw(int num)
 {
+	if (true)
+	{
 
+	}
 	if (exising_flag == true)
 	{
 		switch (enemy_type)
 		{
-		case 1:
+		case 1://雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img[anime], true);
 			break;
-		case 2:
-			DrawRotaGraphF((float)transform.x, (float)transform.y, 1.0, angle, bommer_img[bommer_anime], true, true);
+		case 2://ボマー
+			if (explosion_bommer_flag == false)
+			{
+				DrawRotaGraphF((float)transform.x, (float)transform.y, 1.0, angle, bommer_img[bommer_anime], true, true);
+			}
+			else
+			{
+				DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
+					(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 0, 0), true);
+			}
 			break;
-		case 3:
+		case 3://ブーメラン
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boomerang_img[boomerang_anime], true);
 			break;
-		case 10:
+		case 10://中ボス雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
 			break;
 		default:
@@ -1337,19 +1382,17 @@ void Enemy::Draw(int num)
 
 	for (int i = 0; i < all_bullet_max; i++)
 	{
-		bullet[i].Draw(enemy_type);
+		bullet[i]->Draw(enemy_type);
 		//DrawFormatString(0, 300 + num + (i * 20), GetColor(255, 255, 255), "damage_flag[%d]:%d", i, damage_flag[i]);
 
-		if (bullet[i].GetReflectionNum() >= 3)
+		if (bullet[i]->GetReflectionNum() >= 3)
 		{
-			bullet[i].SetBulletFlag(false);
-			bullet[i].SetReflectionNum(0);
+			bullet[i]->SetBulletFlag(false);
+			bullet[i]->SetReflectionNum(0);
 		}
 	}
 
-	DrawBox(0 + 32, 0 + 32, 960 - 32, 960 - 32, GetColor(255, 255, 255), false);
 
-	item->Draw();
 
 	mine->Draw();
 }
@@ -1358,6 +1401,159 @@ void Enemy::Draw(int num)
 #pragma region 生成
 //ファイルからデータ読みこみ
 void Enemy::form(FILE* fp)
+{
+	delete bullet[0];
+
+	int a = 0;
+	int b = 0;
+	int c = 0;
+	if (fscanf_s(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf,%d,%d,%lf,%lf,%lf,%lf,%lf,%lf,%d,%d,%d,%d,%d,%d"
+		, &a, &b, &c, &enemy_type, &appear_time, &shot_time, &explosion_time, &hp, &transform.xr, &transform.yr, &x_speed, &y_speed, &end_frame, &start_x, &start_y, &end_x, &end_y, &move_time, &move_end_frame,
+		&move_end_x[0], &move_end_y[0], &move_end_x[1], &move_end_y[1], &move_end_x[2], &move_end_y[2], &easing_num,
+		&mime_initialize.transform_xr, &mime_initialize.transform_yr, &mime_initialize.explosion_r, &mime_initialize.def_explosion_time, &mime_initialize.def_bombs_time)
+		!= EOF)
+	{
+		use_flag = a;
+		action_flag = b;
+		shot_action_flag = c;
+		mine->initialize(mime_initialize);
+	}
+	else
+	{
+		use_flag = false;
+		enemy_type = 0;
+		transform.xr = 0;
+		transform.yr = 0;
+		hp = 0;
+		x_speed = 0;
+		y_speed = 0;
+		action_flag = false;
+		shot_time = 0;
+		end_frame = 0;
+		start_x = 0;
+		end_x = 0;
+		end_y = 0;
+		appear_time = -1;
+		move_time = 0;
+		move_end_frame = 0;
+		move_end_x[0] = 0;
+		move_end_y[0] = 0;
+		move_end_x[1] = 0;
+		move_end_y[1] = 0;
+		move_end_x[2] = 0;
+		move_end_y[2] = 0;
+		easing_num = 0;
+		shot_action_flag = false;
+		mime_initialize.transform_yr = 0;
+		mime_initialize.transform_xr = 0;
+		mime_initialize.def_bombs_time = 0;
+		mime_initialize.def_explosion_time = 0;
+		mime_initialize.explosion_r = 0;
+
+	}
+
+	move_start_x[0] = end_x;
+	move_start_y[0] = end_y;
+	transform.x = start_x;
+	transform.y = start_y;
+	exising_flag = false;
+	damage_flag[0] = false;
+	damage_flag[1] = false;
+	damage_flag[2] = false;
+	fast_move_flag = false;
+
+	move_flag = false;
+	frame = 0;
+	move_num = 0;
+	move_frame = 0;
+
+	switch (easing_num)
+	{
+	case 2:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_end_x[1] = move_start_x[0];
+		move_end_y[1] = move_start_y[0];
+		break;
+	case 3:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_start_x[2] = move_end_x[1];
+		move_start_y[2] = move_end_y[1];
+		move_end_x[2] = move_start_x[0];
+		move_end_y[2] = move_start_y[0];
+		break;
+	case 4:
+		move_start_x[1] = move_end_x[0];
+		move_start_y[1] = move_end_y[0];
+		move_start_x[2] = move_end_x[1];
+		move_start_y[2] = move_end_y[1];
+		move_start_x[3] = move_end_x[2];
+		move_start_y[3] = move_end_y[2];
+		move_end_x[3] = move_start_x[0];
+		move_end_y[3] = move_start_y[0];
+		break;
+
+	}
+
+	def_move_time = move_time;
+	def_shot_time = shot_time;
+
+	angle = 0.0f;
+	vertex.top_left_x = 0;
+	vertex.top_left_y = 0;
+	vertex.down_left_x = 0;
+	vertex.down_left_y = 0;
+	vertex.top_right_x = 0;
+	vertex.top_right_y = 0;
+	vertex.down_right_x = 0;
+	vertex.down_right_y = 0;
+	explosion_bommer_flag = false;
+	def_explosion_time = explosion_time;
+
+	switch (enemy_type)
+	{
+	case 1:
+		all_bullet_max = 3;
+		break;
+	case 2:
+		all_bullet_max = 1;
+		break;
+	case 3:
+		all_bullet_max = 3;
+	case 4:
+		all_bullet_max = 48;
+		break;
+	case 10:
+		all_bullet_max = 12;
+		break;
+	}
+
+	for (int i = 0; i < all_bullet_max; i++)
+	{
+		bullet[i] = new EnemyBullet;
+	}
+}
+
+//生成メイン
+void EnemyForm(const char* file_name, int max, Enemy** enemy)
+{
+
+	FILE* fp;
+	fopen_s(&fp, file_name, "r");
+
+	if (fp != NULL)
+	{
+		for (int i = 0; i < max; i++)
+		{
+			enemy[i]->form(fp);
+		}
+		fclose(fp);
+	}
+}
+
+//ファイルからデータ読みこみ
+void Enemy::Tutorialform(FILE* fp)
 {
 	int a = 0;
 	int b = 0;
@@ -1468,7 +1664,7 @@ void Enemy::form(FILE* fp)
 }
 
 //生成メイン
-void EnemyForm(const char* file_name, int max, Enemy* enemy)
+void TutorialEnemyForm(const char* file_name, int max, Enemy** enemy)
 {
 
 	FILE* fp;
@@ -1478,7 +1674,7 @@ void EnemyForm(const char* file_name, int max, Enemy* enemy)
 	{
 		for (int i = 0; i < max; i++)
 		{
-			enemy[i].form(fp);
+			enemy[i]->Tutorialform(fp);
 		}
 		fclose(fp);
 	}
@@ -1675,7 +1871,7 @@ void Enemy::YMove(int y_speed, bool up_flag)
 #pragma region ゲッター
 Transform* Enemy::GetBulletTransform(int num)
 {
-	return bullet[num].GetTransform();
+	return bullet[num]->GetTransform();
 }
 
 Transform Enemy::GetTransform()
@@ -1690,7 +1886,7 @@ int Enemy::GetShotTime()
 
 bool Enemy::GetBulletFlag(int i)
 {
-	return *bullet[i].GetBulletFlag();
+	return *bullet[i]->GetBulletFlag();
 }
 
 bool Enemy::GetEnemyFlag()
@@ -1705,7 +1901,12 @@ int Enemy::GetAppearTime()
 
 EnemyBullet* Enemy::GetEnmyBullet(int i)
 {
-	return &bullet[i];
+	return bullet[i];
+}
+
+int Enemy::GetBulletMax()
+{
+	return all_bullet_max;
 }
 #pragma endregion
 
@@ -1715,7 +1916,7 @@ void Enemy::SetReflectionNum()
 {
 	for (int i = 0; i < all_bullet_max; i++)
 	{
-		bullet[i].SetReflectionNum(0);
+		bullet[i]->SetReflectionNum(0);
 	}
 }
 void Enemy::SetShotTime(int shot_time)
@@ -1729,3 +1930,56 @@ void Enemy::SetEnemyFlag(bool flag)
 }
 
 #pragma endregion
+
+int GetEnemyMax(int& wave_num)
+{
+	switch (wave_num)
+	{
+	case 1:
+		return 1;
+	case 2:
+		return 2;
+	case 3:
+		return 4;
+	case 4:
+		return 2;
+	case 5:
+		return 4;
+	case 6:
+		return 1;
+	case 7:
+		return 3;
+	case 8:
+		return 5;
+	case 9:
+		return 5;
+	case 10:
+		return 3;
+	case 11:
+		return 2;
+	case 12:
+		return 4;
+	case 13:
+		return 4;
+	case 14:
+		return 5;
+	case 15:
+		return 4;
+	case 16:
+		return 4;
+	case 17:
+		return 1;
+	case 18:
+		return 5;
+	case 19:
+		return 4;
+	case 20:
+		return 4;
+	}
+	return -1;
+}
+
+int FlagSerch(EnemyBullet bullet[], int max)
+{
+	return 0;
+}

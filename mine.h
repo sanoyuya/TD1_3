@@ -27,6 +27,7 @@ public:
 	//セッター
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);
+	void SetExplosionTime(int num);
 
 private:
 	int rand;//ランダム

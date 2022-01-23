@@ -11,16 +11,17 @@ public:
 	Enemy();
 	~Enemy();
 	void form(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score);
+	void Tutorialform(FILE* fp);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
-	void HitBox(Transform transform,int num);
+	void HitBox(Transform transform,int num, Item* item);
 	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//ìñÇΩÇËîªíË
 	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Enemy& enemy);
 	void PlaterToEnemyHitBox(Player& player);
 	void ExplosionBommer(Enemy& enemy);
-	void HP(Transform transform, EnemyBullet& bullet);
+	void HP(Transform transform, EnemyBullet& bullet, Item* item);
 	void XMove(int x_speed, bool right_flag);
 	void YMove(int y_speed, bool up_flag);
 	void Refresh_ReflectionNum(int max);
@@ -34,6 +35,7 @@ public:
 	Transform* GetBulletTransform(int num);
 	Transform GetTransform();
 	int GetShotTime();
+	int GetBulletMax();
 
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);
@@ -99,8 +101,8 @@ private:
 	int anime_timer;
 	int anime;
 
-	EnemyBullet* bullet; 
-	Item* item;
+	EnemyBullet* bullet[48]; 
+	//Item* item;
 	Mine* mine;
 	
 
@@ -113,7 +115,7 @@ private:
 	int sub_boss1_img[14];
 	int sub_boss1_anime;
 	int sub_boss1_anime_timer;
-
+	int sub_boss_buiiet_max;
 	//ÉuÅ[ÉÅÉâÉì
 	int boomerang_img[10];
 	int boomerang_anime_timer;
@@ -123,9 +125,10 @@ private:
 
 };
 
-void EnemyForm(const char* file_name, int max, Enemy* enemy);
-
+void EnemyForm(const char* file_name, int max, Enemy** enemy);
+void TutorialEnemyForm(const char* file_name, int max, Enemy** enemy);
 double easeInSine(double x);
 
 int FlagSerch(bool flag[], int max);
-int FlagSerch(EnemyBullet bullet[], int max);
+int FlagSerch(EnemyBullet** bullet, int max);
+int GetEnemyMax(int& wave_num);

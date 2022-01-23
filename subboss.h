@@ -7,7 +7,7 @@ public:
 	void form(FILE* fp);
 	void Move(Player& player, bool reflection_flag);//“®‚«
 	void Draw();//•`‰æ
-	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//“–‚½‚è”»’è
+	void HitBox(Transform& transform, EnemyBullet* enemyBullet, int i);//“–‚½‚è”»’è
 	void HP(Transform& transform, EnemyBullet& enemyBullet);//“–‚½‚è”»’è
 	void Refresh_ReflectionNum(int max);//”½Ë‰ñ”•ÏX
 	void XMove(int x_speed,bool right_flag);
@@ -21,6 +21,10 @@ public:
 	bool GetEnmyBulletFlag(int i);
 
 	bool GetSubBossFlag();
+	int GetAppearTime();
+	int GetBulletMax();
+
+	void SetMineExplosion();
 
 	SubBoss();
 	~SubBoss();
@@ -69,7 +73,7 @@ private:
 
 
 
-	EnemyBullet* bullet;
+	EnemyBullet* bullet[12];
 	Mine* mine;
 	MimeInitialize mime_initialize;
 };
