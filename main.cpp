@@ -692,7 +692,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				sub_boss->Draw();
 			}
 
-
 			player->D();
 			DrawGraph(0, 0, Layout, true);
 			DrawGraph(958, 128, player_img[maba2], true);
