@@ -12,6 +12,36 @@ class Item;
 
 typedef class Player
 {
+public:
+	Player();
+	//void Rset();
+	void PlayerPadMove(char* keys, char* oldkeys);
+	void HP(Transform transform, EnemyBullet& bullet);
+	void HPplus();
+	void Draw();
+	void D();
+	int GetX();
+	int GetY();
+	int GetR();
+	int Getstelsflag();
+	int Getreflectionflag();
+	int GetReflectionR();
+	int GetDamageFlag(int num);
+	int GetEnemyDamage(int num);
+	int GetHp();
+	int Result();
+	int Getnohitflag();
+	int Getscoreitem();
+
+	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag);
+	void TutorialDraw();
+	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag);
+	void ItemFlagAdd(int num, Score& score);
+	void HpSub(int num);
+	void SetDamageFlag(int i, int num);
+
+	void EasingMove(double end_x, double end_y, int end_frame);
+	void SetEasingFlag(int num);
 private:
 	int X;
 	int Y;
@@ -81,36 +111,10 @@ private:
 	Item* tutorial_item;
 
 	int shot_flag;
-	int damage_flag[11];
+	int damage_flag[10];
+
+	int enemy_damage[32];
 
 	int item_1_img;
-public:
-	Player();
-	//void Rset();
-	void PlayerPadMove(char* keys, char* oldkeys);
-	void HP(Transform transform, EnemyBullet& bullet);
-	void HPplus();
-	void Draw();
-	void D();
-	int GetX();
-	int GetY();
-	int GetR();
-	int Getstelsflag();
-	int Getreflectionflag();
-	int GetReflectionR();
-	int GetDamageFlag(int num);
-	int GetHp();
-	int Result();
-	int Getnohitflag();
-	int Getscoreitem();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy,int &sceneflag, int& wave_num,int &pushflag);
-	void TutorialDraw();
-	void TuTorialHP(Transform transform, EnemyBullet& bullet,int& damage_flag);
-	void ItemFlagAdd(int num, Score& score);
-	void HpSub(int num);
-	void SetDamageFlag(int i,int num);
-
-	void EasingMove(double end_x,double end_y,int end_frame);
-	void SetEasingFlag(int num);
 }Player;

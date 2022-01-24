@@ -76,6 +76,7 @@ Player::Player() {//コンストラクタの定義
 	item_1_img = LoadGraph("resouce/item1big.png");
 
 	move_flag = 1;
+	enemy_damage[0] = 0;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
@@ -245,6 +246,11 @@ int Player::GetReflectionR()
 int Player::GetDamageFlag(int num)
 {
 	return damage_flag[num];
+}
+
+int Player::GetEnemyDamage(int num)
+{
+	return enemy_damage[num];
 }
 
 void Player::HpSub(int num)

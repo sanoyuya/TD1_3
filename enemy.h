@@ -5,6 +5,14 @@
 #include"score.h"
 class Mine;
 
+void EnemyForm(const char* file_name, int max, Enemy** enemy);
+void TutorialEnemyForm(const char* file_name, int max, Enemy** enemy);
+double easeInSine(double x);
+
+int FlagSerch(bool flag[], int max);
+int FlagSerch(EnemyBullet** bullet, int max);
+int GetEnemyMax(int& wave_num);
+
 class Enemy
 {
 public:
@@ -19,7 +27,7 @@ public:
 	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//“–‚½‚è”»’è
 	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Enemy& enemy);
-	void PlaterToEnemyHitBox(Player& player);
+	void PlaterToEnemyHitBox(Player& player, int enemy_num);
 	void ExplosionBommer(Enemy& enemy);
 	void HP(Transform transform, EnemyBullet& bullet, Item* item);
 	void XMove(int x_speed, bool right_flag);
@@ -125,10 +133,3 @@ private:
 
 };
 
-void EnemyForm(const char* file_name, int max, Enemy** enemy);
-void TutorialEnemyForm(const char* file_name, int max, Enemy** enemy);
-double easeInSine(double x);
-
-int FlagSerch(bool flag[], int max);
-int FlagSerch(EnemyBullet** bullet, int max);
-int GetEnemyMax(int& wave_num);
