@@ -52,7 +52,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int maba = 0;
 	int maba2 = 0;
 	// ゲームループで使う変数の宣言
-	const int ENEMY_MAX = 64;
+	const int ENEMY_MAX = 5;
 	int sceneflag = 0;
 	int pushflagA = 0;
 	int stageflag = 0;
@@ -66,12 +66,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	bool reflection_flag = true;
 
-	Player* player = nullptr;// = new Player();
-	Enemy* enemy = nullptr;// = new Enemy[ENEMY_MAX];
-	SubBoss* sub_boss = nullptr;// = new SubBoss;
+	Player* player = new Player();
+	Enemy* enemy = new Enemy[ENEMY_MAX];
+	SubBoss* sub_boss = new SubBoss;
 	Score* score = new Score;
 
-	int wave_num = 0;
+	int wave_num = 6;
 	bool game_set = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -129,13 +129,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
 							sceneflag = 10;
 							player = new Player();
-							enemy = new Enemy[ENEMY_MAX];
-							sub_boss = new SubBoss();
 						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 							sceneflag = 10;
 							player = new Player();
-							enemy = new Enemy[ENEMY_MAX];
-							sub_boss = new SubBoss();
 						}
 					}
 				}
@@ -280,10 +276,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 #pragma endregion
 
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						enemy[i].Move(*player, reflection_flag, *score);
-					}
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				enemy[i].Move(*player, reflection_flag,*score);
+			}
 
 					if (wave_num == 10 || wave_num == 11 || wave_num == 20 || wave_num == 21)
 					{
@@ -291,29 +287,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 #pragma region 体力減少
 
-					for (int i = 0; i < ENEMY_MAX; i++)
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				for (int j = 0; j < 48; j++)
+				{
+					player->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
+					sub_boss->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
+					enemy[i].PlaterToEnemyHitBox(*player);
+					for (int k = 0; k < ENEMY_MAX; k++)
 					{
-						if (enemy[i].GetEnemyFlag() == true)
+						if (i != k)
 						{
-							for (int j = 0; j < 48; j++)
-							{
-								player->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
-								sub_boss->HP(*enemy[i].GetBulletTransform(j), *enemy[i].GetEnmyBullet(j));
-								enemy[i].PlaterToEnemyHitBox(*player);
-								for (int k = 0; k < ENEMY_MAX; k++)
-								{
-									if (i != k)
-									{
-										enemy[i].HP(*enemy[k].GetBulletTransform(j), *enemy[k].GetEnmyBullet(j));
-
-
-										enemy[i].ExplosionBommer(enemy[k]);
-									}
-								}
-							}
+							enemy[i].HP(*enemy[k].GetBulletTransform(j), *enemy[k].GetEnmyBullet(j));
+							
+							
+							enemy[i].ExplosionBommer(enemy[k]);
 						}
-						
 					}
+				}
+			}
 
 					for (int i = 0; i < 4; i++)
 					{
@@ -338,12 +330,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 					}
 
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
-							enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
-							|| sub_boss->GetSubBossFlag() == true || sub_boss->GetEnmyBulletFlag(0) == true || sub_boss->GetEnmyBulletFlag(1) == true || sub_boss->GetEnmyBulletFlag(2) == true || sub_boss->GetEnmyBulletFlag(3) == true)
-						{
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+				if (enemy[i].GetEnemyFlag() == true || enemy[i].GetAppearTime() != -1 ||
+					enemy[i].GetBulletFlag(0) == true || enemy[i].GetBulletFlag(1) == true || enemy[i].GetBulletFlag(2) == true
+					|| sub_boss->GetSubBossFlag() == true || sub_boss->GetEnmyBulletFlag(0) == true || sub_boss->GetEnmyBulletFlag(1) == true || sub_boss->GetEnmyBulletFlag(2) == true || sub_boss->GetEnmyBulletFlag(3) == true)
+				{
 
 							i--;
 							break;
@@ -515,11 +507,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				break;
 
-			case 10:
-				//チュートリアル
-				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption);
-				score->IC();
-				break;
+		case 10:
+			//チュートリアル
+			player->TutorialMove(keys, oldkeys, enemy, sceneflag,wave_num);
+			score->IC();
+			break;
 		}
 		// 描画処理
 		switch (sceneflag) {//シーン管理
@@ -619,13 +611,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					maba2 = 0;
 				}
 
-				player->D();//itemback
-				enemy[0].Draw(0);
-				DrawGraph(0, 0, Layout, true);
-				DrawGraph(958, 128, player_img[maba2], true);
-				score->Draw();
-				player->TutorialDraw();
-
+			player->D();//itemback
+			enemy[0].Draw(0);
+			DrawGraph(0, 0, Layout, true);
+			DrawGraph(958, 128, player_img[maba2], true);
+			score->Draw();
+			player->TutorialDraw();
+		
 
 				break;
 				delete player;
