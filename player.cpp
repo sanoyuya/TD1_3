@@ -19,7 +19,7 @@ Player::Player() {//コンストラクタの定義
 	COOLTIMEtimer = 0;
 	itemflag = 0; scoreitem = 0;
 	Cgh = LoadGraph("resouce/enban.png");
-	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 25.0;
+	Moveflag1 = 0; Moveflag2 = 0; Moveflag2_2 = 0; Moveflag3 = 0; Moveflag4 = 0; Moveflag5 = 0; Move2time = 0; rightflag = 0; leftflag = 0;  Bflag = 0;  Aflag = 0;  CP = 0.0;
 	txtflag = 1;
 	pushflag = 1;
 	txt1 = LoadGraph("resouce/text_1.png"); txt2 = LoadGraph("resouce/text_2.png"); txt3 = LoadGraph("resouce/text_3.png");
@@ -498,7 +498,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 	if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
 		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 			CP += 1;
-			if (CP >= 125) {
+			if (CP >= 100) {
 				Moveflag1 = 0;
 
 				if (txtflag == 0)
@@ -846,15 +846,15 @@ void Player::D() {
 	if (itemflag == 1) {
 		DrawExtendGraph(1000, 790, 1300, 900, itemback, true);
 	}if (itemflag == 2) {
-		DrawExtendGraph(800, 750, 1400, 900, itemback, true);
+		DrawExtendGraph(810, 750, 1400, 900, itemback, true);
 	}if (itemflag == 3) {
-		DrawExtendGraph(800, 702, 1400, 900, itemback, true);
+		DrawExtendGraph(810, 702, 1400, 900, itemback, true);
 	}if (itemflag == 4) {
-		DrawExtendGraph(800, 628, 1400, 1000, itemback, true);
+		DrawExtendGraph(810, 628, 1400, 1000, itemback, true);
 	}if (itemflag == 5) {
-		DrawExtendGraph(800, 589, 1400, 1000, itemback, true);
+		DrawExtendGraph(810, 589, 1400, 1000, itemback, true);
 	}if (itemflag == 6) {
-		DrawExtendGraph(800, 500, 1400, 1100, itemback, true);
+		DrawExtendGraph(810, 500, 1400, 1100, itemback, true);
 	}
 	SetDrawBright(255, 255, 255);
 }
@@ -862,8 +862,8 @@ void Player::D() {
 #pragma region チュートリアル
 void Player::TutorialDraw() {
 
-	float CHP = hp * 5.0f + 25.0f;
-	float CMP = stelscooltimer * 0.4f + 25.0f;
+	float CHP = hp * 5.0f;
+	float CMP = stelscooltimer * 0.4f;
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
 	DrawGraph(1088, 680, bigitem, true);
@@ -901,17 +901,17 @@ void Player::TutorialDraw() {
 		SetDrawBright(255, 25, 0);
 	}
 
-	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
 
 	SetDrawBright(255, 255, 255);
 
 	if (Moveflag1 == 1) {
-		DrawCircleGauge(480, 240, CP, Cgh, 25.0);
+		DrawCircleGauge(480, 240, CP, Cgh, 0.0);
 	}
 
 	//ステルスゲージ
 	SetDrawBright(0x00, 0xFF, 0xFF);
-	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
 	SetDrawBright(255, 255, 255);
 
 	switch (txtflag) {
@@ -929,7 +929,7 @@ void Player::TutorialDraw() {
 		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(153, 229, 80);
-		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
 		SetDrawBright(255, 255, 255);
 
 		DrawGraph(47, 719, txt3, true);//ここに体力ゲージがあるの(わ)
@@ -940,7 +940,7 @@ void Player::TutorialDraw() {
 		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(153, 229, 80);
-		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
 		SetDrawBright(255, 255, 255);
 
 		DrawGraph(47, 719, txt4, true);//
@@ -959,7 +959,7 @@ void Player::TutorialDraw() {
 		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(0x00, 0xFF, 0xFF);
-		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
 		SetDrawBright(255, 255, 255);
 
 		DrawGraph(47, 719, txt8, true);
@@ -969,7 +969,7 @@ void Player::TutorialDraw() {
 		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(0x00, 0xFF, 0xFF);
-		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
 		SetDrawBright(255, 255, 255);
 
 		DrawGraph(47, 719, txt9, true);
@@ -1012,7 +1012,7 @@ void Player::TutorialDraw() {
 		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(0x00, 0xFF, 0xFF);
-		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
 		SetDrawBright(255, 255, 255);
 	}
 

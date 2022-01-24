@@ -700,15 +700,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			score->Draw();
 
 			if (Pauseflag == 1) {
-				DrawBox(320, 220, 640, 760, GetColor(255, 255, 255), false);
+				DrawBox(220, 120, 740, 860, GetColor(255, 255, 255), false);
 				if (Pause == 0) {
-					DrawBox(380, 280, 580, 340, GetColor(255, 255, 255), false);
+					DrawBox(280, 180, 680, 340, GetColor(255, 255, 255), false);
 					DrawFormatString(400, 300, GetColor(255, 255, 255), "ñﬂÇÈ");
 				}if (Pause == 1) {
-					DrawBox(380, 460, 580, 520, GetColor(255, 255, 255), false);
+					DrawBox(280, 360, 680, 520, GetColor(255, 255, 255), false);
 					DrawFormatString(400, 480, GetColor(255, 255, 255), "çƒíßêÌ");
 				}if (Pause == 2) {
-					DrawBox(380, 640, 580, 700, GetColor(255, 255, 255), false);
+					DrawBox(280, 640, 680, 800, GetColor(255, 255, 255), false);
 					DrawFormatString(400, 660, GetColor(255, 255, 255), "É^ÉCÉgÉã");
 				}
 			}
