@@ -1,15 +1,21 @@
 #include "item.h"
 #include"DxLib.h"
+#include"enemy.h"
 
 Item::Item()
 {
-	appear_flag = false;
-	exising_flag = false;
-	transform = { 0 };
-	transform.xr = 32;
-	transform.yr = 32;
+	for (int i = 0; i < 6; i++)
+	{
+	appear_flag[i] = false;
+	exising_flag[i] = false;
+	transform[i] = { 0 };
+	transform[i].xr = 32;
+	transform[i].yr = 32;
+	time[i] = 500;
+	}
 
-	time = 500;
+
+
 
 	img = LoadGraph("resouce/ReflectionItem.png");
 	img_r = 32;
@@ -21,15 +27,19 @@ Item::~Item()
 
 void Item::Form(Transform transform)
 {
-	int rand = GetRand(100) + 1;
-
-	if (rand <= 25)
+	int i = FlagSerch(exising_flag,6);
+	if (i != -1)
 	{
-		exising_flag = true;
+		int rand = GetRand(100) + 1;
 
-		this->transform.x = transform.x;
-		this->transform.y = transform.y;
+		if (rand <= 25)
+		{
+			exising_flag[i] = true;
 
+			this->transform[i].x = transform.x;
+			this->transform[i].y = transform.y;
+
+		}
 	}
 }
 
@@ -37,13 +47,13 @@ void Item::TutorialForm(Transform transform, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		exising_flag = true;
+		exising_flag[0] = true;
 	}
 
-	if (exising_flag == true)
+	if (exising_flag[0] == true)
 	{
-		this->transform.x = transform.x;
-		this->transform.y = transform.y;
+		this->transform[0].x = transform.x;
+		this->transform[0].y = transform.y;
 	}
 }
 
@@ -51,11 +61,11 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		if (r * (int)transform.xr >
-			((x - (int)transform.x) * (x - (int)transform.x)) +
-			((y - (int)transform.y) * (y - (int)transform.y)))
+		if (r * (int)transform[0].xr >
+			((x - (int)transform[0].x) * (x - (int)transform[0].x)) +
+			((y - (int)transform[0].y) * (y - (int)transform[0].y)))
 		{
-			exising_flag = false;
+			exising_flag[0] = false;
 			return true;
 		}
 	}
@@ -65,32 +75,38 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 
 void Item::Move(Player& player, Score& score)
 {
-	if (exising_flag == true)
+	for (int i = 0; i < 6; i++)
 	{
-		if (player.GetR() * 64 >
-			((player.GetX() - (int)transform.x) * (player.GetX() - (int)transform.x)) +
-			((player.GetY() - (int)transform.y) * (player.GetY() - (int)transform.y)))
+		if (exising_flag[i] == true)
 		{
-			exising_flag = false;
-			player.ItemFlagAdd(1,score);
-		}
+			if (player.GetR() * 64 >
+				((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
+				((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+			{
+				exising_flag[i] = false;
+				player.ItemFlagAdd(1, score);
+			}
 
-		if (time > 0)
-		{
-			time--;
-		}
-		if (time <= 0)
-		{
-			exising_flag = false;
-			time = 500;
+			if (time[i] > 0)
+			{
+				time[i]--;
+			}
+			if (time[i] <= 0)
+			{
+				exising_flag[i] = false;
+				time[i] = 500;
+			}
 		}
 	}
 }
 
 void Item::Draw()
 {
-	if (exising_flag == true)
+	for (int i = 0; i < 6; i++)
 	{
-		DrawGraph((int)transform.x - img_r, (int)transform.y - img_r, img, true);
+		if (exising_flag[i] == true)
+		{
+			DrawGraph((int)transform[i].x - img_r, (int)transform[i].y - img_r, img, true);
+		}
 	}
 }

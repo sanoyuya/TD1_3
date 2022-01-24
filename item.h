@@ -15,13 +15,13 @@ public:
 
 private:
 
-	Transform transform;
+	Transform transform[6];
 	
-	bool appear_flag;
-	bool exising_flag;
+	bool appear_flag[6];
+	bool exising_flag[6];
 	int img;
 	int img_r;
 
-	int time;
+	int time[6];
 };
 

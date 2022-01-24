@@ -8,12 +8,12 @@
 //コントラスタ
 Mine::Mine()
 {
-		rand = 0;
-		damage_flag = false;
-		explosion_r = 0;
-		mine_flag = false;
-		def_explosion_time = 0;
-		def_bombs_time = 0;
+	rand = 0;
+	damage_flag = false;
+	explosion_r = 0;
+	mine_flag = false;
+	def_explosion_time = 0;
+	def_bombs_time = 0;
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -44,7 +44,7 @@ Mine::~Mine()
 //ランダムがrand_divより下だったら
 //空いているラベルを探して座標とフラグを代入する
 
-void Mine::form(Transform transForm,int&frame)
+void Mine::form(Transform transForm, int& frame)
 {
 	if (mine_flag == true)
 	{
@@ -172,7 +172,7 @@ void Mine::PlayerHitBox(Player& player)
 				transform[i].x + transform[i].xr >(double)player.GetX() - (double)player.GetR())
 			{
 				if (transform[i].y - transform[i].yr < (double)player.GetY() + (double)player.GetR() &&
-					transform[i].y + transform[i].yr > (double)player.GetY() - (double)player.GetR())
+					transform[i].y + transform[i].yr >(double)player.GetY() - (double)player.GetR())
 				{
 					explosion_flag[i] = true;
 				}
@@ -182,25 +182,25 @@ void Mine::PlayerHitBox(Player& player)
 		if (explosion_flag[i] == true)
 		{
 			if (transform[i].x - explosion_r < (double)player.GetX() + (double)player.GetR() &&
-				transform[i].x + explosion_r > (double)player.GetX() - (double)player.GetR())
+				transform[i].x + explosion_r >(double)player.GetX() - (double)player.GetR())
 			{
 				if (transform[i].y - explosion_r < (double)player.GetY() + (double)player.GetR() &&
-					transform[i].y + explosion_r > (double)player.GetY() - (double)player.GetR())
+					transform[i].y + explosion_r >(double)player.GetY() - (double)player.GetR())
 				{
 					if (player.GetDamageFlag(i) == 0)
 					{
 						player.HpSub(1);
 					}
-					player.SetDamageFlag(i,1);
+					player.SetDamageFlag(i, 1);
 				}
 				else
 				{
-					player.SetDamageFlag(i,0);
+					player.SetDamageFlag(i, 0);
 				}
 			}
 			else
 			{
-				player.SetDamageFlag(i,0);
+				player.SetDamageFlag(i, 0);
 			}
 		}
 	}
@@ -261,11 +261,11 @@ void Mine::Draw()
 	{
 		if (exising_flag[i] == true && explosion_flag[i] == true)
 		{
-			DrawBox((int)transform[i].x - transform[i].xr, (int)transform[i].y - transform[i].yr,(int)transform[i].x + transform[i].xr, (int)transform[i].y + transform[i].yr, GetColor(255, 255, 255), true);
+			DrawBox((int)transform[i].x - transform[i].xr, (int)transform[i].y - transform[i].yr, (int)transform[i].x + transform[i].xr, (int)transform[i].y + transform[i].yr, GetColor(255, 255, 255), true);
 		}
 		else if (exising_flag[i] == true)
 		{
-			DrawGraph(transform[i].x - mine_r, transform[i].y - mine_r, mine_img[mine_anime[i]], true);
+			DrawGraph((int)transform[i].x - mine_r, (int)transform[i].y - mine_r, mine_img[mine_anime[i]], true);
 		}
 	}
 
@@ -302,5 +302,16 @@ void Mine::SetMineFlag(bool flag)
 void Mine::SetRand(int end_frame)
 {
 	rand = GetRand(end_frame);
+}
+void Mine::SetExplosionTime(int num)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (exising_flag[i] == true)
+		{
+			explosion_time[i] = num;
+		}
+	}
+
 }
 #pragma endregion
