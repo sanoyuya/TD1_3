@@ -583,7 +583,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}if (Pause == 2) {//ƒ^ƒCƒgƒ‹‚É–ß‚é
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 0;
 						delete player;
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
@@ -594,8 +593,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						game_set = false;
 						wave_num = 1;
 						delete item;
+						sceneflag = 0;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 0;
+						pushflagA = 1;
 						delete player;
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
@@ -606,6 +606,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						Pauseflag = 0;
 						wave_num = 1;
 						delete item;
+						sceneflag = 0;
 					}
 				}
 #pragma endregion
