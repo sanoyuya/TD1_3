@@ -188,7 +188,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (wave_up_flag == true)
 						{
 							wave_num++;
-							if (wave_num > 5 || wave_num > 10 || wave_num > 15 || wave_num > 20 || wave_num > 25 || wave_num > 30) {
+							if (wave_num % 5 == 1) {
 								player->HPplus();
 							}
 							wave_up_flag = false;
