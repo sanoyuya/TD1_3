@@ -87,6 +87,7 @@ public:
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys);
 	void HP(Transform transform, EnemyBullet& bullet);
+	void HPplus();
 	void Draw();
 	void D();
 	int GetX();
@@ -104,7 +105,6 @@ public:
 	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy,int &sceneflag, int& wave_num,int &pushflag);
 	void TutorialDraw();
 	void TuTorialHP(Transform transform, EnemyBullet& bullet,int& damage_flag);
-
 	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
 	void SetDamageFlag(int i,int num);

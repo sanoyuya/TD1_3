@@ -197,6 +197,10 @@ void Player::HP(Transform transform, EnemyBullet& bullet) {
 	}
 }
 
+void Player::HPplus() {
+	hp += 3;
+}
+
 void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag) {
 
 	if (*bullet.GetBulletFlag() == true)
