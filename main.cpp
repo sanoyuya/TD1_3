@@ -48,8 +48,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// 画像などのリソースデータの変数宣言と読み込み
 	int Layout = LoadGraph("resouce/Layout.png");
 	int PSgh = LoadGraph("resouce/pauseselect.png");
-	int PSgh128= LoadGraph("resouce/pauseselect128.png");
-	int PSghreturn= LoadGraph("resouce/pauseselectreturn.png");
+	int PSgh128 = LoadGraph("resouce/pauseselect128.png");
+	int PSghreturn = LoadGraph("resouce/pauseselectreturn.png");
 	int PSghrestart = LoadGraph("resouce/pauseselectrestart.png");
 	int PSghtitle = LoadGraph("resouce/pauseselecttitle.png");
 	int player_img[4];
@@ -188,6 +188,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (wave_up_flag == true)
 						{
 							wave_num++;
+							if (wave_num > 5 || wave_num > 10 || wave_num > 15 || wave_num > 20 || wave_num > 25 || wave_num > 30) {
+								player->HPplus();
+							}
 							wave_up_flag = false;
 						}
 
