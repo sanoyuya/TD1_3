@@ -33,7 +33,19 @@ int Box_Circle(int LeftTopBoxX, int LeftTopBoxY, int RightBottomX, int RightBott
 	}
 }
 
+void circularMotionL(double& posX, double& posY, float cPosX, float cPosY, float length, float& angle) {
 
+	float radius = angle;
+
+	double addX = cos(radius) * length;
+	double addY = sin(radius) * length;
+
+	posX = cPosX + addX;
+	posY = cPosY + addY;
+
+	angle -= 0.02f;//引くと反時計回り　足すと時計回り　数値を大きくすると早く回る
+
+}
 
 //空き番号を返す
 int FlagSerch(EnemyBullet** bullet, int max)
@@ -112,7 +124,7 @@ Enemy::Enemy()
 	def_shot_time = shot_time;
 
 	//ボマー
-	angle = 1.75f;
+	angle = 0.0f;
 	vertex.top_left_x = 0;
 	vertex.top_left_y = 0;
 	vertex.down_left_x = 0;
@@ -428,6 +440,11 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 					{
 						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
 					}
+
+					if (enemy_type == 5)
+					{
+						angle = atan2(transform.x - 480.0, transform.y - 480.0);
+					}
 				}
 			}
 		}
@@ -507,6 +524,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 
 							for (int i = 0; i < bullet_max; i++)
 							{
+								//弾の生成
 								if (*bullet[i]->GetBulletFlag() == false)
 								{
 									bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
@@ -523,6 +541,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 
 							for (int i = 0; i < 16; i++)
 							{
+								//全方位弾生成
 								j = FlagSerch(bullet, 48);
 
 								bullet[j]->OmniForm(transform, player, x_speed, y_speed, enemy_type, i, angl);
@@ -775,6 +794,8 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 		}
 #pragma endregion
 
+#pragma region 中ボス
+
 		if (enemy_type == 10)
 		{
 			if (exising_flag == true)
@@ -972,6 +993,45 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 			mine->Move();
 			mine->PlayerHitBox(player);
 		}
+#pragma endregion
+		if (enemy_type == 5)
+		{
+			if (exising_flag == true)
+			{
+				//移動
+				if (action_flag == true && fast_move_flag == false)
+				{
+					circularMotionL(transform.y, transform.x, 480.0f,480.0f ,380.0f, angle);
+				}
+
+				if (shot_action_flag == true)
+				{
+					//発射時間管理
+					if (fast_move_flag == false && shot_time > 0)
+					{
+						shot_time--;
+					}
+
+					//弾の生成
+					if (shot_time == 0)
+					{
+						shot_time = def_shot_time;
+
+						for (int i = 0; i < bullet_max; i++)
+						{
+							if (*bullet[i]->GetBulletFlag() == false)
+							{
+								//bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
+								damage_flag[i] = true;
+
+								break;
+							}
+						}
+
+					}
+				}
+			}
+		}
 
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
@@ -985,7 +1045,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 
 			if (*bullet[i]->GetBulletFlag() == true && exising_flag == true)
 			{
-				HitBox(*bullet[i]->GetTransform(), i,item);
+				HitBox(*bullet[i]->GetTransform(), i, item);
 			}
 		}
 
@@ -1524,6 +1584,10 @@ void Enemy::form(FILE* fp)
 	case 4:
 		all_bullet_max = 48;
 		break;
+	case 5:
+		all_bullet_max = 3;
+
+		break;
 	case 10:
 		all_bullet_max = 12;
 		break;
@@ -1936,7 +2000,7 @@ int GetEnemyMax(int& wave_num)
 	switch (wave_num)
 	{
 	case 1:
-		return 1;
+		return 2;
 	case 2:
 		return 2;
 	case 3:
