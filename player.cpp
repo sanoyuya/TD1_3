@@ -162,6 +162,10 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//ƒvƒŒƒCƒ„[‚ÌˆÚ“®
 		}
 	}
 
+	if (hp >= 20) {
+		hp = 20;
+	}
+
 	if (hp < 20) {
 		nohitflag = 1;
 	}
