@@ -15,6 +15,8 @@ const int WIN_HEIGHT = 960;
 
 #define PI 3.1415926535f
 
+
+
 double easeInSine(double x)
 {
 	return 1 - cos((x * PI) / 2);
@@ -449,7 +451,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 
 					if (enemy_type == 5)
 					{
-						angle = atan2(transform.x - 480.0, transform.y - 480.0);
+						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
 				}
 			}
@@ -1261,13 +1263,13 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 	}
 }
 
-void Enemy::PlaterToEnemyHitBox(Player& player)
+void Enemy::PlaterToEnemyHitBox(Player& player,int enemy_num)
 {
 	if (enemy_type == 2)
 	{
 		if (BommerHitBox(player) == true && exising_flag == true)
 		{
-			if (player.GetDamageFlag(10) == 0)
+			if (player.GetDamageFlag(enemy_num) == 0)
 			{
 				player.HpSub(1);
 			}
@@ -1275,12 +1277,12 @@ void Enemy::PlaterToEnemyHitBox(Player& player)
 			explosion_bommer_flag = true;
 			enemy_to_bommer = true;
 
-			player.SetDamageFlag(10, 1);
+			player.SetDamageFlag(enemy_num, 1);
 
 		}
 		else
 		{
-			player.SetDamageFlag(10, 0);
+			player.SetDamageFlag(enemy_num, 0);
 		}
 	}
 }
@@ -1591,6 +1593,7 @@ void Enemy::form(FILE* fp)
 		break;
 	case 3:
 		all_bullet_max = 3;
+		break;
 	case 4:
 		all_bullet_max = 48;
 		break;
@@ -2054,7 +2057,3 @@ int GetEnemyMax(int& wave_num)
 	return -1;
 }
 
-int FlagSerch(EnemyBullet bullet[], int max)
-{
-	return 0;
-}
