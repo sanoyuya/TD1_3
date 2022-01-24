@@ -144,7 +144,6 @@ Enemy::Enemy()
 	all_bullet_max = 1;
 	bullet[0] = new EnemyBullet;
 
-	//item = new Item;
 	mine = new Mine;
 	color = GetColor(255, 255, 255);
 	sub_boss_buiiet_max = 12;

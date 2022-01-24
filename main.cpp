@@ -74,8 +74,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player = nullptr;
 	Enemy* enemy[64] = { nullptr };
 	SubBoss* sub_boss = nullptr;
-	Score* score = new Score;
-	Item* item = new Item;
+  	Score* score = nullptr;
+	Item* item = nullptr;
 
 	int wave_num = 6;
 	bool wave_up_flag = false;
@@ -139,10 +139,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
+						item = new Item;
+						score = new Score;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
+						item = new Item;
+						score = new Score;
 					}
 				}
 			}
@@ -172,7 +176,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
 					delete player;
 					player = new Player();
-					wave_num = 16;
+					wave_num = 10;
 					game_set = false;
 				}
 				if (pushflagoption == 0) {
@@ -188,6 +192,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					if (wave_up_flag == true)
 					{
+
 						wave_num++;
 						if (wave_num % 5 == 1) {
 							player->HPplus();
@@ -215,6 +220,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
 						delete player;
 						player = new Player();
+						player->DeleteItem();
 						game_set = true;
 						break;
 					case 2:
@@ -556,6 +562,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						{
 							delete enemy[i];
 						}
+						delete item;
+						item = new Item;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						sceneflag = 2;
 						delete player;
@@ -569,6 +577,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						{
 							delete enemy[i];
 						}
+						delete item;
+						item = new Item;
 					}
 				}if (Pause == 2) {//ƒ^ƒCƒgƒ‹‚É–ß‚é
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
@@ -582,6 +592,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						Pauseflag = 0;
 						game_set = false;
 						wave_num = 1;
+						delete item;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						sceneflag = 0;
 						delete player;
@@ -593,6 +604,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						game_set = false;
 						Pauseflag = 0;
 						wave_num = 1;
+						delete item;
 					}
 				}
 #pragma endregion

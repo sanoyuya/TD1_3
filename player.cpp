@@ -268,6 +268,11 @@ void Player::SetEasingFlag(int num)
 	easing_flag = num;
 }
 
+void Player::DeleteItem()
+{
+	delete tutorial_item;
+}
+
 void Player::EasingMove(double end_x, double end_y, int end_frame)
 {
 	easing_end_x = end_x;
