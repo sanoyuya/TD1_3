@@ -755,8 +755,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 #pragma endregion
 
 void Player::Draw() {//描画関数
-	float CHP = hp * 5.0f + 25.0f;
-	float CMP = stelscooltimer * 0.4f + 25.0f;
+	float CHP = hp * 5.0f;
+	float CMP = stelscooltimer * 0.4f;
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, Alpha);//アルファ
 	DrawGraph(1088, 680, bigitem, true);
@@ -777,13 +777,13 @@ void Player::Draw() {//描画関数
 		SetDrawBright(255, 25, 0);
 	}
 
-	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 25.0);
+	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
 
 	SetDrawBright(255, 255, 255);
 
 	//ステルスゲージ
 	SetDrawBright(0x00, 0xFF, 0xFF);
-	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 25.0);
+	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
 	SetDrawBright(255, 255, 255);
 
 	//時機
