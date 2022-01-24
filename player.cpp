@@ -887,10 +887,10 @@ void Player::Draw() {//描画関数
 		Alpha = 255;
 	}
 
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
-	DrawFormatString(0, 80, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
-	DrawFormatString(0, 100, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
-	DrawFormatString(0, 120, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
+	//DrawFormatString(0, 60, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
+	//DrawFormatString(0, 80, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
+	//DrawFormatString(0, 100, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
+	//DrawFormatString(0, 120, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "hp:%d", hp);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "Afterglow:%d", Afterglow);
 }
@@ -1071,7 +1071,7 @@ void Player::TutorialDraw() {
 	}
 
 
-	DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
+	//DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 
 	if (txtflag != 0) {
 		if (Apushflag == 0) {
