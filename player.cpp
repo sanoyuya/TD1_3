@@ -371,454 +371,458 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		enemy[0] = nullptr;
 		delete tutorial_item;
 	}
-	if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-		pushflag = 0;
-	}
-	switch (txtflag) {
-	case 0:
 
-		break;
-
-	case 1:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 2;
-			}
-		}
-
-		break;
-
-	case 2:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag1 = 1;
-			}
-		}
-
-		break;
-
-	case 3:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 4;
-			}
-		}
-
-		break;
-
-	case 4:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 5;
-
-			}
-		}
-
-		break;
-
-	case 5:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag2 = 1;
-				TutorialEnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 1, enemy);
-				shot_flag = 1;
-			}
-		}
-
-		break;
-
-	case 6:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 7;
-			}
-		}
-
-		break;
-
-	case 7:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 8;
-			}
-		}
-
-		break;
-
-	case 8:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 9;
-			}
-		}
-
-		break;
-
-	case 9:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag3 = 1;
-			}
-		}
-
-		break;
-
-	case 10:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 11;
-
-			}
-		}
-
-		break;
-
-	case 11:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 12;
-			}
-		}
-
-		break;
-
-	case 12:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 13;
-			}
-		}
-
-		break;
-
-	case 13:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag4 = 1;
-				itemflag = 6;
-			}
-		}
-
-		break;
-
-	case 14:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 15;
-			}
-		}
-
-		break;
-
-	case 15:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				Moveflag5 = 1;
-			}
-		}
-
-		break;
-
-	case 16:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 17;
-			}
-		}
-
-	case 17:
-		if (pushflag == 0) {
-			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-				pushflag = 1;
-				txtflag = 0;
-				X = 480;
-				Y = 832;
-				sceneflag = 2;
-				delete enemy[0];
-				delete tutorial_item;
-				enemy[0] = nullptr;
-				wave_num = 1;
-			}
-		}
-
-		break;
-	}
-	if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-			CP += 1;
-			if (CP >= 100) {
-				Moveflag1 = 0;
-
-				if (txtflag == 0)
-				{
-					easing_flag = 1;
-				}
-			}
-		}
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-			Y -= speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-			Y += speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-			X += speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-			X -= speed;
-		}
-	}
-
-	//イージング
-	if (easing_flag == 1)
+	if (sceneflag == 10)
 	{
-		//最初に座標代入
-		if (easing_frame == 0)
-		{
-			easing_start_x = (double)X;
-			easing_start_y = (double)Y;
+		if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+			pushflag = 0;
 		}
+		switch (txtflag) {
+		case 0:
 
-		easing_frame++;
+			break;
 
-		//計算して代入
-		easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
-		easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
-
-		//座標に代入
-		X = (int)easing_x;
-		Y = (int)easing_y;
-
-		//終わったら初期化
-		if (easing_frame == easing_end_frame)
-		{
-			easing_frame = 0;
-			easing_flag = 0;
-			txtflag = 3;
-		}
-	}
-
-	if (Moveflag2 == 1) {//敵の弾を避けるときに使うやつ
-		if (enemy[0]->GetBulletFlag(0) == true)
-		{
-			if (Moveflag2_2 == 0) {
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-					rightflag = 1;
-					Moveflag2_2 = 1;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-					leftflag = 1;
-					Moveflag2_2 = 1;
+		case 1:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 2;
 				}
 			}
-			if (rightflag == 1 && Moveflag2_2 == 1) {
-				Move2time++;
-				if (Move2time <= 20) {
-					X += 5;
+
+			break;
+
+		case 2:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag1 = 1;
 				}
-				else {
-					Move2time = 0;
-					Moveflag2_2 = 2;
+			}
+
+			break;
+
+		case 3:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 4;
 				}
-			}if (leftflag == 1 && Moveflag2_2 == 1) {
-				Move2time++;
-				if (Move2time <= 20) {
-					X -= 5;
+			}
+
+			break;
+
+		case 4:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 5;
+
 				}
-				else {
-					Move2time = 0;
-					Moveflag2_2 = 2;
+			}
+
+			break;
+
+		case 5:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag2 = 1;
+					TutorialEnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 1, enemy);
+					shot_flag = 1;
 				}
+			}
+
+			break;
+
+		case 6:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 7;
+				}
+			}
+
+			break;
+
+		case 7:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 8;
+				}
+			}
+
+			break;
+
+		case 8:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 9;
+				}
+			}
+
+			break;
+
+		case 9:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag3 = 1;
+				}
+			}
+
+			break;
+
+		case 10:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 11;
+
+				}
+			}
+
+			break;
+
+		case 11:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 12;
+				}
+			}
+
+			break;
+
+		case 12:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 13;
+				}
+			}
+
+			break;
+
+		case 13:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag4 = 1;
+					itemflag = 6;
+				}
+			}
+
+			break;
+
+		case 14:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 15;
+				}
+			}
+
+			break;
+
+		case 15:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag5 = 1;
+				}
+			}
+
+			break;
+
+		case 16:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 17;
+				}
+			}
+
+		case 17:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					X = 480;
+					Y = 832;
+					sceneflag = 2;
+					delete enemy[0];
+					delete tutorial_item;
+					enemy[0] = nullptr;
+					wave_num = 1;
+				}
+			}
+
+			break;
+		}
+		if (Moveflag1 == 1) {//移動キーの操作説明で使うやつ
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				CP += 1;
+				if (CP >= 100) {
+					Moveflag1 = 0;
+
+					if (txtflag == 0)
+					{
+						easing_flag = 1;
+					}
+				}
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+				Y -= speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+				Y += speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+				X += speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				X -= speed;
 			}
 		}
 
-		HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0));
-
-		if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
+		//イージング
+		if (easing_flag == 1)
 		{
-			if (rightflag == 1 || leftflag == 1) {
-				//最初に座標代入
-				if (easing_frame == 0)
-				{
-					easing_start_x = (double)X;
-					easing_start_y = (double)Y;
+			//最初に座標代入
+			if (easing_frame == 0)
+			{
+				easing_start_x = (double)X;
+				easing_start_y = (double)Y;
+			}
+
+			easing_frame++;
+
+			//計算して代入
+			easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
+			easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+
+			//座標に代入
+			X = (int)easing_x;
+			Y = (int)easing_y;
+
+			//終わったら初期化
+			if (easing_frame == easing_end_frame)
+			{
+				easing_frame = 0;
+				easing_flag = 0;
+				txtflag = 3;
+			}
+		}
+
+		if (Moveflag2 == 1) {//敵の弾を避けるときに使うやつ
+			if (enemy[0]->GetBulletFlag(0) == true)
+			{
+				if (Moveflag2_2 == 0) {
+					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+						rightflag = 1;
+						Moveflag2_2 = 1;
+					}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+						leftflag = 1;
+						Moveflag2_2 = 1;
+					}
 				}
+				if (rightflag == 1 && Moveflag2_2 == 1) {
+					Move2time++;
+					if (Move2time <= 20) {
+						X += 5;
+					}
+					else {
+						Move2time = 0;
+						Moveflag2_2 = 2;
+					}
+				}if (leftflag == 1 && Moveflag2_2 == 1) {
+					Move2time++;
+					if (Move2time <= 20) {
+						X -= 5;
+					}
+					else {
+						Move2time = 0;
+						Moveflag2_2 = 2;
+					}
+				}
+			}
 
-				easing_frame++;
+			HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0));
 
-				//計算して代入
-				easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
-				easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+			if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
+			{
+				if (rightflag == 1 || leftflag == 1) {
+					//最初に座標代入
+					if (easing_frame == 0)
+					{
+						easing_start_x = (double)X;
+						easing_start_y = (double)Y;
+					}
 
-				//座標に代入
-				X = (int)easing_x;
-				Y = (int)easing_y;
+					easing_frame++;
 
-				//終わったら初期化
-				if (easing_frame == easing_end_frame)
-				{
-					easing_frame = 0;
-					easing_flag = 0;
+					//計算して代入
+					easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
+					easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+
+					//座標に代入
+					X = (int)easing_x;
+					Y = (int)easing_y;
+
+					//終わったら初期化
+					if (easing_frame == easing_end_frame)
+					{
+						easing_frame = 0;
+						easing_flag = 0;
+						Moveflag2 = 0;
+						txtflag = 6;
+					}
+				}
+				else {
 					Moveflag2 = 0;
 					txtflag = 6;
 				}
 			}
-			else {
-				Moveflag2 = 0;
-				txtflag = 6;
-			}
 		}
-	}
 
-	if (Moveflag3 == 1) {//ステルスチュートリアル
-		if (COOLTIMEtimer == 0) {
-			if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
-				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
-					stelscooltimer = -150;//ステルス効果時間
-					stelsAfterglow = 1;
-					stelsflag = 1;
-					enemy[0]->SetShotTime(5);
-					shot_flag = 1;
+		if (Moveflag3 == 1) {//ステルスチュートリアル
+			if (COOLTIMEtimer == 0) {
+				if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
+					if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+						stelscooltimer = -150;//ステルス効果時間
+						stelsAfterglow = 1;
+						stelsflag = 1;
+						enemy[0]->SetShotTime(5);
+						shot_flag = 1;
+					}
+				}
+			}
+
+			if (stelsflag == 1) {
+
+				stealth_anime_timer++;
+
+				if (stealth_anime_timer == 16 * 6)
+				{
+					stealth_anime_timer = 0;
+				}
+
+				stealth_anime = stealth_anime_timer / 6;
+
+				//自機に向けない弾を出す
+				//弾が画面外に出たら
+				if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
+				{
+					stelsflag = 0;
+					txtflag = 10;
+					Moveflag3 = 0;
 				}
 			}
 		}
 
-		if (stelsflag == 1) {
-
-			stealth_anime_timer++;
-
-			if (stealth_anime_timer == 16 * 6)
-			{
-				stealth_anime_timer = 0;
+		if (stelsAfterglow == 1) {
+			stelscooltimer++;
+			if (stelsflag == 1) {
+				if (stelscooltimer > 0) {
+					stelsflag = 0;
+				}
 			}
-
-			stealth_anime = stealth_anime_timer / 6;
-
-			//自機に向けない弾を出す
-			//弾が画面外に出たら
-			if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
-			{
-				stelsflag = 0;
-				txtflag = 10;
-				Moveflag3 = 0;
-			}
-		}
-	}
-
-	if (stelsAfterglow == 1) {
-		stelscooltimer++;
-		if (stelsflag == 1) {
-			if (stelscooltimer > 0) {
-				stelsflag = 0;
-			}
-		}
-		if (stelscooltimer > 250) {//ステルス後隙
-			stelscooltimer = 250;
-			stelsAfterglow = 0;
-		}
-	}
-
-	if (Moveflag4 == 1) {//反射チュートリアル
-		if (pushflag == 0 && reflectionflag == 0) {
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
-				reflectionflag = 1;
-				enemy[0]->SetShotTime(5);
-				shot_flag = 1;
-				itemflag = 0;
+			if (stelscooltimer > 250) {//ステルス後隙
+				stelscooltimer = 250;
+				stelsAfterglow = 0;
 			}
 		}
 
-		if (reflectionflag == 1) {
-
-			if (enemy[0]->GetEnemyFlag() == false)
-			{
-				//自機に向けて弾を出す
-				//敵が死んだら
-				reflectionflag = 0;
-				txtflag = 14;
-				itemflag2 = 1;
-				Moveflag4 = 0;
-
-				tutorial_item->TutorialForm(enemy[0]->GetTransform(), itemflag2);
+		if (Moveflag4 == 1) {//反射チュートリアル
+			if (pushflag == 0 && reflectionflag == 0) {
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
+					reflectionflag = 1;
+					enemy[0]->SetShotTime(5);
+					shot_flag = 1;
+					itemflag = 0;
+				}
 			}
 
+			if (reflectionflag == 1) {
+
+				if (enemy[0]->GetEnemyFlag() == false)
+				{
+					//自機に向けて弾を出す
+					//敵が死んだら
+					reflectionflag = 0;
+					txtflag = 14;
+					itemflag2 = 1;
+					Moveflag4 = 0;
+
+					tutorial_item->TutorialForm(enemy[0]->GetTransform(), itemflag2);
+				}
+
+			}
 		}
-	}
 
-	if (Moveflag5 == 1) {
-		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-			Y -= speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-			Y += speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-			X += speed;
-		}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-			X -= speed;
+		if (Moveflag5 == 1) {
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+				Y -= speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+				Y += speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+				X += speed;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				X -= speed;
+			}
+
+			if (tutorial_item->TutorialMove(X, Y, R, itemflag2) == true) {
+
+				itemflag = 1;
+				txtflag = 16;
+				Moveflag5 = 0;
+
+			}
 		}
 
-		if (tutorial_item->TutorialMove(X, Y, R, itemflag2) == true) {
-
-			itemflag = 1;
-			txtflag = 16;
-			Moveflag5 = 0;
-
+		SetAtime++;
+		if (Apushflag == 0) {
+			if (SetAtime >= 25) {
+				Apushflag = 1;
+				SetAtime = 0;
+			}
 		}
-	}
-
-	SetAtime++;
-	if (Apushflag == 0) {
-		if (SetAtime >= 25) {
-			Apushflag = 1;
-			SetAtime = 0;
+		else {
+			if (SetAtime >= 25) {
+				Apushflag = 0;
+				SetAtime = 0;
+			}
 		}
-	}
-	else {
-		if (SetAtime >= 25) {
-			Apushflag = 0;
-			SetAtime = 0;
+
+		if (enemy[0] != nullptr)
+		{
+			enemy[0]->TuTorialMove(X, Y, R, shot_flag, stelsflag, reflectionflag);
 		}
+
+		if (X <= 64) {
+			X = 64;
+		}if (X >= 896) {
+			X = 896;
+		}if (Y <= 64) {
+			Y = 64;
+		}if (Y >= 896) {
+			Y = 896;
+		}
+
+		anime_timer++;
+
+		if (anime_timer == 16 * 6)
+		{
+			anime_timer = 0;
+		}
+
+		anime = anime_timer / 6;
 	}
-
-	if (enemy[0] != nullptr)
-	{
-		enemy[0]->TuTorialMove(X, Y, R, shot_flag, stelsflag, reflectionflag);
-	}
-
-	if (X <= 64) {
-		X = 64;
-	}if (X >= 896) {
-		X = 896;
-	}if (Y <= 64) {
-		Y = 64;
-	}if (Y >= 896) {
-		Y = 896;
-	}
-
-	anime_timer++;
-
-	if (anime_timer == 16 * 6)
-	{
-		anime_timer = 0;
-	}
-
-	anime = anime_timer / 6;
 
 }
 #pragma endregion
