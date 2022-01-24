@@ -182,7 +182,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 {
 	if (bullet_flag == true)
 	{
-		if (enemy_type == 1 || enemy_type == 4 || enemy_type == 10)
+		if (enemy_type == 1 || enemy_type == 4 || enemy_type == 10 || enemy_type == 5)
 		{
 #pragma region ˆÚ“®
 			if ((cos(angle) * x_speed) < 0)
@@ -851,7 +851,7 @@ void EnemyBullet::Draw(int enemy_type)
 {
 	if (bullet_flag == true)
 	{
-		if (enemy_type == 1 || enemy_type == 10 || enemy_type == 4)
+		if (enemy_type == 1 || enemy_type == 10 || enemy_type == 4 || enemy_type == 5)
 		{
 			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
 		}

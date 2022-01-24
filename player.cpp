@@ -74,51 +74,56 @@ Player::Player() {//コンストラクタの定義
 	damage_flag[0] = 0;
 
 	item_1_img = LoadGraph("resouce/item1big.png");
+
+	move_flag = 1;
 }
 
 void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 {
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-		X -= speed;
-	}
+	if (move_flag == 1)
+	{
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+			X -= speed;
+		}
 
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-		X += speed;
-	}
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+			X += speed;
+		}
 
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-		Y -= speed;
-	}
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+			Y -= speed;
+		}
 
-	if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-		Y += speed;
-	}
+		if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+			Y += speed;
+		}
 
-	if (X <= 64) {
-		X = 64;
-	}if (X >= 896) {
-		X = 896;
-	}if (Y <= 64) {
-		Y = 64;
-	}if (Y >= 896) {
-		Y = 896;
-	}
+		if (X <= 64) {
+			X = 64;
+		}if (X >= 896) {
+			X = 896;
+		}if (Y <= 64) {
+			Y = 64;
+		}if (Y >= 896) {
+			Y = 896;
+		}
 
-	if (COOLTIMEtimer == 0) {
-		if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
-				stelscooltimer = -150;//ステルス効果時間
-				stelsAfterglow = 1;
-				stelsflag = 1;
+		if (COOLTIMEtimer == 0) {
+			if (reflectionflag == 0 && stelscooltimer == 250) {//ステルス
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+					stelscooltimer = -150;//ステルス効果時間
+					stelsAfterglow = 1;
+					stelsflag = 1;
+				}
 			}
 		}
-	}
-	if (itemflag == 6) {//反射
-		if (reflectioncooltimer == -250 && stelsflag == 0) {
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
-				itemflag = 0;
-				reflectionAfterglow = 1;
-				reflectionflag = 1;
+		if (itemflag == 6) {//反射
+			if (reflectioncooltimer == -250 && stelsflag == 0) {
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0 || keys[KEY_INPUT_K] == 1 && oldkeys[KEY_INPUT_K] == 0) {
+					itemflag = 0;
+					reflectionAfterglow = 1;
+					reflectionflag = 1;
+				}
 			}
 		}
 	}
@@ -180,6 +185,8 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 		stealth_anime = stealth_anime_timer / 6;
 	}
+
+	EasingMove(482,480,80);
 }
 
 void Player::HP(Transform transform, EnemyBullet& bullet) {
@@ -248,6 +255,49 @@ void Player::HpSub(int num)
 void Player::SetDamageFlag(int i, int num)
 {
 	damage_flag[i] = num;
+}
+
+void Player::SetEasingFlag(int num)
+{
+	easing_flag = num;
+}
+
+void Player::EasingMove(double end_x, double end_y, int end_frame)
+{
+	easing_end_x = end_x;
+	easing_end_y = end_y;
+	easing_end_frame = end_frame;
+
+	if (easing_flag == 1)
+	{
+		move_flag = 0;
+		//最初に座標代入
+		if (easing_frame == 0)
+		{
+			easing_start_x = (double)X;
+			easing_start_y = (double)Y;
+		}
+
+		easing_frame++;
+
+		//計算して代入
+		easing_x = easing_start_x + (easing_end_x - easing_start_x) * easeInSine(easing_frame / easing_end_frame);
+		easing_y = easing_start_y + (easing_end_y - easing_start_y) * easeInSine(easing_frame / easing_end_frame);
+
+		//座標に代入
+		X = (int)easing_x;
+		Y = (int)easing_y;
+
+		//終わったら初期化
+		if (easing_frame == easing_end_frame)
+		{
+			easing_frame = 0;
+			easing_flag = 0;
+			move_flag = 1;
+		}
+	}
+
+
 }
 
 int Player::GetX()

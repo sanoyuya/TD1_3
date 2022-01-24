@@ -417,6 +417,12 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 			{
 				angle = (float)atan2(end_y - start_y, end_x - start_x);
 			}
+
+			if (enemy_type == 5)
+			{
+				player.SetEasingFlag(1);
+			}
+
 		}
 		else if (appear_time != 0 && appear_time != -1)
 		{
@@ -994,6 +1000,9 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 			mine->PlayerHitBox(player);
 		}
 #pragma endregion
+
+#pragma region フォーメーション
+
 		if (enemy_type == 5)
 		{
 			if (exising_flag == true)
@@ -1001,7 +1010,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 				//移動
 				if (action_flag == true && fast_move_flag == false)
 				{
-					circularMotionL(transform.y, transform.x, 480.0f,480.0f ,380.0f, angle);
+					circularMotionL(transform.y, transform.x, 482.0f,482.0f ,380.0f, angle);
 				}
 
 				if (shot_action_flag == true)
@@ -1021,7 +1030,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 						{
 							if (*bullet[i]->GetBulletFlag() == false)
 							{
-								//bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
+								bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
 								damage_flag[i] = true;
 
 								break;
@@ -1032,6 +1041,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 				}
 			}
 		}
+#pragma endregion
 
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
@@ -1586,7 +1596,6 @@ void Enemy::form(FILE* fp)
 		break;
 	case 5:
 		all_bullet_max = 3;
-
 		break;
 	case 10:
 		all_bullet_max = 12;
@@ -2000,7 +2009,7 @@ int GetEnemyMax(int& wave_num)
 	switch (wave_num)
 	{
 	case 1:
-		return 2;
+		return 1;
 	case 2:
 		return 2;
 	case 3:
@@ -2039,6 +2048,8 @@ int GetEnemyMax(int& wave_num)
 		return 4;
 	case 20:
 		return 4;
+	case 21:
+		return 8;
 	}
 	return -1;
 }

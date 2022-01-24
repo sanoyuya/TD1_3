@@ -217,8 +217,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								delete player;
 								player = new Player();
 								game_set = true;
-
-
 								break;
 							case 2:
 								EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
@@ -298,6 +296,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								sub_boss = new SubBoss;
 								EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy);
 								SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
+								game_set = true;
+								break;
+							case 21:
+								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
 								game_set = true;
 								break;
 						}
