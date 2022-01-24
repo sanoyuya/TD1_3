@@ -629,23 +629,68 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
 				resultflag = 1;
 			}
-			if (resultflag == 0) {//ステージ選択画面に戻る
+			if (resultflag == 0) {//初めからやり直す
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 1;
+						sceneflag = 2;
+						delete player;
+						player = new Player();
+						delete score;
+						score = new Score();
+						wave_num = 1;
+						game_set = false;
+						Pauseflag = 0;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete item;
+						item = new Item;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 1;
+						sceneflag = 2;
+						delete player;
+						player = new Player();
+						delete score;
+						score = new Score();
+						wave_num = 1;
+						game_set = false;
+						Pauseflag = 0;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete item;
+						item = new Item;
 					}
 				}
 			}
 			else {//タイトルへ戻る
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						delete player;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete score;
+						Pauseflag = 0;
+						game_set = false;
+						wave_num = 1;
+						delete item;
 						sceneflag = 0;
-						resultflag = 0;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						pushflagA = 1;
+						delete player;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete score;
+						game_set = false;
+						Pauseflag = 0;
+						wave_num = 1;
+						delete item;
 						sceneflag = 0;
-						resultflag = 0;
 					}
 				}
 			}
@@ -663,23 +708,68 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
 				resultflag = 1;
 			}
-			if (resultflag == 0) {//ステージ選択画面に戻る
+			if (resultflag == 0) {//初めからやり直す
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 1;
+						sceneflag = 2;
+						delete player;
+						player = new Player();
+						delete score;
+						score = new Score();
+						wave_num = 1;
+						game_set = false;
+						Pauseflag = 0;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete item;
+						item = new Item;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 1;
+						sceneflag = 2;
+						delete player;
+						player = new Player();
+						delete score;
+						score = new Score();
+						wave_num = 1;
+						game_set = false;
+						Pauseflag = 0;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete item;
+						item = new Item;
 					}
 				}
 			}
 			else {//タイトルへ戻る
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						delete player;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete score;
+						Pauseflag = 0;
+						game_set = false;
+						wave_num = 1;
+						delete item;
 						sceneflag = 0;
-						resultflag = 0;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						pushflagA = 1;
+						delete player;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+						delete score;
+						game_set = false;
+						Pauseflag = 0;
+						wave_num = 1;
+						delete item;
 						sceneflag = 0;
-						resultflag = 0;
 					}
 				}
 			}
@@ -774,9 +864,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//リザルト画面(ゲームオーバー)
 			if (resultflag == 0) {
 				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+				DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
 			}
 			else {
 				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+				DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
 			}
 
 			break;
@@ -785,9 +877,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//リザルト画面(ゲームクリア)
 			if (resultflag == 0) {
 				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+				DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
 			}
 			else {
 				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+				DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
 			}
 			break;
 
