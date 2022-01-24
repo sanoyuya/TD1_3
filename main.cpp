@@ -139,10 +139,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
+						score = new Score();
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
+						score = new Score();
 					}
 				}
 			}
