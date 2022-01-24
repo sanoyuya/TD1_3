@@ -414,7 +414,13 @@ void SubBoss::Draw()
 	{
 		if (enemy_type == 1 || enemy_type == 3)
 		{
+
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
+			
+			if (teleport_flag == true)
+			{
+				DrawBox((float)transform.x - img_r, (float)transform.y - img_r, (float)transform.x + img_r, (float)transform.y + img_r, GetColor(255, 255, 255), true);
+			}
 		}
 	}
 
