@@ -105,276 +105,274 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 
 	if (exising_flag == true)
 	{
-		//if (enemy_type == 1)
+		if (exising_flag == true)
 		{
-			if (exising_flag == true)
+			//最初の移動
+			if (fast_move_flag == true)
 			{
-				//最初の移動
-				if (fast_move_flag == true)
-				{
-					frame++;
-					//イージング
-					transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
-					transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
+				frame++;
+				//イージング
+				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
+				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
 
-					if (frame == end_frame)
-					{
-						fast_move_flag = false;
-					}
+				if (frame == end_frame)
+				{
+					fast_move_flag = false;
+				}
+			}
+
+			//移動
+			if (fast_move_flag == false)
+			{
+				if (enemy_type == 1 && move_time == 1)
+				{
+					//地雷設置フラフを立てる
+					mine->SetMineFlag(true);
+					mine->SetRand(7);
 				}
 
-				//移動
-				if (fast_move_flag == false)
+				if (enemy_type == 3 && move_time == 1)
 				{
-					if (enemy_type == 1 && move_time == 1)
+					rand = GetRand(7);
+				}
+
+				if (move_time > 0)
+				{
+					move_time--;
+				}
+
+				if (move_time == 0)
+				{
+					move_flag = true;
+
+					int rand2 = GetRand(7);
+
+					if (enemy_type == 3 && rand == rand2)
 					{
-						//地雷設置フラフを立てる
-						mine->SetMineFlag(true);
-						mine->SetRand(7);
+						move_flag = false;
+						teleport_flag = true;
 					}
-
-					if (enemy_type == 3 && move_time == 1)
-					{
-						rand = GetRand(7);
-					}
-
-					if (move_time > 0)
-					{
-						move_time--;
-					}
-
-					if (move_time == 0)
-					{
-						move_flag = true;
-
-						int rand2 = GetRand(7);
-
-						if (enemy_type == 3 && rand == rand2)
-						{
-							move_flag = false;
-							teleport_flag = true;
-						}
-					}
+				}
 
 #pragma region 移動
-					if (move_flag == true)
+				if (move_flag == true)
+				{
+					if (move_frame == 0)
 					{
-						if (move_frame == 0)
-						{
-							rand = GetRand(7) + 1;
+						rand = GetRand(7) + 1;
 
-							if ((int)transform.y == 128)//上
+						if ((int)transform.y == 128)//上
+						{
+							while (rand == 3 || rand == 5 || rand == 7)
 							{
-								while (rand == 3 || rand == 5 || rand == 7)
-								{
-									rand = GetRand(7) + 1;
-								}
-							}
-							else if ((int)transform.y == 864)//下
-							{
-								while (rand == 4 || rand == 6 || rand == 8)
-								{
-									rand = GetRand(7) + 1;
-								}
-							}
-							else if ((int)transform.x >= 776)//右
-							{
-								while (rand == 1 || rand == 5 || rand == 6)
-								{
-									rand = GetRand(7) + 1;
-								}
-							}
-							else if ((int)transform.x <= 178)//左
-							{
-								while (rand == 2 || rand == 7 || rand == 8)
-								{
-									rand = GetRand(7) + 1;
-								}
+								rand = GetRand(7) + 1;
 							}
 						}
-
-						switch (rand)
+						else if ((int)transform.y == 864)//下
 						{
-
-						case 1://右
-							XMove(x_speed, true);
-							break;
-
-						case 2://左
-							XMove(x_speed, false);
-							break;
-
-						case 3://上
-							YMove(y_speed, true);
-							break;
-
-						case 4://下
-							YMove(y_speed, false);
-							break;
-
-						case 5://右上
-							XMove(x_speed, true);
-							YMove(y_speed, true);
-							break;
-
-						case 6://右下
-							XMove(x_speed, true);
-							YMove(y_speed, false);
-							break;
-
-						case 7://左上
-							XMove(x_speed, false);
-							YMove(y_speed, true);
-							break;
-
-						case 8://左下
-							XMove(x_speed, false);
-							YMove(y_speed, false);
-							break;
+							while (rand == 4 || rand == 6 || rand == 8)
+							{
+								rand = GetRand(7) + 1;
+							}
 						}
-
-						move_frame++;
-
-						if (move_frame == move_end_frame)
+						else if ((int)transform.x >= 776)//右
 						{
-							move_frame = 0;
-							move_time = def_move_time;
-							move_flag = false;
+							while (rand == 1 || rand == 5 || rand == 6)
+							{
+								rand = GetRand(7) + 1;
+							}
+						}
+						else if ((int)transform.x <= 178)//左
+						{
+							while (rand == 2 || rand == 7 || rand == 8)
+							{
+								rand = GetRand(7) + 1;
+							}
 						}
 					}
+
+					switch (rand)
+					{
+
+					case 1://右
+						XMove(x_speed, true);
+						break;
+
+					case 2://左
+						XMove(x_speed, false);
+						break;
+
+					case 3://上
+						YMove(y_speed, true);
+						break;
+
+					case 4://下
+						YMove(y_speed, false);
+						break;
+
+					case 5://右上
+						XMove(x_speed, true);
+						YMove(y_speed, true);
+						break;
+
+					case 6://右下
+						XMove(x_speed, true);
+						YMove(y_speed, false);
+						break;
+
+					case 7://左上
+						XMove(x_speed, false);
+						YMove(y_speed, true);
+						break;
+
+					case 8://左下
+						XMove(x_speed, false);
+						YMove(y_speed, false);
+						break;
+					}
+
+					move_frame++;
+
+					if (move_frame == move_end_frame)
+					{
+						move_frame = 0;
+						move_time = def_move_time;
+						move_flag = false;
+					}
+				}
 #pragma endregion
 
-					if (teleport_flag == true)
-					{
-						if (anticipation > 0)
-						{
-							anticipation--;
-						}
-
-						if (anticipation == 0)
-						{
-							transform.x = (double)GetRand(560) + 207;
-							transform.y = (double)GetRand(576) + 192;
-							teleport_flag = false;
-							anticipation = 50;
-						}
-					}
-				}
-
-				//発射時間管理
-				if (fast_move_flag == false && shot_time > 0)
+				if (teleport_flag == true)
 				{
-					shot_time--;
-				}
-
-				if (shot_time == -1)
-				{
-					if (enemy_type == 1)
+					if (anticipation > 0)
 					{
-						shot_time = def_shot_time;
-					}
-					else
-					{
-						Refresh_ReflectionNum(4);
+						anticipation--;
 					}
 
-				}
-
-				//当たり判定
-				for (int i = 0; i < bullet_max; i++)
-				{
-					if (*bullet[i]->GetBulletFlag() == true)
+					if (anticipation == 0)
 					{
-
-						HitBox(*bullet[i]->GetTransform(), bullet[i], i);
+						transform.x = (double)GetRand(560) + 207;
+						transform.y = (double)GetRand(576) + 192;
+						teleport_flag = false;
+						anticipation = 50;
 					}
 				}
+			}
 
-				//弾の生成
-				if (shot_time == 0)
+			//発射時間管理
+			if (fast_move_flag == false && shot_time > 0)
+			{
+				shot_time--;
+			}
+
+			if (shot_time == -1)
+			{
+				if (enemy_type == 1)
+				{
+					shot_time = def_shot_time;
+				}
+				else
+				{
+					Refresh_ReflectionNum(4);
+				}
+
+			}
+
+			//当たり判定
+			for (int i = 0; i < bullet_max; i++)
+			{
+				if (*bullet[i]->GetBulletFlag() == true)
 				{
 
-					if (enemy_type == 1)
+					HitBox(*bullet[i]->GetTransform(), bullet[i], i);
+				}
+			}
+
+			//弾の生成
+			if (shot_time == 0)
+			{
+
+				if (enemy_type == 1)
+				{
+					int k[4] = { 0,0,0,0 };
+					bool end = false;
+					int i;
+					int length = 0;
+
+					for (i = 0; i < 4; i++)
 					{
-						int k[4] = { 0,0,0,0 };
-						bool end = false;
-						int i;
-						int length = 0;
+						int j = FlagSerch(bullet, bullet_max);
 
-						for (i = 0; i < 4; i++)
+						if (j != -1)
 						{
-							int j = FlagSerch(bullet, bullet_max);
-
-							if (j != -1)
-							{
-								bullet[j]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
-								damage_flag[j] = true;
-								k[i] = j;
-							}
-							else
-							{
-								length = i;
-								break;
-							}
-						}
-
-						if (i == 4)
-						{
-							end = true;
-						}
-
-						if (end == true)
-						{
-							//角度を90度ずつずらす
-							bullet[k[1]]->SetAngle(bullet[k[0]]->GetAngle() + (DX_PI_F / 2));
-							bullet[k[2]]->SetAngle(bullet[k[1]]->GetAngle() + (DX_PI_F / 2));
-							bullet[k[3]]->SetAngle(bullet[k[2]]->GetAngle() + (DX_PI_F / 2));
+							bullet[j]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+							damage_flag[j] = true;
+							k[i] = j;
 						}
 						else
 						{
-							for (int i = 0; i < length; i++)
-							{
-								int j = k[i];
-								bullet[j]->SetBulletFlag(false);
-
-								damage_flag[j] = false;
-							}
+							length = i;
+							break;
 						}
+					}
+
+					if (i == 4)
+					{
+						end = true;
+					}
+
+					if (end == true)
+					{
+						//角度を90度ずつずらす
+						bullet[k[1]]->SetAngle(bullet[k[0]]->GetAngle() + (DX_PI_F / 2));
+						bullet[k[2]]->SetAngle(bullet[k[1]]->GetAngle() + (DX_PI_F / 2));
+						bullet[k[3]]->SetAngle(bullet[k[2]]->GetAngle() + (DX_PI_F / 2));
 					}
 					else
 					{
-						for (int i = 0; i < 4; i++)
+						for (int i = 0; i < length; i++)
 						{
-							if (*bullet[i]->GetBulletFlag() == false)
-							{
-								bullet[i]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
-								damage_flag[i] = true;
-								//角度を90度ずつずらす
-								bullet[1]->SetAngle(bullet[0]->GetAngle() + (DX_PI_F / 2));
-								bullet[2]->SetAngle(bullet[1]->GetAngle() + (DX_PI_F / 2));
-								bullet[3]->SetAngle(bullet[2]->GetAngle() + (DX_PI_F / 2));
-							}
+							int j = k[i];
+							bullet[j]->SetBulletFlag(false);
+
+							damage_flag[j] = false;
 						}
 					}
-
-
-
-					shot_time = -1;
 				}
-
-				if (hp <= 0)
+				else
 				{
-					exising_flag = false;
+					for (int i = 0; i < 4; i++)
+					{
+						if (*bullet[i]->GetBulletFlag() == false)
+						{
+							bullet[i]->Form(transform, player, bullet_x_speed, bullet_y_speed, enemy_type);
+							damage_flag[i] = true;
+							//角度を90度ずつずらす
+							bullet[1]->SetAngle(bullet[0]->GetAngle() + (DX_PI_F / 2));
+							bullet[2]->SetAngle(bullet[1]->GetAngle() + (DX_PI_F / 2));
+							bullet[3]->SetAngle(bullet[2]->GetAngle() + (DX_PI_F / 2));
+						}
+					}
 				}
+
+
+
+				shot_time = -1;
 			}
 
-			if (enemy_type == 1)
+			if (hp <= 0)
 			{
-				//地雷の動き
-				mine->form(transform, rand);
-				mine->HitBox(transform, hp);
+				exising_flag = false;
 			}
 		}
+
+		if (enemy_type == 1)
+		{
+			//地雷の動き
+			mine->form(transform, rand);
+			mine->HitBox(transform, hp);
+		}
+
 	}
 
 	if (enemy_type == 1)
@@ -416,7 +414,7 @@ void SubBoss::Draw()
 		{
 
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
-			
+
 			if (teleport_flag == true)
 			{
 				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);

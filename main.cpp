@@ -195,7 +195,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 					score->TC(sceneflag);
 					score->IC();
-					player->PlayerPadMove(keys, oldkeys);
+					player->PlayerPadMove(keys, oldkeys,wave_num);
 					//デバッグ用(本番消す)
 					if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
 						delete player;
@@ -214,6 +214,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 					if (game_set == false)
 					{
+						//wave_num = 21;
 						if (wave_up_flag == true)
 						{
 
@@ -331,6 +332,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								break;
 							case 22:
 								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 23:
+								EnemyForm("WAVE_ENEMY_DATA/wave23.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 24:
+								EnemyForm("WAVE_ENEMY_DATA/wave24.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 25:
+								EnemyForm("WAVE_ENEMY_DATA/wave25.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 						}

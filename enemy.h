@@ -119,6 +119,9 @@ private:
 	//’†ƒ{ƒX
 	int move_rand;
 	int easing_num;
+	int rand;
+	bool teleport_flag;
+	int anticipation;
 
 	int sub_boss1_img[14];
 	int sub_boss1_anime;

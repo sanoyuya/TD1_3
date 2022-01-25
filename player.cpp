@@ -79,7 +79,7 @@ Player::Player() {//コンストラクタの定義
 	enemy_damage[0] = 0;
 }
 
-void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
+void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//プレイヤーの移動
 {
 	if (move_flag == 1)
 	{
@@ -190,8 +190,15 @@ void Player::PlayerPadMove(char* keys, char* oldkeys)//プレイヤーの移動
 
 		stealth_anime = stealth_anime_timer / 6;
 	}
+	if (wave_num == 24)
+	{
+		EasingMove(482, 565, 80);
+	}
+	else
+	{
+		EasingMove(482, 482, 80);
+	}
 
-	EasingMove(482,480,80);
 }
 
 void Player::HP(Transform transform, EnemyBullet& bullet) {

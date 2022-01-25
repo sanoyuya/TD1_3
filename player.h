@@ -15,7 +15,7 @@ typedef class Player
 public:
 	Player();
 	//void Rset();
-	void PlayerPadMove(char* keys, char* oldkeys);
+	void PlayerPadMove(char* keys, char* oldkeys, int wave_num);
 	void HP(Transform transform, EnemyBullet& bullet);
 	void HPplus(int wave);
 	void Draw();
