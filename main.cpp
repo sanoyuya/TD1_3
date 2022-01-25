@@ -241,98 +241,98 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						{
 							case 1:
 
-								EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy,wave_num);
 								delete player;
 								player = new Player();
 								player->DeleteItem();
 								game_set = true;
 								break;
 							case 2:
-								EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 3:
-								EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 4:
-								EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 5:
-								EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 6:
-								EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 7:
-								EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 8:
-								EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 9:
-								EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 10:
-								EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy, wave_num);
 								sub_boss = new SubBoss;
 								SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
 								game_set = true;
 								break;
 							case 11:
-								EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 12:
-								EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 13:
-								EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 14:
-								EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 15:
-								EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 16:
-								EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 17:
-								EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 18:
-								EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 19:
-								EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 20:
 								sub_boss = new SubBoss;
-								EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy, wave_num);
 								SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
 								game_set = true;
 								break;
 							case 21:
-								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 							case 22:
-								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy);
+								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
 						}
@@ -418,7 +418,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					for (int i = 0; i < ENEMY_MAX; i++)
 					{
 						//“G‚Ì“®‚«
-						enemy[i]->Move(*player, reflection_flag, *score, item);
+						enemy[i]->Move(*player, reflection_flag, *score, item, wave_num);
 					}
 
 					if (wave_num == 10 || wave_num == 20)

@@ -962,7 +962,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	}
 }
 
-void EnemyBullet::OmniForm(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle)
+void EnemyBullet::OmniFormHex(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle)
 {
 	bullet_flag = true;
 	this->transform.x = transform.x;
@@ -983,6 +983,26 @@ void EnemyBullet::OmniForm(Transform transform, Player& player, int x_speed, int
 	this->y_speed = y_speed;
 }
 
+void EnemyBullet::OmniFormOct(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle)
+{
+	bullet_flag = true;
+	this->transform.x = transform.x;
+	this->transform.y = transform.y;
+	go_time = 50;
+	return_flag = false;
+	flag = false;
+
+	if (num == 0)
+	{
+		this->angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
+	}
+	else
+	{
+		this->angle = angle + (float)((DX_PI * 2 / 8) * num);
+	}
+	this->x_speed = x_speed;
+	this->y_speed = y_speed;
+}
 void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed, int stelsflag)
 {
 	bullet_flag = true;

@@ -22,7 +22,8 @@ public:
 	void TutorialMove(int y);
 	void Draw(int enemy_type);
 	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
-	void OmniForm(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);
+	void OmniFormHex(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle);
+	void OmniFormOct(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);
 	void TuTorialForm(Transform transform, int x, int y, int x_speed, int y_speed,int stelsflag);
 
 	Vertex GetVertex();

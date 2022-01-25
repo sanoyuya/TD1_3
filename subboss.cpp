@@ -419,7 +419,7 @@ void SubBoss::Draw()
 			
 			if (teleport_flag == true)
 			{
-				DrawBox((float)transform.x - img_r, (float)transform.y - img_r, (float)transform.x + img_r, (float)transform.y + img_r, GetColor(255, 255, 255), true);
+				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
 			}
 		}
 	}

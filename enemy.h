@@ -5,7 +5,7 @@
 #include"score.h"
 class Mine;
 
-void EnemyForm(const char* file_name, int max, Enemy** enemy);
+void EnemyForm(const char* file_name, int max, Enemy** enemy, int wave_num);
 void TutorialEnemyForm(const char* file_name, int max, Enemy** enemy);
 double easeInSine(double x);
 
@@ -18,9 +18,9 @@ class Enemy
 public:
 	Enemy();
 	~Enemy();
-	void form(FILE* fp);
+	void form(FILE* fp, int wave_num);
 	void Tutorialform(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score, Item* item);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num, Item* item);

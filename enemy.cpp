@@ -403,7 +403,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //動き
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,int wave_num)
 {
 	if (use_flag == true)
 	{
@@ -545,14 +545,27 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item)
 						{
 							int j;
 							float angl = (float)atan2((double)player.GetY() - this->transform.y, (double)player.GetX() - this->transform.x);
-
-							for (int i = 0; i < 16; i++)
+							if (wave_num >= 20)
 							{
-								//全方位弾生成
-								j = FlagSerch(bullet, 48);
+								for (int i = 0; i < 16; i++)
+								{
+									//全方位弾生成
+									j = FlagSerch(bullet, 48);
 
-								bullet[j]->OmniForm(transform, player, x_speed, y_speed, enemy_type, i, angl);
-								damage_flag[j] = true;
+									bullet[j]->OmniFormHex(transform, player, x_speed, y_speed, enemy_type, i, angl);
+									damage_flag[j] = true;
+								}
+							}
+							else
+							{
+								for (int i = 0; i < 8; i++)
+								{
+									//全方位弾生成
+									j = FlagSerch(bullet, 24);
+
+									bullet[j]->OmniFormOct(transform, player, x_speed, y_speed, enemy_type, i, angl);
+									damage_flag[j] = true;
+								}
 							}
 						}
 					}
@@ -1472,7 +1485,7 @@ void Enemy::Draw(int num)
 
 #pragma region 生成
 //ファイルからデータ読みこみ
-void Enemy::form(FILE* fp)
+void Enemy::form(FILE* fp, int wave_num)
 {
 	delete bullet[0];
 
@@ -1595,7 +1608,14 @@ void Enemy::form(FILE* fp)
 		all_bullet_max = 3;
 		break;
 	case 4:
-		all_bullet_max = 48;
+		if (wave_num >=20)
+		{
+			all_bullet_max = 48;
+		}
+		else
+		{
+			all_bullet_max = 24;
+		}
 		break;
 	case 5:
 		all_bullet_max = 3;
@@ -1612,7 +1632,7 @@ void Enemy::form(FILE* fp)
 }
 
 //生成メイン
-void EnemyForm(const char* file_name, int max, Enemy** enemy)
+void EnemyForm(const char* file_name, int max, Enemy** enemy,int wave_num)
 {
 
 	FILE* fp;
@@ -1622,7 +1642,7 @@ void EnemyForm(const char* file_name, int max, Enemy** enemy)
 	{
 		for (int i = 0; i < max; i++)
 		{
-			enemy[i]->form(fp);
+			enemy[i]->form(fp, wave_num);
 		}
 		fclose(fp);
 	}
@@ -2040,13 +2060,13 @@ int GetEnemyMax(int& wave_num)
 	case 14:
 		return 5;
 	case 15:
-		return 4;
-	case 16:
-		return 4;
-	case 17:
 		return 1;
-	case 18:
+	case 16:
 		return 5;
+	case 17:
+		return 4;
+	case 18:
+		return 4;
 	case 19:
 		return 4;
 	case 20:
