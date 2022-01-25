@@ -114,10 +114,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (pushflagA == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
 					pushflagA = 1;
-					sceneflag = 1;
+					//sceneflag = 1;
+					//‰¼--------------------------
+					sceneflag = 10;
+					player = new Player();
+					enemy[0] = new Enemy;
+					item = new Item;
+					score = new Score;
+					//----------------------------
 				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflagA = 1;
-					sceneflag = 1;
+					//sceneflag = 1;
+					//‰¼--------------------------
+					sceneflag = 10;
+					player = new Player();
+					enemy[0] = new Enemy;
+					item = new Item;
+					score = new Score;
+					//----------------------------
 				}
 			}
 
@@ -147,7 +161,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						enemy[0] = new Enemy;
 						item = new Item;
 						score = new Score;
-					
 					}
 				}
 			}
