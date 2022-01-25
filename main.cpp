@@ -54,6 +54,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int PSghtitle = LoadGraph("resouce/pauseselecttitle.png");
 	int player_img[4];
 	LoadDivGraph("resouce/player_kari.png", 4, 4, 1, 388, 406, player_img);
+	int wavegh[10] = { 0 };
+	LoadDivGraph("resouce/wavenum.png", 10, 10, 1, 21, 23, wavegh);
+	int waveback = LoadGraph("resouce/wave.png");
+	int wavesand[10] = { 0 };
+	LoadDivGraph("resouce/sandstorm.png", 10, 10, 1, 162, 43, wavesand);
+	int sandcooltime = 0;
+	int sand = 0;
 	int maba = 0;
 	int maba2 = 0;
 	// ゲームループで使う変数の宣言
@@ -74,10 +81,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Player* player = nullptr;
 	Enemy* enemy[64] = { nullptr };
 	SubBoss* sub_boss = nullptr;
-  	Score* score = nullptr;
+	Score* score = nullptr;
 	Item* item = nullptr;
 
 	int wave_num = 6;
+	int windex = 0;
+	int wdeiv = 1;
+	int wdiv = 0;
 	bool wave_up_flag = false;
 	bool game_set = false;
 	bool break_flag = false;
@@ -106,830 +116,851 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-		case 0:
-			//タイトル
-			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-				pushflagA = 0;
-			}
-			if (pushflagA == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-					pushflagA = 1;
-					//sceneflag = 1;
-					//仮--------------------------
-					sceneflag = 10;
-					player = new Player();
-					enemy[0] = new Enemy;
-					item = new Item;
-					score = new Score;
-					//----------------------------
-				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflagA = 1;
-					//sceneflag = 1;
-					//仮--------------------------
-					sceneflag = 10;
-					player = new Player();
-					enemy[0] = new Enemy;
-					item = new Item;
-					score = new Score;
-					//----------------------------
+			case 0:
+				//タイトル
+				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+					pushflagA = 0;
 				}
-			}
-
-			break;
-
-		case 1:
-			//ステージ選択
-			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-				pushflagA = 0;
-			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-				stageflag = 0;
-			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-				stageflag = 1;
-			}
-			if (stageflag == 0) {
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						pushflagA = 1;
+						//sceneflag = 1;
+						//仮--------------------------
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
 						item = new Item;
 						score = new Score;
+						//----------------------------
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						pushflagA = 1;
+						//sceneflag = 1;
+						//仮--------------------------
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
 						item = new Item;
 						score = new Score;
+						//----------------------------
 					}
 				}
-			}
-			else {
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 3;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 3;
+
+				break;
+
+			case 1:
+				//ステージ選択
+				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+					pushflagA = 0;
+				}
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+					stageflag = 0;
+				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+					stageflag = 1;
+				}
+				if (stageflag == 0) {
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							sceneflag = 10;
+							player = new Player();
+							enemy[0] = new Enemy;
+							item = new Item;
+							score = new Score;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							sceneflag = 10;
+							player = new Player();
+							enemy[0] = new Enemy;
+							item = new Item;
+							score = new Score;
+						}
 					}
 				}
-			}
-			break;
-
-		case 2:
-			//プレイ画面
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) == 0 && keys[KEY_INPUT_H] == 0 && oldkeys[KEY_INPUT_H] == 0) {
-				pushflagoption = 0;
-			}
-
-			if (Pauseflag == 0) {
-
-				score->TC(sceneflag);
-				score->IC();
-				player->PlayerPadMove(keys, oldkeys);
-				//デバッグ用(本番消す)
-				if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
-					delete player;
-					player = new Player();
-					wave_num = 10;
-					game_set = false;
-				}
-				if (pushflagoption == 0) {
-					if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
-						pushflagoption = 1;
-						Pauseflag = 1;
+				else {
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							sceneflag = 3;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							sceneflag = 3;
+						}
 					}
 				}
+				break;
+
+			case 2:
+				//プレイ画面
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) == 0 && keys[KEY_INPUT_H] == 0 && oldkeys[KEY_INPUT_H] == 0) {
+					pushflagoption = 0;
+				}
+
+				if (Pauseflag == 0) {
+
+					score->TC(sceneflag);
+					score->IC();
+					player->PlayerPadMove(keys, oldkeys);
+					//デバッグ用(本番消す)
+					if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
+						delete player;
+						player = new Player();
+						wave_num = 10;
+						game_set = false;
+					}
+					if (pushflagoption == 0) {
+						if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
+							pushflagoption = 1;
+							Pauseflag = 1;
+						}
+					}
 
 
 #pragma region 敵データ読み込み
-				if (game_set == false)
-				{
-					if (wave_up_flag == true)
+					if (game_set == false)
 					{
+						if (wave_up_flag == true)
+						{
 
-						wave_num++;
-						if (wave_num % 5 == 1) {
-							player->HPplus();
+							wave_num++;
+							if (wave_num % 5 == 1) {
+								player->HPplus();
+							}
+							wave_up_flag = false;
 						}
-						wave_up_flag = false;
+
+						//敵の数
+						ENEMY_MAX = GetEnemyMax(wave_num);
+
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							enemy[i] = new Enemy;
+						}
+
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							enemy[i]->SetReflectionNum();
+						}
+
+						switch (wave_num)
+						{
+							case 1:
+
+								EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
+								delete player;
+								player = new Player();
+								player->DeleteItem();
+								game_set = true;
+								break;
+							case 2:
+								EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 3:
+								EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 4:
+								EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 5:
+								EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 6:
+								EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 7:
+								EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 8:
+								EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 9:
+								EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 10:
+								EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
+								sub_boss = new SubBoss;
+								SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
+								game_set = true;
+								break;
+							case 11:
+								EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 12:
+								EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 13:
+								EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 14:
+								EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 15:
+								EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 16:
+								EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 17:
+								EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 18:
+								EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 19:
+								EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 20:
+								sub_boss = new SubBoss;
+								EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy);
+								SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
+								game_set = true;
+								break;
+							case 21:
+								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 22:
+								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+						}
+						//敵が死ぬ毎に
+						//Score+=100;
+
 					}
-
-					//敵の数
-					ENEMY_MAX = GetEnemyMax(wave_num);
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						enemy[i] = new Enemy;
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						enemy[i]->SetReflectionNum();
-					}
-
-					switch (wave_num)
-					{
-					case 1:
-
-						EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy);
-						delete player;
-						player = new Player();
-						player->DeleteItem();
-						game_set = true;
-						break;
-					case 2:
-						EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 3:
-						EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 4:
-						EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 5:
-						EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 6:
-						EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 7:
-						EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 8:
-						EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 9:
-						EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 10:
-						EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy);
-						sub_boss = new SubBoss;
-						SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
-						game_set = true;
-						break;
-					case 11:
-						EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 12:
-						EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 13:
-						EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 14:
-						EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 15:
-						EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 16:
-						EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 17:
-						EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 18:
-						EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 19:
-						EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					case 20:
-						sub_boss = new SubBoss;
-						EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy);
-						SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
-						game_set = true;
-						break;
-					case 21:
-						EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
-						game_set = true;
-						break;
-					}
-					//敵が死ぬ毎に
-					//Score+=100;
-
-				}
 #pragma endregion
 
 
 #pragma region 体力減少
 
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+					for (int i = 0; i < ENEMY_MAX; i++)
 					{
-						//時機と敵の弾の当たり判定
-						player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
+						for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+						{
+							//時機と敵の弾の当たり判定
+							player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
 
+							if (enemy[i]->GetEnemyFlag() == true)
+							{
+								//時機とボマーの当たり判定
+								enemy[i]->PlaterToEnemyHitBox(*player, i);
+							}
+
+						}
+					}
+
+					for (int i = 0; i < ENEMY_MAX; i++)
+					{
 						if (enemy[i]->GetEnemyFlag() == true)
 						{
-							//時機とボマーの当たり判定
-							enemy[i]->PlaterToEnemyHitBox(*player,i);
-						}
-
-					}
-				}
-
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					if (enemy[i]->GetEnemyFlag() == true)
-					{
-						for (int k = 0; k < ENEMY_MAX; k++)
-						{
-							if (i != k)
+							for (int k = 0; k < ENEMY_MAX; k++)
 							{
-								//敵とボマーの当たり判定
-								enemy[i]->ExplosionBommer(*enemy[k]);
-
-								for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+								if (i != k)
 								{
-									//敵と敵の弾の当たり判定
-									enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+									//敵とボマーの当たり判定
+									enemy[i]->ExplosionBommer(*enemy[k]);
+
+									for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+									{
+										//敵と敵の弾の当たり判定
+										enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+									}
 								}
 							}
 						}
 					}
-				}
 
-				if (wave_num == 10 || wave_num == 20)
-				{
+					if (wave_num == 10 || wave_num == 20)
+					{
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							if (sub_boss->GetSubBossFlag() == true)
+							{
+								for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+								{
+									//中ボスと敵の弾の当たり判定
+									sub_boss->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
+								}
+							}
+						}
+
+						for (int i = 0; i < sub_boss->GetBulletMax(); i++)
+						{
+							//時機と中ボスの弾の当たり判定
+							player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
+
+							for (int j = 0; j < ENEMY_MAX; j++)
+							{
+								if (enemy[j]->GetEnemyFlag() == true)
+								{
+									//敵と中ボスの弾の当たり判定
+									enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
+								}
+							}
+						}
+
+						//地雷と時機の当たり判定
+						sub_boss->PlayerMineHit(*player);
+					}
+
 					for (int i = 0; i < ENEMY_MAX; i++)
 					{
-						if (sub_boss->GetSubBossFlag() == true)
-						{
-							for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
-							{
-								//中ボスと敵の弾の当たり判定
-								sub_boss->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
-							}
-						}
+						//敵の動き
+						enemy[i]->Move(*player, reflection_flag, *score, item);
 					}
 
-					for (int i = 0; i < sub_boss->GetBulletMax(); i++)
+					if (wave_num == 10 || wave_num == 20)
 					{
-						//時機と中ボスの弾の当たり判定
-						player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i));
-
-						for (int j = 0; j < ENEMY_MAX; j++)
-						{
-							if (enemy[j]->GetEnemyFlag() == true)
-							{
-								//敵と中ボスの弾の当たり判定
-								enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
-							}
-						}
+						//中ボスの動き
+						sub_boss->Move(*player, reflection_flag);
 					}
-
-					//地雷と時機の当たり判定
-					sub_boss->PlayerMineHit(*player);
-				}
-
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					//敵の動き
-					enemy[i]->Move(*player, reflection_flag, *score, item);
-				}
-
-				if (wave_num == 10 || wave_num == 20)
-				{
-					//中ボスの動き
-					sub_boss->Move(*player, reflection_flag);
-				}
 
 #pragma endregion
-				//waveクリア判定
-				if (wave_num != 10 && wave_num != 20)
-				{
-					for (int i = 0; i < ENEMY_MAX; i++)
+					//waveクリア判定
+					if (wave_num != 10 && wave_num != 20)
 					{
-						//敵が全員倒されたら弾の反射をなくす
-						if (enemy[i]->GetEnemyFlag() == false && enemy[i]->GetAppearTime() == -1)
+						for (int i = 0; i < ENEMY_MAX; i++)
 						{
-							if (i == ENEMY_MAX - 1)
+							//敵が全員倒されたら弾の反射をなくす
+							if (enemy[i]->GetEnemyFlag() == false && enemy[i]->GetAppearTime() == -1)
 							{
-								reflection_flag = false;
+								if (i == ENEMY_MAX - 1)
+								{
+									reflection_flag = false;
+								}
+							}
+							else
+							{
+								break;
 							}
 						}
-						else
-						{
-							break;
-						}
 					}
-				}
-				else
-				{
-					for (int i = 0; i < ENEMY_MAX; i++)
+					else
 					{
-						//敵が全員倒されたら弾の反射をなくす
-						if (enemy[i]->GetEnemyFlag() == false && enemy[i]->GetAppearTime() == -1 &&
-							sub_boss->GetSubBossFlag() == false && sub_boss->GetAppearTime() == -1)
+						for (int i = 0; i < ENEMY_MAX; i++)
 						{
-							if (i == ENEMY_MAX - 1)
+							//敵が全員倒されたら弾の反射をなくす
+							if (enemy[i]->GetEnemyFlag() == false && enemy[i]->GetAppearTime() == -1 &&
+								sub_boss->GetSubBossFlag() == false && sub_boss->GetAppearTime() == -1)
 							{
-								sub_boss->SetMineExplosion();
-								reflection_flag = false;
+								if (i == ENEMY_MAX - 1)
+								{
+									sub_boss->SetMineExplosion();
+									reflection_flag = false;
+								}
+							}
+							else
+							{
+								break;
 							}
 						}
-						else
-						{
-							break;
-						}
-					}
-				}
-
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-
-					if (enemy[i]->GetEnemyFlag() == true || enemy[i]->GetAppearTime() != -1)
-					{
-						i--;
-						break_flag = true;
-						break;
 					}
 
-					for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+					for (int i = 0; i < ENEMY_MAX; i++)
 					{
-						if (enemy[i]->GetBulletFlag(j) == true)
+
+						if (enemy[i]->GetEnemyFlag() == true || enemy[i]->GetAppearTime() != -1)
 						{
+							i--;
 							break_flag = true;
 							break;
 						}
-					}
-				}
 
-				if (wave_num == 10 || wave_num == 20)
-				{
-					if (sub_boss->GetSubBossFlag() == true || sub_boss->GetAppearTime() != -1)
-					{
-						break_flag = true;
-					}
-
-					if (break_flag == false)
-					{
-						for (int i = 0; i < 12; i++)
+						for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
 						{
-							if (sub_boss->GetEnmyBulletFlag(i) == true)
+							if (enemy[i]->GetBulletFlag(j) == true)
 							{
 								break_flag = true;
 								break;
 							}
 						}
 					}
-				}
-
-				if (break_flag == false)
-				{
-					game_set = false;
-					reflection_flag = true;
-					wave_up_flag = true;
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						delete enemy[i];
-					}
 
 					if (wave_num == 10 || wave_num == 20)
 					{
-						delete sub_boss;
+						if (sub_boss->GetSubBossFlag() == true || sub_boss->GetAppearTime() != -1)
+						{
+							break_flag = true;
+						}
+
+						if (break_flag == false)
+						{
+							for (int i = 0; i < 12; i++)
+							{
+								if (sub_boss->GetEnmyBulletFlag(i) == true)
+								{
+									break_flag = true;
+									break;
+								}
+							}
+						}
 					}
 
-					break;
-				}
-				else
-				{
-					break_flag = false;
-				}
+					if (break_flag == false)
+					{
+						game_set = false;
+						reflection_flag = true;
+						wave_up_flag = true;
 
-				if (wave_num > 32) {
-					score->CC();
-					sceneflag = 5;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+
+						if (wave_num == 10 || wave_num == 20)
+						{
+							delete sub_boss;
+						}
+
+						break;
+					}
+					else
+					{
+						break_flag = false;
+					}
+
+					if (wave_num > 32) {
+						score->CC();
+						sceneflag = 5;
+					}
+					sceneflag = player->Result();
+					item->Move(*player, *score);
 				}
-				sceneflag = player->Result();
-				item->Move(*player, *score);
-			}
-			else {
+				else {
 #pragma region ポーズ画面処理
-				if (pushflagoption == 0) {
-					if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
-						pushflagoption = 1;
-						Pauseflag = 0;
+					if (pushflagoption == 0) {
+						if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
+							pushflagoption = 1;
+							Pauseflag = 0;
+						}
 					}
-				}
 
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) == 0 && keys[KEY_INPUT_W] == 0) {
-					pushUP = 0;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) == 0 && keys[KEY_INPUT_S] == 0) {
-					pushDOWN = 0;
-				}
-				if (pushUP == 0) {
-					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-						Pause = Pause - 1;
-						pushUP = 1;
+					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) == 0 && keys[KEY_INPUT_W] == 0) {
+						pushUP = 0;
+					}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) == 0 && keys[KEY_INPUT_S] == 0) {
+						pushDOWN = 0;
 					}
-				}if (pushDOWN == 0) {
-					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-						Pause = Pause + 1;
-						pushDOWN = 1;
+					if (pushUP == 0) {
+						if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+							Pause = Pause - 1;
+							pushUP = 1;
+						}
+					}if (pushDOWN == 0) {
+						if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+							Pause = Pause + 1;
+							pushDOWN = 1;
+						}
 					}
-				}
 
-				if (Pause <= 0) {
-					Pause = 0;
-				}
-				if (Pause >= 2) {
-					Pause = 2;
-				}
-				if (Pause == 0) {//戻る
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						Pauseflag = 0;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						Pauseflag = 0;
+					if (Pause <= 0) {
+						Pause = 0;
 					}
-				}if (Pause == 1) {//初めからやり直す
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete item;
-						item = new Item;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete item;
-						item = new Item;
+					if (Pause >= 2) {
+						Pause = 2;
 					}
-				}if (Pause == 2) {//タイトルに戻る
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+					if (Pause == 0) {//戻る
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							Pauseflag = 0;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							Pauseflag = 0;
 						}
-						delete score;
-						Pauseflag = 0;
-						game_set = false;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflagA = 1;
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+					}if (Pause == 1) {//初めからやり直す
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
 						}
-						delete score;
-						game_set = false;
-						Pauseflag = 0;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
+					}if (Pause == 2) {//タイトルに戻る
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							Pauseflag = 0;
+							game_set = false;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							pushflagA = 1;
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							game_set = false;
+							Pauseflag = 0;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
+						}
 					}
-				}
 #pragma endregion
-			}
+				}
 
-			break;
+				break;
 
-		case 3:
-			//プレイ画面
-			score->TC(sceneflag);
-			score->IC();
-			break;
+			case 3:
+				//プレイ画面
+				score->TC(sceneflag);
+				score->IC();
+				break;
 
-		case 4:
-			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-				pushflagA = 0;
-			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-				resultflag = 0;
-			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-				resultflag = 1;
-			}
-			if (resultflag == 0) {//初めからやり直す
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+			case 4:
+				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+					pushflagA = 0;
+				}
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+					resultflag = 0;
+				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+					resultflag = 1;
+				}
+				if (resultflag == 0) {//初めからやり直す
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
 						}
-						delete item;
-						item = new Item;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete item;
-						item = new Item;
 					}
 				}
-			}
-			else {//タイトルへ戻る
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+				else {//タイトルへ戻る
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							Pauseflag = 0;
+							game_set = false;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							pushflagA = 1;
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							game_set = false;
+							Pauseflag = 0;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
 						}
-						delete score;
-						Pauseflag = 0;
-						game_set = false;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflagA = 1;
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete score;
-						game_set = false;
-						Pauseflag = 0;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
 					}
 				}
-			}
-			break;
+				break;
 
-		case 5:
-			//リザルト画面(ゲームクリア)
-			score->TC(sceneflag);
-			score->RC();
-			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-				pushflagA = 0;
-			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-				resultflag = 0;
-			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-				resultflag = 1;
-			}
-			if (resultflag == 0) {//初めからやり直す
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+			case 5:
+				//リザルト画面(ゲームクリア)
+				score->TC(sceneflag);
+				score->RC();
+				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+					pushflagA = 0;
+				}
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+					resultflag = 0;
+				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+					resultflag = 1;
+				}
+				if (resultflag == 0) {//初めからやり直す
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							sceneflag = 2;
+							delete player;
+							player = new Player();
+							delete score;
+							score = new Score();
+							wave_num = 1;
+							game_set = false;
+							Pauseflag = 0;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete item;
+							item = new Item;
 						}
-						delete item;
-						item = new Item;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						sceneflag = 2;
-						delete player;
-						player = new Player();
-						delete score;
-						score = new Score();
-						wave_num = 1;
-						game_set = false;
-						Pauseflag = 0;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete item;
-						item = new Item;
 					}
 				}
-			}
-			else {//タイトルへ戻る
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
+				else {//タイトルへ戻る
+					if (pushflagA == 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							Pauseflag = 0;
+							game_set = false;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
+						}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							pushflagA = 1;
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+							delete score;
+							game_set = false;
+							Pauseflag = 0;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
 						}
-						delete score;
-						Pauseflag = 0;
-						game_set = false;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflagA = 1;
-						delete player;
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							delete enemy[i];
-						}
-						delete score;
-						game_set = false;
-						Pauseflag = 0;
-						wave_num = 1;
-						delete item;
-						sceneflag = 0;
 					}
 				}
-			}
-			break;
+				break;
 
-		case 10:
-			//チュートリアル
-			player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption);
-			score->IC();
-			break;
+			case 10:
+				//チュートリアル
+				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption);
+				score->IC();
+				break;
 		}
 		// 描画処理
 		switch (sceneflag) {//シーン管理
-		case 0:
-			//タイトル
-			break;
+			case 0:
+				//タイトル
+				break;
 
-		case 1:
-			//ステージ選択
-			if (stageflag == 0) {
-				DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
-			}if (stageflag == 1) {
-				DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
-			}
+			case 1:
+				//ステージ選択
+				if (stageflag == 0) {
+					DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
+				}if (stageflag == 1) {
+					DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
+				}
 
-			break;
+				break;
 
-		case 2:
-			maba++;
+			case 2:
+				maba++;
 
-			maba2 = maba / 10;
+				maba2 = maba / 10;
 
-			if (maba2 == 4)
-			{
-				maba = 0;
-				maba2 = 0;
-			}
-
-			if (game_set == true)
-			{
-				//プレイ画面
-				for (int i = 0; i < ENEMY_MAX; i++)
+				if (maba2 == 4)
 				{
-					if (enemy[i] != nullptr)
+					maba = 0;
+					maba2 = 0;
+				}
+
+				if (game_set == true)
+				{
+					//プレイ画面
+					for (int i = 0; i < ENEMY_MAX; i++)
 					{
-						enemy[i]->Draw(60 * i);
+						if (enemy[i] != nullptr)
+						{
+							enemy[i]->Draw(60 * i);
+						}
+
 					}
-
 				}
-			}
 
-			if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
-			{
-				sub_boss->Draw();
-			}
-
-			player->D();
-			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 128, player_img[maba2], true);
-			item->Draw();
-			player->Draw();
-			score->Draw();
-
-			if (Pauseflag == 1) {
-				DrawGraph(220, 120, PSgh, true);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
-				DrawGraph(220, 120, PSgh128, true);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
-				if (Pause == 0) {
-					DrawGraph(220, 120, PSghreturn, true);
-					DrawBox(280, 180, 680, 341, GetColor(255, 255, 255), false);
-					DrawBox(281, 181, 679, 340, GetColor(255, 255, 255), false);
-				}if (Pause == 1) {
-					DrawGraph(220, 120, PSghrestart, true);
-					DrawBox(280, 410, 680, 571, GetColor(255, 255, 255), false);
-					DrawBox(281, 411, 679, 570, GetColor(255, 255, 255), false);
-				}if (Pause == 2) {
-					DrawGraph(220, 120, PSghtitle, true);
-					DrawBox(280, 640, 680, 801, GetColor(255, 255, 255), false);
-					DrawBox(281, 641, 679, 800, GetColor(255, 255, 255), false);
+				if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
+				{
+					sub_boss->Draw();
 				}
-			}
 
-			break;
-			delete player;
-		case 3:
-			//プレイ画面
-			score->Draw();
-			break;
+				player->D();
+				DrawGraph(0, 0, Layout, true);
+				DrawGraph(958, 128, player_img[maba2], true);
+				DrawGraph(1071, 487, waveback, true);
+				wdiv = 1;
+				for (int i = 0; i < 2; i++)
+				{
+					windex = wave_num / wdiv % 10;
+					DrawGraph((2 - 1 - i) * 23 + 1204 - 23, 497, wavegh[windex], true);
+					wdiv = wdiv * 10;
+				}
+				sandcooltime++;
+				if (sandcooltime >= 6) {
+					sandcooltime = 0;
+					sand++;
+				}
+				if (sand > 10) {
+					sand = 0;
+				}
+				DrawGraph(1071, 487, wavesand[sand], true);
+				item->Draw();
+				player->Draw();
+				score->Draw();
 
-		case 4:
-			//リザルト画面(ゲームオーバー)
-			if (resultflag == 0) {
-				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
-			}
-			else {
-				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
-			}
+				if (Pauseflag == 1) {
+					DrawGraph(220, 120, PSgh, true);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
+					DrawGraph(220, 120, PSgh128, true);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+					if (Pause == 0) {
+						DrawGraph(220, 120, PSghreturn, true);
+						DrawBox(280, 180, 680, 341, GetColor(255, 255, 255), false);
+						DrawBox(281, 181, 679, 340, GetColor(255, 255, 255), false);
+					}if (Pause == 1) {
+						DrawGraph(220, 120, PSghrestart, true);
+						DrawBox(280, 410, 680, 571, GetColor(255, 255, 255), false);
+						DrawBox(281, 411, 679, 570, GetColor(255, 255, 255), false);
+					}if (Pause == 2) {
+						DrawGraph(220, 120, PSghtitle, true);
+						DrawBox(280, 640, 680, 801, GetColor(255, 255, 255), false);
+						DrawBox(281, 641, 679, 800, GetColor(255, 255, 255), false);
+					}
+				}
 
-			break;
+				break;
+				delete player;
+			case 3:
+				//プレイ画面
+				score->Draw();
+				break;
 
-		case 5:
-			//リザルト画面(ゲームクリア)
-			if (resultflag == 0) {
-				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
-			}
-			else {
-				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
-			}
-			break;
+			case 4:
+				//リザルト画面(ゲームオーバー)
+				if (resultflag == 0) {
+					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
+				}
+				else {
+					DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+					DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
+				}
 
-		case 10:
-			//チュートリアル
+				break;
 
-			maba++;
+			case 5:
+				//リザルト画面(ゲームクリア)
+				if (resultflag == 0) {
+					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
+					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
+				}
+				else {
+					DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
+					DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
+				}
+				break;
 
-			maba2 = maba / 10;
+			case 10:
+				//チュートリアル
 
-			if (maba2 == 4)
-			{
-				maba = 0;
-				maba2 = 0;
-			}
+				maba++;
 
-			player->D();//itemback
-			enemy[0]->Draw(0);
-			DrawGraph(0, 0, Layout, true);
-			DrawGraph(958, 128, player_img[maba2], true);
-			score->Draw();
-			player->TutorialDraw();
+				maba2 = maba / 10;
+
+				if (maba2 == 4)
+				{
+					maba = 0;
+					maba2 = 0;
+				}
+
+				player->D();//itemback
+				enemy[0]->Draw(0);
+				DrawGraph(0, 0, Layout, true);
+				DrawGraph(958, 128, player_img[maba2], true);
+				score->Draw();
+				player->TutorialDraw();
 
 
-			break;
-			delete player;
+				break;
+				delete player;
 		}
 
 		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
-		//DrawGraph(34, 34, guide, true);
+
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
 
-		// 20ミリ秒待機(疑似60FPS)
+		// 20ミリ秒待機(疑似50FPS)
 		WaitTimer(20);
 
 		// Windowsシステムからくる情報を処理する
