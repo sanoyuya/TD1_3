@@ -57,8 +57,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int wavegh[10] = { 0 };
 	LoadDivGraph("resouce/wavenum.png", 10, 10, 1, 21, 23, wavegh);
 	int waveback = LoadGraph("resouce/wave.png");
-	int wavesand[10] = { 0 }; 
-	LoadDivGraph("resouce/sandstorm.png",10,10,1,162,43,wavesand);
+	int wavesand[10] = { 0 };
+	LoadDivGraph("resouce/sandstorm.png", 10, 10, 1, 162, 43, wavesand);
 	int sandcooltime = 0;
 	int sand = 0;
 	int maba = 0;
@@ -329,6 +329,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								break;
 							case 21:
 								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
+								game_set = true;
+								break;
+							case 22:
+								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy);
 								game_set = true;
 								break;
 						}
@@ -852,23 +856,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				player->D();
 				DrawGraph(0, 0, Layout, true);
 				DrawGraph(958, 128, player_img[maba2], true);
-				DrawGraph(1071, 487, waveback,true);
+				DrawGraph(1071, 487, waveback, true);
 				wdiv = 1;
 				for (int i = 0; i < 2; i++)
 				{
 					windex = wave_num / wdiv % 10;
-					DrawGraph((2-1-i) * 23 + 1204 - 23, 497, wavegh[windex], true);
+					DrawGraph((2 - 1 - i) * 23 + 1204 - 23, 497, wavegh[windex], true);
 					wdiv = wdiv * 10;
 				}
 				sandcooltime++;
 				if (sandcooltime >= 6) {
-					sandcooltime= 0;
+					sandcooltime = 0;
 					sand++;
 				}
-				if (sand >10) {
+				if (sand > 10) {
 					sand = 0;
 				}
-				//DrawGraph(1071, 487, wavesand[sand], true);
+				DrawGraph(1071, 487, wavesand[sand], true);
 				item->Draw();
 				player->Draw();
 				score->Draw();
@@ -951,12 +955,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
-		//DrawGraph(34, 34, guide, true);
+
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
 
-		// 20ミリ秒待機(疑似60FPS)
+		// 20ミリ秒待機(疑似50FPS)
 		WaitTimer(20);
 
 		// Windowsシステムからくる情報を処理する

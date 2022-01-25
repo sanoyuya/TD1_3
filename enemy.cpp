@@ -1445,7 +1445,8 @@ void Enemy::Draw(int num)
 			break;
 		default:
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 0, 0), true);
+				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(0, 255, 0), true);
+			DrawCircle((int)transform.x, (int)transform.y, 2, GetColor(255, 255, 255), true);
 			break;
 		}
 
@@ -2052,6 +2053,8 @@ int GetEnemyMax(int& wave_num)
 		return 4;
 	case 21:
 		return 8;
+	case 22:
+		return 16;
 	}
 	return -1;
 }
