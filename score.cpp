@@ -65,7 +65,7 @@ void Score::Draw() {
 	for (int i = 0; i < 7; i++)
 	{
 		index = score / div % 10;
-		DrawGraph(i * 48 + 985, 30 + 36, scoregh[index], true);
+		DrawGraph((7-1-i) * 48 + 985, 30 + 36, scoregh[index], true);
 		div = div * 10;
 	}
 
