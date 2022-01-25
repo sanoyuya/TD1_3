@@ -17,7 +17,7 @@ public:
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys);
 	void HP(Transform transform, EnemyBullet& bullet);
-	void HPplus();
+	void HPplus(int wave);
 	void Draw();
 	void D();
 	int GetX();

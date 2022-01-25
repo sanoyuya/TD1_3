@@ -209,8 +209,12 @@ void Player::HP(Transform transform, EnemyBullet& bullet) {
 	}
 }
 
-void Player::HPplus() {
-	hp += 3;
+void Player::HPplus(int num) {
+	if (num % 5 == 1) {
+		hp += 3;
+	}if (num % 10 == 1) {
+		hp += 2;
+	}
 }
 
 void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag) {
