@@ -308,6 +308,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy);
 						game_set = true;
 						break;
+					case 22:
+						EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy);
+						game_set = true;
+						break;
 					}
 					//敵が死ぬ毎に
 					//Score+=100;
@@ -825,7 +829,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			{
 				sub_boss->Draw();
 			}
-
+			//DrawGraph(34, 34, guide, true);
 			player->D();
 			DrawGraph(0, 0, Layout, true);
 			DrawGraph(958, 128, player_img[maba2], true);
@@ -911,12 +915,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
-		//DrawGraph(34, 34, guide, true);
+
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
 
-		// 20ミリ秒待機(疑似60FPS)
+		// 20ミリ秒待機(疑似50FPS)
 		WaitTimer(20);
 
 		// Windowsシステムからくる情報を処理する
