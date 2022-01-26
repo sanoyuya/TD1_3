@@ -156,6 +156,10 @@ Enemy::Enemy()
 	move_rand = 0;
 	easing_num = 0;
 
+	anticipation = 50;
+	rand = 0;
+	teleport_flag = false;
+
 	//画像
 	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
 	img_r = 48;
@@ -403,7 +407,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //動き
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,int wave_num)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num)
 {
 	if (use_flag == true)
 	{
@@ -816,6 +820,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 #pragma region 中ボス
 
+#pragma region 1
 		if (enemy_type == 10)
 		{
 			if (exising_flag == true)
@@ -1015,6 +1020,179 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		}
 #pragma endregion
 
+#pragma region 2
+
+		if (enemy_type == 20)
+		{
+			if (exising_flag == true)
+			{
+				//移動
+				if (fast_move_flag == false)
+				{
+					if (move_time == 1)
+					{
+						rand = GetRand(7);
+					}
+
+					if (move_time > 0 && teleport_flag == false)
+					{
+						move_time--;
+					}
+
+					if (move_time == 0)
+					{
+						move_flag = true;
+						int rand2 = GetRand(7);
+						if (rand == rand2)
+						{
+							move_flag = false;
+							teleport_flag = true;
+						}
+					}
+
+#pragma region 移動
+					if (move_flag == true)
+					{
+						if (move_frame == 0)
+						{
+							rand = GetRand(7) + 1;
+
+							if ((int)transform.y == 128)//上
+							{
+								while (rand == 3 || rand == 5 || rand == 7)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.y == 864)//下
+							{
+								while (rand == 4 || rand == 6 || rand == 8)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x >= 776)//右
+							{
+								while (rand == 1 || rand == 5 || rand == 6)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+							else if ((int)transform.x <= 178)//左
+							{
+								while (rand == 2 || rand == 7 || rand == 8)
+								{
+									rand = GetRand(7) + 1;
+								}
+							}
+						}
+
+						switch (rand)
+						{
+
+						case 1://右
+							XMove(x_speed, true);
+							break;
+
+						case 2://左
+							XMove(x_speed, false);
+							break;
+
+						case 3://上
+							YMove(y_speed, true);
+							break;
+
+						case 4://下
+							YMove(y_speed, false);
+							break;
+
+						case 5://右上
+							XMove(x_speed, true);
+							YMove(y_speed, true);
+							break;
+
+						case 6://右下
+							XMove(x_speed, true);
+							YMove(y_speed, false);
+							break;
+
+						case 7://左上
+							XMove(x_speed, false);
+							YMove(y_speed, true);
+							break;
+
+						case 8://左下
+							XMove(x_speed, false);
+							YMove(y_speed, false);
+							break;
+						}
+
+						move_frame++;
+
+						if (move_frame == move_end_frame)
+						{
+							move_frame = 0;
+							move_time = def_move_time;
+							move_flag = false;
+						}
+					}
+#pragma endregion
+
+					if (teleport_flag == true)
+					{
+						if (anticipation > 0)
+						{
+							anticipation--;
+						}
+						if (anticipation == 0)
+						{
+							transform.x = (double)GetRand(560) + 207;
+							transform.y = (double)GetRand(576) + 192;
+							teleport_flag = false;
+							anticipation = 50;
+						}
+					}
+				}
+
+				//発射時間管理
+				if (fast_move_flag == false && shot_time > 0)
+				{
+					shot_time--;
+				}
+				if (shot_time == -1)
+				{
+
+					Refresh_ReflectionNum(4);
+
+				}
+				//弾の生成
+				if (shot_time == 0)
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (*bullet[i]->GetBulletFlag() == false)
+						{
+							bullet[i]->Form(transform, player, x_speed, y_speed, enemy_type);
+							damage_flag[i] = true;
+							//角度を90度ずつずらす
+							bullet[1]->SetAngle(bullet[0]->GetAngle() + (DX_PI_F / 2));
+							bullet[2]->SetAngle(bullet[1]->GetAngle() + (DX_PI_F / 2));
+							bullet[3]->SetAngle(bullet[2]->GetAngle() + (DX_PI_F / 2));
+						}
+					}
+					shot_time = -1;
+				}
+
+				if (hp <= 0)
+				{
+					exising_flag = false;
+				}
+			}
+		}
+#pragma endregion
+
+#pragma endregion
+
 #pragma region フォーメーション
 
 		if (enemy_type == 5)
@@ -1024,7 +1202,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//移動
 				if (action_flag == true && fast_move_flag == false)
 				{
-					circularMotionL(transform.y, transform.x, 482.0f,482.0f ,380.0f, angle);
+					circularMotionL(transform.y, transform.x, 482.0f, 482.0f, 380.0f, angle);
 				}
 
 				if (shot_action_flag == true)
@@ -1275,7 +1453,7 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 	}
 }
 
-void Enemy::PlaterToEnemyHitBox(Player& player,int enemy_num)
+void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
 {
 	if (enemy_type == 2)
 	{
@@ -1456,6 +1634,13 @@ void Enemy::Draw(int num)
 		case 10://中ボス雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
 			break;
+		case 20://中ボス雑魚
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
+			if (teleport_flag == true)
+			{
+				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
+			}
+			break;
 		default:
 			DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
 				(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(0, 255, 0), true);
@@ -1608,7 +1793,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		all_bullet_max = 3;
 		break;
 	case 4:
-		if (wave_num >=20)
+		if (wave_num >= 20)
 		{
 			all_bullet_max = 48;
 		}
@@ -1623,6 +1808,10 @@ void Enemy::form(FILE* fp, int wave_num)
 	case 10:
 		all_bullet_max = 12;
 		break;
+	case 20:
+		all_bullet_max = 4;
+		img_r = 32;
+		break;
 	}
 
 	for (int i = 0; i < all_bullet_max; i++)
@@ -1632,7 +1821,7 @@ void Enemy::form(FILE* fp, int wave_num)
 }
 
 //生成メイン
-void EnemyForm(const char* file_name, int max, Enemy** enemy,int wave_num)
+void EnemyForm(const char* file_name, int max, Enemy** enemy, int wave_num)
 {
 
 	FILE* fp;
@@ -2075,6 +2264,12 @@ int GetEnemyMax(int& wave_num)
 		return 8;
 	case 22:
 		return 16;
+	case 23:
+		return 10;
+	case 24:
+		return 9;
+	case 25:
+		return 10;
 	}
 	return -1;
 }

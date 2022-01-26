@@ -496,17 +496,14 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 			}
 #pragma endregion
 		}
-		if (enemy_type == 3)
+		if (enemy_type == 3 || enemy_type == 20)
 		{
 			if (exising_flag == true)
 			{
-
 				boomerang_x_r = 100;
 				boomerang_y_r = 250;
-
 				center_x = (float)(transform.x + cos(angle) * boomerang_x_r);
 				center_y = (float)(transform.y + sin(angle) * boomerang_y_r);
-
 				if (transform.x - center_x >= 90 && transform.x > center_x)
 				{
 					center_x = center_x - 130;
@@ -517,21 +514,17 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 					center_x = center_x + 130.0f;
 					boomerang_y_r = center_x - (float)transform.x + 130.0f;
 				}
-
 				if (boomerang_angle > 26.00)
 				{
 					bullet_flag = false;
 				}
-
 				circularMotionL(this->transform.x, this->transform.y, center_x, center_y, boomerang_y_r, boomerang_x_r, angle, boomerang_angle);
-
 				boomerang_anime_timer++;
 
 				if (boomerang_anime_timer == 8 * 3)
 				{
 					boomerang_anime_timer = 0;
 				}
-
 				boomerang_anime = boomerang_anime_timer / 3;
 			}
 			else
@@ -855,11 +848,10 @@ void EnemyBullet::Draw(int enemy_type)
 		{
 			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img, true);
 		}
-		if (enemy_type == 3)
+		if (enemy_type == 3 || enemy_type == 20)
 		{
 			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, boomerang_img[boomerang_anime], true);
 		}
-
 	}
 }
 #pragma endregion
@@ -909,7 +901,7 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	this->x_speed = x_speed;
 	this->y_speed = y_speed;
 
-	if (enemy_type == 3)
+	if (enemy_type == 3 || enemy_type == 20)
 	{
 		boomerang_x_r = 100;
 		boomerang_y_r = 250;
