@@ -504,7 +504,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 
-						if (enemy[i]->GetEnemyFlag() == true || enemy[i]->GetAppearTime() != -1)
+						if (enemy[i]->GetEnemyFlag() == true ||
+							enemy[i]->GetAppearTime() != -1 ||
+							enemy[i]->GetExplosionFlag() == true)
 						{
 							i--;
 							break_flag = true;

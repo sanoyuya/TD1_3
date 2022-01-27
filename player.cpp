@@ -368,6 +368,10 @@ int Player::EasingMove(double end_x, double end_y, int end_frame)
 
 	return 0;
 
+
+
+}
+
 int Player::GetX()
 {
 	return X;
