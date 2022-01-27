@@ -39,8 +39,9 @@ public:
 	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
 	void SetDamageFlag(int i, int num);
+	void SetMoveFlag(int flag);
 	
-	void EasingMove(double end_x, double end_y, int end_frame);
+	int EasingMove(double end_x, double end_y, int end_frame);
 	void SetEasingFlag(int num);
 	void DeleteItem();
 	

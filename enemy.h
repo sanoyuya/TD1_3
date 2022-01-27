@@ -13,6 +13,8 @@ int FlagSerch(bool flag[], int max);
 int FlagSerch(EnemyBullet** bullet, int max);
 int GetEnemyMax(int& wave_num);
 
+void TxtDraw(int x,int y, const char* file);
+
 class Enemy
 {
 public:
@@ -20,7 +22,7 @@ public:
 	~Enemy();
 	void form(FILE* fp, int wave_num);
 	void Tutorialform(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num, Item* item);
@@ -28,7 +30,7 @@ public:
 	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Enemy& enemy);
 	void PlaterToEnemyHitBox(Player& player, int enemy_num);
-	void ExplosionBommer(Enemy& enemy);
+	void ExplosionBommer(Enemy* enemy);
 	void HP(Transform transform, EnemyBullet& bullet, Item* item);
 	void XMove(int x_speed, bool right_flag);
 	void YMove(int y_speed, bool up_flag);
@@ -44,11 +46,13 @@ public:
 	Transform GetTransform();
 	int GetShotTime();
 	int GetBulletMax();
+	bool GetExplosionFlag();
+	int GetTxtFlag();
 
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);
 	void SetEnemyFlag(bool flag);
-
+	void SetExplosionFlag(bool flag);
 
 	int color;
 
@@ -100,6 +104,7 @@ private:
 	int bommer_anime_timer;
 	int bommer_anime;
 
+
 	//初期値
 	int def_explosion_time;
 
@@ -131,8 +136,13 @@ private:
 	int boomerang_img[10];
 	int boomerang_anime_timer;
 	int boomerang_anime;
-	//デバッグ用
+	//爆発エフェクト
+	int explosion_img[8];
+	int explosion_img_anime;
+	int explosion_img_anime_timer;
+	bool explosion_flag;
+	int txt_flag;
 
-
+	//フォーメーション
+	bool formation_fast_move_flag;
 };
-

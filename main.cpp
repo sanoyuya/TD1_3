@@ -92,6 +92,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	bool game_set = false;
 	bool break_flag = false;
 	int guide = LoadGraph("resouce/formation_circle.png");
+	bool movie_flag = false;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -214,7 +215,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 					if (game_set == false)
 					{
-						//wave_num = 21;
+						wave_num = 27;
 						if (wave_up_flag == true)
 						{
 
@@ -346,6 +347,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								EnemyForm("WAVE_ENEMY_DATA/wave25.csv", ENEMY_MAX, enemy, wave_num);
 								game_set = true;
 								break;
+							case 26:
+								EnemyForm("WAVE_ENEMY_DATA/wave26.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								movie_flag = true;
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								break;
+							case 27:
+								movie_flag = false;
+								EnemyForm("WAVE_ENEMY_DATA/wave27.csv", ENEMY_MAX, enemy, wave_num);
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								game_set = true;
+								break;
 						}
 						//敵が死ぬ毎に
 						//Score+=100;
@@ -381,7 +396,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								if (i != k)
 								{
 									//敵とボマーの当たり判定
-									enemy[i]->ExplosionBommer(*enemy[k]);
+									enemy[i]->ExplosionBommer(enemy[k]);
 
 									for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 									{
@@ -429,7 +444,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					for (int i = 0; i < ENEMY_MAX; i++)
 					{
 						//敵の動き
-						enemy[i]->Move(*player, reflection_flag, *score, item, wave_num);
+						enemy[i]->Move(*player, reflection_flag, *score, item, wave_num,movie_flag,keys);
 					}
 
 					if (wave_num == 10 || wave_num == 20)
@@ -482,7 +497,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					for (int i = 0; i < ENEMY_MAX; i++)
 					{
 
-						if (enemy[i]->GetEnemyFlag() == true || enemy[i]->GetAppearTime() != -1)
+						if (enemy[i]->GetEnemyFlag() == true ||
+							enemy[i]->GetAppearTime() != -1 ||
+							enemy[i]->GetExplosionFlag() == true)
 						{
 							i--;
 							break_flag = true;
@@ -853,7 +870,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					{
 						if (enemy[i] != nullptr)
 						{
-							enemy[i]->Draw(60 * i);
+							enemy[i]->Draw(i);
 						}
 
 					}
@@ -887,6 +904,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				item->Draw();
 				player->Draw();
 				score->Draw();
+
+				if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+				{
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
 
 				if (Pauseflag == 1) {
 					DrawGraph(220, 120, PSgh, true);
@@ -966,7 +988,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
-
+		DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();

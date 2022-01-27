@@ -27,9 +27,14 @@ Mine::Mine()
 		exising_flag[i] = 0;
 		mine_anime_timer[i] = 0;
 		mine_anime[i] = 0;
+		explosion_img_anime[i] = 0;
+	explosion_img_anime_timer[i] = 0;
 	}
 	mine_r = 8;
 	LoadDivGraph("resouce/bom.png", 10, 10, 1, 32, 32, mine_img);
+
+	LoadDivGraph("resouce/explosion.png", 8, 8, 1, 48, 48, explosion_img);
+
 }
 
 //デストラクタ
@@ -226,6 +231,15 @@ void Mine::Move()
 			{
 				explosion_flag[i] = true;
 			}
+
+			mine_anime_timer[i]++;
+
+			if (mine_anime_timer[i] == 10 * 4)
+			{
+				mine_anime_timer[i] = 0;
+			}
+
+			mine_anime[i] = mine_anime_timer[i] / 4;
 		}
 
 		if (explosion_flag[i] == true)
@@ -239,9 +253,20 @@ void Mine::Move()
 				bombs_time[i] = def_bombs_time;
 				explosion_time[i] = def_explosion_time;
 			}
+
+			explosion_img_anime_timer[i]++;
+
+			if (explosion_img_anime_timer[i] == 8 * 1)
+			{
+				explosion_img_anime_timer[i] = 0;
+			}
+
+			explosion_img_anime[i] = explosion_img_anime_timer[i] / 1;
+
+			
 		}
 
-		mine_anime[i] = explosion_time[i] / 30;
+
 	}
 
 
@@ -261,7 +286,8 @@ void Mine::Draw()
 	{
 		if (exising_flag[i] == true && explosion_flag[i] == true)
 		{
-			DrawBox((int)transform[i].x - transform[i].xr, (int)transform[i].y - transform[i].yr, (int)transform[i].x + transform[i].xr, (int)transform[i].y + transform[i].yr, GetColor(255, 255, 255), true);
+			DrawGraph((int)transform[i].x - 16, (int)transform[i].y - 16, explosion_img[explosion_img_anime[i]], true);
+
 		}
 		else if (exising_flag[i] == true)
 		{
