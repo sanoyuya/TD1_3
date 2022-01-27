@@ -16,7 +16,7 @@ public:
 	Player();
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys, int wave_num);
-	void HP(Transform transform, EnemyBullet& bullet);
+	void HP(Transform transform, EnemyBullet& bullet,int flag);
 	void HPplus(int wave);
 	void Draw();
 	void D();
@@ -32,8 +32,9 @@ public:
 	int Result();
 	int Getnohitflag();
 	int Getscoreitem();
+	void pushB();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag);
+	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag,int flag);
 	void TutorialDraw();
 	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag);
 	void ItemFlagAdd(int num, Score& score);
@@ -63,6 +64,7 @@ private:
 	int Moveflag1; int Moveflag2; int Moveflag2_2; int Moveflag3; int Moveflag4; int Moveflag5; int Move2time; int rightflag; int leftflag; int Bflag; int Aflag; double CP;
 	int txtflag;
 	int pushflag;
+	int pushflagB;
 	int txt1; int txt2; int txt3; int txt4; int txt5; int txt6; int txt7; int txt8; int txt9; int txt10; int txt11; int txt12; int txt13; int txt14; int txt15; int txt16; int txt17; 
 	int A; int option; int Apflag; int Apushflag; int SetAtime;
 	int HPgh; int MPgh; int itemline; int itemback; int bigitem; int Alpha;
