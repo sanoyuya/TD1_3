@@ -1,4 +1,4 @@
-#include "DxLib.h"
+#include "Dxlib.h"
 #include"player.h"
 #include"enemy.h"
 #include"item.h"
@@ -210,14 +210,26 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ÉvÉåÉCÉÑÅ[Ç
 
 		stealth_anime = stealth_anime_timer / 6;
 	}
-	if (wave_num == 24)
+
+	switch (wave_num)
 	{
-		EasingMove(482, 565, 80);
+	case 24:
+		if (EasingMove(482, 565, 80) == 1)
+		{
+			move_flag = 1;
+		}
+		break;
+	case 26:
+		EasingMove(480, 832, 80);
+		break;
+	default:
+		if (EasingMove(482, 482, 80) == 1)
+		{
+			move_flag = 1;
+		}
+
 	}
-	else
-	{
-		EasingMove(482, 482, 80);
-	}
+
 
 }
 
@@ -301,6 +313,11 @@ void Player::SetDamageFlag(int i, int num)
 	damage_flag[i] = num;
 }
 
+void Player::SetMoveFlag(int flag)
+{
+	move_flag = flag;
+}
+
 void Player::SetEasingFlag(int num)
 {
 	easing_flag = num;
@@ -314,8 +331,7 @@ void Player::DeleteItem()
 void Player::pushB() {
 	pushflagB = 1;
 }
-
-void Player::EasingMove(double end_x, double end_y, int end_frame)
+int Player::EasingMove(double end_x, double end_y, int end_frame)
 {
 	easing_end_x = end_x;
 	easing_end_y = end_y;
@@ -346,12 +362,11 @@ void Player::EasingMove(double end_x, double end_y, int end_frame)
 		{
 			easing_frame = 0;
 			easing_flag = 0;
-			move_flag = 1;
+			return 1;
 		}
 	}
 
-
-}
+	return 0;
 
 int Player::GetX()
 {

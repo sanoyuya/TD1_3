@@ -48,5 +48,10 @@ private:
 	int mine_anime_timer[10];
 	int mine_anime[10];
 	int mine_r;
+
+	//爆発エフェクト
+	int explosion_img[8];
+	int explosion_img_anime[10];
+	int explosion_img_anime_timer[10];
 };
 

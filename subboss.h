@@ -71,6 +71,11 @@ private:
 	int boss1_anime;
 	int img_r;
 
+	//爆発エフェクト
+	int explosion_img[8];
+	int explosion_img_anime;
+	int explosion_img_anime_timer;
+	bool explosion_flag;
 
 
 	EnemyBullet* bullet[12];

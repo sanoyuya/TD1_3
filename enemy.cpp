@@ -49,6 +49,83 @@ void circularMotionL(double& posX, double& posY, float cPosX, float cPosY, float
 
 }
 
+void BoxMotionL(double& posX, double& posY, int r, float cPosX, float cPosY, float length, int speed, float& angle, bool& falg) {
+
+	if (falg == false)
+	{
+		if (posX == (double)cPosX - length + r && posY == (double)cPosY - length + r)
+		{
+			angle = -4.71f;
+		}
+		else if (posX == (double)cPosX - length + r && posY > (double)cPosY - length + r && posY < (double)cPosY + length - (r))
+		{
+			angle = -4.71f;
+		}
+
+		else if (posX == (double)cPosX - length + r && posY == (double)cPosY + length - r)
+		{
+			angle = -0.0f;
+		}
+		else if (posX > (double)cPosX - length + r && posX == (double)cPosX + length - (r) && posY == (double)cPosY + length - r)
+		{
+			angle = -0.0f;
+		}
+
+		else if (posX == (double)cPosX + length - r && posY == (double)cPosY + length - r)
+		{
+			angle = -1.57f;
+		}
+		else if (posX == (double)cPosX + length - r && posY < (double)cPosY + length - r && posY >(double)cPosY - length + (r))
+		{
+			angle = -1.57f;
+		}
+
+		else if (posX == (double)cPosX + length - r && posY == (double)cPosY - length + r)
+		{
+			angle = -3.14f;
+		}
+		else if (posX < (double)cPosX + length - r && posX >(double)cPosX - length + r && posY == (double)cPosY - length + r)
+		{
+			angle = -3.14f;
+		}
+		falg = true;
+
+	}
+
+	double addX = cos(angle) * speed;
+	double addY = sin(angle) * speed;
+
+	posX = posX + addX;
+	posY = posY + addY;
+
+	if (posX + r > (double)cPosX + length)
+	{
+		posX = (double)cPosX + length - r;
+	}
+	else if (posX - r < (double)cPosX - length)
+	{
+		posX = (double)cPosX - length + r;
+	}
+
+	if (posY + r > (double)cPosY + length)
+	{
+		posY = (double)cPosY + length - r;
+	}
+	else if (posY - r < (double)cPosY - length)
+	{
+		posY = (double)cPosY - length + r;
+	}
+
+	if (posX == (double)cPosX - length + r && posY == (double)cPosY - length + r ||
+		posX == (double)cPosX + length - r && posY == (double)cPosY - length + r ||
+		posX == (double)cPosX - length + r && posY == (double)cPosY + length - r ||
+		posX == (double)cPosX + length - r && posY == (double)cPosY + length - r)
+	{
+		angle -= 1.57f;//引くと反時計回り　足すと時計回り　数値を大きくすると早く回る
+	}
+
+
+}
 //空き番号を返す
 int FlagSerch(EnemyBullet** bullet, int max)
 {
@@ -177,6 +254,14 @@ Enemy::Enemy()
 	LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
 	bommer_anime_timer = 0;
 	bommer_anime = 0;
+
+	LoadDivGraph("resouce/explosion-sheet.png", 8, 8, 1, 96, 96, explosion_img);
+	explosion_img_anime = 0;
+	explosion_img_anime_timer = 0;
+	explosion_flag = false;
+
+	txt_flag = 0;
+
 }
 
 Enemy::~Enemy()
@@ -407,7 +492,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //動き
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys)
 {
 	if (use_flag == true)
 	{
@@ -423,10 +508,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				angle = (float)atan2(end_y - start_y, end_x - start_x);
 			}
 
-			if (enemy_type == 5)
-			{
-				player.SetEasingFlag(1);
-			}
 
 		}
 		else if (appear_time != 0 && appear_time != -1)
@@ -455,6 +536,12 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					if (enemy_type == 5)
 					{
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
+					}
+
+					if (enemy_type == 6 && wave_num == 26)
+					{
+						txt_flag = 1;
+						player.SetEasingFlag(1);
 					}
 				}
 			}
@@ -943,16 +1030,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					shot_time = def_shot_time;
 				}
 
-				//当たり判定
-				for (int i = 0; i < 4; i++)
-				{
-					if (*bullet[i]->GetBulletFlag() == true)
-					{
-
-						HitBox(*bullet[i]->GetTransform(), *bullet[i], i);
-					}
-				}
-
 				//弾の生成
 				if (shot_time == 0)
 				{
@@ -1002,11 +1079,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					}
 
 					shot_time = -1;
-				}
-
-				if (hp <= 0)
-				{
-					exising_flag = false;
 				}
 
 				//地雷の動き
@@ -1182,11 +1254,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					}
 					shot_time = -1;
 				}
-
-				if (hp <= 0)
-				{
-					exising_flag = false;
-				}
 			}
 		}
 #pragma endregion
@@ -1200,9 +1267,14 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			if (exising_flag == true)
 			{
 				//移動
-				if (action_flag == true && fast_move_flag == false)
+				if (action_flag == true && fast_move_flag == false && wave_num != 28)
 				{
 					circularMotionL(transform.y, transform.x, 482.0f, 482.0f, 380.0f, angle);
+				}
+				else if (action_flag == true && fast_move_flag == false)
+				{
+
+					BoxMotionL(transform.x, transform.y, transform.xr, 482.0f, 482.0f, 430.0f, x_speed, angle, formation_fast_move_flag);
 				}
 
 				if (shot_action_flag == true)
@@ -1235,6 +1307,32 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		}
 #pragma endregion
 
+		if (enemy_type == 6)
+		{
+			if (movie_flag == true)
+			{
+				if (txt_flag == 1)
+				{
+					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+					{
+						txt_flag++;
+					}
+				}
+				if (txt_flag == 2)
+				{
+					move_frame++;
+					transform.x = move_start_x[0] + (move_end_x[0] - move_start_x[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+					transform.y = move_start_y[0] + (move_end_y[0] - move_start_y[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+
+					if (move_frame == move_end_frame)
+					{
+						exising_flag = false;
+						player.SetMoveFlag(1);
+					}
+				}
+			}
+		}
+
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
 		{
@@ -1251,6 +1349,19 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			}
 		}
 
+		if (explosion_flag == true)
+		{
+			explosion_img_anime_timer++;
+
+			if (explosion_img_anime_timer == 8 * 1)
+			{
+				explosion_img_anime_timer = 0;
+				explosion_flag = false;
+			}
+
+			explosion_img_anime = explosion_img_anime_timer / 1;
+		}
+
 		switch (enemy_type)
 		{
 		case 1:
@@ -1265,14 +1376,29 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			break;
 
 		case 2:
-			bommer_anime_timer++;
-
-			if (bommer_anime_timer == 10 * 6)
+			if (explosion_bommer_flag == false)
 			{
-				bommer_anime_timer = 0;
-			}
+				bommer_anime_timer++;
 
-			bommer_anime = bommer_anime_timer / 6;
+				if (bommer_anime_timer == 10 * 6)
+				{
+					bommer_anime_timer = 0;
+				}
+
+				bommer_anime = bommer_anime_timer / 6;
+			}
+			else
+			{
+				explosion_img_anime_timer++;
+
+				if (explosion_img_anime_timer == 8 * 1)
+				{
+					explosion_img_anime_timer = 0;
+					explosion_flag = false;
+				}
+
+				explosion_img_anime = explosion_img_anime_timer / 1;
+			}
 			break;
 
 		case 3:
@@ -1297,8 +1423,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			sub_boss1_anime = sub_boss1_anime_timer / 6;
 			break;
 		}
-
-
 	}
 
 }
@@ -1391,11 +1515,6 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 					shot_flag = false;
 				}
 			}
-
-			if (hp <= 0)
-			{
-				exising_flag = false;
-			}
 		}
 	}
 
@@ -1420,18 +1539,19 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 
 #pragma region ボマー当たり判定
 //爆発エフェクト
-void Enemy::ExplosionBommer(Enemy& enemy)
+void Enemy::ExplosionBommer(Enemy* enemy)
 {
 	if (enemy_type == 2)
 	{
-		if (transform.x != enemy.transform.x && transform.y != enemy.transform.y &&
-			enemy.exising_flag == true && exising_flag == true)
+		if (transform.x != enemy->transform.x && transform.y != enemy->transform.y &&
+			enemy->exising_flag == true && exising_flag == true)
 		{
-			if (BommerHitBox(enemy.GetTransform()) == true)
+			if (BommerHitBox(enemy->GetTransform()) == true)
 			{
 				explosion_bommer_flag = true;
 				enemy_to_bommer = true;
-				enemy.SetEnemyFlag(false);
+				enemy->SetEnemyFlag(false);
+				enemy->SetExplosionFlag(true);
 			}
 		}
 	}
@@ -1497,6 +1617,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 				{
 					exising_flag = false;
 					item->Form(transform);
+					explosion_flag = true;
 				}
 
 			}
@@ -1522,6 +1643,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item)
 				{
 					exising_flag = false;
 					item->Form(transform);
+					explosion_flag = true;
 				}
 			}
 
@@ -1554,6 +1676,7 @@ void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 					hp--;
 					damage_flag[i] = true;
 					enemyBullet.SetBulletFlag(false);
+					explosion_flag = true;
 				}
 
 			}
@@ -1585,6 +1708,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 				if (hp <= 0)
 				{
 					exising_flag = false;
+					explosion_flag = true;
 				}
 			}
 
@@ -1606,16 +1730,14 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 //描画
 void Enemy::Draw(int num)
 {
-	if (true)
-	{
 
-	}
 	if (exising_flag == true)
 	{
 		switch (enemy_type)
 		{
 		case 1://雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img[anime], true);
+
 			break;
 		case 2://ボマー
 			if (explosion_bommer_flag == false)
@@ -1624,8 +1746,8 @@ void Enemy::Draw(int num)
 			}
 			else
 			{
-				DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr,
-					(int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(255, 0, 0), true);
+				DrawGraphF((float)transform.x - 48, (float)transform.y - 48, explosion_img[explosion_img_anime], true);
+
 			}
 			break;
 		case 3://ブーメラン
@@ -1648,6 +1770,11 @@ void Enemy::Draw(int num)
 			break;
 		}
 
+	}
+
+	if (explosion_flag == true)
+	{
+		DrawGraphF((float)transform.x - 48, (float)transform.y - 48, explosion_img[explosion_img_anime], true);
 	}
 
 	for (int i = 0; i < all_bullet_max; i++)
@@ -1783,16 +1910,16 @@ void Enemy::form(FILE* fp, int wave_num)
 
 	switch (enemy_type)
 	{
-	case 1:
+	case 1://雑魚
 		all_bullet_max = 3;
 		break;
-	case 2:
+	case 2://ボマー
 		all_bullet_max = 1;
 		break;
-	case 3:
+	case 3://ブーメラン
 		all_bullet_max = 3;
 		break;
-	case 4:
+	case 4://全方位
 		if (wave_num >= 20)
 		{
 			all_bullet_max = 48;
@@ -1802,13 +1929,16 @@ void Enemy::form(FILE* fp, int wave_num)
 			all_bullet_max = 24;
 		}
 		break;
-	case 5:
+	case 5://フォーメーション
 		all_bullet_max = 3;
 		break;
-	case 10:
+	case 6://レーザー
+		all_bullet_max = 1;
+		break;
+	case 10://中ボス1
 		all_bullet_max = 12;
 		break;
-	case 20:
+	case 20://中ボス2
 		all_bullet_max = 4;
 		img_r = 32;
 		break;
@@ -2154,6 +2284,11 @@ void Enemy::YMove(int y_speed, bool up_flag)
 #pragma endregion
 
 #pragma region ゲッター
+
+bool Enemy::GetExplosionFlag()
+{
+	return explosion_flag;
+}
 Transform* Enemy::GetBulletTransform(int num)
 {
 	return bullet[num]->GetTransform();
@@ -2167,6 +2302,10 @@ Transform Enemy::GetTransform()
 int Enemy::GetShotTime()
 {
 	return shot_time;
+}
+int Enemy::GetTxtFlag()
+{
+	return txt_flag;
 }
 
 bool Enemy::GetBulletFlag(int i)
@@ -2212,6 +2351,11 @@ void Enemy::SetShotTime(int shot_time)
 void Enemy::SetEnemyFlag(bool flag)
 {
 	exising_flag = flag;
+}
+
+void Enemy::SetExplosionFlag(bool flag)
+{
+	explosion_flag = flag;
 }
 
 #pragma endregion
@@ -2270,7 +2414,18 @@ int GetEnemyMax(int& wave_num)
 		return 9;
 	case 25:
 		return 10;
+	case 26:
+		return 2;
+	case 27:
+		return 8;
 	}
 	return -1;
+}
+
+void TxtDraw(int x, int y, const char* file)
+{
+	int txt = LoadGraph(file);
+
+	DrawGraph(x, y, txt, true);
 }
 
