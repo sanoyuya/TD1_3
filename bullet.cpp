@@ -135,6 +135,8 @@ void circularMotionL(double& posX, double& posY, float cPosX, float cPosY, float
 	angle2 += 0.05f;
 }
 
+
+
 #pragma region コンストラクタ・デストラクタ
 EnemyBullet::EnemyBullet()
 {
@@ -170,6 +172,11 @@ EnemyBullet::EnemyBullet()
 	LoadDivGraph("resouce/boomerang.png", 8, 8, 1, 32, 32, boomerang_img);
 	boomerang_anime_timer = 0;
 	boomerang_anime = 0;
+
+	reiza = LoadGraph("resouce/reiza.png");
+	laser_magnification = 0;
+	laser_range = 0;
+	damage_time = 5;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -535,6 +542,43 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 				}
 			}
 		}
+
+		if (enemy_type == 6)
+		{
+			this->transform.x = transform.x;
+			this->transform.y = transform.y;
+			angle = (float)atan2(transform.y - 482.0, transform.x - 482.0);
+
+			if (laser_magnification < 85)
+			{
+				laser_magnification += 5;
+			}
+
+			laser_range = laser_magnification * 16.0f;
+
+			if (LaserHitBox(player) == true)
+			{
+				if (damage_time == 0)
+				{
+					player.HpSub(1);
+					damage_time = 5;
+				}
+				else
+				{
+					damage_time--;
+				}
+
+			}
+		}
+	}
+	else
+	{
+		if (enemy_type == 6)
+		{
+			this->transform.x = transform.x;
+			this->transform.y = transform.y;
+			angle = (float)atan2(transform.y - 482.0, transform.x - 482.0);
+		}
 	}
 }
 
@@ -840,8 +884,15 @@ void EnemyBullet::TutorialMove(int y)
 
 #pragma region Draw
 //描画
-void EnemyBullet::Draw(int enemy_type)
+void EnemyBullet::Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag)
 {
+	if (enemy_type == 6 && shot_time < 50 && fast_move_flag == false && exising_flag == true)
+	{
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);
+		DrawRotaGraph3((int)transform.x, (int)transform.y, 16, 5, 85.0, 1.0, angle, reiza, true, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 	if (bullet_flag == true)
 	{
 		if (enemy_type == 1 || enemy_type == 10 || enemy_type == 4 || enemy_type == 5)
@@ -851,6 +902,10 @@ void EnemyBullet::Draw(int enemy_type)
 		if (enemy_type == 3 || enemy_type == 20)
 		{
 			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, boomerang_img[boomerang_anime], true);
+		}
+		if (enemy_type == 6)
+		{
+			DrawRotaGraph3((int)transform.x, (int)transform.y, 16, 5, laser_magnification, 1.0, angle, reiza, true, true);
 		}
 	}
 }
@@ -1026,9 +1081,25 @@ Transform* EnemyBullet::GetTransform()
 	return &transform;
 }
 
+bool EnemyBullet::GetBulletFlag(int enemy_type)
+{
+	if (enemy_type != 5)
+	{
+		return bullet_flag;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 bool* EnemyBullet::GetBulletFlag()
 {
+
 	return &bullet_flag;
+
+
 }
 
 int EnemyBullet::GetReflectionNum()
@@ -1055,6 +1126,114 @@ void EnemyBullet::SetReflectionNum(int reflection_num)
 void EnemyBullet::SetBulletFlag(bool bullet_flag)
 {
 	this->bullet_flag = bullet_flag;
+}
+
+bool EnemyBullet::LaserHitBox(Player player)
+{
+	VECTOR bommr[4];
+
+	VECTOR vec_player[4][4];
+
+	float cross[4][4];
+
+	float player_left = (float)player.GetX() - player.GetR();
+	float player_right = (float)player.GetX() + player.GetR();
+	float player_top = (float)player.GetY() - player.GetR();
+	float player_down = (float)player.GetY() + player.GetR();
+
+	float left_top_x = ((-laser_range) * cosf(angle) + ((-5.0f) * -sinf(angle)) + (float)transform.x);
+	float left_top_y = ((-laser_range) * sinf(angle) + ((-5.0f) * cosf(angle)) + (float)transform.y);
+
+	float right_top_x = ((laser_range)*cosf(angle) + ((-5.0f) * -sinf(angle)) + (float)transform.x);
+	float right_top_y = ((laser_range)*sinf(angle) + ((-5.0f) * cosf(angle)) + (float)transform.y);
+	float left_down_x = ((-laser_range) * cosf(angle) + ((5.0f) * -sinf(angle)) + (float)transform.x);
+	float left_down_y = ((-laser_range) * sinf(angle) + ((5.0f) * cosf(angle)) + (float)transform.y);
+	float right_down_x = ((laser_range)*cosf(angle) + ((5.0f) * -sinf(angle)) + (float)transform.x);
+	float right_down_y = ((laser_range)*sinf(angle) + ((5.0f) * cosf(angle)) + (float)transform.y);
+
+
+
+	bommr[0] = VGet(left_top_x - left_down_x, left_top_y - left_down_y, 0.0f);//|
+	bommr[1] = VGet(left_down_x - right_down_x, left_down_y - right_down_y, 0.0f);//_
+	bommr[2] = VGet(right_down_x - right_top_x, right_down_y - right_top_y, 0.0f);// |
+	bommr[3] = VGet(right_top_x - left_top_x, right_top_y - left_top_y, 0.0f);//￣
+
+	bommr[0] = VNorm(bommr[0]);
+	bommr[1] = VNorm(bommr[1]);
+	bommr[2] = VNorm(bommr[2]);
+	bommr[3] = VNorm(bommr[3]);
+
+	vec_player[0][0] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[0][1] = VGet(player_left - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[0][2] = VGet(player_left - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[0][3] = VGet(player_left - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[1][0] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[1][1] = VGet(player_left - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[1][2] = VGet(player_left - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[1][3] = VGet(player_left - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[2][0] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+	vec_player[2][1] = VGet(player_right - left_down_x, player_top - left_down_y, 0.0f);
+	vec_player[2][2] = VGet(player_right - right_down_x, player_top - right_down_y, 0.0f);
+	vec_player[2][3] = VGet(player_right - left_top_x, player_top - left_top_y, 0.0f);
+
+	vec_player[3][0] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+	vec_player[3][1] = VGet(player_right - left_down_x, player_down - left_down_y, 0.0f);
+	vec_player[3][2] = VGet(player_right - right_down_x, player_down - right_down_y, 0.0f);
+	vec_player[3][3] = VGet(player_right - left_top_x, player_down - left_top_y, 0.0f);
+
+	vec_player[0][0] = VNorm(vec_player[0][0]);
+	vec_player[0][1] = VNorm(vec_player[0][1]);
+	vec_player[0][2] = VNorm(vec_player[0][2]);
+	vec_player[0][3] = VNorm(vec_player[0][3]);
+
+	vec_player[1][0] = VNorm(vec_player[1][0]);
+	vec_player[1][1] = VNorm(vec_player[1][1]);
+	vec_player[1][2] = VNorm(vec_player[1][2]);
+	vec_player[1][3] = VNorm(vec_player[1][3]);
+
+	vec_player[2][0] = VNorm(vec_player[2][0]);
+	vec_player[2][1] = VNorm(vec_player[2][1]);
+	vec_player[2][2] = VNorm(vec_player[2][2]);
+	vec_player[2][3] = VNorm(vec_player[2][3]);
+
+	vec_player[3][0] = VNorm(vec_player[3][0]);
+	vec_player[3][1] = VNorm(vec_player[3][1]);
+	vec_player[3][2] = VNorm(vec_player[3][2]);
+	vec_player[3][3] = VNorm(vec_player[3][3]);
+
+	cross[0][0] = (bommr[0].x * vec_player[0][0].y) - (bommr[0].y * vec_player[0][0].x);
+	cross[0][1] = (bommr[1].x * vec_player[0][1].y) - (bommr[1].y * vec_player[0][1].x);
+	cross[0][2] = (bommr[2].x * vec_player[0][2].y) - (bommr[2].y * vec_player[0][2].x);
+	cross[0][3] = (bommr[3].x * vec_player[0][3].y) - (bommr[3].y * vec_player[0][3].x);
+
+	cross[1][0] = (bommr[0].x * vec_player[1][0].y) - (bommr[0].y * vec_player[1][0].x);
+	cross[1][1] = (bommr[1].x * vec_player[1][1].y) - (bommr[1].y * vec_player[1][1].x);
+	cross[1][2] = (bommr[2].x * vec_player[1][2].y) - (bommr[2].y * vec_player[1][2].x);
+	cross[1][3] = (bommr[3].x * vec_player[1][3].y) - (bommr[3].y * vec_player[1][3].x);
+
+	cross[2][0] = (bommr[0].x * vec_player[2][0].y) - (bommr[0].y * vec_player[2][0].x);
+	cross[2][1] = (bommr[1].x * vec_player[2][1].y) - (bommr[1].y * vec_player[2][1].x);
+	cross[2][2] = (bommr[2].x * vec_player[2][2].y) - (bommr[2].y * vec_player[2][2].x);
+	cross[2][3] = (bommr[3].x * vec_player[2][3].y) - (bommr[3].y * vec_player[2][3].x);
+
+	cross[3][0] = (bommr[0].x * vec_player[3][0].y) - (bommr[0].y * vec_player[3][0].x);
+	cross[3][1] = (bommr[1].x * vec_player[3][1].y) - (bommr[1].y * vec_player[3][1].x);
+	cross[3][2] = (bommr[2].x * vec_player[3][2].y) - (bommr[2].y * vec_player[3][2].x);
+	cross[3][3] = (bommr[3].x * vec_player[3][3].y) - (bommr[3].y * vec_player[3][3].x);
+
+	if (cross[0][0] >= 0 && cross[0][1] >= 0 && cross[0][2] >= 0 && cross[0][3] >= 0 ||
+		cross[1][0] >= 0 && cross[1][1] >= 0 && cross[1][2] >= 0 && cross[1][3] >= 0 ||
+		cross[2][0] >= 0 && cross[2][1] >= 0 && cross[2][2] >= 0 && cross[2][3] >= 0 ||
+		cross[3][0] >= 0 && cross[3][1] >= 0 && cross[3][2] >= 0 && cross[3][3] >= 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void EnemyBullet::SetAngle(float _angle)

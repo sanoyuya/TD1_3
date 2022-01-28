@@ -20,7 +20,7 @@ public:
 		float point1_x, float point1_y, float point2_x, float point2_y);
 
 	void TutorialMove(int y);
-	void Draw(int enemy_type);
+	void Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag);
 	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
 	void OmniFormHex(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle);
 	void OmniFormOct(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);
@@ -28,6 +28,7 @@ public:
 
 	Vertex GetVertex();
 	Transform* GetTransform();
+	bool GetBulletFlag(int enemy_type);
 	bool* GetBulletFlag();
 	int GetReflectionNum();
 	float GetAngle();
@@ -35,7 +36,7 @@ public:
 	void SetAngle(float angle);
 	void SetReflectionNum(int reflection_num);
 	void SetBulletFlag(bool bullet_flag);
-	
+	bool LaserHitBox(Player player);
 	EnemyBullet();
 	~EnemyBullet();
 
@@ -67,5 +68,10 @@ private:
 	int boomerang_anime_timer;
 	int boomerang_anime;
 
+	int reiza;
+	float laser_range;
+	float laser_magnification;
+
+	int damage_time;
 	//‘S•ûˆÊ
 }EnemyBullet;

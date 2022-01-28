@@ -22,7 +22,7 @@ public:
 	~Enemy();
 	void form(FILE* fp, int wave_num);
 	void Tutorialform(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys,int num);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num);
 	void HitBox(Transform transform,int num, Item* item);
