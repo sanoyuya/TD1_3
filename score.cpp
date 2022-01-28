@@ -60,12 +60,12 @@ void Score::RC() {
 	}
 }
 
-void Score::Draw() {
+void Score::Draw(int randX,int randY) {
 	div = 1;
 	for (int i = 0; i < 7; i++)
 	{
 		index = score / div % 10;
-		DrawGraph((7-1-i) * 48 + 985, 30 + 36, scoregh[index], true);
+		DrawGraph((7-1-i) * 48 + 985+randX, 30 + 36+randY, scoregh[index], true);
 		div = div * 10;
 	}
 
