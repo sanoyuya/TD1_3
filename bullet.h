@@ -28,6 +28,7 @@ public:
 
 	Vertex GetVertex();
 	Transform* GetTransform();
+	bool GetBulletFlag(int enemy_type);
 	bool* GetBulletFlag();
 	int GetReflectionNum();
 	float GetAngle();
@@ -70,5 +71,7 @@ private:
 	int reiza;
 	float laser_range;
 	float laser_magnification;
+
+	int damage_time;
 	//‘S•ûˆÊ
 }EnemyBullet;

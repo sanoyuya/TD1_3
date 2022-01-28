@@ -176,6 +176,7 @@ EnemyBullet::EnemyBullet()
 	reiza = LoadGraph("resouce/reiza.png");
 	laser_magnification = 0;
 	laser_range = 0;
+	damage_time = 5;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -550,15 +551,24 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 
 			if (laser_magnification < 85)
 			{
-				laser_magnification+=5;
+				laser_magnification += 5;
 			}
 
-			laser_range = laser_magnification*16.0;
+			laser_range = laser_magnification * 16.0f;
 
-				if (LaserHitBox(player) == true)
+			if (LaserHitBox(player) == true)
+			{
+				if (damage_time == 0)
 				{
 					player.HpSub(1);
+					damage_time = 5;
 				}
+				else
+				{
+					damage_time--;
+				}
+
+			}
 		}
 	}
 	else
@@ -1071,9 +1081,25 @@ Transform* EnemyBullet::GetTransform()
 	return &transform;
 }
 
+bool EnemyBullet::GetBulletFlag(int enemy_type)
+{
+	if (enemy_type != 5)
+	{
+		return bullet_flag;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 bool* EnemyBullet::GetBulletFlag()
 {
+
 	return &bullet_flag;
+
+
 }
 
 int EnemyBullet::GetReflectionNum()
@@ -1118,12 +1144,12 @@ bool EnemyBullet::LaserHitBox(Player player)
 	float left_top_x = ((-laser_range) * cosf(angle) + ((-5.0f) * -sinf(angle)) + (float)transform.x);
 	float left_top_y = ((-laser_range) * sinf(angle) + ((-5.0f) * cosf(angle)) + (float)transform.y);
 
-	float right_top_x = ((laser_range) * cosf(angle) + ((-5.0f) * -sinf(angle)) + (float)transform.x);
-	float right_top_y = ((laser_range) * sinf(angle) + ((-5.0f) * cosf(angle)) + (float)transform.y);
+	float right_top_x = ((laser_range)*cosf(angle) + ((-5.0f) * -sinf(angle)) + (float)transform.x);
+	float right_top_y = ((laser_range)*sinf(angle) + ((-5.0f) * cosf(angle)) + (float)transform.y);
 	float left_down_x = ((-laser_range) * cosf(angle) + ((5.0f) * -sinf(angle)) + (float)transform.x);
 	float left_down_y = ((-laser_range) * sinf(angle) + ((5.0f) * cosf(angle)) + (float)transform.y);
-	float right_down_x = ((laser_range) * cosf(angle) + ((5.0f) * -sinf(angle)) + (float)transform.x);
-	float right_down_y = ((laser_range) * sinf(angle) + ((5.0f) * cosf(angle)) + (float)transform.y);
+	float right_down_x = ((laser_range)*cosf(angle) + ((5.0f) * -sinf(angle)) + (float)transform.x);
+	float right_down_y = ((laser_range)*sinf(angle) + ((5.0f) * cosf(angle)) + (float)transform.y);
 
 
 

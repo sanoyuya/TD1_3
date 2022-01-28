@@ -1414,6 +1414,11 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					}
 
 				}
+
+				if (reflection_flag == false)
+				{
+					exising_flag = false;
+				}
 			}
 		}
 
@@ -1863,7 +1868,7 @@ void Enemy::Draw(int num)
 
 	for (int i = 0; i < all_bullet_max; i++)
 	{
-		bullet[i]->Draw(enemy_type,shot_time,fast_move_flag,exising_flag);
+		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag);
 
 		if (bullet[i]->GetReflectionNum() >= 3)
 		{
@@ -2393,12 +2398,28 @@ int Enemy::GetTxtFlag()
 
 bool Enemy::GetBulletFlag(int i)
 {
-	return *bullet[i]->GetBulletFlag();
+	if (enemy_type != 6)
+	{
+		return *bullet[i]->GetBulletFlag();
+	}
+	else
+	{
+		return false;
+	}
+
 }
 
 bool Enemy::GetEnemyFlag()
 {
-	return exising_flag;
+	if (enemy_type != 6)
+	{
+		return exising_flag;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 
 int Enemy::GetAppearTime()
