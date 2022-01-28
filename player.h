@@ -16,10 +16,10 @@ public:
 	Player();
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys, int wave_num);
-	void HP(Transform transform, EnemyBullet& bullet,int flag);
+	void HP(Transform transform, EnemyBullet& bullet,int flag,int screenshakeflag,int &shakeflag,int &damageflag, int& shaketime, int& damagetime);
 	void HPplus(int wave);
-	void Draw();
-	void D();
+	void Draw(int randX,int randY);
+	void D(int randX, int randY);
 	int GetX();
 	int GetY();
 	int GetR();
@@ -34,9 +34,9 @@ public:
 	int Getscoreitem();
 	void pushB();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag,int flag);
-	void TutorialDraw();
-	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag);
+	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag,int flag,int screenshakeflag,int shakeflag,int damageflag);
+	void TutorialDraw(int randX, int randY,char *keys);
+	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag, int& shaketime, int& damagetime);
 	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
 	void SetDamageFlag(int i, int num);
@@ -70,6 +70,11 @@ private:
 	int A; int option; int Apflag; int Apushflag; int SetAtime;
 	int HPgh; int MPgh; int itemline; int itemback; int bigitem; int Alpha;
 	int nohitflag;
+	int maba;
+	int maba2;
+	int player_img1[6] = {0};
+	int player_img2[6] = { 0 };
+	int txtcooltime;
 
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
 

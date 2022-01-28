@@ -34,6 +34,12 @@ Player::Player() {//ÉRÉìÉXÉgÉâÉNÉ^ÇÃíËã`
 	itemline = LoadGraph("resouce/ItemGauge.png"); itemback = LoadGraph("resouce/ItemColor.png"); bigitem = LoadGraph("resouce/ReflectionItem_ver2.png");
 	Alpha = 36;
 	nohitflag = 0;
+	maba = 0;
+	maba2 = 0;
+	LoadDivGraph("resouce/EL_stand.png", 6, 6, 1, 380, 402, player_img1);
+	LoadDivGraph("resouce/EL_talk.png", 6, 6, 1, 380, 402, player_img2);
+	txtcooltime = 0;
+	
 
 	//óäÇ‹ÇÍÇƒÇΩÇ‡ÇÃ
 	itemflag2 = 0;
@@ -213,27 +219,27 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ÉvÉåÉCÉÑÅ[Ç
 
 	switch (wave_num)
 	{
-	case 24:
-		if (EasingMove(482, 565, 80) == 1)
-		{
-			move_flag = 1;
-		}
-		break;
-	case 26:
-		EasingMove(480, 832, 80);
-		break;
-	default:
-		if (EasingMove(482, 482, 80) == 1)
-		{
-			move_flag = 1;
-		}
+		case 24:
+			if (EasingMove(482, 565, 80) == 1)
+			{
+				move_flag = 1;
+			}
+			break;
+		case 26:
+			EasingMove(480, 832, 80);
+			break;
+		default:
+			if (EasingMove(482, 482, 80) == 1)
+			{
+				move_flag = 1;
+			}
 
 	}
 
 
 }
 
-void Player::HP(Transform transform, EnemyBullet& bullet,int flag) {
+void Player::HP(Transform transform, EnemyBullet& bullet, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime) {
 
 	if (*bullet.GetBulletFlag() == true)
 	{
@@ -244,6 +250,12 @@ void Player::HP(Transform transform, EnemyBullet& bullet,int flag) {
 				if (flag == 1) {
 					StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//ÉpÉbÉhêUìÆ
 				}
+				if (screenshakeflag == 1) {
+					shaketime = 0;
+					shakeflag = 1;
+				}
+				damagetime = 0;
+				damageflag = 1;
 				hp -= 1;
 			}
 			bullet.SetBulletFlag(false);
@@ -259,7 +271,7 @@ void Player::HPplus(int num) {
 	}
 }
 
-void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag) {
+void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag, int& shaketime, int& damagetime) {
 
 	if (*bullet.GetBulletFlag() == true)
 	{
@@ -416,7 +428,7 @@ int Player::Result() {
 }
 
 #pragma region É`ÉÖÅ[ÉgÉäÉAÉã
-void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption,int flag) {
+void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int flag, int screenshakeflag, int shakeflag, int damageflag) {
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0)
 	{
 		X = 480;
@@ -709,7 +721,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				}
 			}
 
-			HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0),flag);
+			HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0), flag, screenshakeflag, shakeflag, damageflag,shakeflag,damageflag);
 
 			if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
 			{
@@ -884,7 +896,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 }
 #pragma endregion
 
-void Player::Draw() {//ï`âÊä÷êî
+void Player::Draw(int randX, int randY) {//ï`âÊä÷êî
 	float CHP = hp * 5.0f;
 	float CMP = stelscooltimer * 0.4f;
 
@@ -971,26 +983,26 @@ void Player::Draw() {//ï`âÊä÷êî
 	DrawFormatString(40, 80, GetColor(255, 255, 255), "A:%d", pushflag);
 }
 
-void Player::D() {
+void Player::D(int randX, int randY) {
 	SetDrawBright(0xff, 0xff, 0x00);
 	if (itemflag == 1) {
-		DrawExtendGraph(1000, 790, 1300, 900, itemback, true);
+		DrawExtendGraph(1000 + randX, 790 + randY, 1300 + randX, 900 + randY, itemback, true);
 	}if (itemflag == 2) {
-		DrawExtendGraph(810, 750, 1400, 900, itemback, true);
+		DrawExtendGraph(810 + randX, 750 + randY, 1400 + randX, 900 + randY, itemback, true);
 	}if (itemflag == 3) {
-		DrawExtendGraph(810, 702, 1400, 900, itemback, true);
+		DrawExtendGraph(810 + randX, 702 + randY, 1400 + randX, 900 + randY, itemback, true);
 	}if (itemflag == 4) {
-		DrawExtendGraph(810, 628, 1400, 1000, itemback, true);
+		DrawExtendGraph(810 + randX, 628 + randY, 1400 + randX, 1000 + randY, itemback, true);
 	}if (itemflag == 5) {
-		DrawExtendGraph(810, 589, 1400, 1000, itemback, true);
+		DrawExtendGraph(810 + randX, 589 + randY, 1400 + randX, 1000 + randY, itemback, true);
 	}if (itemflag == 6) {
-		DrawExtendGraph(810, 500, 1400, 1100, itemback, true);
+		DrawExtendGraph(810 + randX, 500 + randY, 1400 + randX, 1100 + randY, itemback, true);
 	}
 	SetDrawBright(255, 255, 255);
 }
 
 #pragma region É`ÉÖÅ[ÉgÉäÉAÉã
-void Player::TutorialDraw() {
+void Player::TutorialDraw(int randX, int randY,char *keys) {
 
 	float CHP = hp * 5.0f;
 	float CMP = stelscooltimer * 0.4f;
@@ -1031,7 +1043,7 @@ void Player::TutorialDraw() {
 		SetDrawBright(255, 25, 0);
 	}
 
-	DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
+	DrawCircleGauge(966 + 186 + randX, 558 + 186 + randY, CHP, HPgh, 0.0);
 
 	SetDrawBright(255, 255, 255);
 
@@ -1041,7 +1053,7 @@ void Player::TutorialDraw() {
 
 	//ÉXÉeÉãÉXÉQÅ[ÉW
 	SetDrawBright(0x00, 0xFF, 0xFF);
-	DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
+	DrawCircleGauge(966 + 186 + randX, 558 + 186 + randY, CMP, MPgh, 0.0);
 	SetDrawBright(255, 255, 255);
 
 	switch (txtflag) {
@@ -1149,10 +1161,21 @@ void Player::TutorialDraw() {
 
 	//DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
 
+
 	if (txtflag != 0) {
+		txtcooltime++;
+		if (txtcooltime<=150) {
+			DrawGraph(962, 130, player_img2[maba2], true);
+			DrawFormatString(480, 480, GetColor(333,333,333),"txtcooltime=%d", txtcooltime);
+		}
+		else {
+			DrawGraph(962, 130, player_img1[maba2], true);
+		}
+		
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
 			DrawGraph(650, 64, option, true);
+			
 		}
 		else {
 			SetDrawBright(100, 100, 100);
@@ -1160,6 +1183,22 @@ void Player::TutorialDraw() {
 			DrawGraph(650, 64, option, true);
 			SetDrawBright(255, 255, 255);
 		}
+		if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+			txtcooltime = 0;
+		}
+	}
+	else {
+		DrawGraph(962, 130, player_img1[maba2], true);
+	}
+
+	maba++;
+
+	maba2 = maba / 10;
+
+	if (maba2 == 6)
+	{
+		maba = 0;
+		maba2 = 0;
 	}
 
 	//ÉAÉCÉeÉÄéÊìæêî

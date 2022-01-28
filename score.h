@@ -9,7 +9,7 @@ public:
 	void RC();//rank
 	void TC(int sceneflag);//time
 	void Setnohitflag(int nohitflag);
-	void Draw();
+	void Draw(int randX,int randY);
 	void Setscoreitem(int scoreitem);
 
 private:
