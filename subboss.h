@@ -5,7 +5,7 @@ class SubBoss
 {
 public:
 	void form(FILE* fp);
-	void Move(Player& player, bool reflection_flag);//“®‚«
+	void Move(Player& player, bool reflection_flag,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);//“®‚«
 	void Draw();//•`‰æ
 	void HitBox(Transform& transform, EnemyBullet* enemyBullet, int i);//“–‚½‚è”»’è
 	void HP(Transform& transform, EnemyBullet& enemyBullet);//“–‚½‚è”»’è

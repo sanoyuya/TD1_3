@@ -185,7 +185,8 @@ EnemyBullet::~EnemyBullet()
 #pragma endregion
 
 #pragma region Move
-void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag, Transform& transform)
+void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag, 
+	Transform& transform,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (bullet_flag == true)
 	{
@@ -560,7 +561,17 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 			{
 				if (damage_time == 0)
 				{
-					player.HpSub(1);
+					if (flag == 1) {
+						StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//ÉpÉbÉhêUìÆ
+					}
+					if (screenshakeflag == 1) {
+						shaketime = 0;
+						shakeflag = 1;
+					}
+					damagetime = 0;
+					damageflag = 1;
+
+					//player.HpSub(1);
 					damage_time = 5;
 				}
 				else

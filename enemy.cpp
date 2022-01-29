@@ -523,13 +523,21 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (use_flag == true)
 	{
+		if (num == 3)
+		{
+			int u = 2;
+		}
 		//oŒ»ŽžŠÔŠÇ—
 		if (appear_time == 0)
 		{
+			if (num == 3)
+			{
+				int u = 2;
+			}
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
@@ -548,9 +556,14 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 		if (exising_flag == true)
 		{
+
 			//Å‰‚ÌˆÚ“®
 			if (fast_move_flag == true)
 			{
+				if (num == 3)
+				{
+					int u = 2;
+				}
 				frame++;
 				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
 				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
@@ -564,7 +577,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
 					}
 
-					if (enemy_type == 5)
+					if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
 					{
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
@@ -585,47 +598,55 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//ˆÚ“®
 				if (action_flag == true && fast_move_flag == false)
 				{
-					if (move_time > 0)
+					if (wave_num != 28)
 					{
-						move_time--;
-					}
-
-					if (move_time == 0)
-					{
-						move_frame++;
-						transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
-						transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
-
-						if (move_frame == move_end_frame)
+						if (move_time > 0)
 						{
-							move_num++;
-							move_time = def_move_time;
-							move_frame = 0;
+							move_time--;
+						}
 
-							switch (easing_num)
+						if (move_time == 0)
+						{
+							move_frame++;
+							transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+							transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+
+							if (move_frame == move_end_frame)
 							{
-							case 2:
-								if (move_num == 2)
-								{
-									move_num = 0;
-								}
-								break;
-							case 3:
-								if (move_num == 3)
-								{
-									move_num = 0;
-								}
-								break;
-							case 4:
-								if (move_num == 4)
-								{
-									move_num = 0;
-								}
-								break;
-							}
+								move_num++;
+								move_time = def_move_time;
+								move_frame = 0;
 
+								switch (easing_num)
+								{
+								case 2:
+									if (move_num == 2)
+									{
+										move_num = 0;
+									}
+									break;
+								case 3:
+									if (move_num == 3)
+									{
+										move_num = 0;
+									}
+									break;
+								case 4:
+									if (move_num == 4)
+									{
+										move_num = 0;
+									}
+									break;
+								}
+
+							}
 						}
 					}
+					else
+					{
+						circularMotionL(transform.y, transform.x, 482.0f, 482.0f, 380.0f, angle, 0.02f);
+					}
+
 				}
 				else if (action_flag == false)
 				{
@@ -1425,7 +1446,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		//’e‚Ì“®‚«
 		for (int i = 0; i < all_bullet_max; i++)
 		{
-			bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
+			bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 		}
 
 		//“–‚½‚è”»’è
@@ -2010,7 +2031,15 @@ void Enemy::form(FILE* fp, int wave_num)
 	case 4://‘S•ûˆÊ
 		if (wave_num >= 20)
 		{
-			all_bullet_max = 48;
+			if (wave_num == 28)
+			{
+				all_bullet_max = 16;
+			}
+			else
+			{
+				all_bullet_max = 48;
+			}
+
 		}
 		else
 		{
@@ -2426,7 +2455,10 @@ int Enemy::GetAppearTime()
 {
 	return appear_time;
 }
-
+int Enemy::GetEnemyType()
+{
+	return enemy_type;
+}
 EnemyBullet* Enemy::GetEnmyBullet(int i)
 {
 	return bullet[i];
@@ -2522,6 +2554,8 @@ int GetEnemyMax(int& wave_num)
 		return 2;
 	case 27:
 		return 34;
+	case 28:
+		return 36;
 	}
 	return -1;
 }

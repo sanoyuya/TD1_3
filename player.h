@@ -34,7 +34,7 @@ public:
 	int Getscoreitem();
 	void pushB();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflag,int flag,int screenshakeflag,int shakeflag,int damageflag);
+	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int& flag, int& screenshakeflag, int& shakeflag, int& damageflag);
 	void TutorialDraw(int randX, int randY,char *keys);
 	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag, int& shaketime, int& damagetime);
 	void ItemFlagAdd(int num, Score& score);
