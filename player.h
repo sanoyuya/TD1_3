@@ -17,7 +17,7 @@ public:
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys, int wave_num);
 	void HP(Transform transform, EnemyBullet& bullet,int flag,int screenshakeflag,int &shakeflag,int &damageflag, int& shaketime, int& damagetime);
-	void HPplus(int wave);
+	void HPplus(int wave,int &recoveryflag,int &recoverytime);
 	void Draw(int randX,int randY);
 	void D(int randX, int randY);
 	int GetX();

@@ -263,18 +263,26 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 	}
 }
 
-void Player::HPplus(int num) {
+void Player::HPplus(int num,int &recoveryflag, int& recoverytime) {
 	if (num <= 24) {
 		if (num % 5 == 1) {
+			recoverytime = 0;
+			recoveryflag = 1;
 			hp += 3;
 		}if (num % 10 == 1) {
+			recoverytime = 0;
+			recoveryflag = 1;
 			hp += 2;
 		}
 	}
 	else {
 		if (num == 27) {
+			recoverytime = 0;
+			recoveryflag = 1;
 			hp += 3;
 		}if (num == 30) {
+			recoverytime = 0;
+			recoveryflag = 1;
 			hp += 5;
 		}
 	}

@@ -60,7 +60,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int Coffon = LoadGraph("resouce/offon.png");
 	int Conoff = LoadGraph("resouce/onoff.png");
 	int Conon = LoadGraph("resouce/onon.png");
-	int damageefect= LoadGraph("resouce/DamageEfect.png");
+	int damageefect = LoadGraph("resouce/DamageEfect.png");
 
 
 
@@ -99,7 +99,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int damageflag = 0;
 	int damagetime = 0;
 	int damageAlpha = 0;
-	
+	int recoveryflag = 0;
+	int recoverytime = 0;
+	int recoveryAlpha = 0;
+
 	bool reflection_flag = true;
 
 	Player* player = nullptr;
@@ -128,7 +131,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 最新のキーボード情報だったものは1フレーム前のキーボード情報として保存
 		for (int i = 0; i < 256; ++i)
 		{
- 			oldkeys[i] = keys[i];
+			oldkeys[i] = keys[i];
 		}
 		//配列なのでoldkey = keys;のようにできない、要素を一つずつコピー
 
@@ -242,9 +245,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							wave_num = 28;
 							if (wave_up_flag == true)
 							{
-
 								wave_num++;
-								player->HPplus(wave_num);
+								player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
 								wave_up_flag = false;
 							}
 
@@ -477,7 +479,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							//敵の動き
-							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys,i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
 						if (wave_num == 10 || wave_num == 20)
@@ -486,7 +488,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
-						item->Move(*player,*score);
+						item->Move(*player, *score);
 #pragma endregion
 						//waveクリア判定
 						if (wave_num != 10 && wave_num != 20)
@@ -869,7 +871,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				if (resultflag == 0) {//初めからやり直す
 					if (pushflagA == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 							sceneflag = 2;
 							delete player;
 							player = new Player();
@@ -893,7 +895,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				else {//タイトルへ戻る
 					if (pushflagA == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 							delete player;
 							for (int i = 0; i < ENEMY_MAX; i++)
 							{
@@ -960,7 +962,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
-				DrawBox(1014, 606, 1376, 960, GetColor(0,0,0), true);
+				DrawBox(1014, 606, 1376, 960, GetColor(0, 0, 0), true);
 
 				if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
 				{
@@ -983,7 +985,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				for (int i = 0; i < 2; i++)
 				{
 					windex = wave_num / wdiv % 10;
-					DrawGraph((2 - 1 - i) * 35 + 1194 + randX , 141 + randY, wavegh[windex], true);
+					DrawGraph((2 - 1 - i) * 35 + 1194 + randX, 141 + randY, wavegh[windex], true);
 					wdiv = wdiv * 10;
 				}
 				sandcooltime++;
@@ -1065,7 +1067,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
-				if (damageflag == 1) {
+				if (recoveryflag == 1) {//回復エフェクト
+					recoverytime++;
+					if (recoverytime >= 15) {
+						recoverytime = 0;
+						recoveryflag = 0;
+					}
+					else {
+						recoveryAlpha -= 15;
+					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
+					SetDrawBright(0, 150, 0);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					recoveryAlpha = 255;
+				}
+
+				if (damageflag == 1) {//ダメージエフェクト
 					damagetime++;
 					if (damagetime >= 15) {
 						damagetime = 0;
@@ -1076,7 +1097,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
 					SetDrawBright(150, 0, 0);
-					DrawGraph(962+randX, 130+randY, damageefect, true);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
 					SetDrawBright(255, 255, 255);
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 				}
@@ -1131,10 +1152,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				player->D(randX, randY);//itemback
 				enemy[0]->Draw(0);
-				DrawGraph(-32+randX, -32+randY, Layout, true);
-				
+				DrawGraph(-32 + randX, -32 + randY, Layout, true);
+
 				score->Draw(randX, randY);
-				player->TutorialDraw(randX, randY,keys);
+				player->TutorialDraw(randX, randY, keys);
 
 				if (shakeflag == 1) {//シェイク
 					shaketime++;
