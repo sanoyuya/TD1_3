@@ -264,10 +264,19 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 }
 
 void Player::HPplus(int num) {
-	if (num % 5 == 1) {
-		hp += 3;
-	}if (num % 10 == 1) {
-		hp += 2;
+	if (num <= 24) {
+		if (num % 5 == 1) {
+			hp += 3;
+		}if (num % 10 == 1) {
+			hp += 2;
+		}
+	}
+	else {
+		if (num == 27) {
+			hp += 3;
+		}if (num == 30) {
+			hp += 5;
+		}
 	}
 }
 

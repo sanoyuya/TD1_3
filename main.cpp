@@ -99,8 +99,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int damageflag = 0;
 	int damagetime = 0;
 	int damageAlpha = 0;
-
-
+	
 	bool reflection_flag = true;
 
 	Player* player = nullptr;
@@ -952,6 +951,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
+				DrawBox(1014, 606, 1376, 960, GetColor(0,0,0), true);
+
 				if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
 				{
 					sub_boss->Draw();
@@ -1064,7 +1065,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
 					SetDrawBright(150, 0, 0);
-					DrawGraph(962, 130, damageefect, true);
+					DrawGraph(962+randX, 130+randY, damageefect, true);
 					SetDrawBright(255, 255, 255);
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 				}
@@ -1159,7 +1160,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
 					SetDrawBright(150, 0, 0);
-					DrawGraph(962, 130, damageefect, true);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
 					SetDrawBright(255, 255, 255);
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 				}
