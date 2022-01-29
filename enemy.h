@@ -48,6 +48,7 @@ public:
 	int GetBulletMax();
 	bool GetExplosionFlag();
 	int GetTxtFlag();
+	int GetEnemyType();
 
 	void SetReflectionNum();
 	void SetShotTime(int shot_time);

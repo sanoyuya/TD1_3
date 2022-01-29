@@ -527,9 +527,17 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 {
 	if (use_flag == true)
 	{
+	if (num == 3)
+	{
+		int u = 2;
+	}
 		//oŒ»ŠÔŠÇ—
 		if (appear_time == 0)
 		{
+			if (num == 3)
+			{
+				int u = 2;
+			}
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
@@ -548,9 +556,14 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 		if (exising_flag == true)
 		{
+
 			//Å‰‚ÌˆÚ“®
 			if (fast_move_flag == true)
 			{
+				if (num == 3)
+				{
+					int u = 2;
+				}
 				frame++;
 				transform.x = start_x + (end_x - start_x) * easeInSine((double)frame / (double)end_frame);
 				transform.y = start_y + (end_y - start_y) * easeInSine((double)frame / (double)end_frame);
@@ -2426,7 +2439,10 @@ int Enemy::GetAppearTime()
 {
 	return appear_time;
 }
-
+int Enemy::GetEnemyType()
+{
+	return enemy_type;
+}
 EnemyBullet* Enemy::GetEnmyBullet(int i)
 {
 	return bullet[i];
@@ -2522,6 +2538,8 @@ int GetEnemyMax(int& wave_num)
 		return 2;
 	case 27:
 		return 34;
+	case 28:
+		return 36;
 	}
 	return -1;
 }

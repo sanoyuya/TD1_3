@@ -238,7 +238,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region “Gƒf[ƒ^“Ç‚Ýž‚Ý
 						if (game_set == false)
 						{
-							wave_num = 27;
+							wave_num = 28;
 							if (wave_up_flag == true)
 							{
 
@@ -384,6 +384,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 									player->SetMoveFlag(0);
 									game_set = true;
 									break;
+								case 28:
+									EnemyForm("WAVE_ENEMY_DATA/wave28.csv", ENEMY_MAX, enemy, wave_num);
+									player->SetEasingFlag(1);
+									player->SetMoveFlag(0);
+									game_set = true;
+									break;
 							}
 							//“G‚ªŽ€‚Ê–ˆ‚É
 							//Score+=100;
@@ -418,13 +424,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								{
 									if (i != k)
 									{
-										//“G‚Æƒ{ƒ}[‚Ì“–‚½‚è”»’è
-										enemy[i]->ExplosionBommer(enemy[k]);
-
-										for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+										if (enemy[k]->GetEnemyType() != 6)
 										{
-											//“G‚Æ“G‚Ì’e‚Ì“–‚½‚è”»’è
-											enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+											//“G‚Æƒ{ƒ}[‚Ì“–‚½‚è”»’è
+											enemy[i]->ExplosionBommer(enemy[k]);
+
+											for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+											{
+												//“G‚Æ“G‚Ì’e‚Ì“–‚½‚è”»’è
+												enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+											}
 										}
 									}
 								}
