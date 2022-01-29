@@ -428,7 +428,7 @@ int Player::Result() {
 }
 
 #pragma region チュートリアル
-void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int flag, int screenshakeflag, int shakeflag, int damageflag) {
+void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int& flag, int& screenshakeflag, int& shakeflag, int& damageflag) {
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0)
 	{
 		X = 480;

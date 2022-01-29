@@ -478,13 +478,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							//“G‚Ì“®‚«
-							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys,i);
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys,i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
 						if (wave_num == 10 || wave_num == 20)
 						{
 							//’†ƒ{ƒX‚Ì“®‚«
-							sub_boss->Move(*player, reflection_flag);
+							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
 						item->Move(*player,*score);
@@ -1128,7 +1128,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				player->D(randX, randY);//itemback
 				enemy[0]->Draw(0);
-				DrawGraph(-32, -32, Layout, true);
+				DrawGraph(-32+randX, -32+randY, Layout, true);
 				
 				score->Draw(randX, randY);
 				player->TutorialDraw(randX, randY,keys);

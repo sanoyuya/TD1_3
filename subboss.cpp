@@ -87,7 +87,7 @@ void SubBoss::form(FILE* fp)
 //’e‚ğ‘Å‚Á‚½‚Ä‚·‚×‚ÄÁ‚¦‚½Œã‚ÉˆÚ“®‚·‚é
 //’n—‹‚Æ’e‚Ì“®‚«‚ğ‚·‚é
 
-void SubBoss::Move(Player& player, bool reflection_flag)
+void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 
 
@@ -383,7 +383,7 @@ void SubBoss::Move(Player& player, bool reflection_flag)
 	for (int i = 0; i < bullet_max; i++)
 	{
 		//’e‚Ì“®‚«
-		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform);
+		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 	}
 
 	if (enemy_type == 1)
