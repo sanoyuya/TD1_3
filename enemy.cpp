@@ -523,14 +523,14 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (use_flag == true)
 	{
-	if (num == 3)
-	{
-		int u = 2;
-	}
+		if (num == 3)
+		{
+			int u = 2;
+		}
 		//oŒ»ŽžŠÔŠÇ—
 		if (appear_time == 0)
 		{
@@ -646,7 +646,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					{
 						circularMotionL(transform.y, transform.x, 482.0f, 482.0f, 380.0f, angle, 0.02f);
 					}
-				
+
 				}
 				else if (action_flag == false)
 				{
@@ -2031,7 +2031,15 @@ void Enemy::form(FILE* fp, int wave_num)
 	case 4://‘S•ûˆÊ
 		if (wave_num >= 20)
 		{
-			all_bullet_max = 48;
+			if (wave_num == 28)
+			{
+				all_bullet_max = 16;
+			}
+			else
+			{
+				all_bullet_max = 48;
+			}
+
 		}
 		else
 		{
