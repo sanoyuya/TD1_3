@@ -39,7 +39,7 @@ Player::Player() {//コンストラクタの定義
 	LoadDivGraph("resouce/EL_stand.png", 6, 6, 1, 380, 402, player_img1);
 	LoadDivGraph("resouce/EL_talk.png", 6, 6, 1, 380, 402, player_img2);
 	txtcooltime = 0;
-	
+
 
 	//頼まれてたもの
 	itemflag2 = 0;
@@ -266,7 +266,7 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 	}
 }
 
-void Player::HPplus(int num,int &recoveryflag, int& recoverytime) {
+void Player::HPplus(int num, int& recoveryflag, int& recoverytime) {
 	if (num <= 24) {
 		if (num % 5 == 1) {
 			recoverytime = 0;
@@ -660,6 +660,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
 				CP += 1;
 				if (CP >= 100) {
+					txtcooltime = 0;
 					Moveflag1 = 0;
 
 					if (txtflag == 0)
@@ -741,7 +742,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				}
 			}
 
-			HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0), flag, screenshakeflag, shakeflag, damageflag,shakeflag,damageflag);
+			HP(*enemy[0]->GetBulletTransform(0), *enemy[0]->GetEnmyBullet(0), flag, screenshakeflag, shakeflag, damageflag, shakeflag, damageflag);
 
 			if (enemy[0]->GetBulletFlag(0) == false && enemy[0]->GetShotTime() == -1)
 			{
@@ -768,11 +769,13 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 					{
 						easing_frame = 0;
 						easing_flag = 0;
+						txtcooltime = 0;
 						Moveflag2 = 0;
 						txtflag = 6;
 					}
 				}
 				else {
+					txtcooltime = 0;
 					Moveflag2 = 0;
 					txtflag = 6;
 				}
@@ -809,6 +812,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				{
 					stelsflag = 0;
 					txtflag = 10;
+					txtcooltime = 0;
 					Moveflag3 = 0;
 				}
 			}
@@ -846,6 +850,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 					reflectionflag = 0;
 					txtflag = 14;
 					itemflag2 = 1;
+					txtcooltime = 0;
 					Moveflag4 = 0;
 
 					tutorial_item->TutorialForm(enemy[0]->GetTransform(), itemflag2);
@@ -869,6 +874,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 
 				itemflag = 1;
 				txtflag = 16;
+				txtcooltime = 0;
 				Moveflag5 = 0;
 
 			}
@@ -1022,7 +1028,7 @@ void Player::D(int randX, int randY) {
 }
 
 #pragma region チュートリアル
-void Player::TutorialDraw(int randX, int randY,char *keys) {
+void Player::TutorialDraw(int randX, int randY, char* keys) {
 
 	float CHP = hp * 5.0f;
 	float CMP = stelscooltimer * 0.4f;
@@ -1184,18 +1190,18 @@ void Player::TutorialDraw(int randX, int randY,char *keys) {
 
 	if (txtflag != 0) {
 		txtcooltime++;
-		if (txtcooltime<=150) {
+		if (txtcooltime <= 150) {
 			DrawGraph(962, 130, player_img2[maba2], true);
-			DrawFormatString(480, 480, GetColor(333,333,333),"txtcooltime=%d", txtcooltime);
+			DrawFormatString(480, 480, GetColor(333, 333, 333), "txtcooltime=%d", txtcooltime);
 		}
 		else {
-			DrawGraph(962+randX, 130+randY, player_img1[maba2], true);
+			DrawGraph(962 + randX, 130 + randY, player_img1[maba2], true);
 		}
-		
+
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
 			DrawGraph(650, 64, option, true);
-			
+
 		}
 		else {
 			SetDrawBright(100, 100, 100);
@@ -1208,7 +1214,7 @@ void Player::TutorialDraw(int randX, int randY,char *keys) {
 		}
 	}
 	else {
-		DrawGraph(962+randX, 130+randY, player_img1[maba2], true);
+		DrawGraph(962 + randX, 130 + randY, player_img1[maba2], true);
 	}
 
 	maba++;
