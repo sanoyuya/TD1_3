@@ -60,6 +60,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int Coffon = LoadGraph("resouce/offon.png");
 	int Conoff = LoadGraph("resouce/onoff.png");
 	int Conon = LoadGraph("resouce/onon.png");
+	int damageefect= LoadGraph("resouce/DamageEfect.png");
 
 
 
@@ -97,6 +98,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int shakeflag = 0;
 	int damageflag = 0;
 	int damagetime = 0;
+	int damageAlpha = 0;
 
 
 	bool reflection_flag = true;
@@ -127,7 +129,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 最新のキーボード情報だったものは1フレーム前のキーボード情報として保存
 		for (int i = 0; i < 256; ++i)
 		{
-			oldkeys[i] = keys[i];
+ 			oldkeys[i] = keys[i];
 		}
 		//配列なのでoldkey = keys;のようにできない、要素を一つずつコピー
 
@@ -614,14 +616,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							randX = 0;
 							randY = 0;
 						}
-
-						if (damageflag == 1) {
-							damagetime++;
-							if (damagetime >= 15) {
-								damagetime = 0;
-								damageflag = 0;
-							}
-						}
 					}
 
 				}
@@ -1059,6 +1053,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
+				if (damageflag == 1) {
+					damagetime++;
+					if (damagetime >= 15) {
+						damagetime = 0;
+						damageflag = 0;
+					}
+					else {
+						damageAlpha -= 15;
+					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
+					SetDrawBright(150, 0, 0);
+					DrawGraph(962, 130, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					damageAlpha = 255;
+				}
+
 				break;
 				delete player;
 			case 3:
@@ -1111,7 +1124,48 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				score->Draw(randX, randY);
 				player->TutorialDraw(randX, randY,keys);
 
+				if (shakeflag == 1) {//シェイク
+					shaketime++;
+					if (shaketime < 4) {
+						randX = rand() % 21 - 10;
+						randY = rand() % 21 - 10;
+					}
+					if (4 <= shaketime && shaketime < 9) {
+						randX = rand() % 11 - 5;
+						randY = rand() % 11 - 5;
+					}
+					if (9 <= shaketime) {
+						randX = rand() % 7 - 3;
+						randY = rand() % 7 - 3;
+					}
+					if (shaketime >= 15) {
+						shakeflag = 0;
+						shaketime = 0;
+					}
+				}
+				else {
+					randX = 0;
+					randY = 0;
+				}
 
+				if (damageflag == 1) {
+					damagetime++;
+					if (damagetime >= 15) {
+						damagetime = 0;
+						damageflag = 0;
+					}
+					else {
+						damageAlpha -= 15;
+					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
+					SetDrawBright(150, 0, 0);
+					DrawGraph(962, 130, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					damageAlpha = 255;
+				}
 				break;
 				delete player;
 		}

@@ -1169,7 +1169,7 @@ void Player::TutorialDraw(int randX, int randY,char *keys) {
 			DrawFormatString(480, 480, GetColor(333,333,333),"txtcooltime=%d", txtcooltime);
 		}
 		else {
-			DrawGraph(962, 130, player_img1[maba2], true);
+			DrawGraph(962+randX, 130+randY, player_img1[maba2], true);
 		}
 		
 		if (Apushflag == 0) {
@@ -1188,7 +1188,7 @@ void Player::TutorialDraw(int randX, int randY,char *keys) {
 		}
 	}
 	else {
-		DrawGraph(962, 130, player_img1[maba2], true);
+		DrawGraph(962+randX, 130+randY, player_img1[maba2], true);
 	}
 
 	maba++;
