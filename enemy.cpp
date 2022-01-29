@@ -538,6 +538,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			{
 				int u = 2;
 			}
+
 			fast_move_flag = true;
 			exising_flag = true;
 			appear_time = -1;
@@ -582,7 +583,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
 
-					if (enemy_type == 6 && wave_num == 26)
+					if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29)
 					{
 						txt_flag = 1;
 						player.SetEasingFlag(1);
@@ -1436,7 +1437,8 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 				}
 
-				if (reflection_flag == false)
+				
+				if (reflection_flag == false && movie_flag == false)
 				{
 					exising_flag = false;
 				}
@@ -1889,7 +1891,7 @@ void Enemy::Draw(int num)
 
 	for (int i = 0; i < all_bullet_max; i++)
 	{
-		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag);
+		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag,shot_action_flag);
 
 		if (bullet[i]->GetReflectionNum() >= 3)
 		{
@@ -2438,9 +2440,13 @@ bool Enemy::GetBulletFlag(int i)
 
 }
 
-bool Enemy::GetEnemyFlag()
+bool Enemy::GetEnemyFlag(int wave_num)
 {
 	if (enemy_type != 6)
+	{
+		return exising_flag;
+	}
+	else if(wave_num == 29||wave_num == 26)
 	{
 		return exising_flag;
 	}
@@ -2556,6 +2562,8 @@ int GetEnemyMax(int& wave_num)
 		return 34;
 	case 28:
 		return 36;
+	case 29:
+		return 2;
 	}
 	return -1;
 }

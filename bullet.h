@@ -21,7 +21,7 @@ public:
 		float point1_x, float point1_y, float point2_x, float point2_y);
 
 	void TutorialMove(int y);
-	void Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag);
+	void Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag, bool shot_action_flag);
 	void Form(Transform transform, Player& player, int x_speed, int y_speed,int& enemy_type);
 	void OmniFormHex(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type, int num, float angle);
 	void OmniFormOct(Transform transform, Player& player, int x_speed, int y_speed, int& enemy_type,int num, float angle);

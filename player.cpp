@@ -228,6 +228,9 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ƒvƒŒƒCƒ„[‚
 		case 26:
 			EasingMove(480, 832, 80);
 			break;
+		case 29:
+			EasingMove(480, 832, 80);
+			break;
 		default:
 			if (EasingMove(482, 482, 80) == 1)
 			{
@@ -819,7 +822,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 
 			if (reflectionflag == 1) {
 
-				if (enemy[0]->GetEnemyFlag() == false)
+				if (enemy[0]->GetEnemyFlag(wave_num) == false)
 				{
 					//©‹@‚ÉŒü‚¯‚Ä’e‚ğo‚·
 					//“G‚ª€‚ñ‚¾‚ç
