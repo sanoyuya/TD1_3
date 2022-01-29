@@ -8,7 +8,6 @@
 
 int EnemyBullet::Box_Line(float start_x, float start_y, float start2_x, float start2_y, float start3_x, float start3_y, float start4_x, float start4_y, float point1_x, float point1_y, float point2_x, float point2_y, float point3_x, float point3_y, float point4_x, float point4_y)
 {
-
 	//è„
 	if (LineAndLine(start_x, start_y, start2_x, start2_y,
 		start3_x, start3_y, start4_x, start4_y,
@@ -895,9 +894,9 @@ void EnemyBullet::TutorialMove(int y)
 
 #pragma region Draw
 //ï`âÊ
-void EnemyBullet::Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag)
+void EnemyBullet::Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag,bool shot_action_flag)
 {
-	if (enemy_type == 6 && shot_time < 50 && fast_move_flag == false && exising_flag == true)
+	if (enemy_type == 6 && shot_time < 50 && fast_move_flag == false && exising_flag == true && shot_action_flag == true)
 	{
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 90);

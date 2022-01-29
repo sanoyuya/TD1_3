@@ -39,7 +39,7 @@ public:
 	bool BommerHitBox(Transform transform);
 
 	bool GetBulletFlag(int i);
-	bool GetEnemyFlag();
+	bool GetEnemyFlag(int wave_num);
 	int GetAppearTime();
 	EnemyBullet* GetEnmyBullet(int i);
 	Transform* GetBulletTransform(int num);

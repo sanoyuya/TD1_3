@@ -228,6 +228,9 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ƒvƒŒƒCƒ„[‚
 		case 26:
 			EasingMove(480, 832, 80);
 			break;
+		case 29:
+			EasingMove(480, 832, 80);
+			break;
 		default:
 			if (EasingMove(482, 482, 80) == 1)
 			{
@@ -263,11 +266,28 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 	}
 }
 
-void Player::HPplus(int num) {
-	if (num % 5 == 1) {
-		hp += 3;
-	}if (num % 10 == 1) {
-		hp += 2;
+void Player::HPplus(int num,int &recoveryflag, int& recoverytime) {
+	if (num <= 24) {
+		if (num % 5 == 1) {
+			recoverytime = 0;
+			recoveryflag = 1;
+			hp += 3;
+		}if (num % 10 == 1) {
+			recoverytime = 0;
+			recoveryflag = 1;
+			hp += 2;
+		}
+	}
+	else {
+		if (num == 27) {
+			recoverytime = 0;
+			recoveryflag = 1;
+			hp += 3;
+		}if (num == 30) {
+			recoverytime = 0;
+			recoveryflag = 1;
+			hp += 5;
+		}
 	}
 }
 
@@ -819,7 +839,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 
 			if (reflectionflag == 1) {
 
-				if (enemy[0]->GetEnemyFlag() == false)
+				if (enemy[0]->GetEnemyFlag(wave_num) == false)
 				{
 					//©‹@‚ÉŒü‚¯‚Ä’e‚ğo‚·
 					//“G‚ª€‚ñ‚¾‚ç
