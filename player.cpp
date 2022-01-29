@@ -239,7 +239,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ƒvƒŒƒCƒ„[‚
 
 }
 
-void Player::HP(Transform transform, EnemyBullet& bullet, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime) {
+void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime) {
 
 	if (*bullet.GetBulletFlag() == true)
 	{
@@ -247,7 +247,7 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int flag, int screensh
 
 			if (reflectionflag == 0)
 			{
-				if (flag == 1) {
+				if (vibflag == 1) {
 					StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//ƒpƒbƒhU“®
 				}
 				if (screenshakeflag == 1) {
