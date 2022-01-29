@@ -963,7 +963,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 
 				player->D(randX, randY);
-				DrawGraph(0 + randX, 0 + randY, Layout, true);
+				DrawGraph(-32 + randX, -32 + randY, Layout, true);
 				if (damageflag == 0) {
 					DrawGraph(962 + randX, 130 + randY, player_img[maba2], true);
 				}
@@ -1105,7 +1105,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				player->D(randX, randY);//itemback
 				enemy[0]->Draw(0);
-				DrawGraph(0, 0, Layout, true);
+				DrawGraph(-32, -32, Layout, true);
 				
 				score->Draw(randX, randY);
 				player->TutorialDraw(randX, randY,keys);
