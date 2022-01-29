@@ -1193,7 +1193,7 @@ void Player::TutorialDraw(int randX, int randY,char *keys) {
 
 	maba++;
 
-	maba2 = maba / 10;
+	maba2 = maba / 15;
 
 	if (maba2 == 6)
 	{
