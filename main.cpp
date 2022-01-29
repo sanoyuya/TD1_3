@@ -476,6 +476,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							sub_boss->Move(*player, reflection_flag);
 						}
 
+						item->Move(*player,*score);
 #pragma endregion
 						//waveƒNƒŠƒA”»’è
 						if (wave_num != 10 && wave_num != 20)
