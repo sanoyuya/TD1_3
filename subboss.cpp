@@ -424,7 +424,7 @@ void SubBoss::Draw()
 
 	for (int i = 0; i < bullet_max; i++)
 	{
-		bullet[i]->Draw(enemy_type);
+		bullet[i]->Draw(enemy_type,shot_time,fast_move_flag,exising_flag);
 
 		if (bullet[i]->GetReflectionNum() >= 3)
 		{

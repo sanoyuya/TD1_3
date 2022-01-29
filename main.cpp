@@ -238,7 +238,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 						if (game_set == false)
 						{
-
+							wave_num = 27;
 							if (wave_up_flag == true)
 							{
 
@@ -467,7 +467,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							//敵の動き
-							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys);
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys,i);
 						}
 
 						if (wave_num == 10 || wave_num == 20)
@@ -559,7 +559,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								}
 							}
 
-							if (break_flag == false)
+							if (break_flag == false && reflection_flag == false)
 							{
 								game_set = false;
 								reflection_flag = true;
@@ -963,7 +963,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 
 				player->D(randX, randY);
-				DrawGraph(0 + randX, 0 + randY, Layout, true);
+				DrawGraph(-32 + randX, -32 + randY, Layout, true);
 				if (damageflag == 0) {
 					DrawGraph(962 + randX, 130 + randY, player_img[maba2], true);
 				}
@@ -1105,7 +1105,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				player->D(randX, randY);//itemback
 				enemy[0]->Draw(0);
-				DrawGraph(0, 0, Layout, true);
+				DrawGraph(-32, -32, Layout, true);
 				
 				score->Draw(randX, randY);
 				player->TutorialDraw(randX, randY,keys);
@@ -1116,7 +1116,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
-		DrawGraph(34, 34, guide, true);
+		//DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
