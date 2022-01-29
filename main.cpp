@@ -5,6 +5,7 @@
 #include"subboss.h"
 #include"Score.h"
 #include"item.h"
+#include"math.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -99,7 +100,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int damageflag = 0;
 	int damagetime = 0;
 	int damageAlpha = 0;
-
+	int recoveryflag = 0;
+	int recoverytime = 0;
+	int recoveryAlpha = 0;
+	int backX = 0;
+	int backY = 0;
+	int backcooltime = 0;
+	double x = 0;
+	double y = 0;
+	double ang = 0;
+	int flame = 0;
 
 	bool reflection_flag = true;
 
@@ -243,9 +253,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						wave_num = 28;
 						if (wave_up_flag == true)
 						{
-
 							wave_num++;
-							player->HPplus(wave_num);
+							player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
 							wave_up_flag = false;
 						}
 
@@ -498,7 +507,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 					}
 
-					item->Move(*player, *score);
+					item->Move(*player,*score);
 #pragma endregion
 					//waveクリア判定
 					if (wave_num != 10 && wave_num != 20)
@@ -960,6 +969,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				maba2 = 0;
 			}
 
+			if (flame == 0) {
+				x = 20;
+				y = 10;
+			}
+
+			backX = x + 20 * (cos(ang) * 2);
+			backY = y + 10 * (sin(2 * ang) * 2);
+
+			DrawBox(480 + backX, 480 + backY, 580 + backX, 580 + backY, GetColor(333, 333, 333), true);
+
+			backcooltime++;
+
+			flame++;
+			ang += 0.02;
+
 			if (game_set == true)
 			{
 				//プレイ画面
@@ -972,6 +996,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				}
 			}
+
+			DrawBox(1014, 606, 1376, 960, GetColor(0, 0, 0), true);
 
 			if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
 			{
@@ -1073,7 +1099,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
-			if (damageflag == 1) {
+			if (recoveryflag == 1) {//回復エフェクト
+				recoverytime++;
+				if (recoverytime >= 15) {
+					recoverytime = 0;
+					recoveryflag = 0;
+				}
+				else {
+					recoveryAlpha -= 15;
+				}
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
+				SetDrawBright(0, 150, 0);
+				DrawGraph(962 + randX, 130 + randY, damageefect, true);
+				SetDrawBright(255, 255, 255);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+			}
+			else {
+				recoveryAlpha = 255;
+			}
+
+			if (damageflag == 1) {//ダメージエフェクト
 				damagetime++;
 				if (damagetime >= 15) {
 					damagetime = 0;
@@ -1084,7 +1129,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
 				SetDrawBright(150, 0, 0);
-				DrawGraph(962, 130, damageefect, true);
+				DrawGraph(962 + randX, 130 + randY, damageefect, true);
 				SetDrawBright(255, 255, 255);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 			}
@@ -1092,33 +1137,28 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				damageAlpha = 255;
 			}
 
-			if (movie_flag == true)
+			if (game_set == true && enemy[0]->GetTxtFlag() == 1)
 			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-
-				if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+				if (wave_num == 29)
 				{
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-					DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
+				if (wave_num == 26)
+				{
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
 
-					if (wave_num == 29)
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					if (enemy[i] != nullptr)
 					{
-						TxtDraw(47, 719, "resouce/text_1.png");
-					}
-					if (wave_num == 26)
-					{
-						TxtDraw(47, 719, "resouce/text_1.png");
+						enemy[i]->Draw(i);
 					}
 
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i] != nullptr)
-						{
-							enemy[i]->Draw(i);
-						}
-
-					}
 				}
 			}
 			break;
@@ -1208,7 +1248,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
 				SetDrawBright(150, 0, 0);
-				DrawGraph(962, 130, damageefect, true);
+				DrawGraph(962 + randX, 130 + randY, damageefect, true);
 				SetDrawBright(255, 255, 255);
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 			}
