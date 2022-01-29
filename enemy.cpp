@@ -577,7 +577,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
 					}
 
-					if (enemy_type == 5)
+					if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
 					{
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
@@ -598,47 +598,55 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//ˆÚ“®
 				if (action_flag == true && fast_move_flag == false)
 				{
-					if (move_time > 0)
+					if (wave_num != 28)
 					{
-						move_time--;
-					}
-
-					if (move_time == 0)
-					{
-						move_frame++;
-						transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
-						transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
-
-						if (move_frame == move_end_frame)
+						if (move_time > 0)
 						{
-							move_num++;
-							move_time = def_move_time;
-							move_frame = 0;
+							move_time--;
+						}
 
-							switch (easing_num)
+						if (move_time == 0)
+						{
+							move_frame++;
+							transform.x = move_start_x[move_num] + (move_end_x[move_num] - move_start_x[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+							transform.y = move_start_y[move_num] + (move_end_y[move_num] - move_start_y[move_num]) * easeInSine((double)move_frame / (double)move_end_frame);
+
+							if (move_frame == move_end_frame)
 							{
-							case 2:
-								if (move_num == 2)
-								{
-									move_num = 0;
-								}
-								break;
-							case 3:
-								if (move_num == 3)
-								{
-									move_num = 0;
-								}
-								break;
-							case 4:
-								if (move_num == 4)
-								{
-									move_num = 0;
-								}
-								break;
-							}
+								move_num++;
+								move_time = def_move_time;
+								move_frame = 0;
 
+								switch (easing_num)
+								{
+								case 2:
+									if (move_num == 2)
+									{
+										move_num = 0;
+									}
+									break;
+								case 3:
+									if (move_num == 3)
+									{
+										move_num = 0;
+									}
+									break;
+								case 4:
+									if (move_num == 4)
+									{
+										move_num = 0;
+									}
+									break;
+								}
+
+							}
 						}
 					}
+					else
+					{
+						circularMotionL(transform.y, transform.x, 482.0f, 482.0f, 380.0f, angle, 0.02f);
+					}
+				
 				}
 				else if (action_flag == false)
 				{

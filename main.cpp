@@ -966,6 +966,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					sub_boss->Draw();
 				}
 
+
+
 				player->D(randX, randY);
 				DrawGraph(-32 + randX, -32 + randY, Layout, true);
 				if (damageflag == 0) {
