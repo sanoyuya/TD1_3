@@ -5,6 +5,7 @@
 #include"subboss.h"
 #include"Score.h"
 #include"item.h"
+#include"math.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -102,6 +103,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int recoveryflag = 0;
 	int recoverytime = 0;
 	int recoveryAlpha = 0;
+	int backX = 0;
+	int backY = 0;
+	int backcooltime = 0;
+	double x = 0;
+	double y = 0;
+	double ang = 0;
+	int flame = 0;
 
 	bool reflection_flag = true;
 
@@ -948,6 +956,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					maba = 0;
 					maba2 = 0;
 				}
+
+				if (flame == 0) {
+					x = 20;
+					y = 10;
+				}
+
+				backX = x + 20 * (cos(ang) * 2);
+				backY = y + 10 * (sin(2 * ang) * 2);
+
+				DrawBox(480 + backX, 480 + backY, 580 + backX, 580 + backY, GetColor(333, 333, 333), true);
+
+				backcooltime++;
+
+				flame++;
+				ang += 0.02;
 
 				if (game_set == true)
 				{
