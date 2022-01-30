@@ -6,6 +6,7 @@
 #include"Score.h"
 #include"item.h"
 #include"math.h"
+#include"boss.h"
 
 // ÉEÉBÉìÉhÉEÇÃÉ^ÉCÉgÉãÇ…ï\é¶Ç∑ÇÈï∂éöóÒ
 const char TITLE[] = "é©ñ≈ÉQÅ[";
@@ -118,6 +119,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SubBoss* sub_boss = nullptr;
 	Score* score = nullptr;
 	Item* item = nullptr;
+	Boss* boss = nullptr;
 
 	int wave_num = 6;
 	int windex = 0;
@@ -128,6 +130,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	bool break_flag = false;
 	int guide = LoadGraph("resouce/formation_circle.png");
 	bool movie_flag = false;
+	bool boss_battle_flag = false;
 	// ç≈êVÇÃÉLÅ[É{Å[ÉhèÓïÒóp
 	char keys[256] = { 0 };
 
@@ -247,372 +250,383 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 
 
-#pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
-					if (game_set == false)
+					if (boss_battle_flag == false)
 					{
-						wave_num = 28;
-						if (wave_up_flag == true)
+#pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
+						if (game_set == false)
 						{
-							wave_num++;
-							player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
-							wave_up_flag = false;
+							wave_num = 29;
+							if (wave_up_flag == true)
+							{
+								wave_num++;
+								player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
+								wave_up_flag = false;
+							}
+
+							//ìGÇÃêî
+							ENEMY_MAX = GetEnemyMax(wave_num);
+
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								enemy[i] = new Enemy;
+							}
+
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								enemy[i]->SetReflectionNum();
+							}
+
+							switch (wave_num)
+							{
+							case 1:
+
+								EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy, wave_num);
+								delete player;
+								player = new Player();
+								player->DeleteItem();
+								game_set = true;
+								break;
+							case 2:
+								EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 3:
+								EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 4:
+								EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 5:
+								EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 6:
+								EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 7:
+								EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 8:
+								EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 9:
+								EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 10:
+								EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy, wave_num);
+								sub_boss = new SubBoss;
+								SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
+								game_set = true;
+								break;
+							case 11:
+								EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 12:
+								EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 13:
+								EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 14:
+								EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 15:
+								EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 16:
+								EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 17:
+								EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 18:
+								EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 19:
+								EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 20:
+								sub_boss = new SubBoss;
+								EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy, wave_num);
+								SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
+								game_set = true;
+								break;
+							case 21:
+								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 22:
+								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 23:
+								EnemyForm("WAVE_ENEMY_DATA/wave23.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 24:
+								EnemyForm("WAVE_ENEMY_DATA/wave24.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 25:
+								EnemyForm("WAVE_ENEMY_DATA/wave25.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								break;
+							case 26:
+								EnemyForm("WAVE_ENEMY_DATA/wave26.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								movie_flag = true;
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								break;
+							case 27:
+								movie_flag = false;
+								EnemyForm("WAVE_ENEMY_DATA/wave27.csv", ENEMY_MAX, enemy, wave_num);
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								game_set = true;
+								break;
+							case 28:
+								EnemyForm("WAVE_ENEMY_DATA/wave28.csv", ENEMY_MAX, enemy, wave_num);
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								game_set = true;
+								break;
+							case 29:
+								EnemyForm("WAVE_ENEMY_DATA/wave29.csv", ENEMY_MAX, enemy, wave_num);
+								game_set = true;
+								movie_flag = true;
+								player->SetEasingFlag(1);
+								player->SetMoveFlag(0);
+								break;
+							case 30:
+								movie_flag = false;
+								boss_battle_flag = true;
+								boss = new Boss;
+								game_set = true;
+								break;
+							}
+							//ìGÇ™éÄÇ ñàÇ…
+							//Score+=100;
+
 						}
-
-						//ìGÇÃêî
-						ENEMY_MAX = GetEnemyMax(wave_num);
-
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							enemy[i] = new Enemy;
-						}
-
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							enemy[i]->SetReflectionNum();
-						}
-
-						switch (wave_num)
-						{
-						case 1:
-
-							EnemyForm("WAVE_ENEMY_DATA/wave1.csv", ENEMY_MAX, enemy, wave_num);
-							delete player;
-							player = new Player();
-							player->DeleteItem();
-							game_set = true;
-							break;
-						case 2:
-							EnemyForm("WAVE_ENEMY_DATA/wave2.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 3:
-							EnemyForm("WAVE_ENEMY_DATA/wave3.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 4:
-							EnemyForm("WAVE_ENEMY_DATA/wave4.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 5:
-							EnemyForm("WAVE_ENEMY_DATA/wave5.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 6:
-							EnemyForm("WAVE_ENEMY_DATA/wave6.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 7:
-							EnemyForm("WAVE_ENEMY_DATA/wave7.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 8:
-							EnemyForm("WAVE_ENEMY_DATA/wave8.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 9:
-							EnemyForm("WAVE_ENEMY_DATA/wave9.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 10:
-							EnemyForm("WAVE_ENEMY_DATA/wave10.csv", ENEMY_MAX, enemy, wave_num);
-							sub_boss = new SubBoss;
-							SubBossForm("WAVE_ENEMY_DATA/wave10_subboss.csv", 1, *sub_boss);
-							game_set = true;
-							break;
-						case 11:
-							EnemyForm("WAVE_ENEMY_DATA/wave11.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 12:
-							EnemyForm("WAVE_ENEMY_DATA/wave12.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 13:
-							EnemyForm("WAVE_ENEMY_DATA/wave13.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 14:
-							EnemyForm("WAVE_ENEMY_DATA/wave14.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 15:
-							EnemyForm("WAVE_ENEMY_DATA/wave15.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 16:
-							EnemyForm("WAVE_ENEMY_DATA/wave16.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 17:
-							EnemyForm("WAVE_ENEMY_DATA/wave17.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 18:
-							EnemyForm("WAVE_ENEMY_DATA/wave18.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 19:
-							EnemyForm("WAVE_ENEMY_DATA/wave19.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 20:
-							sub_boss = new SubBoss;
-							EnemyForm("WAVE_ENEMY_DATA/wave20.csv", ENEMY_MAX, enemy, wave_num);
-							SubBossForm("WAVE_ENEMY_DATA/wave20_subboss.csv", 1, *sub_boss);
-							game_set = true;
-							break;
-						case 21:
-							EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 22:
-							EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 23:
-							EnemyForm("WAVE_ENEMY_DATA/wave23.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 24:
-							EnemyForm("WAVE_ENEMY_DATA/wave24.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 25:
-							EnemyForm("WAVE_ENEMY_DATA/wave25.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							break;
-						case 26:
-							EnemyForm("WAVE_ENEMY_DATA/wave26.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							movie_flag = true;
-							player->SetEasingFlag(1);
-							player->SetMoveFlag(0);
-							break;
-						case 27:
-							movie_flag = false;
-							EnemyForm("WAVE_ENEMY_DATA/wave27.csv", ENEMY_MAX, enemy, wave_num);
-							player->SetEasingFlag(1);
-							player->SetMoveFlag(0);
-							game_set = true;
-							break;
-						case 28:
-							EnemyForm("WAVE_ENEMY_DATA/wave28.csv", ENEMY_MAX, enemy, wave_num);
-							player->SetEasingFlag(1);
-							player->SetMoveFlag(0);
-							game_set = true;
-							break;
-						case 29:
-							EnemyForm("WAVE_ENEMY_DATA/wave29.csv", ENEMY_MAX, enemy, wave_num);
-							game_set = true;
-							movie_flag = true;
-							player->SetEasingFlag(1);
-							player->SetMoveFlag(0);
-							break;
-						case 30:
-							movie_flag = false;
-							game_set = true;
-							break;
-						}
-						//ìGÇ™éÄÇ ñàÇ…
-						//Score+=100;
-
-					}
 #pragma endregion
-
 
 #pragma region ëÃóÕå∏è≠
 
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+						for (int i = 0; i < ENEMY_MAX; i++)
 						{
-							//éûã@Ç∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-							player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+							for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+							{
+								//éûã@Ç∆ìGÇÃíeÇÃìñÇΩÇËîªíË
+								player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 
+								if (enemy[i]->GetEnemyFlag(wave_num) == true)
+								{
+									//éûã@Ç∆É{É}Å[ÇÃìñÇΩÇËîªíË
+									enemy[i]->PlaterToEnemyHitBox(*player, i);
+								}
+
+							}
+						}
+
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
 							if (enemy[i]->GetEnemyFlag(wave_num) == true)
 							{
-								//éûã@Ç∆É{É}Å[ÇÃìñÇΩÇËîªíË
-								enemy[i]->PlaterToEnemyHitBox(*player, i);
-							}
-
-						}
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i]->GetEnemyFlag(wave_num) == true)
-						{
-							for (int k = 0; k < ENEMY_MAX; k++)
-							{
-								if (i != k)
+								for (int k = 0; k < ENEMY_MAX; k++)
 								{
-									if (enemy[k]->GetEnemyType() != 6)
+									if (i != k)
 									{
-										//ìGÇ∆É{É}Å[ÇÃìñÇΩÇËîªíË
-										enemy[i]->ExplosionBommer(enemy[k]);
-
-										for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+										if (enemy[k]->GetEnemyType() != 6)
 										{
-											//ìGÇ∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-											enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+											//ìGÇ∆É{É}Å[ÇÃìñÇΩÇËîªíË
+											enemy[i]->ExplosionBommer(enemy[k]);
+
+											for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
+											{
+												//ìGÇ∆ìGÇÃíeÇÃìñÇΩÇËîªíË
+												enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+											}
 										}
 									}
 								}
 							}
 						}
-					}
 
-					if (wave_num == 10 || wave_num == 20)
-					{
-						for (int i = 0; i < ENEMY_MAX; i++)
+						if (wave_num == 10 || wave_num == 20)
 						{
-							if (sub_boss->GetSubBossFlag() == true)
+							for (int i = 0; i < ENEMY_MAX; i++)
 							{
-								for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+								if (sub_boss->GetSubBossFlag() == true)
 								{
-									//íÜÉ{ÉXÇ∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-									sub_boss->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
+									for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+									{
+										//íÜÉ{ÉXÇ∆ìGÇÃíeÇÃìñÇΩÇËîªíË
+										sub_boss->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j));
+									}
 								}
 							}
-						}
 
-						for (int i = 0; i < sub_boss->GetBulletMax(); i++)
-						{
-							//éûã@Ç∆íÜÉ{ÉXÇÃíeÇÃìñÇΩÇËîªíË
-							player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
-
-							for (int j = 0; j < ENEMY_MAX; j++)
+							for (int i = 0; i < sub_boss->GetBulletMax(); i++)
 							{
-								if (enemy[j]->GetEnemyFlag(wave_num) == true)
+								//éûã@Ç∆íÜÉ{ÉXÇÃíeÇÃìñÇΩÇËîªíË
+								player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+
+								for (int j = 0; j < ENEMY_MAX; j++)
 								{
-									//ìGÇ∆íÜÉ{ÉXÇÃíeÇÃìñÇΩÇËîªíË
-									enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
+									if (enemy[j]->GetEnemyFlag(wave_num) == true)
+									{
+										//ìGÇ∆íÜÉ{ÉXÇÃíeÇÃìñÇΩÇËîªíË
+										enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
+									}
 								}
 							}
+
+							//ínóãÇ∆éûã@ÇÃìñÇΩÇËîªíË
+							sub_boss->PlayerMineHit(*player);
 						}
-
-						//ínóãÇ∆éûã@ÇÃìñÇΩÇËîªíË
-						sub_boss->PlayerMineHit(*player);
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						//ìGÇÃìÆÇ´
-						enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
-					}
-
-					if (wave_num == 10 || wave_num == 20)
-					{
-						//íÜÉ{ÉXÇÃìÆÇ´
-						sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
-					}
-
-					item->Move(*player,*score);
-#pragma endregion
-					//waveÉNÉäÉAîªíË
-					if (wave_num != 10 && wave_num != 20)
-					{
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							//ìGÇ™ëSàıì|Ç≥ÇÍÇΩÇÁíeÇÃîΩéÀÇÇ»Ç≠Ç∑
-							if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1)
-							{
-								if (i == ENEMY_MAX - 1)
-								{
-									reflection_flag = false;
-								}
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-					else
-					{
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							//ìGÇ™ëSàıì|Ç≥ÇÍÇΩÇÁíeÇÃîΩéÀÇÇ»Ç≠Ç∑
-							if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1 &&
-								sub_boss->GetSubBossFlag() == false && sub_boss->GetAppearTime() == -1)
-							{
-								if (i == ENEMY_MAX - 1)
-								{
-									sub_boss->SetMineExplosion();
-									reflection_flag = false;
-								}
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-
-						if (enemy[i]->GetEnemyFlag(wave_num) == true ||
-							enemy[i]->GetAppearTime() != -1 ||
-							enemy[i]->GetExplosionFlag() == true)
-						{
-							i--;
-							break_flag = true;
-							break;
-						}
-
-						for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
-						{
-							if (enemy[i]->GetBulletFlag(j) == true)
-							{
-								break_flag = true;
-								break;
-
-							}
-						}
-					}
-
-					if (wave_num == 10 || wave_num == 20)
-					{
-						if (sub_boss->GetSubBossFlag() == true || sub_boss->GetAppearTime() != -1)
-						{
-							break_flag = true;
-						}
-
-						if (break_flag == false)
-						{
-							for (int i = 0; i < 12; i++)
-							{
-								if (sub_boss->GetEnmyBulletFlag(i) == true)
-								{
-									break_flag = true;
-									break;
-								}
-							}
-						}
-					}
-
-					if (break_flag == false && reflection_flag == false)
-					{
-						game_set = false;
-						reflection_flag = true;
-						wave_up_flag = true;
 
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
-							delete enemy[i];
+							//ìGÇÃìÆÇ´
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
 						if (wave_num == 10 || wave_num == 20)
 						{
-							delete sub_boss;
+							//íÜÉ{ÉXÇÃìÆÇ´
+							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
-						break;
+						item->Move(*player, *score);
+#pragma endregion
+
+#pragma region wave ÉNÉäÉAîªíË
+						//waveÉNÉäÉAîªíË
+						if (wave_num != 10 && wave_num != 20)
+						{
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								//ìGÇ™ëSàıì|Ç≥ÇÍÇΩÇÁíeÇÃîΩéÀÇÇ»Ç≠Ç∑
+								if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1)
+								{
+									if (i == ENEMY_MAX - 1)
+									{
+										reflection_flag = false;
+									}
+								}
+								else
+								{
+									break;
+								}
+							}
+						}
+						else
+						{
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								//ìGÇ™ëSàıì|Ç≥ÇÍÇΩÇÁíeÇÃîΩéÀÇÇ»Ç≠Ç∑
+								if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1 &&
+									sub_boss->GetSubBossFlag() == false && sub_boss->GetAppearTime() == -1)
+								{
+									if (i == ENEMY_MAX - 1)
+									{
+										sub_boss->SetMineExplosion();
+										reflection_flag = false;
+									}
+								}
+								else
+								{
+									break;
+								}
+							}
+						}
+
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+
+							if (enemy[i]->GetEnemyFlag(wave_num) == true ||
+								enemy[i]->GetAppearTime() != -1 ||
+								enemy[i]->GetExplosionFlag() == true)
+							{
+								i--;
+								break_flag = true;
+								break;
+							}
+
+							for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+							{
+								if (enemy[i]->GetBulletFlag(j) == true)
+								{
+									break_flag = true;
+									break;
+
+								}
+							}
+						}
+
+						if (wave_num == 10 || wave_num == 20)
+						{
+							if (sub_boss->GetSubBossFlag() == true || sub_boss->GetAppearTime() != -1)
+							{
+								break_flag = true;
+							}
+
+							if (break_flag == false)
+							{
+								for (int i = 0; i < 12; i++)
+								{
+									if (sub_boss->GetEnmyBulletFlag(i) == true)
+									{
+										break_flag = true;
+										break;
+									}
+								}
+							}
+						}
+
+						if (break_flag == false && reflection_flag == false)
+						{
+							game_set = false;
+							reflection_flag = true;
+							wave_up_flag = true;
+
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
+							}
+
+							if (wave_num == 10 || wave_num == 20)
+							{
+								delete sub_boss;
+							}
+
+							break;
+						}
+						else
+						{
+							break_flag = false;
+						}
+#pragma endregion
 					}
 					else
 					{
-						break_flag = false;
+						boss->Move();
 					}
 
 					if (wave_num > 32) {
@@ -1004,6 +1018,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				sub_boss->Draw();
 			}
 
+			if (boss_battle_flag == true)
+			{
+				boss->Draw();
+			}
 
 
 			player->D(randX, randY);
