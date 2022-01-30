@@ -2564,6 +2564,8 @@ int GetEnemyMax(int& wave_num)
 		return 36;
 	case 29:
 		return 2;
+	case 30:
+		return 0;
 	}
 	return -1;
 }
