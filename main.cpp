@@ -239,7 +239,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 						if (game_set == false)
 						{
-							wave_num = 29;
+							wave_num = 25;
 							if (wave_up_flag == true)
 							{
 								wave_num++;

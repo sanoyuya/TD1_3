@@ -78,6 +78,9 @@ private:
 	int explosion_img_anime_timer;
 	bool explosion_flag;
 
+	int teleport_flag_img_anime;
+	int teleport_flag_img_anime_timer;
+	int teleport_img[4];
 
 	EnemyBullet* bullet[12];
 	Mine* mine;

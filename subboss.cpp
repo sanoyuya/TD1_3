@@ -396,6 +396,18 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 
 	boss1_anime = boss1_anime_timer / 6;
 
+	if (teleport_flag == true)
+	{
+		teleport_flag_img_anime_timer++;
+
+		if (teleport_flag_img_anime_timer == 4 * 3)
+		{
+			teleport_flag_img_anime_timer = 0;
+		}
+
+		teleport_flag_img_anime = teleport_flag_img_anime_timer / 3;
+	}
+
 }
 #pragma endregion
 
@@ -859,6 +871,10 @@ SubBoss::SubBoss()
 	explosion_img[0] = 0;
 	explosion_img_anime = 0;
 	explosion_img_anime_timer = 0;
+
+	teleport_flag_img_anime = 0;
+	teleport_flag_img_anime_timer = 0;
+	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
 
 }
 

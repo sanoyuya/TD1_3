@@ -157,4 +157,8 @@ private:
 	int sub_boss2_img[14];
 	int sub_boss2_anime;
 	int sub_boss2_anime_timer;
+
+	int teleport_flag_img_anime;
+	int teleport_flag_img_anime_timer;
+	int teleport_img[4];
  };
