@@ -81,7 +81,7 @@ Boss::~Boss()
 void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 	int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag)
+	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag)
 {
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
@@ -190,7 +190,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
 		//ìGÇÃìÆÇ´
-		enemy[i]->Move(*player, reflection_flag, *score, item, 30, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+		enemy[i]->Move(*player, reflection_flag, *score, item, 30, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag);
 	}
 
 	break_flag = false;

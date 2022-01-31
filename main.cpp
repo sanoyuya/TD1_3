@@ -132,6 +132,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	bool movie_flag = false;
 	bool boss_battle_flag = false;
 	int game_end = 0;
+
+	int txt_rand_y = 0;
+	bool txt_shake_flag = false;
+	int txt_shake_time = 25;
+	int txt_rand_x = 0;
+
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -489,7 +495,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							//敵の動き
-							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag);
 						}
 
 						if (wave_num == 10 || wave_num == 20)
@@ -614,7 +620,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss->Move(enemy, player, item, score,
 							recoveryflag, recoverytime, vibflag, screenshakeflag,
 							shakeflag, damageflag, shaketime, damagetime,
-							reflection_flag, movie_flag, keys,game_end);
+							reflection_flag, movie_flag, keys,game_end, txt_shake_flag);
 					}
 
 					if (game_end == 1) {
@@ -1077,15 +1083,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (wave_num == 29)
 				{
-					TxtDraw(47, 719, "resouce/text_1.png");
+					TxtDraw(47, 719, "resouce/text_RL2.png");
 				}
 				if (wave_num == 26)
 				{
-					TxtDraw(47, 719, "resouce/text_1.png");
+					TxtDraw(47, 719, "resouce/text_RL1.png");
 				}
 				if (wave_num == 30)
 				{
-					TxtDraw(47, 719, "resouce/text_1.png");
+					TxtDraw(47, 719, "resouce/text_boss1.png");
 				}
 				if (wave_num == 30)
 				{
@@ -1111,7 +1117,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (wave_num == 30)
 				{
-					TxtDraw(47, 719, "resouce/text_2.png");
+					TxtDraw(47, 719, "resouce/text_boss2.png");
 				}
 
 				boss->Draw(enemy);
@@ -1125,7 +1131,31 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (wave_num == 30)
 				{
-					TxtDraw(47, 719, "resouce/text_3.png");
+					if (txt_shake_flag == true)
+					{
+						int shake = 25 - txt_shake_time;
+
+						txt_rand_x = GetRand(25 - shake)-5;
+
+						txt_rand_y = GetRand(25 - shake)-5;
+
+						txt_shake_time--;
+
+						if (txt_shake_time == 0)
+						{
+							txt_shake_flag = false;
+							txt_shake_time = 30;
+
+							txt_rand_x = 0;
+							txt_rand_y = 0;
+						}
+
+
+					}
+
+					TxtDraw(47+txt_rand_x, 719+txt_rand_y, "resouce/bosstext.png");
+					TxtDraw(200, 800, "resouce/siturei.png");
+
 				}
 
 				boss->Draw(enemy);

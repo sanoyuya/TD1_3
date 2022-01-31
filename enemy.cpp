@@ -552,7 +552,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, bool& txt_shake_flag)
 {
 	if (use_flag == true)
 	{
@@ -1434,6 +1434,10 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 								{
 									txt_flag++;
 									push_flag = true;
+									if (txt_flag == 3)
+									{
+										txt_shake_flag = true;
+									}
 								}
 							}
 							else
