@@ -506,7 +506,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							for (int i = 0; i < ENEMY_MAX; i++)
 							{
 								//“G‚Ì“®‚«
-								enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+								enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag);
 
 							}
 
