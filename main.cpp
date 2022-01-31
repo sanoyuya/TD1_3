@@ -161,25 +161,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				pushflagA = 0;
 			}
 			if (pushflagA == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflagA = 1;
-					//sceneflag = 1;
+					sceneflag = 1;
 					//仮--------------------------
-					sceneflag = 10;
+					/*sceneflag = 10;
 					player = new Player();
 					enemy[0] = new Enemy;
 					item = new Item;
-					score = new Score;
-					//----------------------------
-				}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-					pushflagA = 1;
-					//sceneflag = 1;
-					//仮--------------------------
-					sceneflag = 10;
-					player = new Player();
-					enemy[0] = new Enemy;
-					item = new Item;
-					score = new Score;
+					score = new Score;*/
 					//----------------------------
 				}
 			}
@@ -191,20 +181,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflagA = 0;
 			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
 				stageflag = 0;
-			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
 				stageflag = 1;
 			}
 			if (stageflag == 0) {
 				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						sceneflag = 10;
-						player = new Player();
-						enemy[0] = new Enemy;
-						item = new Item;
-						score = new Score;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
@@ -965,9 +949,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 1:
 			//ステージ選択
 			if (stageflag == 0) {
-				DrawBox(64, 64, 460, 896, GetColor(255, 255, 255), false);
+				DrawBox(64, 64, 1312, 696, GetColor(255, 255, 255), false);
 			}if (stageflag == 1) {
-				DrawBox(500, 64, 896, 896, GetColor(255, 255, 255), false);
+				DrawBox(64, 760, 1312, 896, GetColor(255, 255, 255), false);
 			}
 
 			break;
