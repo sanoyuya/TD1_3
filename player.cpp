@@ -219,23 +219,25 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ÉvÉåÉCÉÑÅ[Ç
 
 	switch (wave_num)
 	{
-		case 24:
-			if (EasingMove(482, 565, 80) == 1)
-			{
-				move_flag = 1;
-			}
-			break;
-		case 26:
-			EasingMove(480, 832, 80);
-			break;
-		case 29:
-			EasingMove(480, 832, 80);
-			break;
-		default:
-			if (EasingMove(482, 482, 80) == 1)
-			{
-				move_flag = 1;
-			}
+	case 24:
+		if (EasingMove(482, 565, 80) == 1)
+		{
+			move_flag = 1;
+		}
+		break;
+	case 26:
+		EasingMove(480, 832, 80);
+		break;
+	case 29:
+		EasingMove(480, 832, 80);
+	case 30:
+		EasingMove(480, 832, 80);
+		break;
+	default:
+		if (EasingMove(482, 482, 80) == 1)
+		{
+			move_flag = 1;
+		}
 
 	}
 
@@ -434,7 +436,7 @@ int Player::Getscoreitem() {
 
 int Player::Result() {
 	if (hp <= 0) {
-		return 4;//ÉQÅ[ÉÄÉIÅ[ÉoÅ[âÊñ Ç÷
+		return 5;//ÉQÅ[ÉÄÉIÅ[ÉoÅ[âÊñ Ç÷
 	}
 	else {
 		return 2;
@@ -467,194 +469,194 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 			pushflag = 0;
 		}
 		switch (txtflag) {
-			case 0:
+		case 0:
 
-				break;
+			break;
 
-			case 1:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 2;
-					}
+		case 1:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 2;
 				}
+			}
 
-				break;
+			break;
 
-			case 2:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						Moveflag1 = 1;
-					}
+		case 2:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag1 = 1;
 				}
+			}
 
-				break;
+			break;
 
-			case 3:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 4;
-					}
+		case 3:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 4;
 				}
+			}
 
-				break;
+			break;
 
-			case 4:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 5;
+		case 4:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 5;
 
-					}
 				}
+			}
 
-				break;
+			break;
 
-			case 5:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						Moveflag2 = 1;
-						TutorialEnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 1, enemy);
-						shot_flag = 1;
-					}
+		case 5:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag2 = 1;
+					TutorialEnemyForm("WAVE_ENEMY_DATA/Tutorial.csv", 1, enemy);
+					shot_flag = 1;
 				}
+			}
 
-				break;
+			break;
 
-			case 6:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 7;
-					}
+		case 6:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 7;
 				}
+			}
 
-				break;
+			break;
 
-			case 7:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 8;
-					}
+		case 7:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 8;
 				}
+			}
 
-				break;
+			break;
 
-			case 8:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 9;
-					}
+		case 8:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 9;
 				}
+			}
 
-				break;
+			break;
 
-			case 9:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						Moveflag3 = 1;
-					}
+		case 9:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag3 = 1;
 				}
+			}
 
-				break;
+			break;
 
-			case 10:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 11;
+		case 10:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 11;
 
-					}
 				}
+			}
 
-				break;
+			break;
 
-			case 11:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 12;
-					}
+		case 11:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 12;
 				}
+			}
 
-				break;
+			break;
 
-			case 12:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 13;
-					}
+		case 12:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 13;
 				}
+			}
 
-				break;
+			break;
 
-			case 13:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						Moveflag4 = 1;
-						itemflag = 6;
-					}
+		case 13:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag4 = 1;
+					itemflag = 6;
 				}
+			}
 
-				break;
+			break;
 
-			case 14:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 15;
-					}
+		case 14:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 15;
 				}
+			}
 
-				break;
+			break;
 
-			case 15:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						Moveflag5 = 1;
-					}
+		case 15:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					Moveflag5 = 1;
 				}
+			}
 
-				break;
+			break;
 
-			case 16:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 17;
-					}
+		case 16:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 17;
 				}
+			}
 
-			case 17:
-				if (pushflag == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflag = 1;
-						txtflag = 0;
-						X = 480;
-						Y = 832;
-						sceneflag = 2;
-						delete enemy[0];
-						delete tutorial_item;
-						enemy[0] = nullptr;
-						wave_num = 1;
-					}
+		case 17:
+			if (pushflag == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflag = 1;
+					txtflag = 0;
+					X = 480;
+					Y = 832;
+					sceneflag = 2;
+					delete enemy[0];
+					delete tutorial_item;
+					enemy[0] = nullptr;
+					wave_num = 1;
 				}
+			}
 
-				break;
+			break;
 		}
 		if (Moveflag1 == 1) {//à⁄ìÆÉLÅ[ÇÃëÄçÏê‡ñæÇ≈égÇ§Ç‚Ç¬
 			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1 || (GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
@@ -1083,95 +1085,95 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 	SetDrawBright(255, 255, 255);
 
 	switch (txtflag) {
-		case 0:
-			//ÉeÉLÉXÉgÇ»Çµ
-			break;
-		case 1:
-			DrawGraph(47, 719, txt1, true);//Ç‹Ç∏ÇÕä»íPÇ»ëÄçÏê‡ñæÇénÇﬂÇÈÇÀ(ÇÌ)
-			break;
-		case 2:
-			DrawGraph(47, 719, txt2, true);//LÉXÉeÉBÉbÉN(äG)Ç≈à⁄ìÆèoóàÇÈÅBééÇµÇ…é©óRÇ…ìÆÇ¢ÇƒÇ›Çƒ
-			break;
-		case 3:
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			SetDrawBright(153, 229, 80);
-			DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
-			SetDrawBright(255, 255, 255);
+	case 0:
+		//ÉeÉLÉXÉgÇ»Çµ
+		break;
+	case 1:
+		DrawGraph(47, 719, txt1, true);//Ç‹Ç∏ÇÕä»íPÇ»ëÄçÏê‡ñæÇénÇﬂÇÈÇÀ(ÇÌ)
+		break;
+	case 2:
+		DrawGraph(47, 719, txt2, true);//LÉXÉeÉBÉbÉN(äG)Ç≈à⁄ìÆèoóàÇÈÅBééÇµÇ…é©óRÇ…ìÆÇ¢ÇƒÇ›Çƒ
+		break;
+	case 3:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(153, 229, 80);
+		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
+		SetDrawBright(255, 255, 255);
 
-			DrawGraph(47, 719, txt3, true);//Ç±Ç±Ç…ëÃóÕÉQÅ[ÉWÇ™Ç†ÇÈÇÃ(ÇÌ)
+		DrawGraph(47, 719, txt3, true);//Ç±Ç±Ç…ëÃóÕÉQÅ[ÉWÇ™Ç†ÇÈÇÃ(ÇÌ)
 
-			break;
-		case 4:
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			SetDrawBright(153, 229, 80);
-			DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
-			SetDrawBright(255, 255, 255);
+		break;
+	case 4:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(153, 229, 80);
+		DrawCircleGauge(966 + 186, 558 + 186, CHP, HPgh, 0.0);
+		SetDrawBright(255, 255, 255);
 
-			DrawGraph(47, 719, txt4, true);//
-			break;
-		case 5:
-			DrawGraph(47, 719, txt5, true);
-			break;
-		case 6:
-			DrawGraph(47, 719, txt6, true);
-			break;
-		case 7:
-			DrawGraph(47, 719, txt7, true);
-			break;
-		case 8:
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			SetDrawBright(0x00, 0xFF, 0xFF);
-			DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
-			SetDrawBright(255, 255, 255);
+		DrawGraph(47, 719, txt4, true);//
+		break;
+	case 5:
+		DrawGraph(47, 719, txt5, true);
+		break;
+	case 6:
+		DrawGraph(47, 719, txt6, true);
+		break;
+	case 7:
+		DrawGraph(47, 719, txt7, true);
+		break;
+	case 8:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(0x00, 0xFF, 0xFF);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
+		SetDrawBright(255, 255, 255);
 
-			DrawGraph(47, 719, txt8, true);
-			break;
-		case 9:
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			SetDrawBright(0x00, 0xFF, 0xFF);
-			DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
-			SetDrawBright(255, 255, 255);
+		DrawGraph(47, 719, txt8, true);
+		break;
+	case 9:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(0x00, 0xFF, 0xFF);
+		DrawCircleGauge(966 + 186, 558 + 186, CMP, MPgh, 0.0);
+		SetDrawBright(255, 255, 255);
 
-			DrawGraph(47, 719, txt9, true);
-			break;
-		case 10:
-			DrawGraph(47, 719, txt10, true);
-			break;
-		case 11:
-			DrawGraph(47, 719, txt11, true);
-			break;
-		case 12:
-			DrawGraph(47, 719, txt12, true);
-			break;
-		case 13:
-			DrawGraph(47, 719, txt13, true);
-			break;
-		case 14:
-			DrawGraph(47, 719, txt14, true);
-			break;
-		case 15:
-			DrawGraph(47, 719, txt15, true);
-			break;
-		case 16:
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-			DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		DrawGraph(47, 719, txt9, true);
+		break;
+	case 10:
+		DrawGraph(47, 719, txt10, true);
+		break;
+	case 11:
+		DrawGraph(47, 719, txt11, true);
+		break;
+	case 12:
+		DrawGraph(47, 719, txt12, true);
+		break;
+	case 13:
+		DrawGraph(47, 719, txt13, true);
+		break;
+	case 14:
+		DrawGraph(47, 719, txt14, true);
+		break;
+	case 15:
+		DrawGraph(47, 719, txt15, true);
+		break;
+	case 16:
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+		DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-			DrawGraph(966, 558, item_1_img, true);
+		DrawGraph(966, 558, item_1_img, true);
 
-			DrawGraph(47, 719, txt16, true);
-			break;
-		case 17:
-			DrawGraph(47, 719, txt17, true);
-			break;
+		DrawGraph(47, 719, txt16, true);
+		break;
+	case 17:
+		DrawGraph(47, 719, txt17, true);
+		break;
 	}
 
 	if (Moveflag3 == 1 && stelsflag == 0)
@@ -1201,7 +1203,6 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
 			DrawGraph(650, 64, option, true);
-
 		}
 		else {
 			SetDrawBright(100, 100, 100);

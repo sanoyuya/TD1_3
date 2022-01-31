@@ -320,6 +320,8 @@ Enemy::Enemy()
 	laser_img_anime_timer = 0;
 	LoadDivGraph("resouce/lazer_L.png", 6, 6, 1, 64, 64, laser_img_L);
 	LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
+
+	push_flag = false;
 }
 
 Enemy::~Enemy()
@@ -550,7 +552,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, bool& txt_shake_flag)
 {
 	if (use_flag == true)
 	{
@@ -610,7 +612,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
 
-					if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29)
+					if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29 || enemy_type == 6 && wave_num == 30 && movie_flag == true)
 					{
 						txt_flag = 1;
 						player.SetEasingFlag(1);
@@ -1400,23 +1402,60 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			{
 				if (movie_flag == true)
 				{
-					if (txt_flag == 1)
+					if (wave_num != 30)
 					{
-						if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+						if (txt_flag == 1)
 						{
-							txt_flag++;
+							if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+							{
+								txt_flag++;
+							}
+						}
+						if (txt_flag == 2)
+						{
+							move_frame++;
+							transform.x = move_start_x[0] + (move_end_x[0] - move_start_x[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+							transform.y = move_start_y[0] + (move_end_y[0] - move_start_y[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+
+							if (move_frame == move_end_frame)
+							{
+								exising_flag = false;
+								player.SetMoveFlag(1);
+							}
 						}
 					}
-					if (txt_flag == 2)
+					else
 					{
-						move_frame++;
-						transform.x = move_start_x[0] + (move_end_x[0] - move_start_x[0]) * easeInSine((double)move_frame / (double)move_end_frame);
-						transform.y = move_start_y[0] + (move_end_y[0] - move_start_y[0]) * easeInSine((double)move_frame / (double)move_end_frame);
-
-						if (move_frame == move_end_frame)
+						if (txt_flag != 0 && txt_flag != 4)
 						{
-							exising_flag = false;
-							player.SetMoveFlag(1);
+							if (keys[KEY_INPUT_SPACE] == 1|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+							{
+								if (push_flag == false)
+								{
+									txt_flag++;
+									push_flag = true;
+									if (txt_flag == 3)
+									{
+										txt_shake_flag = true;
+									}
+								}
+							}
+							else
+							{
+								push_flag = false;
+							}
+						}
+						if (txt_flag == 4)
+						{
+							move_frame++;
+							transform.x = move_start_x[0] + (move_end_x[0] - move_start_x[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+							transform.y = move_start_y[0] + (move_end_y[0] - move_start_y[0]) * easeInSine((double)move_frame / (double)move_end_frame);
+
+							if (move_frame == move_end_frame)
+							{
+								exising_flag = false;
+								player.SetMoveFlag(1);
+							}
 						}
 					}
 				}
