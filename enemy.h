@@ -153,4 +153,8 @@ private:
 	int omnidirectional_anime_timer;
 
 	int invincible_time;//–³“GŽžŠÔ
+
+	int sub_boss2_img[14];
+	int sub_boss2_anime;
+	int sub_boss2_anime_timer;
  };
