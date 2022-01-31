@@ -22,7 +22,7 @@ public:
 	~Enemy();
 	void form(FILE* fp, int wave_num);
 	void Tutorialform(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys,int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys,int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime,bool& txt_shake_flag);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num, int wave_num);
 	void HitBox(Transform transform,int num, Item* item);
@@ -161,4 +161,19 @@ private:
 	int teleport_flag_img_anime;
 	int teleport_flag_img_anime_timer;
 	int teleport_img[4];
+
+	int formation_img[12];
+	int formation_img_anime;
+	int formation_img_anime_timer;
+
+	int laser_img_L[6];
+	int laser_img_R[6];
+	int laser_img_anime;
+	int laser_img_anime_timer;
+	int laser_leftand_right_judgment;
+	//0レーザーじゃない
+	//1左
+	//2右
+
+	bool push_flag;
  };

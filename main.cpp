@@ -507,6 +507,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							{
 								//敵の動き
 								enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+
 							}
 
 							if (wave_num == 10 || wave_num == 20)
@@ -631,7 +632,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							boss->Move(enemy, player, item, score,
 								recoveryflag, recoverytime, vibflag, screenshakeflag,
 								shakeflag, damageflag, shaketime, damagetime,
-								reflection_flag, movie_flag, keys);
+								reflection_flag, movie_flag, keys, game_end, txt_shake_flag);
 						}
 
 						if (game_end == 1) {
@@ -640,7 +641,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 
 						item->Move(*player, *score);
-
 						sceneflag = player->Result();
 
 						if (shakeflag == 1) {//シェイク
@@ -1000,6 +1000,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (boss_battle_flag == true)
 				{
 					boss->Draw(enemy);
+				}	if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
+				{
+					sub_boss->Draw();
+				}
+
+				if (boss_battle_flag == true)
+				{
+					boss->Draw(enemy);
 				}
 
 				DrawBox(1014, 606, 1376, 960, GetColor(0, 0, 0), true);
@@ -1139,27 +1147,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						DrawBox(281, 641, 679, 800, GetColor(255, 255, 255), false);
 					}
 				}
-
-				if (Pauseflag == 1) {
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
-					DrawGraph(220, 120, PSgh, true);
-					DrawGraph(220, 120, PSgh128, true);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
-					if (Pause == 0) {
-						DrawGraph(220, 120, PSghConfigu, true);
-						DrawBox(280, 180, 680, 341, GetColor(255, 255, 255), false);
-						DrawBox(281, 181, 679, 340, GetColor(255, 255, 255), false);
-					}if (Pause == 1) {
-						DrawGraph(220, 120, PSghrestart, true);
-						DrawBox(280, 410, 680, 571, GetColor(255, 255, 255), false);
-						DrawBox(281, 411, 679, 570, GetColor(255, 255, 255), false);
-					}if (Pause == 2) {
-						DrawGraph(220, 120, PSghtitle, true);
-						DrawBox(280, 640, 680, 801, GetColor(255, 255, 255), false);
-						DrawBox(281, 641, 679, 800, GetColor(255, 255, 255), false);
-					}
-				}
-
 				if (Configuflag == 1) {
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
 					DrawGraph(220, 120, PSgh, true);
@@ -1241,26 +1228,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 						}
 					}
-				}
-				break;
-				delete player;
+					break;
+					delete player;
 			case 3:
 				//プレイ画面
 				score->Draw(randX, randY);
 				break;
 
-			case 4:
-				//リザルト画面(ゲームオーバー)
-				if (resultflag == 0) {
-					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
-				}
-				else {
-					DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-					DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
-				}
-
-				break;
 
 			case 5:
 				//リザルト画面(ゲームクリア)
@@ -1347,30 +1321,30 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				break;
 				delete player;
+				}
+
+				DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
+				//DrawGraph(34, 34, guide, true);
+				//---------  ここまでにプログラムを記述  ---------//
+				// (ダブルバッファ)裏面
+				ScreenFlip();
+
+				// 20ミリ秒待機(疑似50FPS)
+				WaitTimer(20);
+
+				// Windowsシステムからくる情報を処理する
+				if (ProcessMessage() == -1) {
+					break;
+				}
+
+				// ESCキーが押されたらループから抜ける
+				if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
+					break;
+				}
 		}
+		// Dxライブラリ終了処理
+		DxLib_End();
 
-		DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
-		//DrawGraph(34, 34, guide, true);
-		//---------  ここまでにプログラムを記述  ---------//
-		// (ダブルバッファ)裏面
-		ScreenFlip();
-
-		// 20ミリ秒待機(疑似50FPS)
-		WaitTimer(20);
-
-		// Windowsシステムからくる情報を処理する
-		if (ProcessMessage() == -1) {
-			break;
-		}
-
-		// ESCキーが押されたらループから抜ける
-		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
-			break;
-		}
+		// 正常終了
+		return 0;
 	}
-	// Dxライブラリ終了処理
-	DxLib_End();
-
-	// 正常終了
-	return 0;
-}
