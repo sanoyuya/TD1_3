@@ -296,9 +296,19 @@ Enemy::Enemy()
 	omnidirectional_anime = 0;
 	omnidirectional_anime_timer = 0;
 
+	LoadDivGraph("resouce/boss2_64.png", 14, 14, 1, 64, 64, sub_boss2_img);
+	sub_boss2_anime;
+	sub_boss2_anime_timer;
+
 	txt_flag = 0;
 	formation_fast_move_flag = false;
 	invincible_time = 0;
+
+	sub_boss2_anime = 0;
+	sub_boss2_anime_timer = 0;
+	teleport_flag_img_anime = 0;
+	teleport_flag_img_anime_timer = 0;
+	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
 }
 
 Enemy::~Enemy()
@@ -1535,12 +1545,22 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		case 10:
 			sub_boss1_anime_timer++;
 
-			if (sub_boss1_anime_timer == 10 * 6)
+			if (sub_boss1_anime_timer == 14 * 6)
 			{
 				sub_boss1_anime_timer = 0;
 			}
 
 			sub_boss1_anime = sub_boss1_anime_timer / 6;
+			break;
+		case 20:
+			sub_boss2_anime_timer++;
+
+			if (sub_boss2_anime_timer == 14 * 6)
+			{
+				sub_boss2_anime_timer = 0;
+			}
+
+			sub_boss2_anime = sub_boss2_anime_timer / 6;
 			break;
 
 		}
@@ -1565,6 +1585,17 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		explosion_img_anime = explosion_img_anime_timer / 1;
 	}
 
+	if (teleport_flag == true)
+	{
+		teleport_flag_img_anime_timer++;
+
+		if (teleport_flag_img_anime_timer == 4 * 3)
+		{
+			teleport_flag_img_anime_timer = 0;
+		}
+
+		teleport_flag_img_anime = teleport_flag_img_anime_timer /3;
+	}
 }
 #pragma endregion
 
@@ -1925,10 +1956,10 @@ void Enemy::Draw(int num,int wave_num)
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
 			break;
 		case 20://’†ƒ{ƒXŽG‹›
-			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss2_img[sub_boss2_anime], true);
 			if (teleport_flag == true)
 			{
-				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, teleport_img[teleport_flag_img_anime], true);
 			}
 			break;
 		default:
