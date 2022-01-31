@@ -174,4 +174,6 @@ private:
 	//0レーザーじゃない
 	//1左
 	//2右
+
+	bool push_flag;
  };

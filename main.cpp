@@ -131,6 +131,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int guide = LoadGraph("resouce/formation_circle.png");
 	bool movie_flag = false;
 	bool boss_battle_flag = false;
+	int game_end = 0;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -239,7 +240,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 						if (game_set == false)
 						{
-							wave_num = 27;
+							wave_num = 29;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -613,10 +614,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss->Move(enemy, player, item, score,
 							recoveryflag, recoverytime, vibflag, screenshakeflag,
 							shakeflag, damageflag, shaketime, damagetime,
-							reflection_flag, movie_flag, keys);
+							reflection_flag, movie_flag, keys,game_end);
 					}
 
-					if (wave_num > 32) {
+					if (game_end == 1) {
 						score->CC();
 						sceneflag = 5;
 					}
@@ -624,6 +625,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					item->Move(*player, *score);
 
 					sceneflag = player->Result();
+
 					if (shakeflag == 1) {//シェイク
 						shaketime++;
 						if (shaketime < 4) {
@@ -1008,20 +1010,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				maba2 = 0;
 			}
 
-			if (flame == 0) {
-				x = 20;
-				y = 10;
-			}
-
-			backX = (int)x + 20 * (int)(cos(ang) * 2);
-			backY = (int)y + 10 * (int)(sin(2 * ang) * 2);
-
-			DrawBox(480 + backX, 480 + backY, 580 + backX, 580 + backY, GetColor(333, 333, 333), true);
-
 			backcooltime++;
-
-			flame++;
-			ang += 0.02;
 
 			if (game_set == true)
 			{
@@ -1080,8 +1069,67 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Draw(randX, randY);
 			score->Draw(randX, randY);
 
+			if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+				if (wave_num == 29)
+				{
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
+				if (wave_num == 26)
+				{
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
+				if (wave_num == 30)
+				{
+					TxtDraw(47, 719, "resouce/text_1.png");
+				}
+				if (wave_num == 30)
+				{
+					boss->Draw(enemy);
+				}
+				else
+				{
+					for (int i = 0; i < ENEMY_MAX; i++)
+					{
+						if (enemy[i] != nullptr)
+						{
+							enemy[i]->Draw(i, wave_num);
+						}
 
+					}
+				}
+			}
+			if (game_set == true && enemy[0]->GetTxtFlag() == 2 && wave_num == 30)
+			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+				if (wave_num == 30)
+				{
+					TxtDraw(47, 719, "resouce/text_2.png");
+				}
+
+				boss->Draw(enemy);
+			}
+
+			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30)
+			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+				if (wave_num == 30)
+				{
+					TxtDraw(47, 719, "resouce/text_3.png");
+				}
+
+				boss->Draw(enemy);
+			}
 			if (Pauseflag == 1) {
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
 				DrawGraph(220, 120, PSgh, true);
@@ -1181,30 +1229,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				damageAlpha = 255;
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 1)
-			{
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-				if (wave_num == 29)
-				{
-					TxtDraw(47, 719, "resouce/text_1.png");
-				}
-				if (wave_num == 26)
-				{
-					TxtDraw(47, 719, "resouce/text_1.png");
-				}
-
-				for (int i = 0; i < ENEMY_MAX; i++)
-				{
-					if (enemy[i] != nullptr)
-					{
-						enemy[i]->Draw(i, wave_num);
-					}
-
-				}
-			}
+			
 			break;
 			delete player;
 		case 3:
@@ -1312,7 +1337,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			delete player;
 		}
 
-		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", pushflagoption);
+		DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
 		//DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

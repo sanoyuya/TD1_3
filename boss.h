@@ -1,5 +1,5 @@
 #pragma once
-
+#include"Transform.h"
 class Player;
 
 class Score;
@@ -17,7 +17,7 @@ public:
 	void Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 		int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-		bool& reflection_flag, bool& movie_flag, char* keys);
+		bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag);
 	void Draw(Enemy** enemy);
 private:
 	bool wave_set;
@@ -45,5 +45,28 @@ private:
 	int omnidirectional_num;
 
 	int tmp_num;
+
+	Transform transform;
+	int flame;
+	double ang;
+	double x;
+	double y;
+
+	bool easing_flag;
+	double easing_start_x;
+	double easing_start_y;
+	double easing_end_x;
+	double easing_end_y;
+	double easing_frame;
+	double easing_end_frame;
+
+	double escape_start_x;
+	double escape_start_y;
+	double escape_end_x;
+	double escape_end_y;
+	double escape_frame;
+	double escape_end_frame;
+
+	int txt_flag;
 };
 
