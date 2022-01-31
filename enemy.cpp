@@ -291,8 +291,14 @@ Enemy::Enemy()
 	explosion_img_anime_timer = 0;
 	explosion_flag = false;
 
+	LoadDivGraph("resouce/Omnidirectional_8.png", 12, 12, 1, 64, 64, omnidirectional8_img);
+	LoadDivGraph("resouce/Omnidirectional_16.png", 12, 12, 1, 64, 64, omnidirectional16_img);
+	omnidirectional_anime = 0;
+	omnidirectional_anime_timer = 0;
+
 	txt_flag = 0;
 	formation_fast_move_flag = false;
+	invincible_time = 0;
 }
 
 Enemy::~Enemy()
@@ -1365,6 +1371,8 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		}
 #pragma endregion
 
+#pragma region レーザー
+
 		if (enemy_type == 6)
 		{
 			if (exising_flag == true)
@@ -1444,6 +1452,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				}
 			}
 		}
+#pragma endregion
 
 		//弾の動き
 		for (int i = 0; i < all_bullet_max; i++)
@@ -1461,18 +1470,6 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			}
 		}
 
-		if (explosion_flag == true)
-		{
-			explosion_img_anime_timer++;
-
-			if (explosion_img_anime_timer == 8 * 1)
-			{
-				explosion_img_anime_timer = 0;
-				explosion_flag = false;
-			}
-
-			explosion_img_anime = explosion_img_anime_timer / 1;
-		}
 
 		switch (enemy_type)
 		{
@@ -1524,6 +1521,17 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			boomerang_anime = boomerang_anime_timer / 6;
 			break;
 
+		case 4:
+			omnidirectional_anime_timer++;
+
+			if (omnidirectional_anime_timer == 12 * 6)
+			{
+				omnidirectional_anime_timer = 0;
+			}
+
+			omnidirectional_anime = omnidirectional_anime_timer / 6;
+			break;
+
 		case 10:
 			sub_boss1_anime_timer++;
 
@@ -1534,7 +1542,27 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 			sub_boss1_anime = sub_boss1_anime_timer / 6;
 			break;
+
 		}
+
+		if (invincible_time > 0)
+		{
+			invincible_time--;
+		}
+	}
+
+
+	if (explosion_flag == true)
+	{
+		explosion_img_anime_timer++;
+
+		if (explosion_img_anime_timer == 8 * 1)
+		{
+			explosion_img_anime_timer = 0;
+			explosion_flag = false;
+		}
+
+		explosion_img_anime = explosion_img_anime_timer / 1;
 	}
 
 }
@@ -1653,17 +1681,20 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 //爆発エフェクト
 void Enemy::ExplosionBommer(Enemy* enemy)
 {
-	if (enemy_type == 2)
+	if (invincible_time == 0)
 	{
-		if (transform.x != enemy->transform.x && transform.y != enemy->transform.y &&
-			enemy->exising_flag == true && exising_flag == true)
+		if (enemy_type == 2)
 		{
-			if (BommerHitBox(enemy->GetTransform()) == true)
+			if (transform.x != enemy->transform.x && transform.y != enemy->transform.y &&
+				enemy->exising_flag == true && exising_flag == true)
 			{
-				explosion_bommer_flag = true;
-				enemy_to_bommer = true;
-				enemy->SetEnemyFlag(false);
-				enemy->SetExplosionFlag(true);
+				if (BommerHitBox(enemy->GetTransform()) == true)
+				{
+					explosion_bommer_flag = true;
+					enemy_to_bommer = true;
+					enemy->SetEnemyFlag(false);
+					enemy->SetExplosionFlag(true);
+				}
 			}
 		}
 	}
@@ -1671,15 +1702,18 @@ void Enemy::ExplosionBommer(Enemy* enemy)
 //敵と敵
 void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 {
-	if (enemy_type == 2)
+	if (invincible_time == 0)
 	{
-		if (BommerHitBox(enemy.GetTransform()) == true)
+		if (enemy_type == 2)
 		{
-			if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
+			if (BommerHitBox(enemy.GetTransform()) == true)
 			{
-				explosion_bommer_flag = true;
-				enemy_to_bommer = true;
+				if (damage_flag[0] == false || damage_flag[1] == false || damage_flag[2] == false)
+				{
+					explosion_bommer_flag = true;
+					enemy_to_bommer = true;
 
+				}
 			}
 		}
 	}
@@ -1687,24 +1721,27 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 
 void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
 {
-	if (enemy_type == 2)
+	if (invincible_time == 0)
 	{
-		if (BommerHitBox(player) == true && exising_flag == true)
+		if (enemy_type == 2)
 		{
-			if (player.GetDamageFlag(enemy_num) == 0)
+			if (BommerHitBox(player) == true && exising_flag == true)
 			{
-				player.HpSub(1);
+				if (player.GetDamageFlag(enemy_num) == 0)
+				{
+					player.HpSub(1);
+				}
+
+				explosion_bommer_flag = true;
+				enemy_to_bommer = true;
+
+				player.SetDamageFlag(enemy_num, 1);
+
 			}
-
-			explosion_bommer_flag = true;
-			enemy_to_bommer = true;
-
-			player.SetDamageFlag(enemy_num, 1);
-
-		}
-		else
-		{
-			player.SetDamageFlag(enemy_num, 0);
+			else
+			{
+				player.SetDamageFlag(enemy_num, 0);
+			}
 		}
 	}
 }
@@ -1713,25 +1750,28 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
 #pragma region 当たり判定
 void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 {
-	//当たり判定(複数)
-	if (*bullet.GetBulletFlag() == true && exising_flag == true && enemy_type != 6)
+	if (invincible_time == 0)
 	{
-		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-			this->transform.x + this->transform.xr > transform.x - transform.xr)
+		//当たり判定(複数)
+		if (*bullet.GetBulletFlag() == true && exising_flag == true && enemy_type != 6)
 		{
-			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+				this->transform.x + this->transform.xr > transform.x - transform.xr)
 			{
-				hp -= 1;
-				bullet.SetBulletFlag(false);
-
-				if (hp <= 0)
+				if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+					this->transform.y + this->transform.yr > transform.y - transform.yr)
 				{
-					exising_flag = false;
-					item->Form(transform);
-					explosion_flag = true;
-				}
+					hp -= 1;
+					bullet.SetBulletFlag(false);
 
+					if (hp <= 0)
+					{
+						exising_flag = false;
+						item->Form(transform);
+						explosion_flag = true;
+					}
+
+				}
 			}
 		}
 	}
@@ -1740,66 +1780,72 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 //当たり判定(単体)
 void Enemy::HitBox(Transform transform, int num, Item* item)
 {
-	if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-		this->transform.x + this->transform.xr > transform.x - transform.xr && enemy_type != 6)
+	if (invincible_time == 0)
 	{
-		if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-			this->transform.y + this->transform.yr > transform.y - transform.yr)
+		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+			this->transform.x + this->transform.xr > transform.x - transform.xr && enemy_type != 6)
 		{
-			if (damage_flag[num] == false)
+			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+				this->transform.y + this->transform.yr > transform.y - transform.yr)
 			{
-				hp--;
-				bullet[num]->SetBulletFlag(false);
-
-				if (hp <= 0)
+				if (damage_flag[num] == false)
 				{
-					exising_flag = false;
-					item->Form(transform);
-					explosion_flag = true;
-				}
-			}
+					hp--;
+					bullet[num]->SetBulletFlag(false);
 
-			damage_flag[num] = true;
+					if (hp <= 0)
+					{
+						exising_flag = false;
+						item->Form(transform);
+						explosion_flag = true;
+					}
+				}
+
+				damage_flag[num] = true;
+			}
+			else
+			{
+				damage_flag[num] = false;
+			}
 		}
 		else
 		{
 			damage_flag[num] = false;
 		}
 	}
-	else
-	{
-		damage_flag[num] = false;
-	}
 
 }
 
 void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 {
-	if (*enemyBullet.GetBulletFlag() == true && enemy_type != 6)
+	if (invincible_time == 0)
 	{
-		if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
-			this->transform.x + this->transform.xr > transform.x - transform.xr)
+		if (*enemyBullet.GetBulletFlag() == true && enemy_type != 6)
 		{
-			if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
-				this->transform.y + this->transform.yr > transform.y - transform.yr)
+			if (this->transform.x - this->transform.xr < transform.x + transform.xr &&
+				this->transform.x + this->transform.xr > transform.x - transform.xr)
 			{
-				if (damage_flag[i] == false)
+				if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
+					this->transform.y + this->transform.yr > transform.y - transform.yr)
 				{
-					hp--;
-					damage_flag[i] = true;
-					enemyBullet.SetBulletFlag(false);
-					explosion_flag = true;
-				}
+					if (damage_flag[i] == false)
+					{
+						hp--;
+						damage_flag[i] = true;
+						enemyBullet.SetBulletFlag(false);
+						explosion_flag = true;
+					}
 
+				}
+				else
+				{
+					damage_flag[i] = false;
+				}
 			}
 			else
 			{
 				damage_flag[i] = false;
 			}
-		}
-		else
-		{
-			damage_flag[i] = false;
 		}
 	}
 }
@@ -1840,7 +1886,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 
 #pragma region Draw
 //描画
-void Enemy::Draw(int num)
+void Enemy::Draw(int num,int wave_num)
 {
 
 	if (exising_flag == true)
@@ -1864,6 +1910,16 @@ void Enemy::Draw(int num)
 			break;
 		case 3://ブーメラン
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boomerang_img[boomerang_anime], true);
+			break;
+		case 4:
+			if (wave_num >= 20)
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, omnidirectional16_img[omnidirectional_anime], true);
+			}
+			else
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, omnidirectional8_img[omnidirectional_anime], true);
+			}
 			break;
 		case 10://中ボス雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
@@ -2047,6 +2103,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		{
 			all_bullet_max = 24;
 		}
+		img_r = 32;
 		break;
 	case 5://フォーメーション
 		all_bullet_max = 3;
@@ -2067,6 +2124,8 @@ void Enemy::form(FILE* fp, int wave_num)
 	{
 		bullet[i] = new EnemyBullet;
 	}
+
+	invincible_time = appear_time + end_frame;
 }
 
 //生成メイン

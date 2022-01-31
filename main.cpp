@@ -626,7 +626,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					else
 					{
-						boss->Move();
+						boss->Move(enemy, player, item, score,
+							recoveryflag, recoverytime, vibflag, screenshakeflag,
+							shakeflag, damageflag, shaketime, damagetime,
+							reflection_flag,movie_flag, keys);
 					}
 
 					if (wave_num > 32) {
@@ -1005,13 +1008,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					if (enemy[i] != nullptr)
 					{
-						enemy[i]->Draw(i);
+						enemy[i]->Draw(i,wave_num);
 					}
 
 				}
 			}
 
-			DrawBox(1014, 606, 1376, 960, GetColor(0, 0, 0), true);
+
 
 			if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
 			{
@@ -1020,9 +1023,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			if (boss_battle_flag == true)
 			{
-				boss->Draw();
+				boss->Draw(enemy);
 			}
 
+			DrawBox(1014, 606, 1376, 960, GetColor(0, 0, 0), true);
 
 			player->D(randX, randY);
 			DrawGraph(-32 + randX, -32 + randY, Layout, true);
@@ -1174,7 +1178,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					if (enemy[i] != nullptr)
 					{
-						enemy[i]->Draw(i);
+						enemy[i]->Draw(i,wave_num);
 					}
 
 				}
@@ -1225,7 +1229,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 
 			player->D(randX, randY);//itemback
-			enemy[0]->Draw(0);
+			enemy[0]->Draw(0,wave_num);
 			DrawGraph(-32 + randX, -32 + randY, Layout, true);
 
 			score->Draw(randX, randY);

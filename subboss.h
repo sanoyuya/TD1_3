@@ -67,6 +67,7 @@ private:
 	bool teleport_flag;
 
 	int boss1_img[14];
+	int boss2_img[14];
 	int boss1_anime_timer;
 	int boss1_anime;
 	int img_r;

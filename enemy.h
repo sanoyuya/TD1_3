@@ -24,7 +24,7 @@ public:
 	void Tutorialform(FILE* fp);
 	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys,int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
-	void Draw(int num);
+	void Draw(int num, int wave_num);
 	void HitBox(Transform transform,int num, Item* item);
 	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//当たり判定
 	void TutorialHitBox(Transform transform, int num);
@@ -146,4 +146,11 @@ private:
 
 	//フォーメーション
 	bool formation_fast_move_flag;
-};
+
+	int omnidirectional8_img[12];
+	int omnidirectional16_img[12];
+	int omnidirectional_anime;
+	int omnidirectional_anime_timer;
+
+	int invincible_time;//無敵時間
+ };

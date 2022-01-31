@@ -386,17 +386,16 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 	}
 
-	if (enemy_type == 1)
+
+	boss1_anime_timer++;
+
+	if (boss1_anime_timer == 14 * 6)
 	{
-		boss1_anime_timer++;
-
-		if (boss1_anime_timer == 14 * 6)
-		{
-			boss1_anime_timer = 0;
-		}
-
-		boss1_anime = boss1_anime_timer / 6;
+		boss1_anime_timer = 0;
 	}
+
+	boss1_anime = boss1_anime_timer / 6;
+
 }
 #pragma endregion
 
@@ -410,10 +409,19 @@ void SubBoss::Draw()
 {
 	if (exising_flag == true)
 	{
-		if (enemy_type == 1 || enemy_type == 3)
+		if (enemy_type == 1)
 		{
 
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
+
+			if (teleport_flag == true)
+			{
+				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
+			}
+		}
+		if (enemy_type == 3)
+		{
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss2_img[boss1_anime], true);
 
 			if (teleport_flag == true)
 			{
@@ -424,7 +432,7 @@ void SubBoss::Draw()
 
 	for (int i = 0; i < bullet_max; i++)
 	{
-		bullet[i]->Draw(enemy_type,shot_time,fast_move_flag,exising_flag, true);
+		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag, true);
 
 		if (bullet[i]->GetReflectionNum() >= 3)
 		{
@@ -840,11 +848,17 @@ SubBoss::SubBoss()
 	anticipation = 50;
 	teleport_flag = false;
 	LoadDivGraph("resouce/boss1.png", 14, 14, 1, 128, 128, boss1_img);
+	LoadDivGraph("resouce/boss2.png", 14, 14, 1, 128, 128, boss2_img);
 	boss1_anime_timer = 0;
 	boss1_anime = 0;
 	img_r = 64;
 
 	bullet_max = 12;
+
+	explosion_flag = false;
+	explosion_img[0] = 0;
+	explosion_img_anime = 0;
+	explosion_img_anime_timer = 0;
 
 }
 
