@@ -1166,70 +1166,91 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							DrawGraph(220, 120, Conon, true);
 						}
 					}
-					if (recoveryflag == 1) {//回復エフェクト
-						recoverytime++;
-						if (recoverytime >= 15) {
-							recoverytime = 0;
-							recoveryflag = 0;
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+					if (Configu == 0) {
+						if (vibflag == 0) {
+							DrawGraph(220, 120, CVoffgh, true);
 						}
 						else {
-							recoveryAlpha -= 15;
+							DrawGraph(220, 120, CVongh, true);
 						}
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
-						SetDrawBright(0, 150, 0);
-						DrawGraph(962 + randX, 130 + randY, damageefect, true);
-						SetDrawBright(255, 255, 255);
-						SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
-					}
-					else {
-						recoveryAlpha = 255;
-					}
-
-					if (damageflag == 1) {//ダメージエフェクト
-						damagetime++;
-						if (damagetime >= 15) {
-							damagetime = 0;
-							damageflag = 0;
+						DrawBox(280, 180, 680, 341, GetColor(255, 255, 255), false);
+						DrawBox(281, 181, 679, 340, GetColor(255, 255, 255), false);
+					}if (Configu == 1) {
+						if (screenshakeflag == 0) {
+							DrawGraph(220, 120, CSoff, true);
 						}
 						else {
-							damageAlpha -= 15;
+							DrawGraph(220, 120, CSon, true);
 						}
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
-						SetDrawBright(150, 0, 0);
-						DrawGraph(962 + randX, 130 + randY, damageefect, true);
-						SetDrawBright(255, 255, 255);
-						SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+						DrawBox(280, 410, 680, 651, GetColor(255, 255, 255), false);
+						DrawBox(281, 411, 679, 650, GetColor(255, 255, 255), false);
+					}
+				}
+				if (recoveryflag == 1) {//回復エフェクト
+					recoverytime++;
+					if (recoverytime >= 15) {
+						recoverytime = 0;
+						recoveryflag = 0;
 					}
 					else {
-						damageAlpha = 255;
+						recoveryAlpha -= 15;
 					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
+					SetDrawBright(0, 150, 0);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					recoveryAlpha = 255;
+				}
 
-					if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+				if (damageflag == 1) {//ダメージエフェクト
+					damagetime++;
+					if (damagetime >= 15) {
+						damagetime = 0;
+						damageflag = 0;
+					}
+					else {
+						damageAlpha -= 15;
+					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, damageAlpha);//アルファ
+					SetDrawBright(150, 0, 0);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					damageAlpha = 255;
+				}
+
+				if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+				{
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
+					DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+					if (wave_num == 29)
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-						DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-						SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-						if (wave_num == 29)
-						{
-							TxtDraw(47, 719, "resouce/text_1.png");
-						}
-						if (wave_num == 26)
-						{
-							TxtDraw(47, 719, "resouce/text_1.png");
-						}
-
-						for (int i = 0; i < ENEMY_MAX; i++)
-						{
-							if (enemy[i] != nullptr)
-							{
-								enemy[i]->Draw(i, wave_num);
-							}
-
-						}
+						TxtDraw(47, 719, "resouce/text_1.png");
 					}
-					break;
-					delete player;
+					if (wave_num == 26)
+					{
+						TxtDraw(47, 719, "resouce/text_1.png");
+					}
+
+					for (int i = 0; i < ENEMY_MAX; i++)
+					{
+						if (enemy[i] != nullptr)
+						{
+							enemy[i]->Draw(i, wave_num);
+						}
+
+					}
+				}
+				break;
+				delete player;
 			case 3:
 				//プレイ画面
 				score->Draw(randX, randY);
@@ -1321,30 +1342,30 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				break;
 				delete player;
-				}
-
-				DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
-				//DrawGraph(34, 34, guide, true);
-				//---------  ここまでにプログラムを記述  ---------//
-				// (ダブルバッファ)裏面
-				ScreenFlip();
-
-				// 20ミリ秒待機(疑似50FPS)
-				WaitTimer(20);
-
-				// Windowsシステムからくる情報を処理する
-				if (ProcessMessage() == -1) {
-					break;
-				}
-
-				// ESCキーが押されたらループから抜ける
-				if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
-					break;
-				}
 		}
-		// Dxライブラリ終了処理
-		DxLib_End();
 
-		// 正常終了
-		return 0;
+		DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
+		//DrawGraph(34, 34, guide, true);
+		//---------  ここまでにプログラムを記述  ---------//
+		// (ダブルバッファ)裏面
+		ScreenFlip();
+
+		// 20ミリ秒待機(疑似50FPS)
+		WaitTimer(20);
+
+		// Windowsシステムからくる情報を処理する
+		if (ProcessMessage() == -1) {
+			break;
+		}
+
+		// ESCキーが押されたらループから抜ける
+		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) {
+			break;
+		}
 	}
+	// Dxライブラリ終了処理
+	DxLib_End();
+
+	// 正常終了
+	return 0;
+}
