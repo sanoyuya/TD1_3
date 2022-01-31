@@ -239,7 +239,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 						if (game_set == false)
 						{
-							wave_num = 20;
+							wave_num = 27;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -1013,8 +1013,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				y = 10;
 			}
 
-			backX = x + 20 * (cos(ang) * 2);
-			backY = y + 10 * (sin(2 * ang) * 2);
+			backX = (int)x + 20 * (int)(cos(ang) * 2);
+			backY = (int)y + 10 * (int)(sin(2 * ang) * 2);
 
 			DrawBox(480 + backX, 480 + backY, 580 + backX, 580 + backY, GetColor(333, 333, 333), true);
 
