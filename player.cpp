@@ -434,7 +434,7 @@ int Player::Getscoreitem() {
 
 int Player::Result() {
 	if (hp <= 0) {
-		return 4;//ゲームオーバー画面へ
+		return 5;//ゲームオーバー画面へ
 	}
 	else {
 		return 2;
@@ -1201,7 +1201,6 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 		if (Apushflag == 0) {
 			DrawRotaGraph3(880, 874, 32, 32, 0.5, 0.5, 0.0, A, true, false);
 			DrawGraph(650, 64, option, true);
-
 		}
 		else {
 			SetDrawBright(100, 100, 100);
