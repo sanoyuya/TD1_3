@@ -66,8 +66,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 
-	int player_img[6];
-	LoadDivGraph("resouce/EL_stand.png", 6, 6, 1, 380, 402, player_img);
+	int player_img[12];
+	LoadDivGraph("resouce/EL_stand.png", 12, 12, 1, 380, 402, player_img);
 	int playerdamagegh = LoadGraph("resouce/EL_damage.png");
 	int wavegh[10] = { 0 };
 	LoadDivGraph("resouce/wavenum.png", 10, 10, 1, 34, 37, wavegh);
@@ -964,7 +964,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			maba2 = maba / 10;
 
-			if (maba2 == 6)
+			if (maba2 == 12)
 			{
 				maba = 0;
 				maba2 = 0;
@@ -1206,7 +1206,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			maba2 = maba / 10;
 
-			if (maba2 == 6)
+			if (maba2 == 12)
 			{
 				maba = 0;
 				maba2 = 0;

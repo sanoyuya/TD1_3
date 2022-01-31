@@ -36,8 +36,8 @@ Player::Player() {//コンストラクタの定義
 	nohitflag = 0;
 	maba = 0;
 	maba2 = 0;
-	LoadDivGraph("resouce/EL_stand.png", 6, 6, 1, 380, 402, player_img1);
-	LoadDivGraph("resouce/EL_talk.png", 6, 6, 1, 380, 402, player_img2);
+	LoadDivGraph("resouce/EL_stand.png", 12, 12, 1, 380, 402, player_img1);
+	LoadDivGraph("resouce/EL_talk.png", 12, 12, 1, 380, 402, player_img2);
 	txtcooltime = 0;
 
 
@@ -1219,9 +1219,9 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 
 	maba++;
 
-	maba2 = maba / 15;
+	maba2 = maba / 10;
 
-	if (maba2 == 6)
+	if (maba2 == 12)
 	{
 		maba = 0;
 		maba2 = 0;
