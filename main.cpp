@@ -121,7 +121,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Item* item = nullptr;
 	Boss* boss = nullptr;
 
-	int wave_num = 6;
+	int wave_num = 0;
 	int windex = 0;
 	int wdeiv = 1;
 	int wdiv = 0;
@@ -1272,6 +1272,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			else {
 				damageAlpha = 255;
+			}
+
+			DrawGraph(1041 + randX, 141 + randY, waveback, true);
+			wdiv = 1;
+			for (int i = 0; i < 2; i++)
+			{
+				windex = wave_num / wdiv % 10;
+				DrawGraph((2 - 1 - i) * 35 + 1194 + randX, 141 + randY, wavegh[windex], true);
+				wdiv = wdiv * 10;
 			}
 			break;
 			delete player;
