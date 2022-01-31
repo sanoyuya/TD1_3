@@ -157,4 +157,21 @@ private:
 	int sub_boss2_img[14];
 	int sub_boss2_anime;
 	int sub_boss2_anime_timer;
+
+	int teleport_flag_img_anime;
+	int teleport_flag_img_anime_timer;
+	int teleport_img[4];
+
+	int formation_img[12];
+	int formation_img_anime;
+	int formation_img_anime_timer;
+
+	int laser_img_L[6];
+	int laser_img_R[6];
+	int laser_img_anime;
+	int laser_img_anime_timer;
+	int laser_leftand_right_judgment;
+	//0レーザーじゃない
+	//1左
+	//2右
  };

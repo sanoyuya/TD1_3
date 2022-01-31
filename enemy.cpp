@@ -303,6 +303,23 @@ Enemy::Enemy()
 	txt_flag = 0;
 	formation_fast_move_flag = false;
 	invincible_time = 0;
+
+	sub_boss2_anime = 0;
+	sub_boss2_anime_timer = 0;
+
+	teleport_flag_img_anime = 0;
+	teleport_flag_img_anime_timer = 0;
+	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
+
+	LoadDivGraph("resouce/formation.png", 12, 12, 1, 96, 96, formation_img);
+	formation_img_anime = 0;
+	formation_img_anime_timer = 0;
+
+	laser_leftand_right_judgment = 0;
+	laser_img_anime = 0;
+	laser_img_anime_timer = 0;
+	LoadDivGraph("resouce/lazer_L.png", 6, 6, 1, 64, 64, laser_img_L);
+	LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
 }
 
 Enemy::~Enemy()
@@ -1536,6 +1553,27 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			omnidirectional_anime = omnidirectional_anime_timer / 6;
 			break;
 
+		case 5:
+			formation_img_anime_timer++;
+
+			if (formation_img_anime_timer == 12 * 6)
+			{
+				formation_img_anime_timer = 0;
+			}
+
+			formation_img_anime = formation_img_anime_timer / 6;
+			break;
+
+		case 6:
+			laser_img_anime_timer++;
+
+			if (laser_img_anime_timer == 4 * 6)
+			{
+				laser_img_anime_timer = 0;
+			}
+
+			laser_img_anime = laser_img_anime_timer / 6;
+			break;
 		case 10:
 			sub_boss1_anime_timer++;
 
@@ -1579,6 +1617,17 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		explosion_img_anime = explosion_img_anime_timer / 1;
 	}
 
+	if (teleport_flag == true)
+	{
+		teleport_flag_img_anime_timer++;
+
+		if (teleport_flag_img_anime_timer == 4 * 3)
+		{
+			teleport_flag_img_anime_timer = 0;
+		}
+
+		teleport_flag_img_anime = teleport_flag_img_anime_timer /3;
+	}
 }
 #pragma endregion
 
@@ -1935,6 +1984,19 @@ void Enemy::Draw(int num,int wave_num)
 				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, omnidirectional8_img[omnidirectional_anime], true);
 			}
 			break;
+		case 5://フォーメーション
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, formation_img[formation_img_anime], true);
+			break;
+		case 6://フォーメーション
+			if (laser_leftand_right_judgment == 1)
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, laser_img_L[laser_img_anime], true);
+			}
+			else
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, laser_img_R[laser_img_anime], true);
+			}
+			break;
 		case 10://中ボス雑魚
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss1_img[sub_boss1_anime], true);
 			break;
@@ -1942,7 +2004,7 @@ void Enemy::Draw(int num,int wave_num)
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, sub_boss2_img[sub_boss2_anime], true);
 			if (teleport_flag == true)
 			{
-				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, teleport_img[teleport_flag_img_anime], true);
 			}
 			break;
 		default:
@@ -2121,9 +2183,18 @@ void Enemy::form(FILE* fp, int wave_num)
 		break;
 	case 5://フォーメーション
 		all_bullet_max = 3;
+		img_r = 48;
 		break;
 	case 6://レーザー
 		all_bullet_max = 1;
+		if (transform.x > 482)
+		{
+			laser_leftand_right_judgment = 2;
+		}
+		else
+		{
+			laser_leftand_right_judgment = 1;
+		}
 		break;
 	case 10://中ボス1
 		all_bullet_max = 12;
@@ -2140,6 +2211,8 @@ void Enemy::form(FILE* fp, int wave_num)
 	}
 
 	invincible_time = appear_time + end_frame;
+
+
 }
 
 //生成メイン
