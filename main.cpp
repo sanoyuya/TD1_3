@@ -66,8 +66,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 
-	int player_img[6];
-	LoadDivGraph("resouce/EL_stand.png", 6, 6, 1, 380, 402, player_img);
+	int player_img[12];
+	LoadDivGraph("resouce/EL_stand.png", 12, 12, 1, 380, 402, player_img);
 	int playerdamagegh = LoadGraph("resouce/EL_damage.png");
 	int wavegh[10] = { 0 };
 	LoadDivGraph("resouce/wavenum.png", 10, 10, 1, 34, 37, wavegh);
@@ -161,7 +161,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				pushflagA = 0;
 			}
 			if (pushflagA == 0) {
-				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 					pushflagA = 1;
 					sceneflag = 1;
 					//‰¼--------------------------
@@ -613,7 +613,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss->Move(enemy, player, item, score,
 							recoveryflag, recoverytime, vibflag, screenshakeflag,
 							shakeflag, damageflag, shaketime, damagetime,
-							reflection_flag,movie_flag, keys);
+							reflection_flag, movie_flag, keys);
 					}
 
 					if (wave_num > 32) {
@@ -698,6 +698,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 						delete item;
 						item = new Item;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
 					}
 				}if (Pause == 2) {//ƒ^ƒCƒgƒ‹‚É–ß‚é
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
@@ -712,6 +718,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						wave_num = 1;
 						delete item;
 						sceneflag = 0;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
 					}
 				}
 #pragma endregion
@@ -852,6 +864,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						damagetime = 0;
 						shakeflag = 0;
 						damageflag = 0;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
 					}
 				}
 			}
@@ -873,6 +891,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						shakeflag = 0;
 						damageflag = 0;
 						sceneflag = 0;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
 					}
 				}
 			}
@@ -911,6 +935,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						damagetime = 0;
 						shakeflag = 0;
 						damageflag = 0;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
 					}
 				}
 			}
@@ -932,6 +962,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						shakeflag = 0;
 						damageflag = 0;
 						sceneflag = 0;
+
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
+
 					}
 				}
 			}
@@ -964,7 +1002,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			maba2 = maba / 10;
 
-			if (maba2 == 6)
+			if (maba2 == 12)
 			{
 				maba = 0;
 				maba2 = 0;
@@ -992,7 +1030,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					if (enemy[i] != nullptr)
 					{
-						enemy[i]->Draw(i,wave_num);
+						enemy[i]->Draw(i, wave_num);
 					}
 
 				}
@@ -1162,7 +1200,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				{
 					if (enemy[i] != nullptr)
 					{
-						enemy[i]->Draw(i,wave_num);
+						enemy[i]->Draw(i, wave_num);
 					}
 
 				}
@@ -1206,14 +1244,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			maba2 = maba / 10;
 
-			if (maba2 == 6)
+			if (maba2 == 12)
 			{
 				maba = 0;
 				maba2 = 0;
 			}
 
 			player->D(randX, randY);//itemback
-			enemy[0]->Draw(0,wave_num);
+			enemy[0]->Draw(0, wave_num);
 			DrawGraph(-32 + randX, -32 + randY, Layout, true);
 
 			score->Draw(randX, randY);
