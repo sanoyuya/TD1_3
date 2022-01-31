@@ -72,8 +72,8 @@ private:
 	int nohitflag;
 	int maba;
 	int maba2;
-	int player_img1[6] = {0};
-	int player_img2[6] = { 0 };
+	int player_img1[12] = {0};
+	int player_img2[12] = { 0 };
 	int txtcooltime;
 
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
