@@ -437,7 +437,7 @@ void SubBoss::Draw()
 
 			if (teleport_flag == true)
 			{
-				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, teleport_img[teleport_flag_img_anime], true);
 			}
 		}
 	}
@@ -874,7 +874,7 @@ SubBoss::SubBoss()
 
 	teleport_flag_img_anime = 0;
 	teleport_flag_img_anime_timer = 0;
-	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
+	LoadDivGraph("resouce/teleport_128.png", 4, 4, 1, 128, 128, teleport_img);
 
 }
 
