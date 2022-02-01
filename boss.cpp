@@ -25,7 +25,7 @@ Boss::Boss()
 {
 	break_flag = false;
 	ENEMY_MAX = 0;
-	wave_num = 2;
+	wave_num = 1;
 	wave_up_flag = false;
 	wave_set = false;
 
