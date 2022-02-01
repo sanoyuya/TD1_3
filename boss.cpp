@@ -81,7 +81,7 @@ Boss::~Boss()
 void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 	int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag)
+	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag,int& damageAlpha)
 {
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
@@ -151,7 +151,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
 		{
 			//éûã@Ç∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-			player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+			player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 			if (enemy[i]->GetEnemyFlag(wave_num) == true)
 			{

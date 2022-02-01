@@ -318,7 +318,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 							if (game_set == false)
 							{
-								wave_num = 23;
+								wave_num = 28;
 								if (wave_up_flag == true)
 								{
 									wave_num++;
@@ -496,7 +496,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
 								{
 									//時機と敵の弾の当たり判定
-									player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+									player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 									if (enemy[i]->GetEnemyFlag(wave_num) == true)
 									{
@@ -548,7 +548,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								for (int i = 0; i < sub_boss->GetBulletMax(); i++)
 								{
 									//時機と中ボスの弾の当たり判定
-									player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+									player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 									for (int j = 0; j < ENEMY_MAX; j++)
 									{
@@ -695,7 +695,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							boss->Move(enemy, player, item, score,
 								recoveryflag, recoverytime, vibflag, screenshakeflag,
 								shakeflag, damageflag, shaketime, damagetime,
-								reflection_flag, movie_flag, keys, game_end, txt_shake_flag);
+								reflection_flag, movie_flag, keys, game_end, txt_shake_flag, damageAlpha);
 						}
 
 						if (game_end == 1) {
@@ -894,7 +894,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
-				DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
+				//DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
 
 				if (keys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {//Aボタン
 					pushflagA = 1;
@@ -919,8 +919,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 5:
 				//リザルト画面(ゲームクリア)
 				StopSoundMem(STAGE_BGM);
-				score->TC(sceneflag);
-				score->RC();
 				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 					pushflagA = 0;
 				}
@@ -1010,7 +1008,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				flame++;
 				ang += 0.01;
-				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag);
+				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag, damageAlpha);
 				//score->IC();
 				break;
 		}
@@ -1075,10 +1073,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, Bright);
 				DrawGraph(title_easeX4, title_easeY4, Title1, true);
 
-				DrawFormatString(0, 0, GetColor(255, 255, 255), "1:%d", title1_flag);
-				DrawFormatString(0, 20, GetColor(255, 255, 255), "2:%d", title2_flag);
-				DrawFormatString(0, 60, GetColor(255, 255, 255), "time:%d", titleTime);
-				DrawFormatString(0, 40, GetColor(255, 255, 255), "Red:%d", Bright);
+				//DrawFormatString(0, 0, GetColor(255, 255, 255), "1:%d", title1_flag);
+				//DrawFormatString(0, 20, GetColor(255, 255, 255), "2:%d", title2_flag);
+				//DrawFormatString(0, 60, GetColor(255, 255, 255), "time:%d", titleTime);
+				//DrawFormatString(0, 40, GetColor(255, 255, 255), "Red:%d", Bright);
 
 
 
@@ -1480,7 +1478,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				delete player;
 		}
 
-		DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
+		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
 		//DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

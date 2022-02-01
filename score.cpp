@@ -42,9 +42,10 @@ void Score::SetHp(int hp) {
 }
 
 void Score::IC(int scoreitem) {
-	score += 1000;
+	if (scoreitem > 0){
+		score += 1000;
+	}
 	item = scoreitem * 1000;
-
 }
 
 void Score::CC() {
@@ -85,11 +86,13 @@ void Score::KnockDown() {//敵を倒した数*100
 }
 
 void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
-	if (hp <= 0) {
-		KnockDown();
-		IC(scoreitem);
-		RC();
-		sceneflag = 5;
+	if (sceneflag == 2) {
+		if (hp <= 0) {
+			KnockDown();
+			IC(scoreitem);
+			RC();
+			sceneflag = 5;
+		}
 	}
 }
 
@@ -98,7 +101,6 @@ void Score::Clear(int& sceneflag) {//クリアされたとき
 	CC();
 	TC(sceneflag);
 	KnockDown();
-
 	TC(sceneflag);
 	sceneflag = 5;
 }
@@ -124,19 +126,19 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = Toptier / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 300, 30 + 100, scoregh[index], true);//1位
+			DrawGraph((7 - 1 - i) * 48 + 100, 30 + 100, scoregh[index], true);//1位
 			div = div * 10;
 		}div = 1;
 		for (int i = 0; i < 7; i++)
 		{
 			index = Secondtier / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 300, 30 + 300, scoregh[index], true);//2位
+			DrawGraph((7 - 1 - i) * 48 + 100, 30 + 300, scoregh[index], true);//2位
 			div = div * 10;
 		}div = 1;
 		for (int i = 0; i < 7; i++)
 		{
 			index = Thirdtier / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 300, 30 + 500, scoregh[index], true);//3位
+			DrawGraph((7 - 1 - i) * 48 + 100, 30 + 500, scoregh[index], true);//3位
 			div = div * 10;
 		}
 		//---------------------------------------------------------------------ランキング
@@ -156,7 +158,7 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = clear / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 300, scoregh[index], true);//クリアボーナス
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 200, scoregh[index], true);//クリアボーナス
 			div = div * 10;
 		}
 
@@ -164,7 +166,7 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = hps / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 400, scoregh[index], true);//残hp
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 250, scoregh[index], true);//残hp
 			div = div * 10;
 		}
 
@@ -172,7 +174,7 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = knock / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 500, scoregh[index], true);//敵を倒した数
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 300, scoregh[index], true);//敵を倒した数
 			div = div * 10;
 		}
 
@@ -180,7 +182,7 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = item / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 600, scoregh[index], true);//アイテムを拾った数
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 350, scoregh[index], true);//アイテムを拾った数
 			div = div * 10;
 		}
 
@@ -188,23 +190,33 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = nodama / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 700, scoregh[index], true);//ノーダメボーナス
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 400, scoregh[index], true);//ノーダメボーナス
 			div = div * 10;
 		}
 
-		div = 1;
-		for (int i = 0; i < 7; i++)
-		{
-			index = time / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 800, scoregh[index], true);//タイムボーナス
-			div = div * 10;
+		if (hp >= 1) {
+			div = 1;
+			for (int i = 0; i < 7; i++)
+			{
+				index = time / div % 10;
+				DrawGraph((7 - 1 - i) * 48 + 800, 30 + 450, scoregh[index], true);//タイムボーナス
+				div = div * 10;
+			}
+		}
+		else {
+			for (int i = 0; i < 7; i++)
+			{
+				index = 0 / div % 10;
+				DrawGraph((7 - 1 - i) * 48 + 800, 30 + 500, scoregh[index], true);//タイムボーナス
+				div = div * 10;
+			}
 		}
 
 		div = 1;
 		for (int i = 0; i < 7; i++)
 		{
 			index = score / div % 10;
-			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 900, scoregh[index], true);//total
+			DrawGraph((7 - 1 - i) * 48 + 800, 30 + 550, scoregh[index], true);//total
 			div = div * 10;
 		}
 	}
