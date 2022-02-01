@@ -41,9 +41,10 @@ void Score::SetHp(int hp) {
 	this->hp = hp;
 }
 
-void Score::IC() {
-	score += scoreitem * 1000;
+void Score::IC(int scoreitem) {
+	score += 1000;
 	item = scoreitem * 1000;
+
 }
 
 void Score::CC() {
@@ -86,17 +87,18 @@ void Score::KnockDown() {//敵を倒した数*100
 void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 	if (hp <= 0) {
 		KnockDown();
-		IC();
+		IC(scoreitem);
 		RC();
 		sceneflag = 5;
 	}
 }
 
 void Score::Clear(int& sceneflag) {//クリアされたとき
+	IC(scoreitem);
 	CC();
 	TC(sceneflag);
 	KnockDown();
-	IC();
+
 	TC(sceneflag);
 	sceneflag = 5;
 }

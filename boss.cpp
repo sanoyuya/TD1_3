@@ -178,7 +178,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 						for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 						{
 							//“G‚Æ“G‚Ì’e‚Ì“–‚½‚è”»’è
-							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item,score);
 						}
 					}
 				}

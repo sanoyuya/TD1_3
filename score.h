@@ -4,7 +4,7 @@ class Score
 public:
 	Score();
 	~Score();
-	void IC();//knockdown
+	void IC(int scoreitem);//knockdown
 	void CC();//clear
 	void RC();//rank
 	void TC(int sceneflag);//time

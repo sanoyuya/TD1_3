@@ -296,7 +296,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (Pauseflag == 0) {
 					if (Configuflag == 0) {
 						score->TC(sceneflag);
-						score->IC();
+						//score->IC();
 						player->PlayerPadMove(keys, oldkeys, wave_num);
 						//デバッグ用(本番消す)
 						if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
@@ -318,7 +318,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 							if (game_set == false)
 							{
-								wave_num = 10;
+								wave_num = 23;
 								if (wave_up_flag == true)
 								{
 									wave_num++;
@@ -523,7 +523,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 												for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 												{
 													//敵と敵の弾の当たり判定
-													enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+													enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item,score);
 												}
 											}
 										}
@@ -555,7 +555,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 										if (enemy[j]->GetEnemyFlag(wave_num) == true)
 										{
 											//敵と中ボスの弾の当たり判定
-											enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
+											enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item,score);
 										}
 									}
 								}
@@ -578,6 +578,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 
 							item->Move(*player, *score);
+
+							score->SetHp(player->GetHp());
 #pragma endregion
 
 #pragma region wave クリア判定
@@ -911,7 +913,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 3:
 				//プレイ画面
 				score->TC(sceneflag);
-				score->IC();
+				//score->IC();
 				break;
 
 			case 5:
@@ -1009,7 +1011,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				flame++;
 				ang += 0.01;
 				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag);
-				score->IC();
+				//score->IC();
 				break;
 		}
 		// 描画処理

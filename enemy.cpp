@@ -1529,7 +1529,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 			if (*bullet[i]->GetBulletFlag() == true && exising_flag == true)
 			{
-				HitBox(*bullet[i]->GetTransform(), i, item);
+				HitBox(*bullet[i]->GetTransform(), i, item,&score);
 			}
 		}
 
@@ -1876,7 +1876,7 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int 
 #pragma endregion
 
 #pragma region “–‚½‚è”»’è
-void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
+void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item,Score* score)
 {
 	if (invincible_time == 0)
 	{
@@ -1898,6 +1898,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 						exising_flag = false;
 						item->Form(transform);
 						explosion_flag = true;
+						score->KnockDown();
 					}
 
 				}
@@ -1907,7 +1908,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 }
 
 //“–‚½‚è”»’è(’P‘Ì)
-void Enemy::HitBox(Transform transform, int num, Item* item)
+void Enemy::HitBox(Transform transform, int num, Item* item, Score* score)
 {
 	if (invincible_time == 0)
 	{
@@ -1928,6 +1929,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item)
 						exising_flag = false;
 						item->Form(transform);
 						explosion_flag = true;
+						score->KnockDown();
 					}
 				}
 
