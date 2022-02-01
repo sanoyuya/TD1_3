@@ -1779,6 +1779,19 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 	{
 		TutorialHitBox(*bullet[0]->GetTransform(), 0);
 	}
+
+	if (explosion_flag == true)
+	{
+		explosion_img_anime_timer++;
+
+		if (explosion_img_anime_timer == 8 * 1)
+		{
+			explosion_img_anime_timer = 0;
+			explosion_flag = false;
+		}
+
+		explosion_img_anime = explosion_img_anime_timer / 1;
+	}
 }
 #pragma endregion
 
