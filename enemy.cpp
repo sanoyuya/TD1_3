@@ -270,6 +270,9 @@ Enemy::Enemy()
 
 	//画像
 	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
+	LoadDivGraph("resouce/zako_Lv3.png", 12, 12, 1, 96, 96, img_Lv3);
+	LoadDivGraph("resouce/zako_Lv5.png", 12, 12, 1, 96, 96, img_Lv5);
+
 	img_r = 48;
 	anime = 0;
 	anime_timer = 0;
@@ -312,6 +315,8 @@ Enemy::Enemy()
 	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
 
 	LoadDivGraph("resouce/formation.png", 12, 12, 1, 96, 96, formation_img);
+	LoadDivGraph("resouce/formation_Lv3.png", 12, 12, 1, 96, 96, formationLv3_img);
+
 	formation_img_anime = 0;
 	formation_img_anime_timer = 0;
 
@@ -1167,7 +1172,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//地雷の動き
 				mine->form(transform, move_rand);
 			}
-			mine->HitBox(transform, hp,damage_effect);
+			mine->HitBox(transform, hp, damage_effect);
 			mine->Move();
 			mine->PlayerHitBox(player, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 		}
@@ -1431,7 +1436,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					{
 						if (txt_flag != 0 && txt_flag != 4)
 						{
-							if (keys[KEY_INPUT_SPACE] == 1|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+							if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
 							{
 								if (push_flag == false)
 								{
@@ -1508,7 +1513,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 				}
 
-				
+
 				if (reflection_flag == false && movie_flag == false)
 				{
 					exising_flag = false;
@@ -1529,7 +1534,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 
 			if (*bullet[i]->GetBulletFlag() == true && exising_flag == true)
 			{
-				HitBox(*bullet[i]->GetTransform(), i, item,&score);
+				HitBox(*bullet[i]->GetTransform(), i, item, &score);
 			}
 		}
 
@@ -1668,7 +1673,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			teleport_flag_img_anime_timer = 0;
 		}
 
-		teleport_flag_img_anime = teleport_flag_img_anime_timer /3;
+		teleport_flag_img_anime = teleport_flag_img_anime_timer / 3;
 	}
 }
 #pragma endregion
@@ -1876,7 +1881,7 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int 
 #pragma endregion
 
 #pragma region 当たり判定
-void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item,Score* score)
+void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item, Score* score)
 {
 	if (invincible_time == 0)
 	{
@@ -2020,7 +2025,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 
 #pragma region Draw
 //描画
-void Enemy::Draw(int num,int wave_num)
+void Enemy::Draw(int num, int wave_num)
 {
 
 	if (exising_flag == true)
@@ -2028,8 +2033,18 @@ void Enemy::Draw(int num,int wave_num)
 		switch (enemy_type)
 		{
 		case 1://雑魚
-			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img[anime], true);
-
+			if (wave_num <= 10)
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img[anime], true);
+			}
+			else if (wave_num <= 20)
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img_Lv3[anime], true);
+			}
+			else
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, img_Lv5[anime], true);
+			}
 			break;
 		case 2://ボマー
 			if (explosion_bommer_flag == false)
@@ -2056,9 +2071,18 @@ void Enemy::Draw(int num,int wave_num)
 			}
 			break;
 		case 5://フォーメーション
-			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, formation_img[formation_img_anime], true);
+
+			if (wave_num <= 23)
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, formation_img[formation_img_anime], true);
+			}
+			else
+			{
+				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, formationLv3_img[formation_img_anime], true);
+			}
+
 			break;
-		case 6://フォーメーション
+		case 6://レーザー
 			if (laser_leftand_right_judgment == 1)
 			{
 				DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, laser_img_L[laser_img_anime], true);
@@ -2094,7 +2118,7 @@ void Enemy::Draw(int num,int wave_num)
 
 	for (int i = 0; i < all_bullet_max; i++)
 	{
-		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag,shot_action_flag);
+		bullet[i]->Draw(enemy_type, shot_time, fast_move_flag, exising_flag, shot_action_flag);
 
 		if (bullet[i]->GetReflectionNum() >= 3)
 		{
@@ -2110,9 +2134,9 @@ void Enemy::Draw(int num,int wave_num)
 		if (exising_flag == true)
 		{
 			damage_effect_time--;
-			
+
 			DrawGraph(transform.x - 32, transform.y - 32, damage_img, true);
-			
+
 			if (damage_effect_time == 0)
 			{
 				damage_effect = false;
@@ -2683,7 +2707,7 @@ bool Enemy::GetEnemyFlag(int wave_num)
 	{
 		return exising_flag;
 	}
-	else if(wave_num == 29||wave_num == 26)
+	else if (wave_num == 29 || wave_num == 26)
 	{
 		return exising_flag;
 	}
