@@ -19,6 +19,8 @@ Score::Score()
 	item = 0;
 	time = 0;
 	nodama = 0;
+	clear = 0;
+	hps = 0;
 	LoadDivGraph("resouce/scorenum.png", 10, 10, 1, 40, 60, scoregh);
 }
 
@@ -81,7 +83,7 @@ void Score::KnockDown() {//敵を倒した数*100
 	knock += 100;
 }
 
-void Score::Death(int& sceneflag) {
+void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 	if (hp <= 0) {
 		KnockDown();
 		IC();
@@ -90,12 +92,13 @@ void Score::Death(int& sceneflag) {
 	}
 }
 
-void Score::Clear(int& sceneflag) {
+void Score::Clear(int& sceneflag) {//クリアされたとき
 	CC();
 	TC(sceneflag);
 	KnockDown();
 	IC();
 	TC(sceneflag);
+	sceneflag = 5;
 }
 
 void Score::Draw(int randX, int randY) {//ゲーム内スコア表示

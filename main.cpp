@@ -697,9 +697,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						}
 
 						if (game_end == 1) {
-							score->CC();
-							sceneflag = 5;
+							score->Clear(sceneflag);
 						}
+						score->Death(sceneflag);
 
 						item->Move(*player, *score);
 						sceneflag = player->Result();
