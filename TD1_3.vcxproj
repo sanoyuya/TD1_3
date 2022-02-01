@@ -140,6 +140,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="score.cpp" />
     <ClCompile Include="subboss.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boss.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="score.h" />
     <ClInclude Include="subboss.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="item.h" />
   </ItemGroup>

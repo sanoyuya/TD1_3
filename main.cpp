@@ -7,6 +7,7 @@
 #include"item.h"
 #include"math.h"
 #include"boss.h"
+#include"Title.h"
 
 // ウィンドウのタイトルに表示する文字列
 const char TITLE[] = "自滅ゲー";
@@ -17,10 +18,7 @@ const int WIN_WIDTH = 1376;
 // ウィンドウ縦幅
 const int WIN_HEIGHT = 960;
 
-double easeOutSine(double x)
-{
-	return sin((x * 3.14) / 2);
-}
+
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow) {
@@ -70,20 +68,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int damageefect = LoadGraph("resouce/DamageEfect.png");
 	int A = LoadGraph("resouce/A.png");
 	int B = LoadGraph("resouce/B.png");
-	int Option= LoadGraph("resouce/option.png");
+	int Option = LoadGraph("resouce/option.png");
 	int playback = LoadGraph("resouce/GameBackGraund.png");
 
-	int Title1 = LoadGraph("resouce/Title1.png");
-	int Title2 = LoadGraph("resouce/Title2.png");
-	int Title3 = LoadGraph("resouce/Title3.png");
-	int TitleBg = LoadGraph("resouce/TitleBg.png");
-
+	
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
 	int STAGE_BGM = LoadSoundMem("music/1~10.mp3");
 	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3");
 	int RESULT_BGM = LoadSoundMem("music/result.mp3");
 
+	float volume = 250.0f;
 
 
 	int player_img[12];
@@ -142,6 +137,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Score* score = nullptr;
 	Item* item = nullptr;
 	Boss* boss = nullptr;
+	Title* title = new Title;
 
 	int wave_num = 0;
 	int windex = 0;
@@ -159,38 +155,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	bool txt_shake_flag = false;
 	int txt_shake_time = 25;
 	int txt_rand_x = 0;
-
-	//タイトルのイージングの変数
-	double title_easeX1 = 0;
-	double title_easeX2 = 0;
-	double title_easeX3 = 0;
-	double title_easeX4 = 0;
-
-	double title_easeY1 = 0;
-	double title_easeY2 = 0;
-	double title_easeY3 = 0;
-	double title_easeY4 = 0;
-
-	double title1_Frame = 0;
-	double title2_Frame = 0;
-	double title1_EndFrame = 50;
-	double title2_EndFrame = 50;
-
-	double title1_start = -1376;
-	double title2_start = 1376;
-	double title1_end = 0;
-	double title2_end = 0;
-
-	int title1_flag = 0;
-	int title2_flag = 0;
-
-	int title_flag_A = 0;
-	int title_flag_B = 0;
-
-	int Bright = 0;
-	int BrightFlag = 0;
-
-	int titleTime = 0;
+	
+	bool title_sound_falg = false;
+	int titletimer= 0;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 
@@ -1016,69 +983,35 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (sceneflag) {//シーン管理
 			case 0:
 				//タイトル
-				PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP, false);
+				if (title_sound_falg == false)
+				{
+					PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP, true);
+					title_sound_falg = true;
+				}
+				titletimer++;
 
-				titleTime++;
-
-				if (title1_flag == 0 && title2_flag == 0  && title_flag_A == 0 && title_flag_B == 0)
+				if (titletimer < 3000)
 				{
-					title1_flag = 1;
-					title1_Frame = 0;
+					title->title();
 				}
-				if (title1_flag == 1)
+				else
 				{
-					title_flag_A = 1;
-					title1_Frame++;
-				}
-				if (title1_Frame == title1_EndFrame)
-				{
-					title1_flag = 0;
-				}
-
-				if (title1_flag == 0 && title2_flag == 0 && titleTime > 70 && title_flag_A == 1 && title_flag_B == 0)
-				{
-					title2_flag = 1;
-					title2_Frame = 0;
-				}
-				if (title2_flag == 1)
-				{
-					title_flag_B = 1;
-					title2_Frame++;
-				}
-				if (title2_Frame == title2_EndFrame)
-				{
-					title2_flag = 0;
+					StopSoundMem(TITLE_BGM);
+					PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP,true);
+					volume = 250.0f;
+					ChangeVolumeSoundMem(volume, TITLE_BGM);
+					delete title;
+					title = new Title;
+					titletimer = 0;
 				}
 
-				if (titleTime > 150)
+				if (titletimer > 2500)
 				{
-					Bright += 10;
-
+					volume -= 0.20f;
+					ChangeVolumeSoundMem(volume, TITLE_BGM);
 				}
 				
-				if (Bright > 256 )
-				{
-					Bright = 255;
-				}
-
-				title_easeX4 = title1_start + (title1_end - title1_start) * easeOutSine(title1_Frame / title1_EndFrame);
-				title_easeX2 = title2_start + (title2_end - title2_start) * easeOutSine(title2_Frame / title2_EndFrame);
-				
-
-
-				DrawGraph(title_easeX1, title_easeY1, TitleBg, true);
-				DrawGraph(title_easeX2, title_easeY2, Title3, true);
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, Bright);
-				DrawGraph(title_easeX3, title_easeY3, Title2, true);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, Bright);
-				DrawGraph(title_easeX4, title_easeY4, Title1, true);
-
-				DrawFormatString(0, 0, GetColor(255, 255, 255), "1:%d", title1_flag);
-				DrawFormatString(0, 20, GetColor(255, 255, 255), "2:%d", title2_flag);
-				DrawFormatString(0, 60, GetColor(255, 255, 255), "time:%d", titleTime);
-				DrawFormatString(0, 40, GetColor(255, 255, 255), "Red:%d", Bright);
-
-
+				DrawFormatString(100, 100, GetColor(255, 255, 255), "%d", titletimer);
 
 				break;
 
@@ -1100,7 +1033,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				SetDrawBright(150, 150, 150);
 				DrawGraph(backX - 30, backY, playback, true);
-				SetDrawBright(255,255,255);
+				SetDrawBright(255, 255, 255);
 				maba++;
 
 				maba2 = maba / 10;
