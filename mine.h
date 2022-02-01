@@ -18,12 +18,12 @@ public:
 	Mine();//コントラスタ
 	~Mine();//デストラクタ
 	void form(Transform transForm, int& frame);//生成
-	void HitBox(Transform transform, int& hp);//当たり判定
+	void HitBox(Transform transform, int& hp,bool& damage_effect);//当たり判定
 	void Move();//動き
 	void Draw();//描画
 	void initialize(MimeInitialize& mimeinitialize);//初期化
-	void HitBox(Transform transform, int& hp, bool damage_flag);
-	void PlayerHitBox(Player& player);
+	void HitBox(Transform transform, int& hp, bool damage_flag, bool& damage_effect);
+	void PlayerHitBox(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
 	//セッター
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);

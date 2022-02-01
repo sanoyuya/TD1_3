@@ -322,6 +322,9 @@ Enemy::Enemy()
 	LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
 
 	push_flag = false;
+	damage_effect = false;
+	damage_img = LoadGraph("resouce/E_damageEfect64.png");
+	damage_effect_time = 5;
 }
 
 Enemy::~Enemy()
@@ -1164,9 +1167,9 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//地雷の動き
 				mine->form(transform, move_rand);
 			}
-			mine->HitBox(transform, hp);
+			mine->HitBox(transform, hp,damage_effect);
 			mine->Move();
-			mine->PlayerHitBox(player);
+			mine->PlayerHitBox(player, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 		}
 #pragma endregion
 
@@ -1776,6 +1779,19 @@ void Enemy::TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int
 	{
 		TutorialHitBox(*bullet[0]->GetTransform(), 0);
 	}
+
+	if (explosion_flag == true)
+	{
+		explosion_img_anime_timer++;
+
+		if (explosion_img_anime_timer == 8 * 1)
+		{
+			explosion_img_anime_timer = 0;
+			explosion_flag = false;
+		}
+
+		explosion_img_anime = explosion_img_anime_timer / 1;
+	}
 }
 #pragma endregion
 
@@ -1821,7 +1837,7 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 	}
 }
 
-void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
+void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (invincible_time == 0)
 	{
@@ -1831,6 +1847,16 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
 			{
 				if (player.GetDamageFlag(enemy_num) == 0)
 				{
+					if (vibflag == 1) {
+						StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//パッド振動
+					}
+					if (screenshakeflag == 1) {
+						shaketime = 0;
+						shakeflag = 1;
+					}
+					damagetime = 0;
+					damageflag = 1;
+
 					player.HpSub(1);
 				}
 
@@ -1865,6 +1891,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 				{
 					hp -= 1;
 					bullet.SetBulletFlag(false);
+					damage_effect = true;
 
 					if (hp <= 0)
 					{
@@ -1894,6 +1921,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item)
 				{
 					hp--;
 					bullet[num]->SetBulletFlag(false);
+					damage_effect = true;
 
 					if (hp <= 0)
 					{
@@ -1936,6 +1964,8 @@ void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 						damage_flag[i] = true;
 						enemyBullet.SetBulletFlag(false);
 						explosion_flag = true;
+						damage_effect = true;
+
 					}
 
 				}
@@ -1964,7 +1994,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 			{
 				hp--;
 				bullet[num]->SetBulletFlag(false);
-
+				damage_effect = true;
 				if (hp <= 0)
 				{
 					exising_flag = false;
@@ -2071,9 +2101,27 @@ void Enemy::Draw(int num,int wave_num)
 		}
 	}
 
-
-
 	mine->Draw();
+
+	if (damage_effect == true)
+	{
+		if (exising_flag == true)
+		{
+			damage_effect_time--;
+			
+			DrawGraph(transform.x - 32, transform.y - 32, damage_img, true);
+			
+			if (damage_effect_time == 0)
+			{
+				damage_effect = false;
+				damage_effect_time = 5;
+			}
+		}
+		else
+		{
+			damage_effect = false;
+		}
+	}
 }
 #pragma endregion
 
