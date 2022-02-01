@@ -149,15 +149,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int guide = LoadGraph("resouce/formation_circle.png");
 	bool movie_flag = false;
 	bool boss_battle_flag = false;
+	bool stage_sound_flag = false;
+	bool boss_sound_flag = false;
+
 	int game_end = 0;
 
 	int txt_rand_y = 0;
 	bool txt_shake_flag = false;
 	int txt_shake_time = 25;
 	int txt_rand_x = 0;
-
-	bool title_sound_flag = false;
 	bool stage_sound_flag = false;
+	bool title_sound_falg = false;
 	int titletimer = 0;
 
 	int A_img = LoadGraph("resouce/A.png");
@@ -193,25 +195,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		switch (sceneflag) {//シーン管理
-			case 0:
-				//タイトル
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflagA = 0;
+		case 0:
+			//タイトル
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflagA = 0;
+			}
+			if (pushflagA == 0) {
+				if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					pushflagA = 1;
+					delete title;
+					sceneflag = 1;
+					//仮--------------------------
+					/*sceneflag = 10;
+					player = new Player();
+					enemy[0] = new Enemy;
+					item = new Item;
+					score = new Score;*/
+					//----------------------------
 				}
-				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-						pushflagA = 1;
-						delete title;
-						sceneflag = 1;
-						//仮--------------------------
-						/*sceneflag = 10;
-						player = new Player();
-						enemy[0] = new Enemy;
-						item = new Item;
-						score = new Score;*/
-						//----------------------------
-					}
-				}
+			}
 
 				break;
 
@@ -295,15 +297,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (boss_battle_flag == false)
 						{
 #pragma region 敵データ読み込み
-							if (game_set == false)
+						if (game_set == false)
+						{
+							wave_num = 29;
+							if (wave_up_flag == true)
 							{
-								//wave_num = 28;
-								if (wave_up_flag == true)
-								{
-									wave_num++;
-									player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
-									wave_up_flag = false;
-								}
+								wave_num++;
+								player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
+								wave_up_flag = false;
+							}
 
 								//敵の数
 								ENEMY_MAX = GetEnemyMax(wave_num);
@@ -465,9 +467,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								//敵が死ぬ毎に
 								//Score+=100;
 
-							}
+						}
 #pragma endregion
-
+						}
 #pragma region 体力減少
 
 							for (int i = 0; i < ENEMY_MAX; i++)
@@ -766,67 +768,77 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							movie_flag = false;
 							boss_battle_flag = false;
 							stage_sound_flag = false;
-						}if (Pause == 2) {//タイトルに戻る
-							if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-								delete player;
-								for (int i = 0; i < ENEMY_MAX; i++)
-								{
-									delete enemy[i];
-								}
-								delete score;
-								Pauseflag = 0;
-								game_set = false;
-								wave_num = 1;
-								delete item;
-								sceneflag = 0;
-								if (boss != nullptr)
-								{
-									delete boss;
-								}
-								movie_flag = false;
-								boss_battle_flag = false;
-							}
-
-#pragma endregion
+							boss_sound_flag = false;
+							StopSoundMem(STAGE_BGM);
+							StopSoundMem(BOSS_BGM);
 						}
 					}
-					if (Configuflag == 1) {
-						if (pushflagoption == 0) {
-							if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
-								Configuflag = 0;
-								pushflagoption = 1;
+					if (Pause == 2) {//タイトルに戻る
+						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							delete player;
+							for (int i = 0; i < ENEMY_MAX; i++)
+							{
+								delete enemy[i];
 							}
-						}
-						if (pushflagB == 0) {
-							if (keys[KEY_INPUT_RETURN] == 1 && oldkeys[KEY_INPUT_RETURN] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {
-								Pauseflag = 1;
-								Configuflag = 0;
-								pushflagB = 1;
-								player->pushB();
+							delete score;
+							Pauseflag = 0;
+							game_set = false;
+							wave_num = 1;
+							delete item;
+							sceneflag = 0;
+							if (boss != nullptr)
+							{
+								delete boss;
 							}
+							movie_flag = false;
+							boss_battle_flag = false;
+							stage_sound_flag = false;
+							boss_sound_flag = false;
+							StopSoundMem(STAGE_BGM);
+							StopSoundMem(BOSS_BGM);
+							title = new Title;
 						}
+					}
+#pragma endregion
 
-						if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) == 0 && keys[KEY_INPUT_W] == 0) {
-							pushUP = 0;
-						}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) == 0 && keys[KEY_INPUT_S] == 0) {
-							pushDOWN = 0;
-						}
-						if (pushUP == 0) {
-							if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-								Configu = Configu - 1;
-								pushUP = 1;
-							}
-						}if (pushDOWN == 0) {
-							if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-								Configu = Configu + 1;
-								pushDOWN = 1;
-							}
-						}if (Configu <= 0) {
-							Configu = 0;
-						}
-						if (Configu >= 1) {
-							Configu = 1;
-						}
+			}
+			if (Configuflag == 1) {
+				if (pushflagoption == 0) {
+					if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
+						Configuflag = 0;
+						pushflagoption = 1;
+					}
+				}
+				if (pushflagB == 0) {
+					if (keys[KEY_INPUT_RETURN] == 1 && oldkeys[KEY_INPUT_RETURN] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {
+						Pauseflag = 1;
+						Configuflag = 0;
+						pushflagB = 1;
+						player->pushB();
+					}
+				}
+
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) == 0 && keys[KEY_INPUT_W] == 0) {
+					pushUP = 0;
+				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) == 0 && keys[KEY_INPUT_S] == 0) {
+					pushDOWN = 0;
+				}
+				if (pushUP == 0) {
+					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+						Configu = Configu - 1;
+						pushUP = 1;
+					}
+				}if (pushDOWN == 0) {
+					if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+						Configu = Configu + 1;
+						pushDOWN = 1;
+					}
+				}if (Configu <= 0) {
+					Configu = 0;
+				}
+				if (Configu >= 1) {
+					Configu = 1;
+				}
 						if (Configu == 0) {
 							if (pushflagA == 0) {
 								if (vibflag == 0) {
@@ -920,78 +932,88 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				//score->IC();
 				break;
 
-			case 5:
-				//リザルト画面(ゲームクリア)
-				StopSoundMem(STAGE_BGM);
-				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
-					pushflagA = 0;
-				}
-				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
-					resultflag = 0;
-				}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
-					resultflag = 1;
-				}
-				if (resultflag == 0) {//初めからやり直す
-					if (pushflagA == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							sceneflag = 2;
-							delete player;
-							player = new Player();
-							delete score;
-							score = new Score();
-							wave_num = 1;
-							game_set = false;
-							Pauseflag = 0;
-							for (int i = 0; i < ENEMY_MAX; i++)
-							{
-								delete enemy[i];
-							}
-							delete item;
-							item = new Item;
-							shaketime = 0;
-							damagetime = 0;
-							shakeflag = 0;
-							damageflag = 0;
-							if (boss != nullptr)
-							{
-								delete boss;
-							}
-							movie_flag = false;
-							boss_battle_flag = false;
-							stage_sound_flag = false;
+		case 5:
+			//リザルト画面(ゲームクリア)
+			StopSoundMem(STAGE_BGM);
+			StopSoundMem(BOSS_BGM);
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
+				pushflagA = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
+				resultflag = 0;
+			}if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_DOWN) != 0 || keys[KEY_INPUT_S] == 1) {
+				resultflag = 1;
+			}
+			if (resultflag == 0) {//初めからやり直す
+				if (pushflagA == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						sceneflag = 2;
+						delete player;
+						player = new Player();
+						delete score;
+						score = new Score();
+						wave_num = 1;
+						game_set = false;
+						Pauseflag = 0;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
 						}
+						delete item;
+						item = new Item;
+						shaketime = 0;
+						damagetime = 0;
+						shakeflag = 0;
+						damageflag = 0;
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
+						stage_sound_flag = false;
+						boss_sound_flag = false;
+						StopSoundMem(STAGE_BGM);
+						StopSoundMem(BOSS_BGM);
+
 					}
 				}
-				else {//タイトルへ戻る
-					if (pushflagA == 0) {
-						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
-							delete player;
-							for (int i = 0; i < ENEMY_MAX; i++)
-							{
-								delete enemy[i];
-							}
-							delete score;
-							Pauseflag = 0;
-							game_set = false;
-							wave_num = 1;
-							delete item;
-							shaketime = 0;
-							damagetime = 0;
-							shakeflag = 0;
-							damageflag = 0;
-							sceneflag = 0;
-
-							if (boss != nullptr)
-							{
-								delete boss;
-							}
-							movie_flag = false;
-							boss_battle_flag = false;
-
+			}
+			else {//タイトルへ戻る
+				if (pushflagA == 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						delete player;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
 						}
+						delete score;
+						Pauseflag = 0;
+						game_set = false;
+						wave_num = 1;
+						delete item;
+						shaketime = 0;
+						damagetime = 0;
+						shakeflag = 0;
+						damageflag = 0;
+						sceneflag = 0;
+
+						if (boss != nullptr)
+						{
+							delete boss;
+						}
+						movie_flag = false;
+						boss_battle_flag = false;
+						stage_sound_flag = false;
+						boss_sound_flag = false;
+						title = new Title;
+						StopSoundMem(STAGE_BGM);
+						StopSoundMem(BOSS_BGM);
+
 					}
 				}
-				break;
+			}
+			break;
 
 			case 10:
 				//チュートリアル
@@ -1011,27 +1033,27 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				backcooltime++;
 
-				flame++;
-				ang += 0.01;
-				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag, damageAlpha);
-				//score->IC();
-				break;
+			flame++;
+			ang += 0.01;
+			player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag, damageAlpha);
+			//score->IC();
+			break;
+		}
+		// 描画処理
+		switch (sceneflag) {//シーン管理
+			case 0:
+				//タイトル
+				if (title_sound_flag == false)
+				{
+					PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP, true);
+					title_sound_flag = true;
 				}
-				// 描画処理
-				switch (sceneflag) {//シーン管理
-					case 0:
-						//タイトル
-						if (title_sound_flag == false)
-						{
-							PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP, true);
-							title_sound_flag = true;
-						}
-						titletimer++;
+				titletimer++;
 
-						if (titletimer < 3000)
-						{
-							title->title();
-						}
+				if (titletimer < 3000)
+				{
+					title->title();
+				}
 						else
 						{
 							StopSoundMem(TITLE_BGM);
@@ -1065,10 +1087,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					case 2:
 						if (stage_sound_flag == false) {
 							PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, true);
+							stage_sound_flag = true;
 						}
 						if (wave_num >= 30) {
-							StopSoundMem(STAGE_BGM);
-							PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, false);
+							if (boss_sound_flag == false)
+							{
+								StopSoundMem(STAGE_BGM);
+								PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, true);
+								boss_sound_flag = true;
+							}
+
 						}
 						SetDrawBright(150, 150, 150);
 						DrawGraph(backX - 30, backY, playback, true);
@@ -1484,6 +1512,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// Dxライブラリ終了処理
 		DxLib_End();
 
-		// 正常終了
-		return 0;
-	}
+	// 正常終了
+	return 0;
+}
