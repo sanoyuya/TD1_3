@@ -626,6 +626,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								}
 							}
 
+							if (item->ItemExists() == false)
+							{
+								break_flag = true;
+							}
+
 							if (wave_num == 10 || wave_num == 20)
 							{
 								if (sub_boss->GetSubBossFlag() == true || sub_boss->GetAppearTime() != -1)
@@ -709,8 +714,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							randX = 0;
 							randY = 0;
 						}
-
-
 					}
 
 				}
