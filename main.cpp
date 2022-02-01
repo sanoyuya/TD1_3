@@ -1389,6 +1389,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 5:
 				//リザルト画面(ゲームクリア)
+				score->ResultDraw();
 				if (resultflag == 0) {
 					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
 					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
