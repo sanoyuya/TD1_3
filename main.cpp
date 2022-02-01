@@ -298,7 +298,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 						if (game_set == false)
 						{
-							wave_num = 28;
+							wave_num = 29;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -411,27 +411,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								break;
 							case 21:
 								EnemyForm("WAVE_ENEMY_DATA/wave21.csv", ENEMY_MAX, enemy, wave_num);
-								player->SetEasingFlag(1);
 								game_set = true;
 								break;
 							case 22:
 								EnemyForm("WAVE_ENEMY_DATA/wave22.csv", ENEMY_MAX, enemy, wave_num);
-								player->SetEasingFlag(1);
 								game_set = true;
 								break;
 							case 23:
 								EnemyForm("WAVE_ENEMY_DATA/wave23.csv", ENEMY_MAX, enemy, wave_num);
-								player->SetEasingFlag(1);
 								game_set = true;
 								break;
 							case 24:
 								EnemyForm("WAVE_ENEMY_DATA/wave24.csv", ENEMY_MAX, enemy, wave_num);
-								player->SetEasingFlag(1);
 								game_set = true;
 								break;
 							case 25:
 								EnemyForm("WAVE_ENEMY_DATA/wave25.csv", ENEMY_MAX, enemy, wave_num);
-								player->SetEasingFlag(1);
 								game_set = true;
 								break;
 							case 26:
@@ -780,8 +775,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_sound_flag = false;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
-						title_sound_flag = false;
-
 					}
 				}
 				if (Pause == 2) {//タイトルに戻る
@@ -807,8 +800,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_sound_flag = false;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
-						title_sound_flag = false;
-
 						title = new Title;
 					}
 				}
@@ -986,7 +977,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_battle_flag = false;
 						stage_sound_flag = false;
 						boss_sound_flag = false;
-						title_sound_flag = false;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
 
@@ -1020,7 +1010,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_battle_flag = false;
 						stage_sound_flag = false;
 						boss_sound_flag = false;
-						title_sound_flag = false;
 						title = new Title;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);

@@ -614,17 +614,17 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					{
 						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
 					}
-					else if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
+
+					if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
 					{
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
-						
 					}
-					else if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29 || enemy_type == 6 && wave_num == 30 && movie_flag == true)
+
+					if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29 || enemy_type == 6 && wave_num == 30 && movie_flag == true)
 					{
 						txt_flag = 1;
 						player.SetEasingFlag(1);
 					}
-
 				}
 			}
 		}
