@@ -1276,30 +1276,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					damageAlpha = 255;
 				}
 
-				if (game_set == true && enemy[0]->GetTxtFlag() == 1)
-				{
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-					DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-					if (wave_num == 29)
-					{
-						TxtDraw(47, 719, "resouce/text_1.png");
-					}
-					if (wave_num == 26)
-					{
-						TxtDraw(47, 719, "resouce/text_1.png");
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i] != nullptr)
-						{
-							enemy[i]->Draw(i, wave_num);
-						}
-
-					}
-				}
 				break;
 				delete player;
 			case 3:
