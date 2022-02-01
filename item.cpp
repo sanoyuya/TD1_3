@@ -86,6 +86,7 @@ void Item::Move(Player& player, Score& score)
 				exising_flag[i] = false;
 				player.ItemFlagAdd(1, score);
 				time[i] = 500;
+				//score.IC();
 			}
 
 			if (time[i] > 0)

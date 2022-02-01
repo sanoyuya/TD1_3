@@ -10,7 +10,7 @@
 #include"Title.h"
 
 // ウィンドウのタイトルに表示する文字列
-const char TITLE[] = "自滅ゲー";
+const char TITLE[] = "Hide og Sigra";
 
 // ウィンドウ横幅
 const int WIN_WIDTH = 1376;
@@ -263,7 +263,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (Pauseflag == 0) {
 					if (Configuflag == 0) {
 						score->TC(sceneflag);
-						score->IC();
+						//score->IC();
 						player->PlayerPadMove(keys, oldkeys, wave_num);
 						//デバッグ用(本番消す)
 						if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
@@ -285,7 +285,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 							if (game_set == false)
 							{
-								//wave_num = 20;
+								wave_num = 28;
 								if (wave_up_flag == true)
 								{
 									wave_num++;
@@ -463,12 +463,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
 								{
 									//時機と敵の弾の当たり判定
-									player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+									player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 									if (enemy[i]->GetEnemyFlag(wave_num) == true)
 									{
 										//時機とボマーの当たり判定
-										enemy[i]->PlaterToEnemyHitBox(*player, i);
+										enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 									}
 
 								}
@@ -490,7 +490,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 												for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 												{
 													//敵と敵の弾の当たり判定
-													enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+													enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item,score);
 												}
 											}
 										}
@@ -515,20 +515,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								for (int i = 0; i < sub_boss->GetBulletMax(); i++)
 								{
 									//時機と中ボスの弾の当たり判定
-									player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+									player->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 									for (int j = 0; j < ENEMY_MAX; j++)
 									{
 										if (enemy[j]->GetEnemyFlag(wave_num) == true)
 										{
 											//敵と中ボスの弾の当たり判定
-											enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item);
+											enemy[j]->HP(*sub_boss->GetBulletTransform(i), *sub_boss->GetEnmyBullet(i), item,score);
 										}
 									}
 								}
 
 								//地雷と時機の当たり判定
-								sub_boss->PlayerMineHit(*player);
+								sub_boss->PlayerMineHit(*player ,vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 							}
 
 							for (int i = 0; i < ENEMY_MAX; i++)
@@ -545,6 +545,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 
 							item->Move(*player, *score);
+
+							score->SetHp(player->GetHp());
 #pragma endregion
 
 #pragma region wave クリア判定
@@ -660,13 +662,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							boss->Move(enemy, player, item, score,
 								recoveryflag, recoverytime, vibflag, screenshakeflag,
 								shakeflag, damageflag, shaketime, damagetime,
-								reflection_flag, movie_flag, keys, game_end, txt_shake_flag);
+								reflection_flag, movie_flag, keys, game_end, txt_shake_flag, damageAlpha);
 						}
 
 						if (game_end == 1) {
-							score->CC();
-							sceneflag = 5;
+							score->Clear(sceneflag);
 						}
+						score->Death(sceneflag);
 
 						item->Move(*player, *score);
 						sceneflag = player->Result();
@@ -859,7 +861,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 
-				DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
+				//DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
 
 				if (keys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {//Aボタン
 					pushflagA = 1;
@@ -878,14 +880,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 3:
 				//プレイ画面
 				score->TC(sceneflag);
-				score->IC();
+				//score->IC();
 				break;
 
 			case 5:
 				//リザルト画面(ゲームクリア)
 				StopSoundMem(STAGE_BGM);
-				score->TC(sceneflag);
-				score->RC();
 				if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 					pushflagA = 0;
 				}
@@ -975,8 +975,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				flame++;
 				ang += 0.01;
-				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag);
-				score->IC();
+				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag, damageAlpha);
+				//score->IC();
 				break;
 		}
 		// 描画処理
@@ -1010,8 +1010,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					volume -= 0.20f;
 					ChangeVolumeSoundMem(volume, TITLE_BGM);
 				}
-				
-				DrawFormatString(100, 100, GetColor(255, 255, 255), "%d", titletimer);
+
 
 				break;
 
@@ -1322,6 +1321,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 5:
 				//リザルト画面(ゲームクリア)
+				score->ResultDraw();
 				if (resultflag == 0) {
 					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
 					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
@@ -1410,7 +1410,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				delete player;
 		}
 
-		DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
+		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
 		//DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

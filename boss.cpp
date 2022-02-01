@@ -81,7 +81,7 @@ Boss::~Boss()
 void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 	int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag)
+	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag,int& damageAlpha)
 {
 
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
@@ -151,12 +151,12 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
 		{
 			//éûã@Ç∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-			player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+			player->HP(*enemy[i]->GetBulletTransform(j), *enemy[i]->GetEnmyBullet(j), vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 
 			if (enemy[i]->GetEnemyFlag(wave_num) == true)
 			{
 				//éûã@Ç∆É{É}Å[ÇÃìñÇΩÇËîªíË
-				enemy[i]->PlaterToEnemyHitBox(*player, i);
+				enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 			}
 
 		}
@@ -178,7 +178,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 						for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 						{
 							//ìGÇ∆ìGÇÃíeÇÃìñÇΩÇËîªíË
-							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item);
+							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item,score);
 						}
 					}
 				}
@@ -527,7 +527,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 
 void Boss::Draw(Enemy** enemy)
 {
-	DrawBox(transform.x - transform.xr, transform.y - transform.yr, transform.x + transform.xr, transform.y + transform.yr, GetColor(333, 333, 333), true);
+	DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(333, 333, 333), true);
 
 	if (wave_set == true)
 	{

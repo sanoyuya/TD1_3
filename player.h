@@ -16,9 +16,9 @@ public:
 	Player();
 	//void Rset();
 	void PlayerPadMove(char* keys, char* oldkeys, int wave_num);
-	void HP(Transform transform, EnemyBullet& bullet,int flag,int screenshakeflag,int &shakeflag,int &damageflag, int& shaketime, int& damagetime);
-	void HPplus(int wave,int &recoveryflag,int &recoverytime);
-	void Draw(int randX,int randY);
+	void HP(Transform transform, EnemyBullet& bullet, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, int& damageAlpha);
+	void HPplus(int wave, int& recoveryflag, int& recoverytime);
+	void Draw(int randX, int randY);
 	void D(int randX, int randY);
 	int GetX();
 	int GetY();
@@ -34,18 +34,18 @@ public:
 	int Getscoreitem();
 	void pushB();
 
-	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int& flag, int& screenshakeflag, int& shakeflag, int& damageflag);
-	void TutorialDraw(int randX, int randY,char *keys);
+	void TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& sceneflag, int& wave_num, int& pushflagoption, int& flag, int& screenshakeflag, int& shakeflag, int& damageflag, int& damageAlpha);
+	void TutorialDraw(int randX, int randY, char* keys);
 	void TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_flag, int& shaketime, int& damagetime);
 	void ItemFlagAdd(int num, Score& score);
 	void HpSub(int num);
 	void SetDamageFlag(int i, int num);
 	void SetMoveFlag(int flag);
-	
+
 	int EasingMove(double end_x, double end_y, int end_frame);
 	void SetEasingFlag(int num);
 	void DeleteItem();
-	
+
 private:
 	int X;
 	int Y;
@@ -66,13 +66,13 @@ private:
 	int txtflag;
 	int pushflag;
 	int pushflagB;
-	int txt1; int txt2; int txt3; int txt4; int txt5; int txt6; int txt7; int txt8; int txt9; int txt10; int txt11; int txt12; int txt13; int txt14; int txt15; int txt16; int txt17; 
+	int txt1; int txt2; int txt3; int txt4; int txt5; int txt6; int txt7; int txt8; int txt9; int txt10; int txt11; int txt12; int txt13; int txt14; int txt15; int txt16; int txt17;
 	int A; int option; int Apflag; int Apushflag; int SetAtime;
 	int HPgh; int MPgh; int itemline; int itemback; int bigitem; int Alpha;
 	int nohitflag;
 	int maba;
 	int maba2;
-	int player_img1[12] = {0};
+	int player_img1[12] = { 0 };
 	int player_img2[12] = { 0 };
 	int txtcooltime;
 

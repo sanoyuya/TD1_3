@@ -17,7 +17,7 @@ public:
 	void Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 		int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-		bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag, bool& txt_shake_flag);
+		bool& reflection_flag, bool& movie_flag, char* keys, int& sceneflag, bool& txt_shake_flag, int& damageAlpha);
 	void Draw(Enemy** enemy);
 private:
 	bool wave_set;
@@ -25,13 +25,13 @@ private:
 	int ENEMY_MAX;
 	bool wave_up_flag;
 	bool break_flag;
-	
+
 	bool zako_wannihilation_falg;
 	int zako_num;
 
 	bool boss1_wannihilation_falg;
 	int boss1_num;
-	
+
 	bool boomerang_wannihilation_falg;
 	int boomerang_num;
 
