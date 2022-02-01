@@ -330,6 +330,11 @@ Enemy::Enemy()
 	damage_effect = false;
 	damage_img = LoadGraph("resouce/E_damageEfect64.png");
 	damage_effect_time = 5;
+
+	laser_sound = LoadSoundMem("music/lazer.mp3");
+	douwn_sound = LoadSoundMem("music/knockdouwn.mp3");
+	sound_flag = false;
+
 }
 
 Enemy::~Enemy()
@@ -614,13 +619,11 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 					{
 						angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
 					}
-
-					if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
+					else if (enemy_type == 5 || enemy_type == 4 && wave_num == 28)
 					{
 						angle = (float)atan2(transform.x - 480.0, transform.y - 480.0);
 					}
-
-					if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29 || enemy_type == 6 && wave_num == 30 && movie_flag == true)
+					else if (enemy_type == 6 && wave_num == 26 || enemy_type == 6 && wave_num == 29 || enemy_type == 6 && wave_num == 30 && movie_flag == true)
 					{
 						txt_flag = 1;
 						player.SetEasingFlag(1);
@@ -1508,6 +1511,8 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 							shot_time = -1;
 							bullet[0]->Form(transform, player, x_speed, y_speed, enemy_type);
 							damage_flag[0] = true;
+
+							PlaySoundMem(laser_sound, DX_PLAYTYPE_BACK);
 						}
 					}
 
@@ -1518,6 +1523,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				{
 					exising_flag = false;
 					bullet[0]->SetBulletFlag(0);
+					StopSoundMem(laser_sound);
 				}
 			}
 		}
@@ -1905,6 +1911,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item, Score* scor
 						item->Form(transform);
 						explosion_flag = true;
 						score->KnockDown();
+						PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 					}
 
 				}
@@ -1936,6 +1943,8 @@ void Enemy::HitBox(Transform transform, int num, Item* item, Score* score)
 						item->Form(transform);
 						explosion_flag = true;
 						score->KnockDown();
+						PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
+
 					}
 				}
 
@@ -2007,6 +2016,8 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 				{
 					exising_flag = false;
 					explosion_flag = true;
+					PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
+
 				}
 			}
 

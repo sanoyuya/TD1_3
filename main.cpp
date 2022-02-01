@@ -76,10 +76,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
 	int STAGE_BGM = LoadSoundMem("music/1~10.mp3");
 	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3");
+	int TUTORIAL_BGM = LoadSoundMem("music/チュートリアル.mp3");
 	int RESULT_BGM = LoadSoundMem("music/result.mp3");
 
 	float volume = 250.0f;
 
+	//SE
+	int SELECT_SE = LoadSoundMem("music/選択不可.mp3");
 
 	int player_img[12];
 	LoadDivGraph("resouce/EL_stand.png", 12, 12, 1, 380, 402, player_img);
@@ -132,7 +135,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	bool reflection_flag = true;
 
 	Player* player = nullptr;
-	Enemy* enemy[64] = { nullptr };
+	Enemy* enemy[40] = { nullptr };
 	SubBoss* sub_boss = nullptr;
 	Score* score = nullptr;
 	Item* item = nullptr;
@@ -160,6 +163,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int txt_rand_x = 0;
 	bool title_sound_flag = false;
 	int titletimer = 0;
+	bool tutorial_sound_flag = false;
 
 	int A_img = LoadGraph("resouce/A.png");
 	int A_time = 0;
@@ -204,6 +208,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					pushflagA = 1;
 					delete title;
 					sceneflag = 1;
+					PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 					//仮--------------------------
 					/*sceneflag = 10;
 					player = new Player();
@@ -229,19 +234,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (stageflag == 0) {
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						sceneflag = 10;
 						player = new Player();
 						enemy[0] = new Enemy;
 						item = new Item;
 						score = new Score;
+
 					}
 				}
 			}
 			else {
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
+						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						sceneflag = 3;
 					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						sceneflag = 3;
 					}
 				}
@@ -298,7 +307,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 						if (game_set == false)
 						{
-							wave_num = 23;
+							wave_num = 28;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -756,6 +765,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (Pause == 1) {//初めからやり直す
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+
 						sceneflag = 2;
 						delete player;
 						player = new Player();
@@ -781,11 +792,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
 						title_sound_flag = false;
+						tutorial_sound_flag = false;
 
 					}
 				}
 				if (Pause == 2) {//タイトルに戻る
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						delete player;
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
@@ -808,6 +821,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
 						title_sound_flag = false;
+						tutorial_sound_flag = false;
 
 						title = new Title;
 					}
@@ -857,11 +871,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (vibflag == 0) {
 							if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 								vibflag = 1;
+								PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+
 							}
 						}
 						else {
 							if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 								vibflag = 0;
+								PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+
 							}
 						}
 					}
@@ -870,11 +888,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (screenshakeflag == 0) {
 							if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 								screenshakeflag = 1;
+								PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+
 							}
 						}
 						else {
 							if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 								screenshakeflag = 0;
+								PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+
 							}
 						}
 					}
@@ -891,6 +913,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (Pause == 0) {//設定
 					if (pushflagA == 0) {
 						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+							PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 							Configuflag = 1;
 							Pauseflag = 0;
 						}
@@ -987,6 +1010,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						stage_sound_flag = false;
 						boss_sound_flag = false;
 						title_sound_flag = false;
+						tutorial_sound_flag = false;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
 
@@ -1021,6 +1045,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						stage_sound_flag = false;
 						boss_sound_flag = false;
 						title_sound_flag = false;
+						tutorial_sound_flag = false;
 						title = new Title;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
@@ -1101,6 +1126,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 2:
 			if (stage_sound_flag == false) {
+				StopSoundMem(TUTORIAL_BGM);
 				PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, true);
 				stage_sound_flag = true;
 			}
@@ -1190,9 +1216,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 				if (wave_num == 29)
 				{
-
 					DrawGraph(47, 719, RL2_txt, true);
-
 				}
 				if (wave_num == 26)
 				{
@@ -1430,6 +1454,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		case 10:
 			//チュートリアル
 			StopSoundMem(TITLE_BGM);
+			if (tutorial_sound_flag == false)
+			{
+				PlaySoundMem(TUTORIAL_BGM, DX_PLAYTYPE_LOOP);
+				tutorial_sound_flag = true;
+			}
 			SetDrawBright(150, 150, 150);
 			DrawGraph(backX - 30, backY, playback, true);
 			SetDrawBright(255, 255, 255);
