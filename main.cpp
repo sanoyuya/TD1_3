@@ -70,6 +70,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int damageefect = LoadGraph("resouce/DamageEfect.png");
 	int A = LoadGraph("resouce/A.png");
 	int B = LoadGraph("resouce/B.png");
+	int Option= LoadGraph("resouce/option.png");
+	int playback = LoadGraph("resouce/GameBackGraund.png");
 
 	int Title1 = LoadGraph("resouce/Title1.png");
 	int Title2 = LoadGraph("resouce/Title2.png");
@@ -129,6 +131,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	double y = 0;
 	double ang = 0;
 	int flame = 0;
+	int ABtime = 0;
+	int ABflag = 0;
 
 	bool reflection_flag = true;
 
@@ -266,6 +270,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				//プレイ画面
+				if (maba2 >= 11)
+				{
+					maba = 0;
+					maba2 = 0;
+				}
+
+				if (flame == 0) {
+					x = 15;
+					y = 10;
+				}
+
+				backX = x + 20 * (cos(ang) * 2);
+				backY = y + 10 * (sin(2 * ang) * 2);
+
+				backcooltime++;
+
+				flame++;
+				ang += 0.01;
+
 				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) == 0 && keys[KEY_INPUT_H] == 0 && oldkeys[KEY_INPUT_H] == 0) {
 					pushflagoption = 0;
 				}
@@ -279,7 +302,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
 							delete player;
 							player = new Player();
-							wave_num = 10;
+							wave_num = 29;
 							game_set = false;
 						}
 						if (pushflagoption == 0) {
@@ -454,8 +477,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 										player->SetMoveFlag(0);
 										break;
 									case 30:
-										StopSoundMem(STAGE_BGM);
-										PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, false);
 										movie_flag = false;
 										boss_battle_flag = true;
 										boss = new Boss;
@@ -969,6 +990,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 10:
 				//チュートリアル
+				if (maba2 >= 11)
+				{
+					maba = 0;
+					maba2 = 0;
+				}
+
+				if (flame == 0) {
+					x = 15;
+					y = 10;
+				}
+
+				backX = x + 20 * (cos(ang) * 2);
+				backY = y + 10 * (sin(2 * ang) * 2);
+
+				backcooltime++;
+
+				flame++;
+				ang += 0.01;
 				player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag);
 				score->IC();
 				break;
@@ -1055,30 +1094,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 2:
 				PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, false);
+				if (wave_num >= 30) {
+					StopSoundMem(STAGE_BGM);
+					PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, false);
+				}
+				SetDrawBright(150, 150, 150);
+				DrawGraph(backX - 30, backY, playback, true);
+				SetDrawBright(255,255,255);
 				maba++;
 
 				maba2 = maba / 10;
-
-				if (maba2 == 12)
-				{
-					maba = 0;
-					maba2 = 0;
-				}
-
-				if (flame == 0) {
-					x = 20;
-					y = 10;
-				}
-
-				backX = x + 20 * (cos(ang) * 2);
-				backY = y + 10 * (sin(2 * ang) * 2);
-
-				DrawBox(480 + backX, 480 + backY, 580 + backX, 580 + backY, GetColor(333, 333, 333), true);
-
-				backcooltime++;
-
-				flame++;
-				ang += 0.02;
 
 				if (game_set == true)
 				{
@@ -1089,11 +1114,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						{
 							enemy[i]->Draw(i, wave_num);
 						}
-
 					}
 				}
-
-
 
 				if (wave_num == 10 && wave_up_flag == false || wave_num == 20 && wave_up_flag == false)
 				{
@@ -1231,9 +1253,57 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					boss->Draw(enemy);
 				}
 
+				if (recoveryflag == 1) {//回復エフェクト
+					recoverytime++;
+					if (recoverytime >= 15) {
+						recoverytime = 0;
+						recoveryflag = 0;
+					}
+					else {
+						recoveryAlpha -= 15;
+					}
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
+					SetDrawBright(0, 150, 0);
+					DrawGraph(962 + randX, 130 + randY, damageefect, true);
+					SetDrawBright(255, 255, 255);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
+				}
+				else {
+					recoveryAlpha = 255;
+				}
+
+				if (Pauseflag == 1 || Configuflag == 1) {
+					DrawGraph(220, 120, PSgh, true);
+					ABtime++;
+					if (ABflag == 0) {
+						if (ABtime >= 25) {
+							ABtime = 0;
+							ABflag = 1;
+						}
+					}
+					else {
+						if (ABtime >= 25) {
+							ABtime = 0;
+							ABflag = 0;
+						}
+					}
+
+					if (ABflag == 0) {
+						DrawGraph(660, 780, A, true);
+						DrawGraph(236, 780, B, true);
+						DrawGraph(660, 136, Option, true);
+					}
+					else {
+						SetDrawBright(100, 100, 100);
+						DrawGraph(660, 780, A, true);
+						DrawGraph(236, 780, B, true);
+						DrawGraph(660, 136, Option, true);
+						SetDrawBright(255, 255, 255);
+					}
+				}
+
 				if (Pauseflag == 1) {
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
-					DrawGraph(220, 120, PSgh, true);
 					DrawGraph(220, 120, PSgh128, true);
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
 					if (Pause == 0) {
@@ -1252,7 +1322,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				if (Configuflag == 1) {
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//アルファ
-					DrawGraph(220, 120, PSgh, true);
 					if (vibflag == 0) {
 						if (screenshakeflag == 0) {
 							DrawGraph(220, 120, Coffoff, true);
@@ -1290,24 +1359,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						DrawBox(281, 411, 679, 650, GetColor(255, 255, 255), false);
 					}
 				}
-				if (recoveryflag == 1) {//回復エフェクト
-					recoverytime++;
-					if (recoverytime >= 15) {
-						recoverytime = 0;
-						recoveryflag = 0;
-					}
-					else {
-						recoveryAlpha -= 15;
-					}
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, recoveryAlpha);//アルファ
-					SetDrawBright(0, 150, 0);
-					DrawGraph(962 + randX, 130 + randY, damageefect, true);
-					SetDrawBright(255, 255, 255);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);//ノーブレンド
-				}
-				else {
-					recoveryAlpha = 255;
-				}
 
 				if (damageflag == 1) {//ダメージエフェクト
 					damagetime++;
@@ -1328,30 +1379,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					damageAlpha = 255;
 				}
 
-				if (game_set == true && enemy[0]->GetTxtFlag() == 1)
-				{
-					SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
-					DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
-					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-					if (wave_num == 29)
-					{
-						TxtDraw(47, 719, "resouce/text_1.png");
-					}
-					if (wave_num == 26)
-					{
-						TxtDraw(47, 719, "resouce/text_1.png");
-					}
-
-					for (int i = 0; i < ENEMY_MAX; i++)
-					{
-						if (enemy[i] != nullptr)
-						{
-							enemy[i]->Draw(i, wave_num);
-						}
-
-					}
-				}
 				break;
 				delete player;
 			case 3:
@@ -1375,11 +1402,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 10:
 				//チュートリアル
 				StopSoundMem(TITLE_BGM);
+				SetDrawBright(150, 150, 150);
+				DrawGraph(backX - 30, backY, playback, true);
+				SetDrawBright(255, 255, 255);
 				maba++;
 
 				maba2 = maba / 10;
 
-				if (maba2 == 12)
+				if (maba2 == 11)
 				{
 					maba = 0;
 					maba2 = 0;
