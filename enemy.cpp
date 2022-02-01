@@ -2250,6 +2250,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		break;
 	case 3://ブーメラン
 		all_bullet_max = 3;
+		img_r = 32;
 		break;
 	case 4://全方位
 		if (wave_num >= 20)
@@ -2287,6 +2288,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		break;
 	case 10://中ボス1
 		all_bullet_max = 12;
+		img_r = 32;
 		break;
 	case 20://中ボス2
 		all_bullet_max = 4;
