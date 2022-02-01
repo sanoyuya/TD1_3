@@ -61,9 +61,14 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		if (r * (int)transform[0].xr >
-			((x - (int)transform[0].x) * (x - (int)transform[0].x)) +
-			((y - (int)transform[0].y) * (y - (int)transform[0].y)))
+		float a = x - transform[0].x;
+		float b = y - transform[0].y;
+		float c = a * a + b * b;
+		float sum_radius = r + transform[0].xr;
+		//if (player.GetR() * 64 >
+		//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
+		//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+		if (c <= sum_radius * sum_radius)
 		{
 			exising_flag[0] = false;
 			return true;
