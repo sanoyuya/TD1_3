@@ -72,6 +72,12 @@ Boss::Boss()
 	escape_end_y = -150;
 	escape_end_frame = 100;
 	txt_flag = 0;
+	LoadDivGraph("resouce/lastboss.png", 2, 2, 1, 160,160, img);
+	LoadDivGraph("resouce/lastboss_mugon.png", 2, 2, 1, 160, 160, mugon_img);
+	LoadDivGraph("resouce/lastboss_talk.png", 2, 2, 1, 160, 160, talk_img);
+	img_anime = 0;
+	img_anime_timer = 0;
+	txt_cool_time = 0;
 }
 
 Boss::~Boss()
@@ -90,7 +96,6 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		if (wave_up_flag == true)
 		{
 			wave_num++;
-			//player->HPplus(wave_num, recoveryflag = 0, recoverytime = 0);
 			wave_up_flag = false;
 		}
 
@@ -523,12 +528,47 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 			}
 		}
 	}
+
+	img_anime_timer++;
+
+	if (img_anime_timer == 2 * 5)
+	{
+		img_anime_timer = 0;
+	}
+
+	img_anime = img_anime_timer / 5;
+
+	if (txt_flag == 3 && txt_cool_time < 70)
+	{
+		txt_cool_time++;
+	}
+
+	txt_flag = enemy[0]->GetTxtFlag();
 }
 
 void Boss::Draw(Enemy** enemy)
 {
-	DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(333, 333, 333), true);
-
+	if (txt_flag == 0)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 130);
+		DrawGraph(transform.x - transform.xr, transform.y - transform.yr, img[img_anime], true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else if(txt_flag == 1 || txt_flag == 2 || txt_flag == 4)
+	{
+		DrawGraph(transform.x - transform.xr, transform.y - transform.yr, mugon_img[img_anime], true);
+	}
+	else if(txt_flag == 3)
+	{
+		if (txt_cool_time < 70)
+		{
+			DrawGraph(transform.x - transform.xr, transform.y - transform.yr, talk_img[img_anime], true);
+		}
+		else
+		{
+			DrawGraph(transform.x - transform.xr, transform.y - transform.yr, mugon_img[img_anime], true);
+		}
+	}
 	if (wave_set == true)
 	{
 		//ƒvƒŒƒC‰æ–Ê
