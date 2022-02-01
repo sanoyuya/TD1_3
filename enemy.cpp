@@ -1169,7 +1169,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 			}
 			mine->HitBox(transform, hp,damage_effect);
 			mine->Move();
-			mine->PlayerHitBox(player);
+			mine->PlayerHitBox(player, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 		}
 #pragma endregion
 
@@ -1824,7 +1824,7 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 	}
 }
 
-void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
+void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (invincible_time == 0)
 	{
@@ -1834,6 +1834,16 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num)
 			{
 				if (player.GetDamageFlag(enemy_num) == 0)
 				{
+					if (vibflag == 1) {
+						StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//ÉpÉbÉhêUìÆ
+					}
+					if (screenshakeflag == 1) {
+						shaketime = 0;
+						shakeflag = 1;
+					}
+					damagetime = 0;
+					damageflag = 1;
+
 					player.HpSub(1);
 				}
 

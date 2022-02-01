@@ -570,7 +570,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 					damagetime = 0;
 					damageflag = 1;
 
-					//player.HpSub(1);
+					player.HpSub(1);
 					damage_time = 5;
 				}
 				else

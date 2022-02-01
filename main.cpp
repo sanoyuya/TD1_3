@@ -501,7 +501,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 									if (enemy[i]->GetEnemyFlag(wave_num) == true)
 									{
 										//時機とボマーの当たり判定
-										enemy[i]->PlaterToEnemyHitBox(*player, i);
+										enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 									}
 
 								}
@@ -561,7 +561,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								}
 
 								//地雷と時機の当たり判定
-								sub_boss->PlayerMineHit(*player);
+								sub_boss->PlayerMineHit(*player ,vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 							}
 
 							for (int i = 0; i < ENEMY_MAX; i++)

@@ -741,9 +741,9 @@ void SubBoss::MineHit(Transform transform, int& hp, bool damage_flag)
 	mine->HitBox(transform, hp, damage_flag);
 }
 
-void SubBoss::PlayerMineHit(Player& player)
+void SubBoss::PlayerMineHit(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
-	mine->PlayerHitBox(player);
+	mine->PlayerHitBox(player,vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 }
 #pragma endregion
 

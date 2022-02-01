@@ -156,7 +156,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 			if (enemy[i]->GetEnemyFlag(wave_num) == true)
 			{
 				//時機とボマーの当たり判定
-				enemy[i]->PlaterToEnemyHitBox(*player, i);
+				enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 			}
 
 		}
@@ -527,7 +527,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 
 void Boss::Draw(Enemy** enemy)
 {
-	DrawBox(transform.x - transform.xr, transform.y - transform.yr, transform.x + transform.xr, transform.y + transform.yr, GetColor(333, 333, 333), true);
+	DrawBox((int)transform.x - transform.xr, (int)transform.y - transform.yr, (int)transform.x + transform.xr, (int)transform.y + transform.yr, GetColor(333, 333, 333), true);
 
 	if (wave_set == true)
 	{

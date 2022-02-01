@@ -169,7 +169,7 @@ void Mine::HitBox(Transform transform, int& hp, bool damage_flag, bool& damage_e
 	}
 }
 
-void Mine::PlayerHitBox(Player& player)
+void Mine::PlayerHitBox(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -196,6 +196,16 @@ void Mine::PlayerHitBox(Player& player)
 				{
 					if (player.GetDamageFlag(i) == 0)
 					{
+						if (vibflag == 1) {
+							StartJoypadVibration(DX_INPUT_PAD1, 500, 500, -1);//ƒpƒbƒhU“®
+						}
+						if (screenshakeflag == 1) {
+							shaketime = 0;
+							shakeflag = 1;
+						}
+						damagetime = 0;
+						damageflag = 1;
+
 						player.HpSub(1);
 					}
 					player.SetDamageFlag(i, 1);

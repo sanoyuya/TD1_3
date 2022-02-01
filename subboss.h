@@ -13,7 +13,7 @@ public:
 	void XMove(int x_speed,bool right_flag);
 	void YMove(int y_speed,bool up_flag);
 	void MineHit(Transform transform, int& hp, bool damage_flag);
-	void PlayerMineHit(Player& player);
+	void PlayerMineHit(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
 
 	Transform* GetBulletTransform(int num);
 	EnemyBullet* GetEnmyBullet(int i);

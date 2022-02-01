@@ -23,7 +23,7 @@ public:
 	void Draw();//描画
 	void initialize(MimeInitialize& mimeinitialize);//初期化
 	void HitBox(Transform transform, int& hp, bool damage_flag, bool& damage_effect);
-	void PlayerHitBox(Player& player);
+	void PlayerHitBox(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
 	//セッター
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);
