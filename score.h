@@ -11,6 +11,7 @@ public:
 	void Setnohitflag(int nohitflag);
 	void Draw(int randX,int randY);
 	void Setscoreitem(int scoreitem);
+	void KnockDown();
 
 private:
 	int score;

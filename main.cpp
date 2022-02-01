@@ -9,7 +9,7 @@
 #include"boss.h"
 
 // ウィンドウのタイトルに表示する文字列
-const char TITLE[] = "自滅ゲー";
+const char TITLE[] = "Hide og Sigra";
 
 // ウィンドウ横幅
 const int WIN_WIDTH = 1376;

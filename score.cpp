@@ -60,6 +60,10 @@ void Score::RC() {
 	}
 }
 
+void Score::KnockDown() {//敵を足した数*100
+	score += 100;
+}
+
 void Score::Draw(int randX,int randY) {
 	div = 1;
 	for (int i = 0; i < 7; i++)
@@ -75,6 +79,7 @@ void Score::Draw(int randX,int randY) {
 	//result
 	//クリアボーナス     +5000
 	//残hp　　　　　　　 +1000*hp
+	//敵を倒した数　　　 +倒した数*100
 	//アイテムを拾った数 +1000*item
 	//ノーダメボーナス   +50000
 	//タイムボーナス     +total-ボーナス類
