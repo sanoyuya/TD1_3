@@ -68,5 +68,15 @@ private:
 	double escape_end_frame;
 
 	int txt_flag;
+
+	int img[2];
+	int mugon_img[2];
+	int talk_img[2];
+
+
+	int img_anime;
+	int img_anime_timer;
+
+	int txt_cool_time;
 };
 
