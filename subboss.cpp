@@ -370,7 +370,7 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 		{
 			//’n—‹‚Ì“®‚«
 			mine->form(transform, rand);
-			mine->HitBox(transform, hp);
+			mine->HitBox(transform, hp,damage_effect);
 		}
 
 	}
@@ -455,6 +455,27 @@ void SubBoss::Draw()
 
 	mine->Draw();
 
+
+	if (damage_effect == true)
+	{
+		if (exising_flag == true)
+		{
+			damage_effect_time--;
+
+			DrawGraph(transform.x - 64, transform.y - 64, damage_img, true);
+
+			if (damage_effect_time == 0)
+			{
+				damage_effect = false;
+				damage_effect_time = 5;
+			}
+		}
+		else
+		{
+			damage_effect = false;
+		}
+	}
+
 	DrawFormatString(0, 100, GetColor(255, 255, 255), "sub_boss hp:%d", hp);
 	DrawFormatString(0, 120, GetColor(255, 255, 255), "sub_boss move_num:%d", move_num);
 	DrawFormatString(0, 140, GetColor(255, 255, 255), "move_time :%d", move_time);
@@ -484,6 +505,8 @@ void SubBoss::HitBox(Transform& transform, EnemyBullet* enemyBullet, int i)
 					hp--;
 					damage_flag[i] = true;
 					enemyBullet->SetBulletFlag(false);
+					damage_effect = true;
+
 				}
 
 			}
@@ -512,6 +535,8 @@ void SubBoss::HP(Transform& transform, EnemyBullet& enemyBullet)
 			{
 				hp -= 1;
 				enemyBullet.SetBulletFlag(false);
+				damage_effect = true;
+
 
 				if (hp <= 0)
 				{
@@ -876,6 +901,9 @@ SubBoss::SubBoss()
 	teleport_flag_img_anime_timer = 0;
 	LoadDivGraph("resouce/teleport_128.png", 4, 4, 1, 128, 128, teleport_img);
 
+	damage_effect = false;
+	damage_effect_time = 5;
+	damage_img = LoadGraph("resouce/E_damageEfect128.png");
 }
 
 SubBoss::~SubBoss()

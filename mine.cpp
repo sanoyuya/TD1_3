@@ -73,7 +73,7 @@ void Mine::form(Transform transForm, int& frame)
 //爆発している時に当たったら体力を減らす
 //フラグを使い1ダメージしか与えないようにしている
 
-void Mine::HitBox(Transform transform, int& hp)
+void Mine::HitBox(Transform transform, int& hp, bool& damage_effect)
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -103,6 +103,7 @@ void Mine::HitBox(Transform transform, int& hp)
 					if (damage_flag == false)
 					{
 						hp--;
+						damage_effect = true;
 					}
 					damage_flag = true;
 				}
@@ -120,7 +121,7 @@ void Mine::HitBox(Transform transform, int& hp)
 	}
 }
 
-void Mine::HitBox(Transform transform, int& hp, bool damage_flag)
+void Mine::HitBox(Transform transform, int& hp, bool damage_flag, bool& damage_effect)
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -150,6 +151,7 @@ void Mine::HitBox(Transform transform, int& hp, bool damage_flag)
 					if (damage_flag == false)
 					{
 						hp--;
+						damage_effect = true;
 					}
 					damage_flag = true;
 				}

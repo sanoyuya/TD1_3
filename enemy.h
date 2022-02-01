@@ -176,4 +176,8 @@ private:
 	//2‰E
 
 	bool push_flag;
+
+	bool damage_effect;
+	int damage_img;
+	int damage_effect_time;
  };

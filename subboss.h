@@ -85,6 +85,11 @@ private:
 	EnemyBullet* bullet[12];
 	Mine* mine;
 	MimeInitialize mime_initialize;
+
+
+	bool damage_effect;
+	int damage_img;
+	int damage_effect_time;
 };
 
 void SubBossForm(const char* file_name, int max, SubBoss& sub_boss);

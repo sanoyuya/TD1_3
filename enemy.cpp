@@ -322,6 +322,9 @@ Enemy::Enemy()
 	LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
 
 	push_flag = false;
+	damage_effect = false;
+	damage_img = LoadGraph("resouce/E_damageEfect64.png");
+	damage_effect_time = 5;
 }
 
 Enemy::~Enemy()
@@ -1164,7 +1167,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				//’n—‹‚Ì“®‚«
 				mine->form(transform, move_rand);
 			}
-			mine->HitBox(transform, hp);
+			mine->HitBox(transform, hp,damage_effect);
 			mine->Move();
 			mine->PlayerHitBox(player);
 		}
@@ -1865,6 +1868,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item)
 				{
 					hp -= 1;
 					bullet.SetBulletFlag(false);
+					damage_effect = true;
 
 					if (hp <= 0)
 					{
@@ -1894,6 +1898,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item)
 				{
 					hp--;
 					bullet[num]->SetBulletFlag(false);
+					damage_effect = true;
 
 					if (hp <= 0)
 					{
@@ -1936,6 +1941,8 @@ void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 						damage_flag[i] = true;
 						enemyBullet.SetBulletFlag(false);
 						explosion_flag = true;
+						damage_effect = true;
+
 					}
 
 				}
@@ -1964,7 +1971,7 @@ void Enemy::TutorialHitBox(Transform transform, int num)
 			{
 				hp--;
 				bullet[num]->SetBulletFlag(false);
-
+				damage_effect = true;
 				if (hp <= 0)
 				{
 					exising_flag = false;
@@ -2071,9 +2078,27 @@ void Enemy::Draw(int num,int wave_num)
 		}
 	}
 
-
-
 	mine->Draw();
+
+	if (damage_effect == true)
+	{
+		if (exising_flag == true)
+		{
+			damage_effect_time--;
+			
+			DrawGraph(transform.x - 32, transform.y - 32, damage_img, true);
+			
+			if (damage_effect_time == 0)
+			{
+				damage_effect = false;
+				damage_effect_time = 5;
+			}
+		}
+		else
+		{
+			damage_effect = false;
+		}
+	}
 }
 #pragma endregion
 
