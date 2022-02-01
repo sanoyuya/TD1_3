@@ -288,7 +288,7 @@ void Player::HPplus(int num, int& recoveryflag, int& recoverytime) {
 		}if (num == 30) {
 			recoverytime = 0;
 			recoveryflag = 1;
-			hp += 5;
+			hp = 20;
 		}
 	}
 }
