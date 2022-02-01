@@ -79,9 +79,14 @@ void Item::Move(Player& player, Score& score)
 	{
 		if (exising_flag[i] == true)
 		{
-			if (player.GetR() * 64 >
-				((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
-				((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+			float a = player.GetX() - transform[i].x;
+			float b = player.GetY() - transform[i].y;
+			float c = a * a + b * b;
+			float sum_radius = player.GetR() + transform[i].xr;
+			//if (player.GetR() * 64 >
+			//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
+			//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+			if (c <= sum_radius * sum_radius)
 			{
 				exising_flag[i] = false;
 				player.ItemFlagAdd(1, score);

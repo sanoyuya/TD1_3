@@ -248,8 +248,14 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 
 	if (*bullet.GetBulletFlag() == true)
 	{
-		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
+		float a = X - transform.x;
+		float b = Y - transform.y;
+		float c = a * a + b * b;
+		float sum_radius = R + transform.xr;
+		//if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 
+		if (c <= sum_radius * sum_radius)
+		{
 			if (reflectionflag == 0)
 			{
 				if (vibflag == 1) {
@@ -1195,7 +1201,7 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 		txtcooltime++;
 		if (txtcooltime <= 150) {
 			DrawGraph(962, 130, player_img2[maba2], true);
-			DrawFormatString(480, 480, GetColor(333, 333, 333), "txtcooltime=%d", txtcooltime);
+			//DrawFormatString(480, 480, GetColor(333, 333, 333), "txtcooltime=%d", txtcooltime);
 		}
 		else {
 			DrawGraph(962 + randX, 130 + randY, player_img1[maba2], true);
