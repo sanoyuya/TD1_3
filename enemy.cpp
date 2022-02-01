@@ -358,10 +358,10 @@ bool Enemy::BommerHitBox(Player& player)
 
 	float cross[4][4];
 
-	float player_left = (float)player.GetX() - player.GetR();
-	float player_right = (float)player.GetX() + player.GetR();
-	float player_top = (float)player.GetY() - player.GetR();
-	float player_down = (float)player.GetY() + player.GetR();
+	float player_left = (float)player.GetX() - 32;
+	float player_right = (float)player.GetX() + 32;
+	float player_top = (float)player.GetY() - 32;
+	float player_down = (float)player.GetY() + 32;
 
 	float left_top_x = ((-transform.xr) * cosf(angle) + ((-transform.yr) * -sinf(angle)) + (float)transform.x);
 	float left_top_y = ((-transform.xr) * sinf(angle) + ((-transform.yr) * cosf(angle)) + (float)transform.y);
