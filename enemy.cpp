@@ -1517,6 +1517,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 				if (reflection_flag == false && movie_flag == false)
 				{
 					exising_flag = false;
+					bullet[0]->SetBulletFlag(0);
 				}
 			}
 		}

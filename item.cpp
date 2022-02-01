@@ -6,12 +6,12 @@ Item::Item()
 {
 	for (int i = 0; i < 6; i++)
 	{
-	appear_flag[i] = false;
-	exising_flag[i] = false;
-	transform[i] = { 0 };
-	transform[i].xr = 32;
-	transform[i].yr = 32;
-	time[i] = 500;
+		appear_flag[i] = false;
+		exising_flag[i] = false;
+		transform[i] = { 0 };
+		transform[i].xr = 32;
+		transform[i].yr = 32;
+		time[i] = 500;
 	}
 
 
@@ -27,7 +27,7 @@ Item::~Item()
 
 void Item::Form(Transform transform)
 {
-	int i = FlagSerch(exising_flag,6);
+	int i = FlagSerch(exising_flag, 6);
 	if (i != -1)
 	{
 		int rand = GetRand(100) + 1;
@@ -111,4 +111,28 @@ void Item::Draw()
 			DrawGraph((int)transform[i].x - img_r, (int)transform[i].y - img_r, img, true);
 		}
 	}
+}
+
+bool Item::ItemExists()
+{
+	bool brek_flag = false;;
+
+	for (int i = 0; i < 6; i++)
+	{
+		if (exising_flag[i] == true)
+		{
+			brek_flag = true;
+			break;
+		}
+	}
+
+	if (brek_flag == true)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+	;
 }

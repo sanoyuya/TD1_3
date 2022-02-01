@@ -551,22 +551,22 @@ void Boss::Draw(Enemy** enemy)
 	if (txt_flag == 0)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 130);
-		DrawGraph(transform.x - transform.xr, transform.y - transform.yr, img[img_anime], true);
+		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img[img_anime], true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else if(txt_flag == 1 || txt_flag == 2 || txt_flag == 4)
 	{
-		DrawGraph(transform.x - transform.xr, transform.y - transform.yr, mugon_img[img_anime], true);
+		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, mugon_img[img_anime], true);
 	}
 	else if(txt_flag == 3)
 	{
 		if (txt_cool_time < 70)
 		{
-			DrawGraph(transform.x - transform.xr, transform.y - transform.yr, talk_img[img_anime], true);
+			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, talk_img[img_anime], true);
 		}
 		else
 		{
-			DrawGraph(transform.x - transform.xr, transform.y - transform.yr, mugon_img[img_anime], true);
+			DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, mugon_img[img_anime], true);
 		}
 	}
 	if (wave_set == true)

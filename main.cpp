@@ -605,7 +605,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
-
+							
 							if (enemy[i]->GetEnemyFlag(wave_num) == true ||
 								enemy[i]->GetAppearTime() != -1 ||
 								enemy[i]->GetExplosionFlag() == true)
@@ -624,6 +624,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 								}
 							}
+						}
+
+						if (item->ItemExists() == false)
+						{
+							break_flag = true;
 						}
 
 						if (wave_num == 10 || wave_num == 20)
