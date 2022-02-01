@@ -1903,6 +1903,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item, Score* scor
 				{
 					hp -= 1;
 					bullet.SetBulletFlag(false);
+					bullet.SetReflectionNum(0);
 					damage_effect = true;
 
 					if (hp <= 0)
@@ -1935,6 +1936,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item, Score* score)
 				{
 					hp--;
 					bullet[num]->SetBulletFlag(false);
+					bullet[num]->SetReflectionNum(0);
 					damage_effect = true;
 
 					if (hp <= 0)
@@ -1980,6 +1982,7 @@ void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 						hp--;
 						damage_flag[i] = true;
 						enemyBullet.SetBulletFlag(false);
+						enemyBullet.SetReflectionNum(0);
 						explosion_flag = true;
 						damage_effect = true;
 

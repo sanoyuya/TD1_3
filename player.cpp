@@ -409,6 +409,7 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 				hp -= 1;
 			}
 			bullet.SetBulletFlag(false);
+			bullet.SetReflectionNum(0);
 		}
 	}
 }
