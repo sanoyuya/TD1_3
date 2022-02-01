@@ -111,6 +111,9 @@ private:
 
 	//‰æ‘œ
 	int img[12];
+	int img_Lv3[12];
+	int img_Lv5[12];
+
 	int img_r;
 	int anime_timer;
 	int anime;
@@ -163,6 +166,7 @@ private:
 	int teleport_img[4];
 
 	int formation_img[12];
+	int formationLv3_img[12];
 	int formation_img_anime;
 	int formation_img_anime_timer;
 

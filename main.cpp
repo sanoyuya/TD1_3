@@ -299,7 +299,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 						if (game_set == false)
 						{
-							//wave_num = 28;
+							wave_num = 29;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -973,6 +973,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_battle_flag = false;
 						stage_sound_flag = false;
 						boss_sound_flag = false;
+						StopSoundMem(STAGE_BGM);
+						StopSoundMem(BOSS_BGM);
 
 					}
 				}
@@ -1004,7 +1006,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_battle_flag = false;
 						stage_sound_flag = false;
 						boss_sound_flag = false;
-
+						title = new Title;
+						StopSoundMem(STAGE_BGM);
+						StopSoundMem(BOSS_BGM);
 
 					}
 				}
@@ -1089,7 +1093,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (boss_sound_flag == false)
 				{
 					StopSoundMem(STAGE_BGM);
-					PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, false);
+					PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, true);
 					boss_sound_flag = true;
 				}
 
