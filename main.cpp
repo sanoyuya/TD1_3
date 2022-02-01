@@ -156,7 +156,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int txt_shake_time = 25;
 	int txt_rand_x = 0;
 	
-	bool title_sound_falg = false;
+	bool title_sound_flag = false;
+	bool stage_sound_flag = false;
 	int titletimer= 0;
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
@@ -190,6 +191,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						pushflagA = 1;
+						delete title;
 						sceneflag = 1;
 						//仮--------------------------
 						/*sceneflag = 10;
@@ -285,7 +287,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region 敵データ読み込み
 							if (game_set == false)
 							{
-								wave_num = 28;
+								//wave_num = 28;
 								if (wave_up_flag == true)
 								{
 									wave_num++;
@@ -753,6 +755,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 							movie_flag = false;
 							boss_battle_flag = false;
+							stage_sound_flag = false;
 						}
 					}if (Pause == 2) {//タイトルに戻る
 						if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
@@ -773,6 +776,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 							movie_flag = false;
 							boss_battle_flag = false;
+							title_sound_flag = false;
+							StopSoundMem(STAGE_BGM);
+							title = new Title;
 						}
 					}
 #pragma endregion
@@ -921,6 +927,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 							movie_flag = false;
 							boss_battle_flag = false;
+							stage_sound_flag = false;
 						}
 					}
 				}
@@ -949,7 +956,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							}
 							movie_flag = false;
 							boss_battle_flag = false;
-
+							title = new Title;
+							title_sound_flag = false;
+							StopSoundMem(STAGE_BGM);
 						}
 					}
 				}
@@ -983,10 +992,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (sceneflag) {//シーン管理
 			case 0:
 				//タイトル
-				if (title_sound_falg == false)
+				if (title_sound_flag == false)
 				{
 					PlaySoundMem(TITLE_BGM, DX_PLAYTYPE_LOOP, true);
-					title_sound_falg = true;
+					title_sound_flag = true;
 				}
 				titletimer++;
 
@@ -1025,7 +1034,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				break;
 
 			case 2:
-				PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, false);
+				if (stage_sound_flag == false) {
+					PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, true);
+				}
 				if (wave_num >= 30) {
 					StopSoundMem(STAGE_BGM);
 					PlaySoundMem(BOSS_BGM, DX_PLAYTYPE_LOOP, false);
@@ -1322,6 +1333,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			case 5:
 				//リザルト画面(ゲームクリア)
 				score->ResultDraw();
+				StopSoundMem(TITLE_BGM);
 				if (resultflag == 0) {
 					DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
 					DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
