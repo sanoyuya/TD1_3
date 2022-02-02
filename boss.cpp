@@ -10,6 +10,8 @@ int GetBossEnemyMax(int wave_num)
 {
 	switch (wave_num)
 	{
+	case 0:
+		return 0;
 	case 1:
 		return 22;
 	case 2:
@@ -25,7 +27,7 @@ Boss::Boss()
 {
 	break_flag = false;
 	ENEMY_MAX = 0;
-	wave_num = 1;
+	wave_num = 0;
 	wave_up_flag = false;
 	wave_set = false;
 
@@ -50,8 +52,8 @@ Boss::Boss()
 
 	transform.xr = 80;
 	transform.yr = 80;
-	ang = 0.0f;
-	transform.x = 0;
+	ang = 4.7249999999999952f;
+	transform.x = 480;
 	transform.y = 0;
 	flame = 0;
 	x = 0;
@@ -59,10 +61,11 @@ Boss::Boss()
 
 	easing_flag = false;
 	easing_frame = 0;
-	easing_start_x = 0;
+	easing_start_x = 480;
 	easing_start_y = 0;
 	easing_end_x = 480;
 	easing_end_y = 150;
+	easing2_end_y = 482;
 	easing_end_frame = 100;
 
 	escape_frame = 0;
@@ -72,12 +75,14 @@ Boss::Boss()
 	escape_end_y = -150;
 	escape_end_frame = 100;
 	txt_flag = 0;
-	LoadDivGraph("resouce/lastboss.png", 2, 2, 1, 160,160, img);
+	LoadDivGraph("resouce/lastboss.png", 2, 2, 1, 160, 160, img);
 	LoadDivGraph("resouce/lastboss_mugon.png", 2, 2, 1, 160, 160, mugon_img);
 	LoadDivGraph("resouce/lastboss_talk.png", 2, 2, 1, 160, 160, talk_img);
 	img_anime = 0;
 	img_anime_timer = 0;
 	txt_cool_time = 0;
+	move_flag = false;
+	boss_txt_flag = 0;
 }
 
 Boss::~Boss()
@@ -87,7 +92,7 @@ Boss::~Boss()
 void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	int& recoveryflag, int& recoverytime, int& vibflag, int& screenshakeflag,
 	int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
-	bool& reflection_flag, bool& movie_flag, char* keys,int& sceneflag,bool& txt_shake_flag,int& damageAlpha)
+	bool& reflection_flag, bool& movie_flag, char* keys, int& sceneflag, bool& txt_shake_flag, int& damageAlpha)
 {
 
 #pragma region “Gƒf[ƒ^“Ç‚Ýž‚Ý
@@ -114,6 +119,12 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 
 		switch (wave_num)
 		{
+		case 0:
+			easing_flag = true;
+			wave_set = true;
+			player->SetMoveFlag(0);
+			player->SetEasingFlag(1);
+			break;
 		case 1:
 
 			EnemyForm("WAVE_ENEMY_DATA/boss1.csv", ENEMY_MAX, enemy, wave_num);
@@ -163,7 +174,6 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 				//Žž‹@‚Æƒ{ƒ}[‚Ì“–‚½‚è”»’è
 				enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 			}
-
 		}
 	}
 
@@ -183,7 +193,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 						for (int j = 0; j < enemy[k]->GetBulletMax(); j++)
 						{
 							//“G‚Æ“G‚Ì’e‚Ì“–‚½‚è”»’è
-							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item,score);
+							enemy[i]->HP(*enemy[k]->GetBulletTransform(j), *enemy[k]->GetEnmyBullet(j), item, score);
 						}
 					}
 				}
@@ -262,6 +272,38 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 #pragma endregion
 
 	tmp_num = 0;
+	if (wave_num == 0)
+	{
+		if (easing_flag == true)
+		{
+			easing_frame++;
+			transform.y = easing_start_y + (easing2_end_y - easing_start_y) * easeInSine((double)easing_frame / (double)easing_end_frame);
+
+			if (easing_frame == easing_end_frame)
+			{
+				easing_flag = false;
+				boss_txt_flag = 1;
+				txt_flag = 3;
+			}
+		}
+
+		if (boss_txt_flag == 1)
+		{
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0)
+			{
+				boss_txt_flag++;
+				txt_flag = 0;
+				txt_cool_time = 0;
+			}
+		}
+
+		if (boss_txt_flag == 2)
+		{
+			wave_set = false;
+			wave_num = 1;
+			move_flag = true;
+		}
+	}
 
 	if (wave_num == 1)
 	{
@@ -491,16 +533,19 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	}
 	if (wave_num != 3)
 	{
-		if (flame == 0) {
-			x = 482;
-			y = 482;
+		if (move_flag == true)
+		{
+			if (flame == 0) {
+				x = 482;
+				y = 482;
+			}
+
+			flame++;
+			ang += 0.015;
+
+			transform.x = x + 300 * (cos(ang) * 2);
+			transform.y = y + 150 * (sin(2 * ang) * 2);
 		}
-
-		flame++;
-		ang += 0.015;
-
-		transform.x = x + 300 * (cos(ang) * 2);
-		transform.y = y + 150 * (sin(2 * ang) * 2);
 	}
 	else
 	{
@@ -543,7 +588,10 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		txt_cool_time++;
 	}
 
-	txt_flag = enemy[0]->GetTxtFlag();
+	if (wave_num == 3)
+	{
+		txt_flag = enemy[0]->GetTxtFlag();
+	}
 }
 
 void Boss::Draw(Enemy** enemy)
@@ -554,11 +602,11 @@ void Boss::Draw(Enemy** enemy)
 		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, img[img_anime], true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
-	else if(txt_flag == 1 || txt_flag == 2 || txt_flag == 4)
+	else if (txt_flag == 1 || txt_flag == 2 || txt_flag == 4)
 	{
 		DrawGraph((int)transform.x - transform.xr, (int)transform.y - transform.yr, mugon_img[img_anime], true);
 	}
-	else if(txt_flag == 3)
+	else if (txt_flag == 3)
 	{
 		if (txt_cool_time < 70)
 		{
@@ -581,5 +629,10 @@ void Boss::Draw(Enemy** enemy)
 
 		}
 	}
+}
+
+int Boss::GetBossTxtFlag()
+{
+	return boss_txt_flag;
 }
 

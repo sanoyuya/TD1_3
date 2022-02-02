@@ -23,12 +23,12 @@ Score::Score()
 	hps = 0;
 	LoadDivGraph("resouce/scorenum.png", 10, 10, 1, 40, 60, scoregh);
 	RESULT = LoadGraph("resouce/result.png");
-	LoadDivGraph("resouce/scorenum_128.png",10, 10, 1, 84, 91,resultnum);
+	LoadDivGraph("resouce/scorenum_128.png", 10, 10, 1, 84, 91, resultnum);
 }
 
 Score::~Score()
 {
-
+	PushScore();
 }
 
 void Score::Setnohitflag(int nohitflag) {
@@ -91,6 +91,7 @@ void Score::KnockDown() {//敵を倒した数*100
 void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 	if (sceneflag == 2) {
 		if (hp <= 0) {
+			LordScore();
 			RC();
 			sceneflag = 5;
 		}
@@ -100,6 +101,8 @@ void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 void Score::Clear(int& sceneflag) {//クリアされたとき
 	CC();
 	TC(sceneflag);
+	LordScore();
+	RC();
 	sceneflag = 5;
 }
 
@@ -215,8 +218,70 @@ void Score::ResultDraw() {
 		for (int i = 0; i < 7; i++)
 		{
 			index = score / div % 10;
-			DrawGraph((7 - 1 - i) * 96 + 644,799, resultnum[index], true);//total
+			DrawGraph((7 - 1 - i) * 96 + 644, 799, resultnum[index], true);//total
 			div = div * 10;
 		}
+	}
+}
+
+int Score::LordScore()
+{
+	FILE* fp;
+	fopen_s(&fp, "score/Toptier.txt", "r");
+	int score_num;
+	if (fp == NULL)
+	{
+		return -1;
+	}
+	fscanf_s(fp, "%d", &score_num);
+	fclose(fp);
+	Toptier = score_num;
+
+	fopen_s(&fp, "score/Secondtier.txt", "r");
+
+	if (fp == NULL)
+	{
+		return -1;
+	}
+	fscanf_s(fp, "%d", &score_num);
+	fclose(fp);
+	Secondtier = score_num;
+
+	fopen_s(&fp, "score/Thirdtier.txt", "r");
+
+	if (fp == NULL)
+	{
+		return -1;
+	}
+	fscanf_s(fp, "%d", &score_num);
+	fclose(fp);
+	Thirdtier = score_num;
+
+	return 0;
+}
+
+void Score::PushScore()
+{
+	FILE* fp;
+	fopen_s(&fp, "score/Toptier.txt", "w");
+
+	if (fp != NULL)
+	{
+		fprintf_s(fp, "%d", Toptier);
+		fclose(fp);
+	}
+	fopen_s(&fp, "score/Secondtier.txt", "w");
+
+	if (fp != NULL)
+	{
+		fprintf_s(fp, "%d", Secondtier);
+		fclose(fp);
+	}
+	fopen_s(&fp, "score/Thirdtier.txt", "w");
+
+	if (fp != NULL)
+	{
+		fprintf_s(fp, "%d", Thirdtier);
+		fclose(fp);
 	}
 }
