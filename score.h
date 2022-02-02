@@ -1,6 +1,8 @@
 #pragma once
-#include"boss.h"
-#include"enemy.h"
+class Player;
+class Boss;
+class Enemy;
+
 class Score
 {
 public:

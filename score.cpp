@@ -1,6 +1,9 @@
 #include"Dxlib.h"
 #include "score.h"
 #include"player.h"
+#include"boss.h"
+#include"enemy.h"
+
 
 Score::Score()
 {
