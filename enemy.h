@@ -55,6 +55,9 @@ public:
 	void SetEnemyFlag(bool flag);
 	void SetExplosionFlag(bool flag);
 
+	void PictureBookMove();
+	void PictureBookDraw(int scroll_x);
+
 	int color;
 
 private:

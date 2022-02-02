@@ -70,8 +70,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int B = LoadGraph("resouce/B.png");
 	int Option = LoadGraph("resouce/option.png");
 	int playback = LoadGraph("resouce/GameBackGraund.png");
-	int modeselect= LoadGraph("resouce/modeSelect_1.png");
-	int gameplay= LoadGraph("resouce/modeSelect_PLAY.png");
+	int modeselect = LoadGraph("resouce/modeSelect_1.png");
+	int gameplay = LoadGraph("resouce/modeSelect_PLAY.png");
 	int gamepicture = LoadGraph("resouce/modeSelect_PICTURE.png");
 
 	//BGM
@@ -101,7 +101,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//図鑑
 	int P[14] = { 0 };
-	P[0]= LoadGraph("resouce/picture_book1.png");
+	P[0] = LoadGraph("resouce/picture_book1.png");
 	P[1] = LoadGraph("resouce/picture_book2.png");
 	P[2] = LoadGraph("resouce/picture_book3.png");
 	P[3] = LoadGraph("resouce/picture_book4.png");
@@ -276,7 +276,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			else {
 				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						picturepage = 0;
 						scroll_x = 0;
@@ -608,8 +608,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 						}
 
-						item->Move(*player, *score);
-
 						score->SetHp(player->GetHp());
 #pragma endregion
 
@@ -728,6 +726,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 					else
 					{
+						score->SetHp(player->GetHp());
+
 						boss->Move(enemy, player, item, score,
 							recoveryflag, recoverytime, vibflag, screenshakeflag,
 							shakeflag, damageflag, shaketime, damagetime,
@@ -739,6 +739,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					if (game_end == 1) {
 						score->Clear(sceneflag);
 					}
+
 					score->Death(sceneflag);
 
 					if (shakeflag == 1) {//シェイク
@@ -1009,7 +1010,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					sceneflag = 1;
 				}
 			}
-			
+
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {//Aボタン
 				pushflagA = 0;
 			}if (keys[KEY_INPUT_RETURN] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {//Bボタン
