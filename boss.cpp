@@ -27,7 +27,7 @@ Boss::Boss()
 {
 	break_flag = false;
 	ENEMY_MAX = 0;
-	wave_num = 3;
+	wave_num = 0;
 	wave_up_flag = false;
 	wave_set = false;
 
@@ -657,5 +657,10 @@ void Boss::PictureBookDraw(int x, int y)
 int Boss::GetBossTxtFlag()
 {
 	return boss_txt_flag;
+}
+
+int Boss::GetENEMY_MAX()
+{
+	return ENEMY_MAX;
 }
 

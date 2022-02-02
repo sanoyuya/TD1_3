@@ -1,6 +1,9 @@
 #include"Dxlib.h"
 #include "score.h"
 #include"player.h"
+#include"boss.h"
+#include"enemy.h"
+
 
 Score::Score()
 {
@@ -85,14 +88,17 @@ void Score::KnockDown() {//敵を倒した数*100
 	knock += 100;
 }
 
-void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
+int Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 	if (sceneflag == 2) {
 		if (hp <= 0) {
+
 			LordScore();
 			RC();
 			sceneflag = 5;
+			return 1;
 		}
 	}
+	return 0;
 }
 
 void Score::Clear(int& sceneflag) {//クリアされたとき
@@ -114,8 +120,7 @@ void Score::Draw(int randX, int randY) {//ゲーム内スコア表示
 		div = div * 10;
 	}
 
-	/*DrawFormatString(480, 480, GetColor(255, 255, 255), "score:%d", score);
-	DrawFormatString(480, 500, GetColor(255, 255, 255), "scoreitem:%d", scoreitem);*/
+
 }
 
 void Score::ResultDraw() {

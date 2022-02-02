@@ -1507,12 +1507,6 @@ void Player::Draw(int randX, int randY) {//描画関数
 		Alpha = 255;
 	}
 
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "ステルスフラグ:%d", stelsflag);
-	//DrawFormatString(0, 80, GetColor(255, 255, 255), "反射フラグ:%d", reflectionflag);
-	//DrawFormatString(0, 100, GetColor(255, 255, 255), "stelscooltimer:%d", stelscooltimer);
-	//DrawFormatString(0, 120, GetColor(255, 255, 255), "COOLTIMEtimer:%d", COOLTIMEtimer);
-	//DrawFormatString(40, 80, GetColor(255, 255, 255), "B:%d", pushflagB);
-	//DrawFormatString(40, 80, GetColor(255, 255, 255), "A:%d", pushflag);
 }
 
 void Player::D(int randX, int randY) {
@@ -1691,14 +1685,14 @@ void Player::TutorialDraw(int randX, int randY, char* keys) {
 	}
 
 
-	//DrawFormatString(40, 80, GetColor(255, 255, 255), "txtflag:%d", txtflag);
+
 
 
 	if (txtflag != 0) {
 		txtcooltime++;
 		if (txtcooltime <= 150) {
 			DrawGraph(962, 130, player_img2[maba2], true);
-			//DrawFormatString(480, 480, GetColor(333, 333, 333), "txtcooltime=%d", txtcooltime);
+
 		}
 		else {
 			DrawGraph(962 + randX, 130 + randY, player_img1[maba2], true);

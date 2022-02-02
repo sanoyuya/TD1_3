@@ -1,4 +1,8 @@
 #pragma once
+class Player;
+class Boss;
+class Enemy;
+
 class Score
 {
 public:
@@ -13,7 +17,7 @@ public:
 	void Setscoreitem(int scoreitem);
 	void KnockDown();//knockdown
 	void SetHp(int hp);
-	void Death(int& sceneflag);
+	int Death(int& sceneflag);
 	void Clear(int& sceneflag);
 	void ResultDraw();
 

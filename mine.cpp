@@ -313,8 +313,7 @@ void Mine::Draw()
 		}
 	}
 
-	//DrawFormatString(0, 200, GetColor(255, 255, 255), "mine explosion_time[0]:%d", explosion_time[0]);
-	//DrawFormatString(0, 220, GetColor(255, 255, 255), "mine bombs_time[0]:%d", bombs_time[0]);
+
 }
 #pragma endregion
 
