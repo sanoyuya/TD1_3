@@ -752,17 +752,29 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 					if (game_end == 1) {
 						score->Clear(sceneflag);
-						delete boss;
-						boss = nullptr;
-						for (int i = 0; i < ENEMY_MAX; i++)
+
+						for (int i = 0; i < boss->GetENEMY_MAX(); i++)
 						{
 							delete enemy[i];
 							enemy[i] = nullptr;
 						}
+						delete boss;
+						boss = nullptr;
 
 					}
 
-					score->Death(sceneflag,boss,enemy,ENEMY_MAX);
+					if (score->Death(sceneflag) == 1)
+					{
+
+						for (int i = 0; i < boss->GetENEMY_MAX(); i++)
+						{
+							delete enemy[i];
+							enemy[i] = nullptr;
+						}
+						delete boss;
+						boss = nullptr;
+
+					}
 
 					if (shakeflag == 1) {//シェイク
 						shaketime++;
@@ -987,7 +999,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30)
+			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30 && boss != nullptr)
 			{
 				if (wave_num == 30)
 				{
@@ -1347,7 +1359,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Draw(randX, randY);
 			score->Draw(randX, randY);
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 1)
+			if (game_set == true && enemy[0]->GetTxtFlag() == 1 && boss != nullptr)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1403,7 +1415,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				boss->Draw(enemy);
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 2 && wave_num == 30)
+			if (game_set == true && enemy[0]->GetTxtFlag() == 2 && wave_num == 30 && boss != nullptr)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1428,7 +1440,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				boss->Draw(enemy);
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30)
+			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30 && boss != nullptr)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);

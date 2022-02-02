@@ -88,21 +88,17 @@ void Score::KnockDown() {//敵を倒した数*100
 	knock += 100;
 }
 
-void Score::Death(int& sceneflag, Boss* boss, Enemy** enemy, int ene_mex) {//プレイヤーが死んだとき
+int Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 	if (sceneflag == 2) {
 		if (hp <= 0) {
-			for (int i = 0; i < ene_mex; i++)
-			{
-				delete enemy[i];
-				enemy[i] = nullptr;
-			}
-			delete boss;
-			boss = nullptr;
+
 			LordScore();
 			RC();
 			sceneflag = 5;
+			return 1;
 		}
 	}
+	return 0;
 }
 
 void Score::Clear(int& sceneflag) {//クリアされたとき

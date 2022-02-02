@@ -22,6 +22,8 @@ public:
 	void PictureBookDraw(int x, int y);
 
 	int GetBossTxtFlag();
+	int GetENEMY_MAX();
+
 private:
 	bool wave_set;
 	int wave_num;
@@ -87,5 +89,6 @@ private:
 
 	int boss_txt_flag;
 	int ron_se;
+
 };
 

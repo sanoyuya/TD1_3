@@ -659,3 +659,8 @@ int Boss::GetBossTxtFlag()
 	return boss_txt_flag;
 }
 
+int Boss::GetENEMY_MAX()
+{
+	return ENEMY_MAX;
+}
+
