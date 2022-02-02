@@ -73,6 +73,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int modeselect = LoadGraph("resouce/modeSelect_1.png");
 	int gameplay = LoadGraph("resouce/modeSelect_PLAY.png");
 	int gamepicture = LoadGraph("resouce/modeSelect_PICTURE.png");
+	int Breturn= LoadGraph("resouce/page_back_B.png");
+	int Lstickpage = LoadGraph("resouce/page_turn_L.png");
 
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
@@ -344,7 +346,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #pragma region ìGÉfÅ[É^ì«Ç›çûÇ›
 						if (game_set == false)
 						{
-							//wave_num = 28;
+							//wave_num = 29;
 							if (wave_up_flag == true)
 							{
 								wave_num++;
@@ -1567,6 +1569,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawGraph(15136 - scroll_x, 0, P[11], true);
 			DrawGraph(16512 - scroll_x, 0, P[12], true);
 			DrawGraph(17888 - scroll_x, 0, P[13], true);
+			DrawGraph(932, 917, Breturn, true);
+			DrawGraph(220, 917, Lstickpage, true);
 
 			break;
 
