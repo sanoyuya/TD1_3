@@ -127,4 +127,5 @@ private:
 
 	int item_1_img;
 
+	Vertex vertex;
 }Player;

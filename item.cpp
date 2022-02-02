@@ -6,12 +6,12 @@ Item::Item()
 {
 	for (int i = 0; i < 6; i++)
 	{
-	appear_flag[i] = false;
-	exising_flag[i] = false;
-	transform[i] = { 0 };
-	transform[i].xr = 32;
-	transform[i].yr = 32;
-	time[i] = 500;
+		appear_flag[i] = false;
+		exising_flag[i] = false;
+		transform[i] = { 0 };
+		transform[i].xr = 32;
+		transform[i].yr = 32;
+		time[i] = 500;
 	}
 
 
@@ -27,7 +27,7 @@ Item::~Item()
 
 void Item::Form(Transform transform)
 {
-	int i = FlagSerch(exising_flag,6);
+	int i = FlagSerch(exising_flag, 6);
 	if (i != -1)
 	{
 		int rand = GetRand(100) + 1;
@@ -61,9 +61,14 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		if (r * (int)transform[0].xr >
-			((x - (int)transform[0].x) * (x - (int)transform[0].x)) +
-			((y - (int)transform[0].y) * (y - (int)transform[0].y)))
+		float a = x - transform[0].x;
+		float b = y - transform[0].y;
+		float c = a * a + b * b;
+		float sum_radius = r + transform[0].xr;
+		//if (player.GetR() * 64 >
+		//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
+		//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+		if (c <= sum_radius * sum_radius)
 		{
 			exising_flag[0] = false;
 			return true;
@@ -79,9 +84,14 @@ void Item::Move(Player& player, Score& score)
 	{
 		if (exising_flag[i] == true)
 		{
-			if (player.GetR() * 64 >
-				((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
-				((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+			float a = player.GetX() - transform[i].x;
+			float b = player.GetY() - transform[i].y;
+			float c = a * a + b * b;
+			float sum_radius = player.GetR() + transform[i].xr;
+			//if (player.GetR() * 64 >
+			//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
+			//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
+			if (c <= sum_radius * sum_radius)
 			{
 				exising_flag[i] = false;
 				player.ItemFlagAdd(1, score);
@@ -111,4 +121,28 @@ void Item::Draw()
 			DrawGraph((int)transform[i].x - img_r, (int)transform[i].y - img_r, img, true);
 		}
 	}
+}
+
+bool Item::ItemExists()
+{
+	bool brek_flag = false;;
+
+	for (int i = 0; i < 6; i++)
+	{
+		if (exising_flag[i] == true)
+		{
+			brek_flag = true;
+			break;
+		}
+	}
+
+	if (brek_flag == true)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+	;
 }

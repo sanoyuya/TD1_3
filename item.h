@@ -12,6 +12,7 @@ public:
 	bool TutorialMove(int x, int y, int r, int item_flag);
 	void Move(Player& player, Score& score);
 	void Draw();
+	bool ItemExists();
 
 private:
 

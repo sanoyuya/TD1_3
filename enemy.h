@@ -184,4 +184,8 @@ private:
 	bool damage_effect;
 	int damage_img;
 	int damage_effect_time;
+	
+	int laser_sound;
+	int douwn_sound;
+	bool sound_flag;
  };

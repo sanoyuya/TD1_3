@@ -475,12 +475,6 @@ void SubBoss::Draw()
 			damage_effect = false;
 		}
 	}
-
-	DrawFormatString(0, 100, GetColor(255, 255, 255), "sub_boss hp:%d", hp);
-	DrawFormatString(0, 120, GetColor(255, 255, 255), "sub_boss move_num:%d", move_num);
-	DrawFormatString(0, 140, GetColor(255, 255, 255), "move_time :%d", move_time);
-	DrawFormatString(500, 160, GetColor(255, 255, 255), "x:%lf", transform.x);
-	DrawFormatString(0, 180, GetColor(255, 255, 255), "y:%lf", transform.y);
 }
 #pragma endregion
 
