@@ -267,6 +267,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bƒ{ƒ^ƒ“
 					pushflagB = 1;
 					title = new Title;
+					title_sound_flag = false;
 					sceneflag = 0;
 				}
 			}
