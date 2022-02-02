@@ -27,6 +27,8 @@ Score::Score()
 	LoadDivGraph("resouce/scorenum.png", 10, 10, 1, 40, 60, scoregh);
 	RESULT = LoadGraph("resouce/result.png");
 	LoadDivGraph("resouce/scorenum_128.png", 10, 10, 1, 84, 91, resultnum);
+	NEW = LoadGraph("resouce/NEW.png");
+	rankflag = 0;
 }
 
 Score::~Score()
@@ -74,11 +76,14 @@ void Score::RC() {
 	if (Toptier < score) {//スコアがランキングも含め一番高かったら
 		Thirdtier = Secondtier;//2位を3位に
 		Secondtier = Toptier;//1位を2位に
+		rankflag = 1;
 		Toptier = score;//ランキングにランクイン
 	}if (Toptier > score && Secondtier < score) {//スコアがランキングも含め二番目に高かったら
 		Thirdtier = Secondtier;//2位を3位に
+		rankflag = 2;
 		Secondtier = score;//ランキングにランクイン
 	}if (Secondtier > score && Thirdtier < score) {//スコアがランキングも含め三番目に高かったら
+		rankflag = 3;
 		Thirdtier = score;//ランキングにランクイン
 	}
 }
@@ -128,6 +133,13 @@ void Score::ResultDraw() {
 	for (int i = 0; i < 7; i++)
 	{
 		//---------------------------------------------------------------------ランキング
+		if (rankflag == 1) {
+			DrawGraph(451-72, 104 - 88, NEW, true);
+		}if (rankflag == 2) {
+			DrawGraph(451-72, 358 - 88, NEW, true);
+		}if (rankflag == 3) {
+			DrawGraph(451-72, 634 - 88, NEW, true);
+		}
 		div = 1;
 		for (int i = 0; i < 7; i++)
 		{

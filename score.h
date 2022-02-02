@@ -45,5 +45,7 @@ private:
 	int hps;
 	int RESULT;
 	int resultnum[10];
+	int NEW;
+	int rankflag;
 };
 
