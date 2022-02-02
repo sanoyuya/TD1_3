@@ -61,10 +61,10 @@ bool Item::TutorialMove(int x, int y, int r, int item_flag)
 {
 	if (item_flag == 1)
 	{
-		float a = x - transform[0].x;
-		float b = y - transform[0].y;
+		float a = x - (float)transform[0].x;
+		float b = y - (float)transform[0].y;
 		float c = a * a + b * b;
-		float sum_radius = r + transform[0].xr;
+		float sum_radius = r + (float)transform[0].xr;
 		//if (player.GetR() * 64 >
 		//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
 		//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))
@@ -84,10 +84,10 @@ void Item::Move(Player& player, Score& score)
 	{
 		if (exising_flag[i] == true)
 		{
-			float a = player.GetX() - transform[i].x;
-			float b = player.GetY() - transform[i].y;
+			float a = player.GetX() - (float)transform[i].x;
+			float b = player.GetY() - (float)transform[i].y;
 			float c = a * a + b * b;
-			float sum_radius = player.GetR() + transform[i].xr;
+			float sum_radius = (float)player.GetR() + transform[i].xr;
 			//if (player.GetR() * 64 >
 			//	((player.GetX() - (int)transform[i].x) * (player.GetX() - (int)transform[i].x)) +
 			//	((player.GetY() - (int)transform[i].y) * (player.GetY() - (int)transform[i].y)))

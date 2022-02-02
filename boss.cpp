@@ -144,6 +144,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 			break;
 		case 3:
 			EnemyForm("WAVE_ENEMY_DATA/boss3.csv", ENEMY_MAX, enemy, wave_num);
+			easing_frame = 0;
 			player->SetMoveFlag(0);
 			easing_flag = true;
 			easing_start_x = transform.x;
@@ -211,62 +212,64 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	break_flag = false;
 
 #pragma region waveƒNƒŠƒA”»’è
-
-	if (zako_wannihilation_falg == true && bommer_wannihilation_falg == true && boomerang_wannihilation_falg == true)
+	if (wave_num != 3)
 	{
-		for (int i = 0; i < ENEMY_MAX; i++)
+		if (zako_wannihilation_falg == true && bommer_wannihilation_falg == true && boomerang_wannihilation_falg == true)
 		{
-			//“G‚ª‘Sˆõ“|‚³‚ê‚½‚ç’e‚Ì”½ŽË‚ð‚È‚­‚·
-			if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1)
+			for (int i = 0; i < ENEMY_MAX; i++)
 			{
-				if (i == ENEMY_MAX - 1)
+				//“G‚ª‘Sˆõ“|‚³‚ê‚½‚ç’e‚Ì”½ŽË‚ð‚È‚­‚·
+				if (enemy[i]->GetEnemyFlag(wave_num) == false && enemy[i]->GetAppearTime() == -1)
 				{
-					reflection_flag = false;
+					if (i == ENEMY_MAX - 1)
+					{
+						reflection_flag = false;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			for (int i = 0; i < ENEMY_MAX; i++)
+			{
+
+				if (enemy[i]->GetEnemyFlag(wave_num) == true ||
+					enemy[i]->GetAppearTime() != -1 ||
+					enemy[i]->GetExplosionFlag() == true)
+				{
+					i--;
+					break_flag = true;
+					break;
+				}
+
+				for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
+				{
+					if (enemy[i]->GetBulletFlag(j) == true)
+					{
+						break_flag = true;
+						break;
+
+					}
+				}
+			}
+
+			if (break_flag == false && reflection_flag == false)
+			{
+				wave_set = false;
+				reflection_flag = true;
+				wave_up_flag = true;
+
+				for (int i = 0; i < ENEMY_MAX; i++)
+				{
+					delete enemy[i];
 				}
 			}
 			else
 			{
-				break;
+				break_flag = false;
 			}
-		}
-
-		for (int i = 0; i < ENEMY_MAX; i++)
-		{
-
-			if (enemy[i]->GetEnemyFlag(wave_num) == true ||
-				enemy[i]->GetAppearTime() != -1 ||
-				enemy[i]->GetExplosionFlag() == true)
-			{
-				i--;
-				break_flag = true;
-				break;
-			}
-
-			for (int j = 0; j < enemy[i]->GetBulletMax(); j++)
-			{
-				if (enemy[i]->GetBulletFlag(j) == true)
-				{
-					break_flag = true;
-					break;
-
-				}
-			}
-		}
-
-		if (break_flag == false && reflection_flag == false)
-		{
-			wave_set = false;
-			reflection_flag = true;
-			wave_up_flag = true;
-
-			for (int i = 0; i < ENEMY_MAX; i++)
-			{
-				delete enemy[i];
-			}
-		}
-		else
-		{
-			break_flag = false;
 		}
 	}
 #pragma endregion
@@ -305,7 +308,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 		}
 	}
 
-	if (wave_num == 1)
+	if (wave_num == 1 && wave_set == true)
 	{
 #pragma region ŽG‹›“G‘S–Åˆ—E’†ƒ{ƒX1ŽG‹›oŒ»
 

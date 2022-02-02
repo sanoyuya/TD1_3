@@ -2150,7 +2150,7 @@ void Enemy::Draw(int num, int wave_num)
 		{
 			damage_effect_time--;
 
-			DrawGraph(transform.x - 32, transform.y - 32, damage_img, true);
+			DrawGraph((int)transform.x - 32, (int)transform.y - 32, damage_img, true);
 
 			if (damage_effect_time == 0)
 			{
@@ -2853,3 +2853,12 @@ void TxtDraw(int x, int y, const char* file)
 	DrawGraph(x, y, txt, true);
 }
 
+void Enemy::PictureBookMove()
+{
+
+}
+
+void Enemy::PictureBookDraw(int scroll_x)
+{
+
+}
