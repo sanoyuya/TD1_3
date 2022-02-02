@@ -17,6 +17,10 @@ public:
 	void Clear(int& sceneflag);
 	void ResultDraw();
 
+	int LordScore();
+
+	void PushScore();
+
 private:
 	int score;
 	int Toptier;
