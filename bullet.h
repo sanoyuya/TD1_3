@@ -77,4 +77,6 @@ private:
 
 	int damage_time;
 	//‘S•ûˆÊ
+
+	int refrection_se;
 }EnemyBullet;

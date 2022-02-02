@@ -185,6 +185,21 @@ int FlagSerch(bool flag[], int max)
 #pragma region コントラスタ・デストラクタ
 Enemy::Enemy()
 {
+	boomerang_img[0] = 0;
+	bommer_img[0] = 0;
+	formationLv3_img[0] = 0;
+	formation_img[0] = 0;
+	img[0] = 0;
+	img_Lv3[0] = 0;
+	laser_img_L[0] = 0;
+	laser_img_R[0] = 0;
+	laser_sound = 0;
+	omnidirectional16_img[0] = 0;
+	omnidirectional8_img[0] = 0;
+	sub_boss1_img[0] = 0;
+	sub_boss2_img[0] = 0;
+	img_Lv5[0] = 0;
+	teleport_img[0] = 0;
 	use_flag = false;//使うかフラグ
 	enemy_type = 0;//敵のタイプ
 
@@ -269,23 +284,18 @@ Enemy::Enemy()
 	teleport_flag = false;
 
 	//画像
-	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
-	LoadDivGraph("resouce/zako_Lv3.png", 12, 12, 1, 96, 96, img_Lv3);
-	LoadDivGraph("resouce/zako_Lv5.png", 12, 12, 1, 96, 96, img_Lv5);
+
 
 	img_r = 48;
 	anime = 0;
 	anime_timer = 0;
 
-	LoadDivGraph("resouce/boss1_64.png", 14, 14, 1, 64, 64, sub_boss1_img);
 	sub_boss1_anime = 0;
 	sub_boss1_anime_timer = 0;
 
-	LoadDivGraph("resouce/zako_boomerang.png", 10, 10, 1, 64, 64, boomerang_img);
 	boomerang_anime = 0;
 	boomerang_anime_timer = 0;
 
-	LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
 	bommer_anime_timer = 0;
 	bommer_anime = 0;
 
@@ -294,12 +304,10 @@ Enemy::Enemy()
 	explosion_img_anime_timer = 0;
 	explosion_flag = false;
 
-	LoadDivGraph("resouce/Omnidirectional_8.png", 12, 12, 1, 64, 64, omnidirectional8_img);
-	LoadDivGraph("resouce/Omnidirectional_16.png", 12, 12, 1, 64, 64, omnidirectional16_img);
+
 	omnidirectional_anime = 0;
 	omnidirectional_anime_timer = 0;
 
-	LoadDivGraph("resouce/boss2_64.png", 14, 14, 1, 64, 64, sub_boss2_img);
 	sub_boss2_anime;
 	sub_boss2_anime_timer;
 
@@ -312,10 +320,7 @@ Enemy::Enemy()
 
 	teleport_flag_img_anime = 0;
 	teleport_flag_img_anime_timer = 0;
-	LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
 
-	LoadDivGraph("resouce/formation.png", 12, 12, 1, 96, 96, formation_img);
-	LoadDivGraph("resouce/formation_Lv3.png", 12, 12, 1, 96, 96, formationLv3_img);
 
 	formation_img_anime = 0;
 	formation_img_anime_timer = 0;
@@ -323,18 +328,17 @@ Enemy::Enemy()
 	laser_leftand_right_judgment = 0;
 	laser_img_anime = 0;
 	laser_img_anime_timer = 0;
-	LoadDivGraph("resouce/lazer_L.png", 6, 6, 1, 64, 64, laser_img_L);
-	LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
 
 	push_flag = false;
 	damage_effect = false;
 	damage_img = LoadGraph("resouce/E_damageEfect64.png");
 	damage_effect_time = 5;
 
-	laser_sound = LoadSoundMem("music/lazer.mp3");
 	douwn_sound = LoadSoundMem("music/knockdouwn.mp3");
 	sound_flag = false;
+	img_set = false;
 
+	ron_se = 0;
 }
 
 Enemy::~Enemy()
@@ -1443,6 +1447,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 							{
 								if (push_flag == false)
 								{
+									PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
 									txt_flag++;
 									push_flag = true;
 									if (txt_flag == 3)
@@ -1512,7 +1517,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 							bullet[0]->Form(transform, player, x_speed, y_speed, enemy_type);
 							damage_flag[0] = true;
 
-							PlaySoundMem(laser_sound, DX_PLAYTYPE_BACK);
+							PlaySoundMem(laser_sound, DX_PLAYTYPE_LOOP);
 						}
 					}
 
@@ -2283,11 +2288,16 @@ void Enemy::form(FILE* fp, int wave_num)
 	{
 	case 1://雑魚
 		all_bullet_max = 3;
+		LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
+		LoadDivGraph("resouce/zako_Lv3.png", 12, 12, 1, 96, 96, img_Lv3);
+		LoadDivGraph("resouce/zako_Lv5.png", 12, 12, 1, 96, 96, img_Lv5);
 		break;
 	case 2://ボマー
 		all_bullet_max = 1;
+		LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
 		break;
 	case 3://ブーメラン
+		LoadDivGraph("resouce/zako_boomerang.png", 10, 10, 1, 64, 64, boomerang_img);
 		all_bullet_max = 3;
 		img_r = 32;
 		break;
@@ -2297,41 +2307,53 @@ void Enemy::form(FILE* fp, int wave_num)
 			if (wave_num == 28)
 			{
 				all_bullet_max = 16;
+				LoadDivGraph("resouce/Omnidirectional_16.png", 12, 12, 1, 64, 64, omnidirectional16_img);
 			}
 			else
 			{
 				all_bullet_max = 48;
+				LoadDivGraph("resouce/Omnidirectional_16.png", 12, 12, 1, 64, 64, omnidirectional16_img);
 			}
 
 		}
 		else
 		{
 			all_bullet_max = 24;
+			LoadDivGraph("resouce/Omnidirectional_8.png", 12, 12, 1, 64, 64, omnidirectional8_img);
 		}
 		img_r = 32;
 		break;
 	case 5://フォーメーション
 		all_bullet_max = 3;
 		img_r = 48;
+		LoadDivGraph("resouce/formation.png", 12, 12, 1, 96, 96, formation_img);
+		LoadDivGraph("resouce/formation_Lv3.png", 12, 12, 1, 96, 96, formationLv3_img);
 		break;
 	case 6://レーザー
 		all_bullet_max = 1;
+		ron_se = LoadSoundMem("music/ron.mp3");
+		laser_sound = LoadSoundMem("music/lazer.mp3");
 		if (transform.x > 482)
 		{
+			LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
 			laser_leftand_right_judgment = 2;
 		}
 		else
 		{
+			LoadDivGraph("resouce/lazer_L.png", 6, 6, 1, 64, 64, laser_img_L);
 			laser_leftand_right_judgment = 1;
 		}
 		break;
 	case 10://中ボス1
 		all_bullet_max = 12;
 		img_r = 32;
+		LoadDivGraph("resouce/boss1_64.png", 14, 14, 1, 64, 64, sub_boss1_img);
 		break;
 	case 20://中ボス2
 		all_bullet_max = 4;
 		img_r = 32;
+		LoadDivGraph("resouce/boss2_64.png", 14, 14, 1, 64, 64, sub_boss2_img);
+		LoadDivGraph("resouce/teleport.png", 4, 4, 1, 64, 64, teleport_img);
 		break;
 	}
 
@@ -2427,6 +2449,8 @@ void Enemy::Tutorialform(FILE* fp)
 	frame = 0;
 	move_num = 0;
 	move_frame = 0;
+
+	LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
 
 	switch (easing_num)
 	{
@@ -2855,6 +2879,22 @@ void TxtDraw(int x, int y, const char* file)
 
 void Enemy::PictureBookMove()
 {
+	if (img_set == false)
+	{
+		LoadDivGraph("resouce/zako.png", 12, 12, 1, 96, 96, img);
+		LoadDivGraph("resouce/zako_Lv3.png", 12, 12, 1, 96, 96, img_Lv3);
+		LoadDivGraph("resouce/zako_Lv5.png", 12, 12, 1, 96, 96, img_Lv5);
+		LoadDivGraph("resouce/Bomer.png", 10, 10, 1, 96, 96, bommer_img);
+		LoadDivGraph("resouce/zako_boomerang.png", 10, 10, 1, 64, 64, boomerang_img);
+		LoadDivGraph("resouce/Omnidirectional_16.png", 12, 12, 1, 64, 64, omnidirectional16_img);
+		LoadDivGraph("resouce/Omnidirectional_8.png", 12, 12, 1, 64, 64, omnidirectional8_img);
+		LoadDivGraph("resouce/formation.png", 12, 12, 1, 96, 96, formation_img);
+		LoadDivGraph("resouce/formation_Lv3.png", 12, 12, 1, 96, 96, formationLv3_img);
+		LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
+		LoadDivGraph("resouce/lazer_L.png", 6, 6, 1, 64, 64, laser_img_L);
+		img_set = true;
+	}
+
 	anime_timer++;
 
 	if (anime_timer == 12 * 6)
@@ -2913,18 +2953,18 @@ void Enemy::PictureBookMove()
 
 void Enemy::PictureBookDraw(int scroll_x)
 {
-	DrawRotaGraph(688- scroll_x, 250,5.0, 0.0, img[anime], true, true);
+	DrawRotaGraph(688 - scroll_x, 250, 5.0, 0.0, img[anime], true, true);
 
 	bullet[0]->PictureDraw(0, 2064 - scroll_x, 250);
-	
+
 	DrawRotaGraph(3444 - scroll_x, 250, 5.0, 0.0, bommer_img[bommer_anime], true, false);
 
 	DrawRotaGraph(7568 - scroll_x, 250, 5.0, 0.0, boomerang_img[boomerang_anime], true, false);
 
-	bullet[0]->PictureDraw(1, 8256+ 688 - scroll_x, 250);
+	bullet[0]->PictureDraw(1, 8256 + 688 - scroll_x, 250);
 
-	DrawRotaGraph(9632+390 - scroll_x, 250, 5.0, 0.0, img_Lv3[anime], true, true);
-	DrawRotaGraph(9632+959 - scroll_x, 250, 5.0, 0.0, img_Lv5[anime], true, true);
+	DrawRotaGraph(9632 + 390 - scroll_x, 250, 5.0, 0.0, img_Lv3[anime], true, true);
+	DrawRotaGraph(9632 + 959 - scroll_x, 250, 5.0, 0.0, img_Lv5[anime], true, true);
 
 	DrawRotaGraph(12384 + 390 - scroll_x, 250, 5.0, 0.0, omnidirectional8_img[omnidirectional_anime], true, true);
 	DrawRotaGraph(12384 + 959 - scroll_x, 250, 5.0, 0.0, omnidirectional16_img[omnidirectional_anime], true, true);

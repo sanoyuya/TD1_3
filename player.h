@@ -130,5 +130,12 @@ private:
 
 	int EL_Helmet;
 
+	int damage_se;
+	int heal_se;
+
+	int kore_se;
+
+	int stealth_se;
+
 	Vertex vertex;
 }Player;

@@ -41,7 +41,7 @@ Player::Player() {//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì’è‹`
 	LoadDivGraph("resouce/EL_talk.png", 12, 12, 1, 380, 402, player_img2);
 	txtcooltime = 0;
 
-
+	damage_se = LoadSoundMem("music/damage.mp3");
 	//—Š‚Ü‚ê‚Ä‚½‚à‚Ì
 	itemflag2 = 0;
 
@@ -84,6 +84,11 @@ Player::Player() {//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì’è‹`
 	item_1_img = LoadGraph("resouce/item1big.png");
 
 	EL_Helmet = LoadGraph("resouce/EL_Helmet.png");
+	heal_se = LoadSoundMem("music/heal.mp3");
+
+	kore_se = LoadSoundMem("music/kore.mp3");
+
+	stealth_se = LoadSoundMem("music/stealth.mp3");
 
 	move_flag = 1;
 	enemy_damage[0] = 0;
@@ -268,6 +273,7 @@ void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//ƒvƒŒƒCƒ„[‚
 		if (pushflagB == 0 && COOLTIMEtimer == 0) {
 			if (reflectionflag == 0 && stelscooltimer == 250) {//ƒXƒeƒ‹ƒX
 				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
+					PlaySoundMem(stealth_se, DX_PLAYTYPE_BACK);
 					stelscooltimer = -150;//ƒXƒeƒ‹ƒXŒø‰ÊŽžŠÔ
 					stelsAfterglow = 1;
 					stelsflag = 1;
@@ -393,7 +399,6 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 		float b = Y - transform.y;
 		float c = a * a + b * b;
 		float sum_radius = R + transform.xr;
-		//if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 
 		if (c <= sum_radius * sum_radius)
 		{
@@ -409,6 +414,7 @@ void Player::HP(Transform transform, EnemyBullet& bullet, int vibflag, int scree
 				damagetime = 0;
 				damageAlpha = 255;
 				damageflag = 1;
+				PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 				hp -= 1;
 			}
 			bullet.SetBulletFlag(false);
@@ -422,10 +428,12 @@ void Player::HPplus(int num, int& recoveryflag, int& recoverytime) {
 		if (num % 5 == 1) {
 			recoverytime = 0;
 			recoveryflag = 1;
+			PlaySoundMem(heal_se, DX_PLAYTYPE_BACK);
 			hp += 3;
 		}if (num % 10 == 1) {
 			recoverytime = 0;
 			recoveryflag = 1;
+			PlaySoundMem(heal_se, DX_PLAYTYPE_BACK);
 			hp += 2;
 		}
 	}
@@ -433,10 +441,12 @@ void Player::HPplus(int num, int& recoveryflag, int& recoverytime) {
 		if (num == 27) {
 			recoverytime = 0;
 			recoveryflag = 1;
+			PlaySoundMem(heal_se, DX_PLAYTYPE_BACK);
 			hp += 3;
 		}if (num == 30) {
 			recoverytime = 0;
 			recoveryflag = 1;
+			PlaySoundMem(heal_se, DX_PLAYTYPE_BACK);
 			hp = 20;
 		}
 	}
@@ -448,6 +458,7 @@ void Player::TuTorialHP(Transform transform, EnemyBullet& bullet, int& damage_fl
 	{
 		if (((double)R * (double)R) > (((double)X - transform.x) * ((double)X - transform.x)) + (((double)Y - transform.y) * ((double)Y - transform.y))) {
 			damage_flag = 1;
+			PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 			bullet.SetBulletFlag(false);
 		}
 	}
@@ -488,6 +499,8 @@ int Player::GetEnemyDamage(int num)
 void Player::HpSub(int num)
 {
 	hp -= num;
+	PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
+
 }
 
 void Player::SetDamageFlag(int i, int num)
@@ -632,6 +645,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 	{
 		if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 			pushflag = 0;
+
 		}
 		switch (txtflag) {
 		case 0:
@@ -641,6 +655,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 1:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 2;
 				}
@@ -662,6 +677,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 3:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 4;
 				}
@@ -672,6 +688,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 4:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 5;
 
@@ -696,6 +713,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 6:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 7;
 				}
@@ -706,6 +724,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 7:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 8;
 				}
@@ -716,6 +735,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 8:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 9;
 				}
@@ -737,6 +757,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 10:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 11;
 
@@ -748,6 +769,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 11:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 12;
 				}
@@ -758,6 +780,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 12:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 13;
 				}
@@ -768,6 +791,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 13:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 0;
 					Moveflag4 = 1;
@@ -780,6 +804,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 14:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 15;
 				}
@@ -801,6 +826,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 		case 16:
 			if (pushflag == 0) {
 				if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					pushflag = 1;
 					txtflag = 17;
 				}
@@ -1030,6 +1056,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				easing_frame = 0;
 				easing_flag = 0;
 				txtflag = 3;
+				PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
+
 			}
 		}
 
@@ -1096,12 +1124,14 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 						txtcooltime = 0;
 						Moveflag2 = 0;
 						txtflag = 6;
+						PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 					}
 				}
 				else {
 					txtcooltime = 0;
 					Moveflag2 = 0;
 					txtflag = 6;
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 				}
 			}
 		}
@@ -1111,6 +1141,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				if (reflectionflag == 0 && stelscooltimer == 250) {//ƒXƒeƒ‹ƒX
 					if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0 || keys[KEY_INPUT_J] == 1 && oldkeys[KEY_INPUT_J] == 0) {
 						stelscooltimer = -150;//ƒXƒeƒ‹ƒXŒø‰ÊŽžŠÔ
+						PlaySoundMem(stealth_se, DX_PLAYTYPE_BACK);
 						stelsAfterglow = 1;
 						stelsflag = 1;
 						enemy[0]->SetShotTime(5);
@@ -1138,6 +1169,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 					txtflag = 10;
 					txtcooltime = 0;
 					Moveflag3 = 0;
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
+
 				}
 			}
 		}
@@ -1176,6 +1209,7 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 					itemflag2 = 1;
 					txtcooltime = 0;
 					Moveflag4 = 0;
+					PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
 
 					tutorial_item->TutorialForm(enemy[0]->GetTransform(), itemflag2);
 				}
@@ -1356,6 +1390,8 @@ void Player::TutorialMove(char* keys, char* oldkeys, Enemy** enemy, int& scenefl
 				txtflag = 16;
 				txtcooltime = 0;
 				Moveflag5 = 0;
+				PlaySoundMem(kore_se, DX_PLAYTYPE_BACK);
+
 
 			}
 		}

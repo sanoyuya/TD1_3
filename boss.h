@@ -86,6 +86,6 @@ private:
 	bool move_flag;
 
 	int boss_txt_flag;
-
+	int ron_se;
 };
 

@@ -78,6 +78,7 @@ Boss::Boss()
 	LoadDivGraph("resouce/lastboss.png", 2, 2, 1, 160, 160, img);
 	LoadDivGraph("resouce/lastboss_mugon.png", 2, 2, 1, 160, 160, mugon_img);
 	LoadDivGraph("resouce/lastboss_talk.png", 2, 2, 1, 160, 160, talk_img);
+	ron_se = LoadSoundMem("music/ron.mp3");
 	img_anime = 0;
 	img_anime_timer = 0;
 	txt_cool_time = 0;
@@ -297,6 +298,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 				boss_txt_flag++;
 				txt_flag = 0;
 				txt_cool_time = 0;
+				PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
 			}
 		}
 

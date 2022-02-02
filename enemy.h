@@ -191,4 +191,6 @@ private:
 	int laser_sound;
 	int douwn_sound;
 	bool sound_flag;
+	bool img_set;
+	int ron_se;
  };

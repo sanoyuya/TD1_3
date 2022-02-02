@@ -176,6 +176,7 @@ EnemyBullet::EnemyBullet()
 	laser_magnification = 0;
 	laser_range = 0;
 	damage_time = 5;
+	refrection_se = 0;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -501,21 +502,25 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 				switch (wey)
 				{
 				case 1:
+					PlaySoundMem(refrection_se, DX_PLAYTYPE_BACK);
 					y_speed = -(y_speed);
 					this->transform.y = (double)player.GetY() - player.GetReflectionR() - this->transform.yr;
 					break;
 
 				case 2:
+					PlaySoundMem(refrection_se, DX_PLAYTYPE_BACK);
 					y_speed = -(y_speed);
 					this->transform.y = (double)player.GetY() + player.GetReflectionR() + this->transform.yr;
 					break;
 
 				case 3:
+					PlaySoundMem(refrection_se, DX_PLAYTYPE_BACK);
 					x_speed = -(x_speed);
 					this->transform.x = (double)player.GetX() - player.GetReflectionR() - this->transform.xr;
 					break;
 
 				case 4:
+					PlaySoundMem(refrection_se, DX_PLAYTYPE_BACK);
 					x_speed = -(x_speed);
 					this->transform.x = (double)player.GetX() + player.GetReflectionR() + this->transform.xr;
 					break;
@@ -908,6 +913,7 @@ void EnemyBullet::TutorialMove(int y)
 		if (transform.y + 56 + y_speed > y)
 		{
 			y_speed = -y_speed;
+			PlaySoundMem(refrection_se, DX_PLAYTYPE_BACK);
 		}
 	}
 }
@@ -951,7 +957,10 @@ void EnemyBullet::Form(Transform transform, Player& player, int x_speed, int y_s
 	go_time = 50;
 	return_flag = false;
 	flag = false;
-
+	if (enemy_type == 1)
+	{
+		refrection_se = LoadSoundMem("music/refrection.mp3");
+	}
 	if (player.Getstelsflag() == 0)
 	{
 		angle = (float)atan2(player.GetY() - this->transform.y, player.GetX() - this->transform.x);
@@ -1085,6 +1094,7 @@ void EnemyBullet::TuTorialForm(Transform transform, int x, int y, int x_speed, i
 	bullet_flag = true;
 	this->transform.x = transform.x;
 	this->transform.y = transform.y;
+	refrection_se = LoadSoundMem("music/refrection.mp3");
 	if (stelsflag == 0)
 	{
 		angle = (float)atan2(y - this->transform.y, x - this->transform.x);

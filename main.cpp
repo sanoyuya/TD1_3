@@ -79,14 +79,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
 	int STAGE_BGM = LoadSoundMem("music/1~10.mp3");
-	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3");
+	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3"); 
 	int TUTORIAL_BGM = LoadSoundMem("music/チュートリアル.mp3");
 	int RESULT_BGM = LoadSoundMem("music/result.mp3");
+	int PAGE_TURN = LoadSoundMem("music/page_turn.mp3");
 
 	float volume = 250.0f;
 
 	//SE
 	int SELECT_SE = LoadSoundMem("music/選択不可.mp3");
+	int CANSEL_SE = LoadSoundMem("music/cansel.mp3");
+	int KORE_SE = LoadSoundMem("music/kore.mp3");
 
 	int player_img[12];
 	LoadDivGraph("resouce/EL_stand.png", 12, 12, 1, 380, 402, player_img);
@@ -268,6 +271,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						sceneflag = 10;
+						PlaySoundMem(KORE_SE, DX_PLAYTYPE_BACK);
 						player = new Player();
 						enemy[0] = new Enemy;
 						item = new Item;
@@ -294,6 +298,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			if (pushflagB == 0) {
 				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
+					PlaySoundMem(CANSEL_SE, DX_PLAYTYPE_BACK);
 					pushflagB = 1;
 					title = new Title;
 					title_sound_flag = false;
@@ -889,6 +894,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						Configuflag = 0;
 						pushflagB = 1;
 						player->pushB();
+						PlaySoundMem(CANSEL_SE, DX_PLAYTYPE_BACK);
 					}
 				}
 
@@ -955,6 +961,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					if (keys[KEY_INPUT_RETURN] == 1 && oldkeys[KEY_INPUT_RETURN] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {
 						Pauseflag = 0;
 						player->pushB();
+						PlaySoundMem(CANSEL_SE, DX_PLAYTYPE_BACK);
 					}
 				}
 				if (Pause == 0) {//設定
@@ -1038,6 +1045,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					rightpushflag = 1;
 					rightflag = 1;
 					picturepage++;
+					PlaySoundMem(PAGE_TURN, DX_PLAYTYPE_BACK, true);
 				}
 			}
 			if (leftpushflag == 0) {
@@ -1045,6 +1053,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					leftpushflag = 1;
 					rightflag = 0;
 					picturepage--;
+					PlaySoundMem(PAGE_TURN, DX_PLAYTYPE_BACK, true);
 				}
 			}
 			enemy[0]->PictureBookMove();
