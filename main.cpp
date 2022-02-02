@@ -70,7 +70,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int B = LoadGraph("resouce/B.png");
 	int Option = LoadGraph("resouce/option.png");
 	int playback = LoadGraph("resouce/GameBackGraund.png");
-
+	int modeselect= LoadGraph("resouce/modeSelect_1.png");
+	int gameplay= LoadGraph("resouce/modeSelect_PLAY.png");
+	int gamepicture = LoadGraph("resouce/modeSelect_PICTURE.png");
 
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
@@ -131,6 +133,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int flame = 0;
 	int ABtime = 0;
 	int ABflag = 0;
+	int picturepage = 0;
+	int scroll_x = 0;
+	int scroll_y = 0;
+	int rightflag = 0;
 
 	bool reflection_flag = true;
 
@@ -227,6 +233,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//ステージ選択
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflagA = 0;
+			}if (keys[KEY_INPUT_RETURN] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {//Bボタン
+				pushflagB = 0;
 			}
 			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_UP) != 0 || keys[KEY_INPUT_W] == 1) {
 				stageflag = 0;
@@ -248,13 +256,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			else {
 				if (pushflagA == 0) {
-					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0) {
-						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
-						sceneflag = 3;
-					}if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
+					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
 						sceneflag = 3;
 					}
+				}
+			}
+
+			if (pushflagB == 0) {
+				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
+					pushflagB = 1;
+					title = new Title;
+					sceneflag = 0;
 				}
 			}
 			break;
@@ -951,9 +964,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			//DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
 
-			if (keys[KEY_INPUT_SPACE] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {//Aボタン
+			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {//Aボタン
 				pushflagA = 1;
-			}if (keys[KEY_INPUT_RETURN] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
+			}if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
 				pushflagB = 1;
 			}
 
@@ -966,9 +979,44 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 
 		case 3:
-			//プレイ画面
-			score->TC(sceneflag);
-			//score->IC();
+			//キャラクター図鑑
+			if (pushflagB == 0) {
+				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
+					pushflagB = 1;
+					sceneflag = 1;
+				}
+			}
+			
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {//Aボタン
+				pushflagA = 0;
+			}if (keys[KEY_INPUT_RETURN] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {//Bボタン
+				pushflagB = 0;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+				rightflag = 1;
+			}
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+				rightflag = 0;
+			}
+
+			if (rightflag == 1) {
+				scroll_x += 50;
+				if (scroll_x >= picturepage * 1376) {
+					scroll_x = picturepage * 1376;
+				}
+			}
+			else {
+				scroll_x -= 50;
+				if (scroll_x <= picturepage * 1376) {
+					scroll_x = picturepage * 1376;
+				}
+			}
+
+			if (picturepage <= 0) {
+				picturepage = 0;
+			}if (picturepage >= 15) {
+				picturepage = 15;
+			}
 			break;
 
 		case 5:
@@ -1057,6 +1105,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					StopSoundMem(RESULT_BGM);
 				}
 			}
+
+			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {//Aボタン
+				pushflagA = 0;
+			}if (keys[KEY_INPUT_RETURN] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {//Bボタン
+				pushflagB = 0;
+			}
 			break;
 
 		case 10:
@@ -1119,10 +1173,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		case 1:
 			//ステージ選択
+			DrawGraph(-32, -32, modeselect, true);
+			SetDrawBright(150, 150, 150);
+			DrawGraph(98 - 32, 96 - 32, gameplay, true);
+			DrawGraph(98 - 32, 638 - 32, gamepicture, true);
+			SetDrawBright(255, 255, 255);
 			if (stageflag == 0) {
-				DrawBox(64, 64, 1312, 696, GetColor(255, 255, 255), false);
+				DrawGraph(98 - 32, 96 - 32, gameplay, true);
+				//DrawBox(64, 64, 1312, 696, GetColor(255, 255, 255), false);
 			}if (stageflag == 1) {
-				DrawBox(64, 760, 1312, 896, GetColor(255, 255, 255), false);
+				DrawGraph(98 - 32, 638 - 32, gamepicture, true);
+				//DrawBox(64, 760, 1312, 896, GetColor(255, 255, 255), false);
 			}
 
 			break;
@@ -1448,8 +1509,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 			delete player;
 		case 3:
-			//プレイ画面
-			score->Draw(randX, randY);
+			//キャラクター図鑑
+
 			break;
 
 
