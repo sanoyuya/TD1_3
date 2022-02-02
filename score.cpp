@@ -120,8 +120,7 @@ void Score::Draw(int randX, int randY) {//ゲーム内スコア表示
 		div = div * 10;
 	}
 
-	/*DrawFormatString(480, 480, GetColor(255, 255, 255), "score:%d", score);
-	DrawFormatString(480, 500, GetColor(255, 255, 255), "scoreitem:%d", scoreitem);*/
+
 }
 
 void Score::ResultDraw() {

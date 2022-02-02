@@ -1026,7 +1026,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					}
 				}
 			}
-			//DrawFormatString(480, 480, GetColor(255, 255, 255), "Pause:%d", Pauseflag);
+
 
 			if (keys[KEY_INPUT_SPACE] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {//Aボタン
 				pushflagA = 1;
@@ -1639,14 +1639,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}
 			//リザルト画面(ゲームクリア)
 			score->ResultDraw();
-			/*if (resultflag == 0) {
-				DrawBox(50, 760, 910, 810, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 785, GetColor(255, 255, 255), "初めからやり直す");
-			}
-			else {
-				DrawBox(50, 860, 910, 910, GetColor(255, 255, 255), false);
-				DrawFormatString(100, 885, GetColor(255, 255, 255), "タイトルに戻る");
-			}*/
+
 			break;
 
 		case 10:
@@ -1733,8 +1726,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			delete player;
 		}
 
-		//DrawFormatString(480, 480, GetColor(255, 255, 255), "pushflagoption:%d", sceneflag);
-		//DrawGraph(34, 34, guide, true);
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
 		ScreenFlip();
