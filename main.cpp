@@ -73,13 +73,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int modeselect = LoadGraph("resouce/modeSelect_1.png");
 	int gameplay = LoadGraph("resouce/modeSelect_PLAY.png");
 	int gamepicture = LoadGraph("resouce/modeSelect_PICTURE.png");
-	int Breturn= LoadGraph("resouce/page_back_B.png");
+	int Breturn = LoadGraph("resouce/page_back_B.png");
 	int Lstickpage = LoadGraph("resouce/page_turn_L.png");
 
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
 	int STAGE_BGM = LoadSoundMem("music/1~10.mp3");
-	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3"); 
+	int BOSS_BGM = LoadSoundMem("music/BOSS.mp3");
 	int TUTORIAL_BGM = LoadSoundMem("music/チュートリアル.mp3");
 	int RESULT_BGM = LoadSoundMem("music/result.mp3");
 	int PAGE_TURN = LoadSoundMem("music/page_turn.mp3");
@@ -619,7 +619,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (wave_num == 10 || wave_num == 20)
 						{
 							//中ボスの動き
-							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime,damageAlpha);
+							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 						}
 
 						score->SetHp(player->GetHp());
@@ -752,28 +752,30 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 					if (game_end == 1) {
 						score->Clear(sceneflag);
-
-						for (int i = 0; i < boss->GetENEMY_MAX(); i++)
+						if (boss != nullptr)
 						{
-							delete enemy[i];
-							enemy[i] = nullptr;
+							for (int i = 0; i < boss->GetENEMY_MAX(); i++)
+							{
+								delete enemy[i];
+								enemy[i] = nullptr;
+							}
+							delete boss;
+							boss = nullptr;
 						}
-						delete boss;
-						boss = nullptr;
-
 					}
 
 					if (score->Death(sceneflag) == 1)
 					{
-
-						for (int i = 0; i < boss->GetENEMY_MAX(); i++)
+						if (boss != nullptr)
 						{
-							delete enemy[i];
-							enemy[i] = nullptr;
+							for (int i = 0; i < boss->GetENEMY_MAX(); i++)
+							{
+								delete enemy[i];
+								enemy[i] = nullptr;
+							}
+							delete boss;
+							boss = nullptr;
 						}
-						delete boss;
-						boss = nullptr;
-
 					}
 
 					if (shakeflag == 1) {//シェイク
@@ -1131,7 +1133,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					Pauseflag = 0;
 					for (int i = 0; i < ENEMY_MAX; i++)
 					{
-						delete enemy[i];
+						if (enemy[i] != nullptr)
+						{
+							delete enemy[i];
+						}
+
 					}
 					delete item;
 					item = new Item;
@@ -1153,6 +1159,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					StopSoundMem(STAGE_BGM);
 					StopSoundMem(BOSS_BGM);
 					StopSoundMem(RESULT_BGM);
+					game_end = false;
 				}
 			}
 
@@ -1359,7 +1366,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Draw(randX, randY);
 			score->Draw(randX, randY);
 
-			if ( enemy[0] != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 1)
+			if (enemy[0] != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 1)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
