@@ -335,6 +335,7 @@ Enemy::Enemy()
 	damage_effect_time = 5;
 
 	douwn_sound = LoadSoundMem("music/knockdouwn.mp3");
+	damage_se = LoadSoundMem("music/damage.mp3");
 	sound_flag = false;
 	img_set = false;
 
@@ -569,7 +570,7 @@ bool Enemy::BommerHitBox(Transform transform)
 
 #pragma region Move
 //“®‚«
-void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, bool& txt_shake_flag)
+void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, bool& txt_shake_flag, int& damageAlpha)
 {
 	if (use_flag == true)
 	{
@@ -820,6 +821,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 										else
 										{
 											explosion_bommer_flag = true;
+											PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 											break;
 
 										}
@@ -871,6 +873,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 										else
 										{
 											explosion_bommer_flag = true;
+											PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 											break;
 
 										}
@@ -924,6 +927,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 										else
 										{
 											explosion_bommer_flag = true;
+											PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 											break;
 										}
 									}
@@ -974,6 +978,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 										else
 										{
 											explosion_bommer_flag = true;
+											PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 											break;
 
 										}
@@ -1537,7 +1542,7 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 		//’e‚Ì“®‚«
 		for (int i = 0; i < all_bullet_max; i++)
 		{
-			bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+			bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 		}
 
 		//“–‚½‚è”»’è
@@ -1829,6 +1834,7 @@ void Enemy::ExplosionBommer(Enemy* enemy)
 					enemy_to_bommer = true;
 					enemy->SetEnemyFlag(false);
 					enemy->SetExplosionFlag(true);
+					PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 				}
 			}
 		}
@@ -1847,6 +1853,7 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 				{
 					explosion_bommer_flag = true;
 					enemy_to_bommer = true;
+					PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 
 				}
 			}
@@ -1854,7 +1861,7 @@ void Enemy::EnemyToEnemyHitBox(Enemy& enemy)
 	}
 }
 
-void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, int& damageAlpha)
 {
 	if (invincible_time == 0)
 	{
@@ -1873,8 +1880,10 @@ void Enemy::PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int 
 					}
 					damagetime = 0;
 					damageflag = 1;
-
+					damageAlpha = 255;
 					player.HpSub(1);
+					PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
+
 				}
 
 				explosion_bommer_flag = true;
@@ -1906,6 +1915,7 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item, Score* scor
 				if (this->transform.y - this->transform.yr < transform.y + transform.yr &&
 					this->transform.y + this->transform.yr > transform.y - transform.yr)
 				{
+
 					hp -= 1;
 					bullet.SetBulletFlag(false);
 					bullet.SetReflectionNum(0);
@@ -1918,6 +1928,10 @@ void Enemy::HP(Transform transform, EnemyBullet& bullet, Item* item, Score* scor
 						explosion_flag = true;
 						score->KnockDown();
 						PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
+					}
+					else
+					{
+						PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 					}
 
 				}
@@ -1944,6 +1958,7 @@ void Enemy::HitBox(Transform transform, int num, Item* item, Score* score)
 					bullet[num]->SetReflectionNum(0);
 					damage_effect = true;
 
+
 					if (hp <= 0)
 					{
 						exising_flag = false;
@@ -1952,6 +1967,10 @@ void Enemy::HitBox(Transform transform, int num, Item* item, Score* score)
 						score->KnockDown();
 						PlaySoundMem(douwn_sound, DX_PLAYTYPE_BACK);
 
+					}
+					else
+					{
+						PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 					}
 				}
 
@@ -1984,6 +2003,7 @@ void Enemy::HitBox(Transform& transform, EnemyBullet& enemyBullet, int i)
 				{
 					if (damage_flag[i] == false)
 					{
+						PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 						hp--;
 						damage_flag[i] = true;
 						enemyBullet.SetBulletFlag(false);

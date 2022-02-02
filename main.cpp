@@ -544,7 +544,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 								if (enemy[i]->GetEnemyFlag(wave_num) == true)
 								{
 									//時機とボマーの当たり判定
-									enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+									enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 								}
 
 							}
@@ -610,14 +610,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							//敵の動き
-							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag);
+							enemy[i]->Move(*player, reflection_flag, *score, item, wave_num, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag, damageAlpha);
 
 						}
 
 						if (wave_num == 10 || wave_num == 20)
 						{
 							//中ボスの動き
-							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+							sub_boss->Move(*player, reflection_flag, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime,damageAlpha);
 						}
 
 						score->SetHp(player->GetHp());

@@ -22,14 +22,14 @@ public:
 	~Enemy();
 	void form(FILE* fp, int wave_num);
 	void Tutorialform(FILE* fp);
-	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime,int& damagetime, bool& txt_shake_flag);
+	void Move(Player& player, bool reflection_flag, Score& score, Item* item, int wave_num, bool& movie_flag, char* keys, int num, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime,int& damagetime, bool& txt_shake_flag, int& damageAlpha);
 	void TuTorialMove(int x, int y, int r, int& shot_flag, int stelsflag, int reflectionflag);
 	void Draw(int num, int wave_num);
 	void HitBox(Transform transform,int num, Item* item, Score* score);
 	void HitBox(Transform& transform, EnemyBullet& enemyBullet, int i);//“–‚½‚è”»’è
 	void TutorialHitBox(Transform transform, int num);
 	void EnemyToEnemyHitBox(Enemy& enemy);
-	void PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);
+	void PlaterToEnemyHitBox(Player& player, int enemy_num, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime,int& damageAlpha);
 	void ExplosionBommer(Enemy* enemy);
 	void HP(Transform transform, EnemyBullet& bullet, Item* item, Score* score);
 	void XMove(int x_speed, bool right_flag);
@@ -55,8 +55,9 @@ public:
 	void SetEnemyFlag(bool flag);
 	void SetExplosionFlag(bool flag);
 
-	void PictureBookMove();
 	void PictureBookDraw(int scroll_x);
+	void PictureBookMove();
+	
 
 	int color;
 
@@ -193,4 +194,5 @@ private:
 	bool sound_flag;
 	bool img_set;
 	int ron_se;
+	int damage_se;
  };

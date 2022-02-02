@@ -174,7 +174,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 			if (enemy[i]->GetEnemyFlag(wave_num) == true)
 			{
 				//時機とボマーの当たり判定
-				enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+				enemy[i]->PlaterToEnemyHitBox(*player, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 			}
 		}
 	}
@@ -207,7 +207,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 	for (int i = 0; i < ENEMY_MAX; i++)
 	{
 		//敵の動き
-		enemy[i]->Move(*player, reflection_flag, *score, item, 30, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag);
+		enemy[i]->Move(*player, reflection_flag, *score, item, 30, movie_flag, keys, i, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, txt_shake_flag,damageAlpha);
 	}
 
 	break_flag = false;

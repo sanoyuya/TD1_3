@@ -206,7 +206,7 @@ void EnemyBullet::PictureDraw(int num, int x, int y)
 
 #pragma region Move
 void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag,
-	Transform& transform, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+	Transform& transform, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, int& damageAlpha)
 {
 	if (bullet_flag == true)
 	{
@@ -593,6 +593,7 @@ void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, d
 						shakeflag = 1;
 					}
 					damagetime = 0;
+					damageAlpha = 255;
 					damageflag = 1;
 
 					player.HpSub(1);

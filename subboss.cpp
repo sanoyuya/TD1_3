@@ -87,7 +87,7 @@ void SubBoss::form(FILE* fp)
 //’e‚ğ‘Å‚Á‚½‚Ä‚·‚×‚ÄÁ‚¦‚½Œã‚ÉˆÚ“®‚·‚é
 //’n—‹‚Æ’e‚Ì“®‚«‚ğ‚·‚é
 
-void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, int& damageAlpha)
 {
 
 
@@ -363,6 +363,7 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 			if (hp <= 0)
 			{
 				exising_flag = false;
+				PlaySoundMem(knockdouwn_se, DX_PLAYTYPE_BACK);
 			}
 		}
 
@@ -383,7 +384,7 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 	for (int i = 0; i < bullet_max; i++)
 	{
 		//’e‚Ì“®‚«
-		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime, damageAlpha);
 	}
 
 	if (enemy_type == 1)
@@ -508,6 +509,7 @@ void SubBoss::HitBox(Transform& transform, EnemyBullet* enemyBullet, int i)
 					damage_flag[i] = true;
 					enemyBullet->SetBulletFlag(false);
 					damage_effect = true;
+					PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 
 				}
 
@@ -537,12 +539,18 @@ void SubBoss::HP(Transform& transform, EnemyBullet& enemyBullet)
 			{
 				hp -= 1;
 				enemyBullet.SetBulletFlag(false);
+
 				damage_effect = true;
 
 
 				if (hp <= 0)
 				{
 					exising_flag = false;
+					PlaySoundMem(knockdouwn_se, DX_PLAYTYPE_BACK);
+				}
+				else
+				{
+					PlaySoundMem(damage_se, DX_PLAYTYPE_BACK);
 				}
 
 			}
@@ -837,7 +845,7 @@ void SubBoss::PictureBookDraw(int x, int y, int num)
 
 		DrawRotaGraph(x, y, 2.5, 0.0, boss1_img[boss1_anime], true, true);
 	}
-	else if(num == 1)
+	else if (num == 1)
 	{
 		boss2_anime_timer++;
 
@@ -852,7 +860,7 @@ void SubBoss::PictureBookDraw(int x, int y, int num)
 	}
 	else
 	{
-		mine->PictureBookDraw(x,y);
+		mine->PictureBookDraw(x, y);
 	}
 }
 
@@ -943,6 +951,8 @@ SubBoss::SubBoss()
 	damage_img = LoadGraph("resouce/E_damageEfect128.png");
 	boss2_anime_timer = 0;
 	boss2_anime = 0;
+	damage_se = LoadSoundMem("music/damage.png");
+	knockdouwn_se = LoadSoundMem("music/knockdouwn.png");
 }
 
 SubBoss::~SubBoss()

@@ -34,6 +34,7 @@ Mine::Mine()
 	LoadDivGraph("resouce/bom.png", 10, 10, 1, 32, 32, mine_img);
 
 	LoadDivGraph("resouce/explosion.png", 8, 8, 1, 48, 48, explosion_img);
+	explosion_se = LoadSoundMem("music/knockdouwn.mp3");
 
 }
 
@@ -86,6 +87,8 @@ void Mine::HitBox(Transform transform, int& hp, bool& damage_effect)
 					this->transform[i].y + this->transform[i].yr > transform.y - transform.yr)
 				{
 					explosion_flag[i] = true;
+					PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK);
+
 				}
 
 			}
@@ -134,6 +137,7 @@ void Mine::HitBox(Transform transform, int& hp, bool damage_flag, bool& damage_e
 					this->transform[i].y + this->transform[i].yr > transform.y - transform.yr)
 				{
 					explosion_flag[i] = true;
+					PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK);
 				}
 
 			}
@@ -182,6 +186,8 @@ void Mine::PlayerHitBox(Player& player, int vibflag, int screenshakeflag, int& s
 					transform[i].y + transform[i].yr >(double)player.GetY() - (double)player.GetR())
 				{
 					explosion_flag[i] = true;
+					PlaySoundMem(explosion_se, DX_PLAYTYPE_BACK);
+
 				}
 			}
 		}
