@@ -5,7 +5,7 @@ class SubBoss
 {
 public:
 	void form(FILE* fp);
-	void Move(Player& player, bool reflection_flag,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime);//“®‚«
+	void Move(Player& player, bool reflection_flag,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime, int& damageAlpha);//“®‚«
 	void Draw();//•`‰æ
 	void HitBox(Transform& transform, EnemyBullet* enemyBullet, int i);//“–‚½‚è”»’è
 	void HP(Transform& transform, EnemyBullet& enemyBullet);//“–‚½‚è”»’è
@@ -93,6 +93,8 @@ private:
 	bool damage_effect;
 	int damage_img;
 	int damage_effect_time;
+	int damage_se;
+	int knockdouwn_se;
 };
 
 void SubBossForm(const char* file_name, int max, SubBoss& sub_boss);

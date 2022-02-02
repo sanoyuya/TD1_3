@@ -54,5 +54,6 @@ private:
 	int explosion_img[8];
 	int explosion_img_anime[10];
 	int explosion_img_anime_timer[10];
+	int explosion_se;
 };
 
