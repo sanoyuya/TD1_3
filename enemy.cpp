@@ -351,6 +351,8 @@ Enemy::~Enemy()
 		delete bullet[i];
 	}
 
+	StopSoundMem(laser_sound);
+
 }
 #pragma endregion
 
