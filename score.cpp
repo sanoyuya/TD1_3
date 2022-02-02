@@ -56,17 +56,14 @@ void Score::CC() {
 	score += 1000 * hp;
 	hps = 1000 * hp;
 	if (nohitflag == 0) {
-		score += 50000;
-		nodama = 50000;
+		//score += 50000;
+		//nodama = 50000;
 	}
 }
 
 void Score::TC(int sceneflag) {
 	if (sceneflag == 2) {
 		flame++;
-	}if (sceneflag == 5) {
-		score += (30000 - flame);//10分-クリアフレーム
-		time = (30000 - flame);//10分-クリアフレーム
 	}
 }
 
@@ -101,6 +98,8 @@ void Score::Death(int& sceneflag) {//プレイヤーが死んだとき
 void Score::Clear(int& sceneflag) {//クリアされたとき
 	CC();
 	TC(sceneflag);
+	score += (45000 - flame);//15分-クリアフレーム
+	time = (45000 - flame);//15分-クリアフレーム
 	LordScore();
 	RC();
 	sceneflag = 5;
