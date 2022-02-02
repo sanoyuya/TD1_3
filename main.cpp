@@ -208,6 +208,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int boss_txt = LoadGraph("resouce/bosstext.png");
 	int siturei_txt = LoadGraph("resouce/siturei.png");
 	int boss0_txt = LoadGraph("resouce/text_boss3.png");
+
 	// 最新のキーボード情報用
 	char keys[256] = { 0 };
 

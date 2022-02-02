@@ -27,7 +27,7 @@ Boss::Boss()
 {
 	break_flag = false;
 	ENEMY_MAX = 0;
-	wave_num = 0;
+	wave_num = 3;
 	wave_up_flag = false;
 	wave_set = false;
 
@@ -288,6 +288,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 				easing_flag = false;
 				boss_txt_flag = 1;
 				txt_flag = 3;
+				PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
 			}
 		}
 
@@ -298,7 +299,7 @@ void Boss::Move(Enemy** enemy, Player* player, Item* item, Score* score,
 				boss_txt_flag++;
 				txt_flag = 0;
 				txt_cool_time = 0;
-				PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
+				
 			}
 		}
 

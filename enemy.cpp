@@ -282,6 +282,7 @@ Enemy::Enemy()
 	anticipation = 50;
 	rand = 0;
 	teleport_flag = false;
+	ron_se = 0;
 
 	//‰æ‘œ
 
@@ -1452,12 +1453,12 @@ void Enemy::Move(Player& player, bool reflection_flag, Score& score, Item* item,
 							{
 								if (push_flag == false)
 								{
-									PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
 									txt_flag++;
 									push_flag = true;
 									if (txt_flag == 3)
 									{
 										txt_shake_flag = true;
+										PlaySoundMem(ron_se, DX_PLAYTYPE_BACK);
 									}
 								}
 							}
@@ -2353,6 +2354,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		all_bullet_max = 1;
 		ron_se = LoadSoundMem("music/ron.mp3");
 		laser_sound = LoadSoundMem("music/lazer.mp3");
+		ron_se = LoadSoundMem("music/ron.mp3");
 		if (transform.x > 482)
 		{
 			LoadDivGraph("resouce/lazer_R.png", 6, 6, 1, 64, 64, laser_img_R);
