@@ -70,7 +70,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int B = LoadGraph("resouce/B.png");
 	int Option = LoadGraph("resouce/option.png");
 	int playback = LoadGraph("resouce/GameBackGraund.png");
-
+	int modeselect= LoadGraph("resouce/modeSelect_1.png");
+	int gameplay= LoadGraph("resouce/modeSelect_PLAY.png");
+	int gamepicture = LoadGraph("resouce/modeSelect_PICTURE.png");
 
 	//BGM
 	int TITLE_BGM = LoadSoundMem("music/title.mp3");
@@ -1119,10 +1121,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			case 1:
 				//ステージ選択
+				DrawGraph(-32, -32, modeselect, true);
+				SetDrawBright(150, 150, 150);
+				DrawGraph(98 - 32, 96 - 32, gameplay, true);
+				DrawGraph(98 - 32, 638 - 32, gamepicture, true);
+				SetDrawBright(255, 255, 255);
 				if (stageflag == 0) {
-					DrawBox(64, 64, 1312, 696, GetColor(255, 255, 255), false);
+					DrawGraph(98-32, 96-32, gameplay, true);
+					//DrawBox(64, 64, 1312, 696, GetColor(255, 255, 255), false);
 				}if (stageflag == 1) {
-					DrawBox(64, 760, 1312, 896, GetColor(255, 255, 255), false);
+					DrawGraph(98-32, 638-32, gamepicture, true);
+					//DrawBox(64, 760, 1312, 896, GetColor(255, 255, 255), false);
 				}
 
 				break;
