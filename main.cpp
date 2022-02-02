@@ -1628,7 +1628,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (result_bgm_flag == false)
 			{
 				PlaySoundMem(RESULT_BGM, DX_PLAYTYPE_LOOP, true);
-				ChangeVolumeSoundMem(200, RESULT_BGM);
 				result_bgm_flag = true;
 			}
 			//リザルト画面(ゲームクリア)
