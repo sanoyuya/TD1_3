@@ -752,9 +752,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 					if (game_end == 1) {
 						score->Clear(sceneflag);
+						delete boss;
+						for (int i = 0; i < ENEMY_MAX; i++)
+						{
+							delete enemy[i];
+						}
+
 					}
 
-					score->Death(sceneflag);
+					score->Death(sceneflag,boss,enemy,ENEMY_MAX);
 
 					if (shakeflag == 1) {//シェイク
 						shaketime++;

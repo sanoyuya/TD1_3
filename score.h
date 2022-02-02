@@ -1,4 +1,6 @@
 #pragma once
+#include"boss.h"
+#include"enemy.h"
 class Score
 {
 public:
@@ -13,7 +15,7 @@ public:
 	void Setscoreitem(int scoreitem);
 	void KnockDown();//knockdown
 	void SetHp(int hp);
-	void Death(int& sceneflag);
+	void Death(int& sceneflag,Boss* boss,Enemy**enemy,int ene_mex);
 	void Clear(int& sceneflag);
 	void ResultDraw();
 
