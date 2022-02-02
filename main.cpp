@@ -338,13 +338,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (Configuflag == 0) {
 					score->TC(sceneflag);
 					player->PlayerPadMove(keys, oldkeys, wave_num);
-					//デバッグ用(本番消す)
-					if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
-						delete player;
-						player = new Player();
-						wave_num = 29;
-						game_set = false;
-					}
+
 					if (pushflagoption == 0) {
 						if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_8) != 0 || keys[KEY_INPUT_H] == 1 && oldkeys[KEY_INPUT_H] == 0) {
 							pushflagoption = 1;
