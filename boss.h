@@ -19,6 +19,8 @@ public:
 		int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
 		bool& reflection_flag, bool& movie_flag, char* keys, int& sceneflag, bool& txt_shake_flag, int& damageAlpha);
 	void Draw(Enemy** enemy);
+
+	int GetBossTxtFlag();
 private:
 	bool wave_set;
 	int wave_num;
@@ -57,6 +59,7 @@ private:
 	double easing_start_y;
 	double easing_end_x;
 	double easing_end_y;
+	double easing2_end_y;
 	double easing_frame;
 	double easing_end_frame;
 
@@ -78,5 +81,10 @@ private:
 	int img_anime_timer;
 
 	int txt_cool_time;
+
+	bool move_flag;
+
+	int boss_txt_flag;
+
 };
 
