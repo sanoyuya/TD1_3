@@ -287,7 +287,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (Pauseflag == 0) {
 				if (Configuflag == 0) {
 					score->TC(sceneflag);
-					//score->IC();
 					player->PlayerPadMove(keys, oldkeys, wave_num);
 					//デバッグ用(本番消す)
 					if (keys[KEY_INPUT_R] == 1 && oldkeys[KEY_INPUT_R] == 0 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_6) != 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_5) != 0) {
@@ -699,13 +698,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 							reflection_flag, movie_flag, keys, game_end, txt_shake_flag, damageAlpha);
 					}
 
+					item->Move(*player, *score);
+
 					if (game_end == 1) {
 						score->Clear(sceneflag);
 					}
 					score->Death(sceneflag);
-
-					item->Move(*player, *score);
-					sceneflag = player->Result();
 
 					if (shakeflag == 1) {//シェイク
 						shaketime++;
@@ -1086,7 +1084,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			flame++;
 			ang += 0.01;
 			player->TutorialMove(keys, oldkeys, enemy, sceneflag, wave_num, pushflagoption, vibflag, screenshakeflag, shakeflag, damageflag, damageAlpha);
-			//score->IC();
 			break;
 		}
 		// 描画処理

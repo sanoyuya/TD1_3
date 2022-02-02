@@ -4,14 +4,14 @@ class Score
 public:
 	Score();
 	~Score();
-	void IC(int scoreitem);//knockdown
+	void IC();
 	void CC();//clear
 	void RC();//rank
 	void TC(int sceneflag);//time
 	void Setnohitflag(int nohitflag);
 	void Draw(int randX, int randY);
 	void Setscoreitem(int scoreitem);
-	void KnockDown();
+	void KnockDown();//knockdown
 	void SetHp(int hp);
 	void Death(int& sceneflag);
 	void Clear(int& sceneflag);
@@ -35,5 +35,7 @@ private:
 	int nodama;
 	int clear;
 	int hps;
+	int RESULT;
+	int resultnum[10];
 };
 

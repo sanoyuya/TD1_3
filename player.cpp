@@ -457,10 +457,9 @@ void Player::ItemFlagAdd(int num, Score& score)
 		itemflag += num;
 	}
 
-	scoreitem += num;
-
-	score.IC(scoreitem);
-
+	if (itemflag > 0) {
+		score.IC();
+	}
 }
 
 int Player::GetHp()
