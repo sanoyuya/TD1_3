@@ -999,7 +999,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30 && boss != nullptr)
+			if (boss != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30)
 			{
 				if (wave_num == 30)
 				{
@@ -1359,7 +1359,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Draw(randX, randY);
 			score->Draw(randX, randY);
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 1 && boss != nullptr)
+			if ( enemy[0] != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 1)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1405,7 +1405,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 			}
 
-			if (game_set == true && wave_num == 30 && boss->GetBossTxtFlag() == 1)
+			if (boss != nullptr && game_set == true && wave_num == 30 && boss->GetBossTxtFlag() == 1)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1415,7 +1415,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				boss->Draw(enemy);
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 2 && wave_num == 30 && boss != nullptr)
+			if (boss != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 2 && wave_num == 30)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1440,7 +1440,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				boss->Draw(enemy);
 			}
 
-			if (game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30 && boss != nullptr)
+			if (boss != nullptr && game_set == true && enemy[0]->GetTxtFlag() == 3 && wave_num == 30)
 			{
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 185);
 				DrawBox(0, 0, 1376, 960, GetColor(0, 0, 0), true);
@@ -1628,7 +1628,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (result_bgm_flag == false)
 			{
 				PlaySoundMem(RESULT_BGM, DX_PLAYTYPE_LOOP, true);
-				ChangeVolumeSoundMem(130, RESULT_BGM);
+				ChangeVolumeSoundMem(200, RESULT_BGM);
 				result_bgm_flag = true;
 			}
 			//リザルト画面(ゲームクリア)

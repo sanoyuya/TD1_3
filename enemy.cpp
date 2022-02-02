@@ -2356,6 +2356,7 @@ void Enemy::form(FILE* fp, int wave_num)
 		all_bullet_max = 1;
 		ron_se = LoadSoundMem("music/ron.mp3");
 		laser_sound = LoadSoundMem("music/lazer.mp3");
+		ChangeVolumeSoundMem(51, laser_sound);
 		ron_se = LoadSoundMem("music/ron.mp3");
 		if (transform.x > 482)
 		{
