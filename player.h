@@ -128,5 +128,7 @@ private:
 
 	int item_1_img;
 
+	int EL_Helmet;
+
 	Vertex vertex;
 }Player;

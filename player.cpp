@@ -83,6 +83,8 @@ Player::Player() {//コンストラクタの定義
 
 	item_1_img = LoadGraph("resouce/item1big.png");
 
+	EL_Helmet = LoadGraph("resouce/EL_Helmet.png");
+
 	move_flag = 1;
 	enemy_damage[0] = 0;
 }
@@ -521,6 +523,8 @@ void Player::PictureBookDraw(int x,int y)
 	}
 
 	DrawGraph(x+200, y, player_img1[maba2], true);
+
+	DrawGraph(x + 800, y, EL_Helmet, true);
 }
 
 void Player::pushB() {

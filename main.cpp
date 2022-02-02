@@ -283,6 +283,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						picturepage = 0;
 						scroll_x = 0;
 						sceneflag = 3;
+
+						enemy[0] = new Enemy;
+						sub_boss = new SubBoss;
+						boss = new Boss;
+						player = new Player;
 					}
 				}
 			}
@@ -1010,6 +1015,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bƒ{ƒ^ƒ“
 					pushflagB = 1;
 					sceneflag = 1;
+					delete enemy[0];
+					delete player;
+					delete sub_boss;
+					delete boss;
 				}
 			}
 
@@ -1038,7 +1047,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					picturepage--;
 				}
 			}
-
+			enemy[0]->PictureBookMove();
 			if (rightflag == 1) {
 				if (scroll_x < 17888) {
 					scroll_x += 50;
@@ -1571,6 +1580,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			DrawGraph(17888 - scroll_x, 0, P[13], true);
 			DrawGraph(932, 917, Breturn, true);
 			DrawGraph(220, 917, Lstickpage, true);
+
+			enemy[0]->PictureBookDraw(scroll_x);
+			sub_boss->PictureBookDraw(4816 - scroll_x, 250, 0);
+			sub_boss->PictureBookDraw(6192 - scroll_x, 250, 3);
+			sub_boss->PictureBookDraw(11008 + 688 - scroll_x, 250, 1);
+			boss->PictureBookDraw(16512 - scroll_x, 250);
+			player->PictureBookDraw(17888 - scroll_x, 50);
 
 			break;
 
