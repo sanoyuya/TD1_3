@@ -2978,7 +2978,7 @@ void Enemy::PictureBookMove()
 
 void Enemy::PictureBookDraw(int scroll_x)
 {
-	DrawRotaGraph(688 - scroll_x, 250, 5.0, 0.0, img[anime], true, true);
+	DrawRotaGraph(688 - scroll_x, 250, 5.0, 0.0, img[anime], true, false);
 
 	bullet[0]->PictureDraw(0, 2064 - scroll_x, 250);
 
@@ -2988,16 +2988,16 @@ void Enemy::PictureBookDraw(int scroll_x)
 
 	bullet[0]->PictureDraw(1, 8256 + 688 - scroll_x, 250);
 
-	DrawRotaGraph(9632 + 390 - scroll_x, 250, 5.0, 0.0, img_Lv3[anime], true, true);
-	DrawRotaGraph(9632 + 959 - scroll_x, 250, 5.0, 0.0, img_Lv5[anime], true, true);
+	DrawRotaGraph(9632 + 390 - scroll_x, 250, 5.0, 0.0, img_Lv3[anime], true, false);
+	DrawRotaGraph(9632 + 959 - scroll_x, 250, 5.0, 0.0, img_Lv5[anime], true, false);
 
-	DrawRotaGraph(12384 + 390 - scroll_x, 250, 5.0, 0.0, omnidirectional8_img[omnidirectional_anime], true, true);
-	DrawRotaGraph(12384 + 959 - scroll_x, 250, 5.0, 0.0, omnidirectional16_img[omnidirectional_anime], true, true);
+	DrawRotaGraph(12384 + 390 - scroll_x, 250, 5.0, 0.0, omnidirectional8_img[omnidirectional_anime], true, false);
+	DrawRotaGraph(12384 + 959 - scroll_x, 250, 5.0, 0.0, omnidirectional16_img[omnidirectional_anime], true, false);
 
-	DrawRotaGraph(13760 + 390 - scroll_x, 250, 5.0, 0.0, formation_img[formation_img_anime], true, true);
-	DrawRotaGraph(13760 + 959 - scroll_x, 250, 5.0, 0.0, formationLv3_img[formation_img_anime], true, true);
+	DrawRotaGraph(13760 + 390 - scroll_x, 250, 5.0, 0.0, formation_img[formation_img_anime], true, false);
+	DrawRotaGraph(13760 + 959 - scroll_x, 250, 5.0, 0.0, formationLv3_img[formation_img_anime], true, false);
 
-	DrawRotaGraph(15136 + 390 - scroll_x, 250, 5.0, 0.0, laser_img_L[laser_img_anime], true, true);
-	DrawRotaGraph(15136 + 959 - scroll_x, 250, 5.0, 0.0, laser_img_R[laser_img_anime], true, true);
+	DrawRotaGraph(15136 + 390 - scroll_x, 250, 5.0, 0.0, laser_img_L[laser_img_anime], true, false);
+	DrawRotaGraph(15136 + 959 - scroll_x, 250, 5.0, 0.0, laser_img_R[laser_img_anime], true, false);
 
 }
