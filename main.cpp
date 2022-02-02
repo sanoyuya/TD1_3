@@ -98,6 +98,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int sand = 0;
 	int maba = 0;
 	int maba2 = 0;
+
+	//図鑑
+	int P[14] = { 0 };
+	P[0]= LoadGraph("resouce/picture_book1.png");
+	P[1] = LoadGraph("resouce/picture_book2.png");
+	P[2] = LoadGraph("resouce/picture_book3.png");
+	P[3] = LoadGraph("resouce/picture_book4.png");
+	P[4] = LoadGraph("resouce/picture_book5.png");
+	P[5] = LoadGraph("resouce/picture_book6.png");
+	P[6] = LoadGraph("resouce/picture_book7.png");
+	P[7] = LoadGraph("resouce/picture_book8.png");
+	P[8] = LoadGraph("resouce/picture_book9.png");
+	P[9] = LoadGraph("resouce/picture_book10.png");
+	P[10] = LoadGraph("resouce/picture_book11.png");
+	P[11] = LoadGraph("resouce/picture_book12.png");
+	P[12] = LoadGraph("resouce/picture_book13.png");
+	P[13] = LoadGraph("resouce/picture_book14.png");
+
 	// ゲームループで使う変数の宣言
 	int ENEMY_MAX = 0;
 	int sceneflag = 0;
@@ -137,6 +155,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int scroll_x = 0;
 	int scroll_y = 0;
 	int rightflag = 0;
+	int rightpushflag = 0;
+	int leftpushflag = 0;
 
 	bool reflection_flag = true;
 
@@ -258,6 +278,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (pushflagA == 0) {
 					if (keys[KEY_INPUT_SPACE] == 1 && oldkeys[KEY_INPUT_SPACE] == 0|| (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) != 0) {
 						PlaySoundMem(SELECT_SE, DX_PLAYTYPE_BACK);
+						picturepage = 0;
+						scroll_x = 0;
 						sceneflag = 3;
 					}
 				}
@@ -267,6 +289,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				if (keys[KEY_INPUT_RETURN] == 1 || (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) != 0) {//Bボタン
 					pushflagB = 1;
 					title = new Title;
+					title_sound_flag = false;
 					sceneflag = 0;
 				}
 			}
@@ -992,21 +1015,39 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			}if (keys[KEY_INPUT_RETURN] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {//Bボタン
 				pushflagB = 0;
 			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
-				rightflag = 1;
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) == 0 && keys[KEY_INPUT_D] == 0) {
+				rightpushflag = 0;
 			}
-			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
-				rightflag = 0;
+			if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) == 0 && keys[KEY_INPUT_A] == 0) {
+				leftpushflag = 0;
+			}
+			if (rightpushflag == 0) {
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_RIGHT) != 0 || keys[KEY_INPUT_D] == 1) {
+					rightpushflag = 1;
+					rightflag = 1;
+					picturepage++;
+				}
+			}
+			if (leftpushflag == 0) {
+				if ((GetJoypadInputState(DX_INPUT_KEY_PAD1) & PAD_INPUT_LEFT) != 0 || keys[KEY_INPUT_A] == 1) {
+					leftpushflag = 1;
+					rightflag = 0;
+					picturepage--;
+				}
 			}
 
 			if (rightflag == 1) {
-				scroll_x += 50;
+				if (scroll_x < 17888) {
+					scroll_x += 50;
+				}
 				if (scroll_x >= picturepage * 1376) {
 					scroll_x = picturepage * 1376;
 				}
 			}
 			else {
-				scroll_x -= 50;
+				if (scroll_x > 0) {
+					scroll_x -= 50;
+				}
 				if (scroll_x <= picturepage * 1376) {
 					scroll_x = picturepage * 1376;
 				}
@@ -1014,8 +1055,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 			if (picturepage <= 0) {
 				picturepage = 0;
-			}if (picturepage >= 15) {
-				picturepage = 15;
+			}if (picturepage >= 13) {
+				picturepage = 13;
 			}
 			break;
 
@@ -1510,6 +1551,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			delete player;
 		case 3:
 			//キャラクター図鑑
+			DrawBox(0, 0, 1376, 960, GetColor(200, 200, 200), true);
+			DrawGraph(0 - scroll_x, 0, P[0], true);
+			DrawGraph(1376 - scroll_x, 0, P[1], true);
+			DrawGraph(2752 - scroll_x, 0, P[2], true);
+			DrawGraph(4128 - scroll_x, 0, P[3], true);
+			DrawGraph(5504 - scroll_x, 0, P[4], true);
+			DrawGraph(6880 - scroll_x, 0, P[5], true);
+			DrawGraph(8256 - scroll_x, 0, P[6], true);
+			DrawGraph(9632 - scroll_x, 0, P[7], true);
+			DrawGraph(11008 - scroll_x, 0, P[8], true);
+			DrawGraph(12384 - scroll_x, 0, P[9], true);
+			DrawGraph(13760 - scroll_x, 0, P[10], true);
+			DrawGraph(15136 - scroll_x, 0, P[11], true);
+			DrawGraph(16512 - scroll_x, 0, P[12], true);
+			DrawGraph(17888 - scroll_x, 0, P[13], true);
 
 			break;
 
