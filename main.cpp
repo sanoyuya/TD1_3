@@ -165,6 +165,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int titletimer = 0;
 	bool tutorial_sound_flag = false;
 
+	bool result_bgm_flag = false;
+
 	int A_img = LoadGraph("resouce/A.png");
 	int A_time = 0;
 
@@ -793,6 +795,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						StopSoundMem(BOSS_BGM);
 						title_sound_flag = false;
 						tutorial_sound_flag = false;
+						result_bgm_flag = false;
+
 
 					}
 				}
@@ -822,6 +826,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						StopSoundMem(BOSS_BGM);
 						title_sound_flag = false;
 						tutorial_sound_flag = false;
+						result_bgm_flag = false;
 
 						title = new Title;
 					}
@@ -972,6 +977,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//リザルト画面(ゲームクリア)
 			StopSoundMem(STAGE_BGM);
 			StopSoundMem(BOSS_BGM);
+
 			if (keys[KEY_INPUT_SPACE] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_1) == 0) {
 				pushflagA = 0;
 			}
@@ -1011,8 +1017,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_sound_flag = false;
 						title_sound_flag = false;
 						tutorial_sound_flag = false;
+						result_bgm_flag = false;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
+						StopSoundMem(RESULT_BGM);
 
 					}
 				}
@@ -1046,9 +1054,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						boss_sound_flag = false;
 						title_sound_flag = false;
 						tutorial_sound_flag = false;
+						result_bgm_flag = false;
 						title = new Title;
 						StopSoundMem(STAGE_BGM);
 						StopSoundMem(BOSS_BGM);
+						StopSoundMem(RESULT_BGM);
 
 					}
 				}
@@ -1128,6 +1138,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (stage_sound_flag == false) {
 				StopSoundMem(TUTORIAL_BGM);
 				PlaySoundMem(STAGE_BGM, DX_PLAYTYPE_LOOP, true);
+				ChangeVolumeSoundMem(130, STAGE_BGM);
 				stage_sound_flag = true;
 			}
 			if (wave_num >= 30) {
@@ -1439,6 +1450,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 
 		case 5:
+			if (result_bgm_flag == false)
+			{
+				PlaySoundMem(RESULT_BGM, DX_PLAYTYPE_LOOP, true);
+				ChangeVolumeSoundMem(130, RESULT_BGM);
+				result_bgm_flag = true;
+			}
 			//リザルト画面(ゲームクリア)
 			score->ResultDraw();
 			if (resultflag == 0) {
@@ -1457,6 +1474,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			if (tutorial_sound_flag == false)
 			{
 				PlaySoundMem(TUTORIAL_BGM, DX_PLAYTYPE_LOOP);
+				ChangeVolumeSoundMem(130, TUTORIAL_BGM);
 				tutorial_sound_flag = true;
 			}
 			SetDrawBright(150, 150, 150);
