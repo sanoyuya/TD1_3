@@ -753,9 +753,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					if (game_end == 1) {
 						score->Clear(sceneflag);
 						delete boss;
+						boss = nullptr;
 						for (int i = 0; i < ENEMY_MAX; i++)
 						{
 							delete enemy[i];
+							enemy[i] = nullptr;
 						}
 
 					}

@@ -94,8 +94,10 @@ void Score::Death(int& sceneflag, Boss* boss, Enemy** enemy, int ene_mex) {//ƒvƒ
 			for (int i = 0; i < ene_mex; i++)
 			{
 				delete enemy[i];
+				enemy[i] = nullptr;
 			}
 			delete boss;
+			boss = nullptr;
 			LordScore();
 			RC();
 			sceneflag = 5;
