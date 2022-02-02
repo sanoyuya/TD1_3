@@ -19,6 +19,7 @@ public:
 		int& shakeflag, int& damageflag, int& shaketime, int& damagetime,
 		bool& reflection_flag, bool& movie_flag, char* keys, int& sceneflag, bool& txt_shake_flag, int& damageAlpha);
 	void Draw(Enemy** enemy);
+	void PictureBookDraw(int x, int y);
 
 	int GetBossTxtFlag();
 private:

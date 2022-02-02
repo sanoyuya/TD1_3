@@ -507,6 +507,21 @@ void Player::DeleteItem()
 	delete tutorial_item;
 }
 
+void Player::PictureBookDraw(int x,int y)
+{
+	maba++;
+
+	maba2 = maba / 10;
+
+	if (maba2 == 12)
+	{
+		maba = 0;
+		maba2 = 0;
+	}
+
+	DrawGraph(x+200, y, player_img1[maba2], true);
+}
+
 void Player::pushB() {
 	pushflagB = 1;
 }

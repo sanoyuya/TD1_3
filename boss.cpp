@@ -634,6 +634,23 @@ void Boss::Draw(Enemy** enemy)
 	}
 }
 
+void Boss::PictureBookDraw(int x, int y)
+{
+	img_anime_timer++;
+
+	if (img_anime_timer == 2 * 5)
+	{
+		img_anime_timer = 0;
+	}
+
+	img_anime = img_anime_timer / 5;
+
+	DrawRotaGraph(x+229, 250, 2.0, 0.0, img[img_anime], true, true);
+	DrawRotaGraph(x + 688, 250, 2.0, 0.0, talk_img[img_anime], true, true);
+	DrawRotaGraph(x + 1147, 250, 2.0, 0.0, mugon_img[img_anime], true, true);
+
+}
+
 int Boss::GetBossTxtFlag()
 {
 	return boss_txt_flag;

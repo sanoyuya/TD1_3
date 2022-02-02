@@ -2855,10 +2855,84 @@ void TxtDraw(int x, int y, const char* file)
 
 void Enemy::PictureBookMove()
 {
+	anime_timer++;
+
+	if (anime_timer == 12 * 6)
+	{
+		anime_timer = 0;
+	}
+
+	anime = anime_timer / 6;
+
+	bommer_anime_timer++;
+
+	if (bommer_anime_timer == 10 * 6)
+	{
+		bommer_anime_timer = 0;
+	}
+
+	bommer_anime = bommer_anime_timer / 6;
+
+	boomerang_anime_timer++;
+
+	if (boomerang_anime_timer == 10 * 6)
+	{
+		boomerang_anime_timer = 0;
+	}
+
+	boomerang_anime = boomerang_anime_timer / 6;
+
+	formation_img_anime_timer++;
+
+	if (formation_img_anime_timer == 12 * 6)
+	{
+		formation_img_anime_timer = 0;
+	}
+
+	formation_img_anime = formation_img_anime_timer / 6;
+
+	omnidirectional_anime_timer++;
+
+	if (omnidirectional_anime_timer == 12 * 6)
+	{
+		omnidirectional_anime_timer = 0;
+	}
+
+	omnidirectional_anime = omnidirectional_anime_timer / 6;
+
+	laser_img_anime_timer++;
+
+	if (laser_img_anime_timer == 4 * 6)
+	{
+		laser_img_anime_timer = 0;
+	}
+
+	laser_img_anime = laser_img_anime_timer / 6;
 
 }
 
 void Enemy::PictureBookDraw(int scroll_x)
 {
+	DrawRotaGraph(688- scroll_x, 250,5.0, 0.0, img[anime], true, true);
+
+	bullet[0]->PictureDraw(0, 2064 - scroll_x, 250);
+	
+	DrawRotaGraph(3444 - scroll_x, 250, 5.0, 0.0, bommer_img[bommer_anime], true, false);
+
+	DrawRotaGraph(7568 - scroll_x, 250, 5.0, 0.0, boomerang_img[boomerang_anime], true, false);
+
+	bullet[0]->PictureDraw(1, 8256+ 688 - scroll_x, 250);
+
+	DrawRotaGraph(9632+390 - scroll_x, 250, 5.0, 0.0, img_Lv3[anime], true, true);
+	DrawRotaGraph(9632+959 - scroll_x, 250, 5.0, 0.0, img_Lv5[anime], true, true);
+
+	DrawRotaGraph(12384 + 390 - scroll_x, 250, 5.0, 0.0, omnidirectional8_img[omnidirectional_anime], true, true);
+	DrawRotaGraph(12384 + 959 - scroll_x, 250, 5.0, 0.0, omnidirectional16_img[omnidirectional_anime], true, true);
+
+	DrawRotaGraph(13760 + 390 - scroll_x, 250, 5.0, 0.0, formation_img[formation_img_anime], true, true);
+	DrawRotaGraph(13760 + 959 - scroll_x, 250, 5.0, 0.0, formationLv3_img[formation_img_anime], true, true);
+
+	DrawRotaGraph(15136 + 390 - scroll_x, 250, 5.0, 0.0, laser_img_L[laser_img_anime], true, true);
+	DrawRotaGraph(15136 + 959 - scroll_x, 250, 5.0, 0.0, laser_img_R[laser_img_anime], true, true);
 
 }

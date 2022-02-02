@@ -28,6 +28,7 @@ public:
 	void SetMineFlag(bool flag);
 	void SetRand(int end_frame);
 	void SetExplosionTime(int num);
+	void PictureBookDraw(int x, int y);
 
 private:
 	int rand;//ƒ‰ƒ“ƒ_ƒ€

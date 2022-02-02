@@ -181,11 +181,31 @@ EnemyBullet::EnemyBullet()
 EnemyBullet::~EnemyBullet()
 {
 }
+void EnemyBullet::PictureDraw(int num, int x, int y)
+{
+	if (num == 0)
+	{
+		DrawRotaGraph(x, y, 5.0, 0.0, img, true, true);
+	}
+	else
+	{
+		boomerang_anime_timer++;
+
+		if (boomerang_anime_timer == 8 * 3)
+		{
+			boomerang_anime_timer = 0;
+		}
+		boomerang_anime = boomerang_anime_timer / 3;
+
+		DrawRotaGraph(x, y, 2.5, 0.0, boomerang_img[boomerang_anime], true, false);
+	}
+
+}
 #pragma endregion
 
 #pragma region Move
-void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag, 
-	Transform& transform,int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
+void EnemyBullet::Move(int& enemy_type, bool& reflection_flag, Player& player, double& x, double& y, bool& exising_flag,
+	Transform& transform, int flag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
 	if (bullet_flag == true)
 	{
@@ -894,7 +914,7 @@ void EnemyBullet::TutorialMove(int y)
 
 #pragma region Draw
 //•`‰æ
-void EnemyBullet::Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag,bool shot_action_flag)
+void EnemyBullet::Draw(int enemy_type, int shot_time, bool fast_move_flag, bool exising_flag, bool shot_action_flag)
 {
 	if (enemy_type == 6 && shot_time < 50 && fast_move_flag == false && exising_flag == true && shot_action_flag == true)
 	{

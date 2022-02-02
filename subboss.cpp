@@ -370,7 +370,7 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 		{
 			//地雷の動き
 			mine->form(transform, rand);
-			mine->HitBox(transform, hp,damage_effect);
+			mine->HitBox(transform, hp, damage_effect);
 		}
 
 	}
@@ -386,15 +386,28 @@ void SubBoss::Move(Player& player, bool reflection_flag, int flag, int screensha
 		bullet[i]->Move(enemy_type, reflection_flag, player, transform.x, transform.y, exising_flag, transform, flag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 	}
 
-
-	boss1_anime_timer++;
-
-	if (boss1_anime_timer == 14 * 6)
+	if (enemy_type == 1)
 	{
-		boss1_anime_timer = 0;
-	}
+		boss1_anime_timer++;
 
-	boss1_anime = boss1_anime_timer / 6;
+		if (boss1_anime_timer == 14 * 6)
+		{
+			boss1_anime_timer = 0;
+		}
+
+		boss1_anime = boss1_anime_timer / 6;
+	}
+	else
+	{
+		boss2_anime_timer++;
+
+		if (boss2_anime_timer == 19 * 6)
+		{
+			boss2_anime_timer = 0;
+		}
+
+		boss2_anime = boss2_anime_timer / 6;
+	}
 
 	if (teleport_flag == true)
 	{
@@ -425,15 +438,10 @@ void SubBoss::Draw()
 		{
 
 			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss1_img[boss1_anime], true);
-
-			if (teleport_flag == true)
-			{
-				DrawBox((int)transform.x - img_r, (int)transform.y - img_r, (int)transform.x + img_r, (int)transform.y + img_r, GetColor(255, 255, 255), true);
-			}
 		}
 		if (enemy_type == 3)
 		{
-			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss2_img[boss1_anime], true);
+			DrawGraphF((float)transform.x - img_r, (float)transform.y - img_r, boss2_img[boss2_anime], true);
 
 			if (teleport_flag == true)
 			{
@@ -737,7 +745,7 @@ void SubBoss::MineHit(Transform transform, int& hp, bool damage_flag)
 
 void SubBoss::PlayerMineHit(Player& player, int vibflag, int screenshakeflag, int& shakeflag, int& damageflag, int& shaketime, int& damagetime)
 {
-	mine->PlayerHitBox(player,vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
+	mine->PlayerHitBox(player, vibflag, screenshakeflag, shakeflag, damageflag, shaketime, damagetime);
 }
 #pragma endregion
 
@@ -813,6 +821,41 @@ void SubBoss::SetMineExplosion()
 
 #pragma region コントラスタ・デストラクタ
 
+void SubBoss::PictureBookDraw(int x, int y, int num)
+{
+
+	if (num == 0)
+	{
+		boss1_anime_timer++;
+
+		if (boss1_anime_timer == 14 * 6)
+		{
+			boss1_anime_timer = 0;
+		}
+
+		boss1_anime = boss1_anime_timer / 6;
+
+		DrawRotaGraph(x, y, 2.5, 0.0, boss1_img[boss1_anime], true, true);
+	}
+	else if(num == 1)
+	{
+		boss2_anime_timer++;
+
+		if (boss2_anime_timer == 19 * 6)
+		{
+			boss2_anime_timer = 0;
+		}
+
+		boss2_anime = boss2_anime_timer / 6;
+
+		DrawRotaGraph(x, y, 2.5, 0.0, boss2_img[boss2_anime], true, false);
+	}
+	else
+	{
+		mine->PictureBookDraw(x,y);
+	}
+}
+
 SubBoss::SubBoss()
 {
 	enemy_type = 0;//敵のタイプ
@@ -879,7 +922,7 @@ SubBoss::SubBoss()
 	anticipation = 50;
 	teleport_flag = false;
 	LoadDivGraph("resouce/boss1.png", 14, 14, 1, 128, 128, boss1_img);
-	LoadDivGraph("resouce/boss2.png", 14, 14, 1, 128, 128, boss2_img);
+	LoadDivGraph("resouce/boss2.png", 19, 19, 1, 128, 128, boss2_img);
 	boss1_anime_timer = 0;
 	boss1_anime = 0;
 	img_r = 64;
@@ -898,6 +941,8 @@ SubBoss::SubBoss()
 	damage_effect = false;
 	damage_effect_time = 5;
 	damage_img = LoadGraph("resouce/E_damageEfect128.png");
+	boss2_anime_timer = 0;
+	boss2_anime = 0;
 }
 
 SubBoss::~SubBoss()

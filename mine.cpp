@@ -352,4 +352,18 @@ void Mine::SetExplosionTime(int num)
 	}
 
 }
+void Mine::PictureBookDraw(int x, int y)
+{
+
+	mine_anime_timer[0]++;
+
+	if (mine_anime_timer[0] == 10 * 4)
+	{
+		mine_anime_timer[0] = 0;
+	}
+
+	mine_anime[0] = mine_anime_timer[0] / 4;
+
+	DrawRotaGraph(x, y, 2.5, 0.0, mine_img[mine_anime[0]], true, true);
+}
 #pragma endregion

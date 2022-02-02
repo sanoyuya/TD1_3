@@ -41,6 +41,8 @@ public:
 	EnemyBullet();
 	~EnemyBullet();
 
+	void PictureDraw(int num, int x,int y);
+
 	//デバッグ用
 	int color;
 

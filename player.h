@@ -45,6 +45,7 @@ public:
 	int EasingMove(double end_x, double end_y, int end_frame);
 	void SetEasingFlag(int num);
 	void DeleteItem();
+	void PictureBookDraw(int x, int y);
 
 private:
 	int X;

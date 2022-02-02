@@ -26,6 +26,7 @@ public:
 
 	void SetMineExplosion();
 
+	void PictureBookDraw(int x,int y,int num);
 	SubBoss();
 	~SubBoss();
 
@@ -67,9 +68,11 @@ private:
 	bool teleport_flag;
 
 	int boss1_img[14];
-	int boss2_img[14];
+	int boss2_img[19];
 	int boss1_anime_timer;
 	int boss1_anime;
+	int boss2_anime_timer;
+	int boss2_anime;
 	int img_r;
 
 	//爆発エフェクト
