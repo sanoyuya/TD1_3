@@ -89,6 +89,7 @@ Player::Player() {//コンストラクタの定義
 
 void Player::PlayerPadMove(char* keys, char* oldkeys, int wave_num)//プレイヤーの移動
 {
+	//hp += 20;//デバッグ用
 	if (keys[KEY_INPUT_J] == 0 && (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_2) == 0) {
 		pushflagB = 0;
 	}
