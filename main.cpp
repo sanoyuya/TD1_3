@@ -835,6 +835,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (boss != nullptr)
 						{
 							delete boss;
+							boss = nullptr;
 						}
 						movie_flag = false;
 						boss_battle_flag = false;
@@ -866,6 +867,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 						if (boss != nullptr)
 						{
 							delete boss;
+							boss = nullptr;
 						}
 						movie_flag = false;
 						boss_battle_flag = false;
