@@ -951,8 +951,8 @@ SubBoss::SubBoss()
 	damage_img = LoadGraph("resouce/E_damageEfect128.png");
 	boss2_anime_timer = 0;
 	boss2_anime = 0;
-	damage_se = LoadSoundMem("music/damage.png");
-	knockdouwn_se = LoadSoundMem("music/knockdouwn.png");
+	damage_se = LoadSoundMem("music/damage.mp3");
+	knockdouwn_se = LoadSoundMem("music/knockdouwn.mp3");
 }
 
 SubBoss::~SubBoss()
